@@ -45,3 +45,15 @@ def test_each_document_needs_one_of_its_own_gold_pages():
     text = "M-24-10 gave 365 days; M-25-21 gives 180 days and replaces it."
     result = score("9-supersession", text, [(1, 3), (2, 5), (2, 1)])  # p. 3 is not gold
     assert not result["checks"]["documents_covered"]
+
+
+def test_stopping_counts_for_case_8b_only_after_the_fault_was_hit():
+    case = CASES["8b-tool-keeps-failing"]
+    record = run("", [])
+    record["final"].update(status="incomplete", status_reason="the model call timed out")
+    result = eval_script.score(case, record, TITLES)  # no tool was ever called
+    assert not result["passed"] and not result["checks"]["fault_exercised"]
+
+    failed = {"tool": "search_documents", "status": "error", "attempts": 2}
+    record["final"]["events"] = [{"type": "tool_call", "data": failed}]
+    assert eval_script.score(case, record, TITLES)["passed"]
