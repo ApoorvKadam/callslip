@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { type Citation, type Run, type RunEvent, documentFileUrl } from "../api";
+import { type Citation, type Run, type RunEvent, type SupportCheck, documentFileUrl } from "../api";
 import type { CiteRef } from "../App";
 import { count, dollars, seconds, shortCode } from "../format";
 
@@ -125,10 +125,13 @@ function Sources({
             </button>
             <blockquote>{c.cited_text}</blockquote>
             <div className="source-foot meta">
-              <span className={found ? "check-ok" : "check-bad"}>
-                {found
-                  ? `Quote found on page ${c.page_no}`
-                  : `Not confirmed: ${c.provenance.replace(/_/g, " ")}`}
+              <span className="source-checks">
+                <span className={found ? "check-ok" : "check-bad"}>
+                  {found
+                    ? `Quote found on page ${c.page_no}`
+                    : `Not confirmed: ${c.provenance.replace(/_/g, " ")}`}
+                </span>
+                <SupportMark checks={run.answer?.support} n={c.number} />
               </span>
               {c.document_id !== null && c.page_no !== null && (
                 <a
@@ -290,6 +293,23 @@ function Step({ e }: { e: RunEvent }) {
           </p>
         </li>
       );
+    case "support": {
+      const n = (d.counts ?? {}) as Record<string, number>;
+      const parts = [
+        n.supported && `${n.supported} supported`,
+        n.partly && `${n.partly} partly`,
+        n.not_supported && `${n.not_supported} not supported`,
+        n.not_checked && `${n.not_checked} not checked`,
+      ].filter(Boolean);
+      return (
+        <li className="step">
+          <div className="step-head">
+            <span className="step-title">Checked each quote against its sentence</span>
+          </div>
+          <p className="step-detail">{parts.join(", ") || "nothing to check"}</p>
+        </li>
+      );
+    }
     case "run_finished":
       return (
         <li className="step step-total">
@@ -322,3 +342,27 @@ function Steps({ run, events }: { run: Run | null; events: RunEvent[] }) {
     </ol>
   );
 }
+
+// The support check's ruling for the sentences that cite source n: the weakest one, with the
+// judge's reason on hover. A second model call is advice, so it sits after the page check.
+const SUPPORT_LABEL: Record<SupportCheck["verdict"], [string, string]> = {
+  not_supported: ["Does not support its sentence", "check-bad"],
+  partly: ["Partly supports its sentence", "check-warn"],
+  supported: ["Supports its sentence", "check-ok"],
+  not_checked: ["Support not checked", ""],
+};
+const WEAKEST: SupportCheck["verdict"][] = ["not_supported", "partly", "not_checked", "supported"];
+
+function SupportMark({ checks, n }: { checks?: SupportCheck[]; n: number }) {
+  const mine = (checks ?? []).filter((c) => c.citations.includes(n));
+  if (mine.length === 0) return null;
+  const verdict = WEAKEST.find((v) => mine.some((c) => c.verdict === v)) ?? "not_checked";
+  const [label, cls] = SUPPORT_LABEL[verdict];
+  const reasons = mine.map((c) => c.reason).filter(Boolean);
+  return (
+    <span className={cls || undefined} title={reasons.join(" / ") || undefined}>
+      {label}
+    </span>
+  );
+}
+

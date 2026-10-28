@@ -5,6 +5,7 @@ import {
   type Run,
   type Answer,
   type RunEvent,
+  type SupportCheck,
   type RunStatus,
   abandon,
   ask,
@@ -28,6 +29,7 @@ const EVENT_TYPES = [
   "clarification_answered",
   "answer_delta",
   "answer",
+  "support",
   "run_finished",
 ];
 
@@ -153,7 +155,13 @@ export default function App() {
     const list = events[run.id] ?? [];
     const answerEvent = list.find((e) => e.type === "answer");
     if (answerEvent) {
-      live[run.id] = { answer: answerEvent.data as unknown as Answer };
+      const supportEvent = list.find((e) => e.type === "support");
+      const answer = answerEvent.data as unknown as Answer;
+      live[run.id] = {
+        answer: supportEvent
+          ? { ...answer, support: supportEvent.data.checks as SupportCheck[] }
+          : answer,
+      };
       continue;
     }
     if (run.answer || list.some((e) => e.type === "run_finished")) continue;
@@ -255,7 +263,12 @@ export default function App() {
     }
   }
 
-  const selected = runs.find((r) => r.id === selectedId) ?? null;
+  // Runs as shown: a run's answer from its events until the stored run is read again.
+  const shown: Run[] = runs.map((r) => {
+    const early = live[r.id]?.answer;
+    return !r.answer && early ? { ...r, answer: early } : r;
+  });
+  const selected = shown.find((r) => r.id === selectedId) ?? null;
 
   const active = hovered ?? chosen;
 
@@ -296,7 +309,7 @@ export default function App() {
         </aside>
         <main className="talk">
           <Conversation
-            runs={runs}
+            runs={shown}
             live={live}
             selectedId={selectedId}
             onSelect={(id) => void onSelect(id)}

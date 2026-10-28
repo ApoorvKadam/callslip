@@ -43,7 +43,9 @@ class ReplayLLM:
         self.final = turns[-1]
         self.tool_choices: list[dict | None] = []
 
-    async def create(self, *, tool_choice=None, on_text=None, **_):
+    async def create(self, *, tool_choice=None, on_text=None, purpose=None, messages=(), **_):
+        if purpose == "support_check":
+            return self.judge(messages)
         self.tool_choices.append(tool_choice)
         turn = self.final if tool_choice == FINAL else self.turns.pop(0)
         if on_text:  # stream each text block in two pieces, as the real client would
@@ -60,6 +62,27 @@ class ReplayLLM:
                 "model": "claude-sonnet-5-5",
                 "content": turn["content"],
                 "stop_reason": turn["stop_reason"],
+                "stop_sequence": None,
+                "usage": {"input_tokens": 10, "output_tokens": 5},
+            }
+        )
+        return message, Usage(10, 5, 0, 0, 0.0001, 1)
+
+    def judge(self, messages):
+        """Rules every claim supported, as a well-formed judge reply would."""
+        self.judged = len(json.loads(messages[0]["content"]))
+        checks = [
+            {"claim": i, "verdict": "supported", "reason": "stated"}
+            for i in range(1, self.judged + 1)
+        ]
+        message = Message.model_validate(
+            {
+                "id": "msg_judge",
+                "type": "message",
+                "role": "assistant",
+                "model": "claude-haiku-5-5",
+                "content": [{"type": "text", "text": json.dumps({"checks": checks})}],
+                "stop_reason": "end_turn",
                 "stop_sequence": None,
                 "usage": {"input_tokens": 10, "output_tokens": 5},
             }
@@ -254,3 +277,35 @@ async def test_streamed_text_adds_up_to_the_final_answer(tools):  # noqa: F811
     # Progress comes before the answer, which is still built from the finished message.
     kinds = [t for t, _ in recorded]
     assert max(i for i, k in enumerate(kinds) if k == "answer_delta") < kinds.index("answer")
+
+
+async def test_each_cited_piece_of_the_answer_gets_a_support_verdict(tools):  # noqa: F811
+    llm = ReplayLLM(RUNS[FAILED_SEARCH])
+    ctx = await new_run(tools, llm)
+    await start_agent(ctx, FAILED_SEARCH, [], {})
+
+    recorded = await events(ctx)
+    kinds = [t for t, _ in recorded]
+    assert kinds.index("answer") < kinds.index("support") < kinds.index("run_finished")
+    checks = next(d for t, d in recorded if t == "support")["checks"]
+    assert len(checks) == llm.judged > 0
+    assert {c["verdict"] for c in checks} == {"supported"}
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["answer"]["support"] == checks  # stored with the answer
+
+
+async def test_a_failed_support_check_leaves_the_answer_and_marks_pieces_unchecked(
+    tools,  # noqa: F811
+):
+    llm = ReplayLLM(RUNS[FAILED_SEARCH])
+
+    def broken(messages):
+        raise TimeoutError
+
+    llm.judge = broken
+    ctx = await new_run(tools, llm)
+    await start_agent(ctx, FAILED_SEARCH, [], {})
+
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "complete" and run["answer"]["text"]
+    assert {c["verdict"] for c in run["answer"]["support"]} == {"not_checked"}

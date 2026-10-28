@@ -44,6 +44,9 @@ class Settings(BaseSettings):
     max_model_turns: int = 10
     max_tool_calls: int = 9
     tool_timeout_s: float = 8.0
+    # After each answer, one model call judges whether every quote supports its sentence.
+    support_check: bool = True
+    support_timeout_s: float = 15.0
     # Lets the evaluation inject tool failures. Off unless explicitly enabled.
     allow_fault_injection: bool = False
     # Send the session cookie only over HTTPS. Off for the local stack on plain HTTP; on behind TLS.

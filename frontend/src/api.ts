@@ -77,11 +77,20 @@ export interface Citation {
   provenance: string;
 }
 
+// A second model call's ruling on one cited piece of the answer: do its quotes say what it says?
+export interface SupportCheck {
+  claim: number;
+  citations: number[];
+  verdict: "supported" | "partly" | "not_supported" | "not_checked";
+  reason: string;
+}
+
 export interface Answer {
   text: string;
   segments: { text: string; citations: number[] }[];
   citations: Citation[];
   citations_verified: number;
+  support?: SupportCheck[];
 }
 
 export interface RunEvent {

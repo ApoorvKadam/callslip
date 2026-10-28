@@ -66,9 +66,11 @@ class LLM:
         tools: list[dict] | None = None,
         tool_choice: dict | None = None,
         on_text: Callable[[str], Awaitable[None]] | None = None,
+        json_schema: dict | None = None,
     ) -> tuple[Message, Usage]:
         """One model call. With `on_text`, the response is streamed and each piece of text is
-        passed on as it arrives; the returned message is the same finished message either way."""
+        passed on as it arrives; the returned message is the same finished message either way.
+        With `json_schema`, the reply is one text block of JSON that matches it."""
         kwargs: dict[str, Any] = {
             "model": self.model,
             "max_tokens": max_tokens,
@@ -80,6 +82,8 @@ class LLM:
             kwargs["tools"] = tools
         if tool_choice:
             kwargs["tool_choice"] = tool_choice
+        if json_schema:
+            kwargs["output_config"]["format"] = {"type": "json_schema", "schema": json_schema}
 
         client = self.client.with_options(timeout=timeout_s)
 
