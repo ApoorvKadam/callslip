@@ -20,7 +20,7 @@ Ask in Agent mode: *What change to the NIST AI RMF does America's AI Action Plan
 
 ![A two-document answer with its first source selected](images/1-multi-document.png)
 
-Selecting a citation number highlights the text it supports and opens its source: the quote, the page check ("Quote found on page 7") and a link to the PDF page (Action Plan p. 7, AI RMF p. 17). Text that the answer copies word for word from a source is shown in quotation marks.
+Selecting a citation number highlights the text it supports and opens its source: the quote, the page check ("Quote found on page 7") and a link to the PDF page (Action Plan p. 7, AI RMF p. 17). A cited piece of eight or more words that matches its source word for word, apart from spacing and line-break hyphens, is shown in quotation marks.
 
 ![The same answer with its steps](images/2-steps.png)
 

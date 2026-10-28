@@ -14,7 +14,8 @@ The same images that Docker Compose runs, as Kubernetes resources: `deploy/kuber
 # 1. Build and push the two images to a registry the cluster can pull from.
 docker build -t registry.example.edu/callslip-backend:$(git rev-parse --short HEAD) backend
 docker build -t registry.example.edu/callslip-frontend:$(git rev-parse --short HEAD) frontend
-docker push ...   # both
+docker push registry.example.edu/callslip-backend:$(git rev-parse --short HEAD)
+docker push registry.example.edu/callslip-frontend:$(git rev-parse --short HEAD)
 
 # 2. Point the manifests at them: edit the `images` entries in base/kustomization.yaml, or
 #    with the standalone kustomize CLI:

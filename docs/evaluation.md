@@ -48,10 +48,10 @@ Latency is execution time; for case 4 it excludes the time waiting for the user'
 
 ## Which model, and why Haiku is the default
 
-- **More tasks done, at a tenth of the cost.** The Haiku agent passed 30 of 30 runs at $0.0026 per question; the Sonnet agent passed 27 of 30 at $0.0273. Median latency is about the same (6.9 s against 7.6 s).
-- **The difference is one decision.** On case 9 the Haiku agent searched for "M-25-21 rescinds M-24-10", found page 1 and cited it, in every repeat. The Sonnet agent found both deadlines and stopped, in every repeat ([Failure analysis](#failure-analysis)).
-- **Sonnet writes cleaner prose.** Haiku sometimes repeats a sentence and then the quoted source text beside it, or a fact once per source ("September 1, 2026 and September 1, 2026"), and once (baseline, case 6) it answered correctly without a single citation, which failed the check. Sonnet's slip is different: on case 6 it leads with its own reading of which policy wins.
-- **Both stay available.** Set `ANSWER_MODEL=claude-sonnet-5-5` in `.env` to use Sonnet. Ten cases on one corpus are evidence for this workload, not a general ranking of the two models.
+- The Haiku agent passed 30 of 30 runs at $0.0026 per question; the Sonnet agent passed 27 of 30 at $0.0273, about ten times as much. Median latency is about the same (6.9 s against 7.6 s).
+- The three runs Sonnet failed are all case 9. There the Haiku agent searched for "M-25-21 rescinds M-24-10", found page 1 and cited it, in every repeat. The Sonnet agent found both deadlines and stopped, in every repeat ([Failure analysis](#failure-analysis)).
+- Sonnet writes cleaner prose. Haiku sometimes repeats a sentence and then the quoted source text beside it, or a fact once per source ("September 1, 2026 and September 1, 2026"), and once (baseline, case 6) it answered correctly without a single citation, which failed the check. Sonnet's slip is different: on case 6 it leads with its own reading of which policy wins.
+- Both stay available: set `ANSWER_MODEL=claude-sonnet-5-5` in `.env` to use Sonnet. Ten cases on one corpus are evidence for this workload, not a general ranking of the two models.
 
 ## What each case showed (Haiku agent, first repeat, unless noted)
 
@@ -91,7 +91,7 @@ The checks are deterministic and narrow, so the first repeat of three columns wa
 | 9 | correct and complete: the rescission cited | partial: both deadlines, cannot say which governs | partial: both deadlines right, "the later one shortens it", rescission not found |
 | **Total** | **10 correct and complete** | **2 correct and complete, 1 correct without citations, 5 partial, 2 no answer** | **8 correct and complete, 2 partial** |
 
-No answer in any column was wrong. For the Haiku agent, every sentence without a citation was also checked against the passages it had retrieved (the scorer cannot see those sentences): all restate what a cited passage says, apart from one labelled date calculation in case 9 ("my calculation").
+The shortfalls are missing evidence, incomplete answers, missing citations, and two answers that went further than their evidence: the baseline's case 5 answer gives the deadline of a different requirement, and Sonnet's case 6 answer treats an unresolved conflict as settled. For the Haiku agent, every sentence without a citation was also checked against the passages it had retrieved (the scorer cannot see those sentences): all restate what a cited passage says, apart from one labelled date calculation in case 9 ("my calculation").
 
 **Citation support.** Provenance is checked in code for every citation: the quote was sent to the model and is on the cited page (535 of 535 across both runs). Whether a quote supports its sentence was reviewed by hand on the earlier runs with the same retriever and corpus (Sonnet agent 56 of 56, Sonnet baseline 40 of 40, Haiku agent 50 of 50, first repeat each); it was not repeated for these runs.
 
