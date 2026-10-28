@@ -6,6 +6,10 @@ x-backend: &backend
   build: ./backend
   image: agentic-rag-backend:${IMAGE_TAG:-dev}
   restart: unless-stopped
+  # Optional settings (MAX_TOOL_CALLS, ANSWER_MODEL, ...) are read from .env too; see config.py.
+  env_file:
+    - path: .env
+      required: false
   environment:
     DATABASE_URL: postgresql://${POSTGRES_USER:-rag}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-rag}
     REDIS_URL: redis://redis:6379/0
