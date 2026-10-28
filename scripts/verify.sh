@@ -3,7 +3,7 @@
 # upload, ingestion and search (scripts/smoke_test.py). Exits non-zero on any failure.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-port="$(docker compose port frontend 8080 2>/dev/null | sed 's/.*://')"
+port="$(docker compose port frontend 8080 2>/dev/null | sed 's/.*://' || true)"
 base="${BASE_URL:-http://localhost:${port:-8080}}"
 
 docker compose ps --format 'table {{.Service}}\t{{.Status}}'
