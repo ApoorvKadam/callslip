@@ -23,6 +23,8 @@ import logging
 import time
 
 import anthropic
+import psycopg
+import psycopg_pool
 from pydantic import ValidationError
 
 from app.agent.evidence import collect_evidence, parse_source
@@ -49,6 +51,11 @@ TRANSIENT_MODEL_ERRORS = (
     anthropic.RateLimitError,
     anthropic.InternalServerError,
 )
+
+
+# Real failures worth one retry: the dependency may answer the second time. Anything else (a
+# bug) would fail the same way again, so it goes back to the model at once.
+TRANSIENT_TOOL_ERRORS = (psycopg.OperationalError, psycopg_pool.PoolTimeout, OSError)
 
 
 class ToolFailure(Exception):
@@ -110,18 +117,16 @@ async def execute_tool(
             )
             return outcome, attempt, retries
         except TimeoutError:
-            reason = f"timed out after {timeout:g} s"
-            status = "timeout"
+            reason, status, retryable = f"timed out after {timeout:g} s", "timeout", True
         except ToolFailure as exc:
-            reason = str(exc)
-            status = "error"
-        except Exception as exc:  # a real failure (database, bug) reaches the model the same way
+            reason, status, retryable = str(exc), "error", True
+        except Exception as exc:  # a real failure reaches the model as a typed error too
             fields = {"run_id": str(ctx.run_id), "tool": name}
             log.exception("tool failed", extra={"fields": fields})
             reason = f"failed unexpectedly ({type(exc).__name__})"
-            status = "error"
+            status, retryable = "error", isinstance(exc, TRANSIENT_TOOL_ERRORS)
         retries.append(reason)
-        if attempt == 2 or ctx.remaining_s() <= ctx.settings.finalize_reserve_s:
+        if attempt == 2 or not retryable or ctx.remaining_s() <= ctx.settings.finalize_reserve_s:
             break
     payload = {"status": status, "tool": name, "error": reason, "attempts": len(retries)}
     return (
@@ -158,8 +163,13 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
     note: str | None = None
     step = ctx.tool_calls
     while True:
+        # The budget gate before every model call, including the first after a resume: the last
+        # turn is kept for the final answer, and a spent budget stops without another call.
+        if note is None and ctx.model_turns >= ctx.settings.max_model_turns - 1:
+            note = f"the limit of {ctx.settings.max_model_turns} model turns was reached"
+            await ctx.emit("limit", {"reason": note})
         final = note is not None
-        if ctx.remaining_s() < MIN_MODEL_CALL_S:
+        if ctx.model_turns >= ctx.settings.max_model_turns or ctx.remaining_s() < MIN_MODEL_CALL_S:
             await stop_without_model(ctx, messages, note or "the time limit was reached")
             return
         timeout = (

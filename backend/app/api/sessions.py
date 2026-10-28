@@ -7,6 +7,7 @@ not own. Documents are shared on purpose: this is a single-tenant demo corpus.
 """
 
 import hashlib
+import json
 import secrets
 import time
 from typing import Annotated, Literal
@@ -199,7 +200,8 @@ async def resume(
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
     async with pool.connection() as conn, conn.transaction():
         run = await owned_run_for_update(conn, session_id, run_id, owner)
-        reply_hash = hashlib.sha256(f"{body.tool_use_id}\n{body.reply}".encode()).hexdigest()
+        payload = json.dumps([body.tool_use_id, body.reply])  # unambiguous, unlike joining
+        reply_hash = hashlib.sha256(payload.encode()).hexdigest()
         resume_key = f"{body.idempotency_key}:{reply_hash[:16]}"
         if run["resume_key"] == resume_key:
             return {k: run[k] for k in RUN_COLUMNS}  # the same reply, sent again

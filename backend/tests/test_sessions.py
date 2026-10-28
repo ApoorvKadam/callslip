@@ -132,3 +132,19 @@ def test_a_reply_is_accepted_once_per_key(client):
     assert client.post(url, json=body).status_code == 202  # the same reply, sent again
     assert client.post(url, json={**body, "reply": "OMB M-24-10"}).status_code == 409
     assert client.post(url, json={**body, "idempotency_key": "key-0002"}).status_code == 409
+
+
+def test_a_reply_cannot_borrow_another_replys_key(client):
+    session = new_browser(client)
+    client.app.state.llm = NoModel()
+    run = insert_run(session, "needs_clarification")
+    with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
+        conn.execute(
+            "UPDATE runs SET mode = 'agent', pending_tool_use_id = 'toolu_1' WHERE id = %s", (run,)
+        )
+    url = f"/api/sessions/{session}/runs/{run}/resume"
+    first = {"tool_use_id": "toolu_1", "idempotency_key": "key-0003", "reply": "alpha\nbeta"}
+    assert client.post(url, json=first).status_code == 202
+    # Joined with a newline, these two would read the same; they must not.
+    other = {**first, "tool_use_id": "toolu_1\nalpha", "reply": "beta"}
+    assert client.post(url, json=other).status_code == 409

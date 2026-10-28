@@ -11,6 +11,7 @@ import json
 import uuid
 from pathlib import Path
 
+import psycopg
 import pytest
 from anthropic.types import Message
 
@@ -193,9 +194,21 @@ async def test_baseline_model_timeout_ends_incomplete(tools):  # noqa: F811
     assert "TimeoutError" in run["status_reason"]
 
 
-async def test_unexpected_tool_exception_goes_back_as_a_typed_error(tools, monkeypatch):  # noqa: F811
+@pytest.mark.parametrize(
+    ("error", "attempts"),
+    [
+        (psycopg.OperationalError("the connection to the server was lost"), 2),  # may recover
+        (RuntimeError("a bug"), 1),  # would fail the same way again
+    ],
+)
+async def test_a_real_tool_exception_goes_back_as_a_typed_error(
+    tools,  # noqa: F811
+    monkeypatch,
+    error,
+    attempts,
+):
     async def broken(self, args):
-        raise RuntimeError("connection to the database was lost")
+        raise error
 
     monkeypatch.setattr(Tools, "search_documents", broken)
     ctx = await new_run(tools, ReplayLLM(RUNS[FAILED_SEARCH]))
@@ -204,6 +217,18 @@ async def test_unexpected_tool_exception_goes_back_as_a_typed_error(tools, monke
         d for t, d in await events(ctx) if t == "tool_call" and d["tool"] == "search_documents"
     ]
     assert searches and all(d["status"] == "error" for d in searches)
-    assert all(d["attempts"] == 2 and "RuntimeError" in d["summary"] for d in searches)
+    name = type(error).__name__
+    assert all(d["attempts"] == attempts and name in d["summary"] for d in searches)
     run = await ctx.store.get_run(ctx.run_id)
     assert run["status"] == "complete"  # the model moved on to reading pages, as recorded
+
+
+@pytest.mark.parametrize(("used", "calls"), [(2, 0), (1, 1)])
+async def test_a_resumed_run_respects_the_turn_budget(tools, used, calls):  # noqa: F811
+    llm = ReplayLLM(RUNS[FAILED_SEARCH])
+    ctx = await new_run(tools, llm, max_model_turns=2)
+    ctx.model_turns = used  # as restored from the database on resume
+    await resume_agent(ctx)
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "incomplete"
+    assert llm.tool_choices == [FINAL] * calls  # only the final answer, or nothing at all
