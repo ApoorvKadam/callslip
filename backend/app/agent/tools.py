@@ -90,8 +90,15 @@ TOOL_DEFINITIONS: list[dict] = [
         "input_schema": {
             "type": "object",
             "properties": {
-                "question": {"type": "string"},
-                "options": {"type": "array", "items": {"type": "string"}},
+                "question": {
+                    "type": "string",
+                    "description": "One short question, at most 500 characters.",
+                },
+                "options": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Up to 6 short choices the user can pick from.",
+                },
             },
             "required": ["question"],
             "additionalProperties": False,

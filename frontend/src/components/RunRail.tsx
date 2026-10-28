@@ -189,6 +189,8 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
     title = `Read ${doc}, pages ${input.page_start} to ${input.page_end}`;
   } else if (tool === "list_documents") {
     title = "Listed the documents";
+  } else if (tool === "ask_clarification") {
+    title = "Clarifying question, not asked";
   }
 
   const marks: [string, string][] = [];
