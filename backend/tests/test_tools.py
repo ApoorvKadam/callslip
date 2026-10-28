@@ -146,6 +146,18 @@ async def test_outline_of_another_users_document_is_not_found(tools):
     assert "list_documents" in json.loads(out.content)["error"]
 
 
+async def test_the_worker_fills_a_missing_outline_when_idle(tools):
+    from app.worker import fill_one_outline
+
+    async with tools.store.pool.connection() as conn:
+        await conn.execute("UPDATE documents SET outline = NULL WHERE id = 2")
+    assert await fill_one_outline(tools.store.pool, get_settings())
+    async with tools.store.pool.connection() as conn:
+        cur = await conn.execute("SELECT outline FROM documents WHERE id = 2")
+        assert (await cur.fetchone())[0] == []  # read, and the PDF has no bookmarks
+    assert not await fill_one_outline(tools.store.pool, get_settings())  # nothing left
+
+
 def test_argument_rules():
     with pytest.raises(ValidationError):
         SearchArgs(query="   ")

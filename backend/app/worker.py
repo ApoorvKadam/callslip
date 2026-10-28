@@ -114,33 +114,44 @@ async def process(
         )
 
 
-async def fill_outlines(pool: AsyncConnectionPool, settings: Settings) -> None:
-    """Read the outline of documents ingested before outlines were kept. Best effort: a document
-    that fails here keeps no outline, and its tool says so."""
+# Documents whose outline failed to read in this process; retried after a restart.
+_outline_failed: set[int] = set()
+
+
+async def fill_one_outline(pool: AsyncConnectionPool, settings: Settings) -> bool:
+    """Read the outline of one document ingested before outlines were kept. Runs only when no
+    ingestion job is waiting, so new uploads never wait for it. Returns whether it found one."""
     async with pool.connection() as conn:
         cur = await conn.execute(
-            "SELECT id FROM documents WHERE status = 'ready' AND outline IS NULL ORDER BY id"
+            "SELECT id FROM documents WHERE status = 'ready' AND outline IS NULL"
+            " AND NOT (id = ANY(%s)) ORDER BY id LIMIT 1",
+            (list(_outline_failed),),
         )
-        ids = [row[0] for row in await cur.fetchall()]
-    for document_id in ids:
-        try:
-            async with pool.connection() as conn:
-                content = await jobs.load_pdf(conn, document_id)
-            parsed = await asyncio.to_thread(parse_pdf, content, settings.max_pages)
-            outline = parsed.outline
-        except Exception as exc:
-            log.warning(
-                "outline not read",
-                extra={"fields": {"document_id": document_id, "error": str(exc)}},
-            )
-            outline = []
+        row = await cur.fetchone()
+    if row is None:
+        return False
+    document_id = row[0]
+    try:
         async with pool.connection() as conn:
-            await conn.execute(
-                "UPDATE documents SET outline = %s WHERE id = %s AND outline IS NULL",
-                (Jsonb(outline), document_id),
-            )
-    if ids:
-        log.info("outlines filled", extra={"fields": {"documents": len(ids)}})
+            content = await jobs.load_pdf(conn, document_id)
+        parsed = await asyncio.to_thread(parse_pdf, content, settings.max_pages)
+    except PdfRejected:
+        outline: list[dict] = []  # it will not parse any better next time
+    except Exception as exc:
+        # Possibly transient: leave it unread, and try again after the next restart.
+        _outline_failed.add(document_id)
+        log.warning(
+            "outline not read", extra={"fields": {"document_id": document_id, "error": str(exc)}}
+        )
+        return True
+    else:
+        outline = parsed.outline
+    async with pool.connection() as conn:
+        await conn.execute(
+            "UPDATE documents SET outline = %s WHERE id = %s AND outline IS NULL",
+            (Jsonb(outline), document_id),
+        )
+    return True
 
 
 async def run() -> None:
@@ -162,13 +173,14 @@ async def run() -> None:
         loop.add_signal_handler(sig, stop.set)
     log.info("worker started", extra={"fields": {"owner": owner, "model": settings.embed_model}})
     beat = asyncio.create_task(heartbeat(stop))
-    await fill_outlines(pool, settings)
 
     while not stop.is_set():
         async with pool.connection() as conn:
             await jobs.fail_exhausted(conn, settings.max_attempts)
             job = await jobs.claim_next(conn, owner, settings.lease_seconds, settings.max_attempts)
         if job is None:
+            if await fill_one_outline(pool, settings):
+                continue
             # Sleep until the next poll, waking early on shutdown.
             with contextlib.suppress(TimeoutError):
                 await asyncio.wait_for(stop.wait(), timeout=settings.worker_poll_seconds)

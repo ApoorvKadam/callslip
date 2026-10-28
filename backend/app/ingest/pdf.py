@@ -58,8 +58,11 @@ def _outline(reader: PdfReader) -> list[dict]:
                 continue
             if len(entries) >= MAX_OUTLINE:
                 return
-            page = reader.get_destination_page_number(item)
-            title = normalize_whitespace(str(item.title or ""))[:200]
+            try:
+                page = reader.get_destination_page_number(item)
+                title = normalize_whitespace(str(item.title or ""))[:200]
+            except Exception:  # one unreadable bookmark does not cost the others
+                continue
             # Entries without a page or without words ("1.", "2.") do not help navigation.
             if page is not None and page >= 0 and _LETTER.search(title):
                 entries.append({"title": title, "page": page + 1, "level": level})
@@ -67,7 +70,7 @@ def _outline(reader: PdfReader) -> list[dict]:
     try:
         walk(reader.outline, 0)
     except Exception:
-        return []
+        return entries  # the outline itself could not be read past this point
     return entries
 
 
