@@ -6,6 +6,14 @@ import {
   listDocuments,
   uploadDocument,
 } from "../api";
+import { shortCode, titleRest } from "../format";
+
+const STATUS_MARK: Record<DocumentStatus, string> = {
+  queued: "mark",
+  processing: "mark mark-wait",
+  ready: "mark mark-ok",
+  failed: "mark mark-bad",
+};
 
 const STATUS_LABEL: Record<DocumentStatus, string> = {
   queued: "Queued",
@@ -67,15 +75,17 @@ export function DocumentsPanel() {
   const ready = docs.filter((d) => d.status === "ready").length;
 
   return (
-    <section className="panel" aria-labelledby="documents-heading">
-      <div className="panel-head">
-        <h2 id="documents-heading">Documents</h2>
-        <span className="muted">
-          {ready} of {docs.length} ready
+    <section aria-labelledby="documents-heading">
+      <div className="docs-head">
+        <h2 id="documents-heading" className="label">
+          Documents
+        </h2>
+        <span className="meta">
+          {ready === docs.length ? `${ready} ready` : `${ready} of ${docs.length} ready`}
         </span>
       </div>
 
-      <label className={`upload${uploading ? " busy" : ""}`}>
+      <label className={`btn upload${uploading ? " busy" : ""}`}>
         <input
           ref={input}
           type="file"
@@ -84,9 +94,9 @@ export function DocumentsPanel() {
           disabled={uploading}
           onChange={(e) => void upload(e.target.files)}
         />
-        <span>{uploading ? "Uploading…" : "Upload PDFs"}</span>
+        <span>{uploading ? "Uploading" : "Upload PDFs"}</span>
       </label>
-      <p className="notice" role="status" aria-live="polite">
+      <p className="notice meta" role="status" aria-live="polite">
         {notice}
       </p>
       {loadError && (
@@ -96,22 +106,31 @@ export function DocumentsPanel() {
       )}
 
       {docs.length === 0 && !loadError && (
-        <p className="muted">No documents yet. Upload text-based PDFs to start.</p>
+        <p className="meta">No documents yet. Upload text-based PDFs to start.</p>
       )}
       <ul className="doc-list">
         {docs.map((d) => (
           <li key={d.id} className="doc">
-            <div className="doc-row">
-              <a href={documentFileUrl(d.id)} target="_blank" rel="noreferrer" className="doc-title">
-                {d.title}
-              </a>
-              <span className={`badge badge-${d.status}`}>{STATUS_LABEL[d.status]}</span>
-            </div>
-            <div className="muted small">
-              {d.page_count ? `${d.page_count} pages` : d.filename}
-              {d.chunk_count ? ` · ${d.chunk_count} passages` : ""}
-            </div>
-            {d.error && <p className="error small">{d.error}</p>}
+            <a
+              href={documentFileUrl(d.id)}
+              target="_blank"
+              rel="noreferrer"
+              title={d.title}
+              aria-label={`${d.title}${d.status === "ready" ? "" : `, ${STATUS_LABEL[d.status]}`}, opens the PDF`}
+            >
+              <span className="doc-code">
+                {shortCode(d.title)}
+                {d.status !== "ready" && (
+                  <span className={STATUS_MARK[d.status]}>{STATUS_LABEL[d.status]}</span>
+                )}
+              </span>
+              <span className="doc-title">{titleRest(d.title)}</span>
+              <span className="meta">
+                {d.page_count ? `${d.page_count} pages` : d.filename}
+                {d.chunk_count ? `, ${d.chunk_count} passages` : ""}
+              </span>
+            </a>
+            {d.error && <p className="error meta">{d.error}</p>}
           </li>
         ))}
       </ul>

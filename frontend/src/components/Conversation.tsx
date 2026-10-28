@@ -1,14 +1,16 @@
-import { type FormEvent, type KeyboardEvent, useState } from "react";
-import type { Mode, Run } from "../api";
+import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import type { Run } from "../api";
+import type { CiteRef } from "../App";
+import { count, seconds } from "../format";
 import { AnswerView } from "./AnswerView";
 
-const STATUS_TEXT: Record<Run["status"], string> = {
-  running: "Working…",
-  needs_clarification: "Needs your answer",
-  complete: "Answered",
-  incomplete: "Incomplete",
-  failed: "Failed",
-  abandoned: "Skipped",
+// Status words for runs that need attention; a plain answered run shows none.
+const STATUS: Partial<Record<Run["status"], [string, string]>> = {
+  running: ["Working", "mark"],
+  needs_clarification: ["Waiting for your reply", "mark mark-wait"],
+  incomplete: ["Incomplete", "mark mark-warn"],
+  failed: ["Failed", "mark mark-bad"],
+  abandoned: ["Skipped", "mark"],
 };
 
 export interface PendingClarification {
@@ -21,22 +23,51 @@ export interface PendingClarification {
 interface Props {
   runs: Run[];
   selectedId: string | null;
-  mode: Mode;
-  onMode: (mode: Mode) => void;
   pending: PendingClarification | null;
   onSelect: (id: string) => void;
   onAsk: (text: string) => Promise<boolean>;
   onSkip: () => void;
-  onNewSession: () => void;
   error: string | null;
+  active: CiteRef | null;
+  onHover: (ref: CiteRef | null) => void;
+  onChoose: (ref: CiteRef) => void;
+  onShowSteps: (runId: string) => void;
+}
+
+function RunMeta({ run, onShowSteps }: { run: Run; onShowSteps: () => void }) {
+  const status = STATUS[run.status];
+  const answer = run.answer;
+  return (
+    <div className="exchange-meta meta">
+      <span>{run.mode === "agent" ? "Agent" : "Single pass"}</span>
+      {status && <span className={status[1]}>{status[0]}</span>}
+      {run.exec_ms > 0 && <span>{seconds(run.exec_ms)}</span>}
+      {answer && answer.citations.length > 0 && (
+        <span>
+          {count(answer.citations.length, "source")}
+          {answer.citations_verified === answer.citations.length
+            ? ", every quote found on its page"
+            : `, ${answer.citations.length - answer.citations_verified} not found on the page`}
+        </span>
+      )}
+      <button type="button" className="text-button" onClick={onShowSteps}>
+        {run.tool_calls > 0 ? `Steps (${run.tool_calls})` : "Steps"}
+      </button>
+    </div>
+  );
 }
 
 export function Conversation(props: Props) {
-  const { runs, selectedId, mode, onMode, pending, onSelect, onAsk, onSkip, onNewSession, error } =
-    props;
+  const { runs, selectedId, pending, onSelect, onAsk, onSkip, error } = props;
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const busy = sending || runs.some((r) => r.status === "running");
+  const end = useRef<HTMLDivElement>(null);
+
+  // Keep the newest exchange in view as questions are added.
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "end" });
+  }, [runs.length, pending?.runId]);
 
   async function send(value: string) {
     const q = value.trim();
@@ -63,106 +94,102 @@ export function Conversation(props: Props) {
   }
 
   return (
-    <section className="panel conversation" aria-labelledby="conversation-heading">
-      <div className="panel-head">
-        <h2 id="conversation-heading">Questions</h2>
-        <button type="button" className="link-button" onClick={onNewSession}>
-          New conversation
-        </button>
+    <>
+      <div className="transcript">
+        {runs.length === 0 && (
+          <>
+            <p className="intro">Ask a question about the documents on the left.</p>
+            <p className="meta">
+              Answers cite the document and page for every claim, and each quote is checked
+              against the page before it is shown.
+            </p>
+          </>
+        )}
+
+        {runs.map((run) => (
+          <article
+            key={run.id}
+            className={`exchange${run.id === selectedId ? " selected" : ""}`}
+            aria-labelledby={`q-${run.id}`}
+          >
+            <h2>
+              <button
+                type="button"
+                id={`q-${run.id}`}
+                className="question"
+                onClick={() => onSelect(run.id)}
+              >
+                {run.question}
+              </button>
+            </h2>
+            <RunMeta run={run} onShowSteps={() => props.onShowSteps(run.id)} />
+            {run.status_reason && run.status !== "complete" && (
+              <p className="meta">{run.status_reason}</p>
+            )}
+            {run.answer && (
+              <AnswerView
+                runId={run.id}
+                answer={run.answer}
+                active={props.active}
+                onHover={props.onHover}
+                onChoose={props.onChoose}
+              />
+            )}
+            {pending?.runId === run.id && (
+              <div className="clarify" role="group" aria-labelledby="clarify-question">
+                <p id="clarify-question" className="clarify-question">
+                  {pending.question}
+                </p>
+                {pending.options.length > 0 && (
+                  <div className="options">
+                    {pending.options.map((o) => (
+                      <button
+                        key={o}
+                        type="button"
+                        className="btn"
+                        disabled={busy}
+                        onClick={() => void send(o)}
+                      >
+                        {o}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <button type="button" className="text-button" onClick={onSkip} disabled={busy}>
+                  Skip this question
+                </button>
+              </div>
+            )}
+          </article>
+        ))}
+        {error && (
+          <p className="error" role="alert">
+            {error}
+          </p>
+        )}
+        <div ref={end} />
       </div>
 
-      {runs.length === 0 && (
-        <p className="muted">
-          Ask about the uploaded documents. Answers cite the document and page for every claim.
-        </p>
-      )}
-
-      <ol className="runs">
-        {runs.map((run) => (
-          <li key={run.id} className={`run${run.id === selectedId ? " selected" : ""}`}>
-            <button type="button" className="run-question" onClick={() => onSelect(run.id)}>
-              <span>{run.question}</span>
-              <span className="run-meta">
-                <span className="muted small">{run.mode === "agent" ? "Agent" : "Single pass"}</span>
-                <span className={`badge badge-run-${run.status}`}>{STATUS_TEXT[run.status]}</span>
-              </span>
-            </button>
-            {run.status_reason && <p className="small muted">{run.status_reason}</p>}
-            {run.answer && <AnswerView answer={run.answer} />}
-          </li>
-        ))}
-      </ol>
-
-      {pending && (
-        <div className="clarify" role="group" aria-labelledby="clarify-question">
-          <p id="clarify-question">
-            <strong>The agent asks:</strong> {pending.question}
-          </p>
-          {pending.options.length > 0 && (
-            <div className="options">
-              {pending.options.map((o) => (
-                <button key={o} type="button" disabled={busy} onClick={() => void send(o)}>
-                  {o}
-                </button>
-              ))}
-            </div>
-          )}
-          <button type="button" className="link-button" onClick={onSkip} disabled={busy}>
-            Skip this question
-          </button>
-        </div>
-      )}
-
-      {error && (
-        <p className="error" role="alert">
-          {error}
-        </p>
-      )}
-
       <form className="composer" onSubmit={submit}>
-        <label htmlFor="question" className="visually-hidden">
-          {pending ? "Your reply" : "Your question"}
-        </label>
-        <textarea
-          id="question"
-          rows={3}
-          value={text}
-          placeholder={
-            pending ? "Reply to the agent's question" : "Ask a question about the documents"
-          }
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={onKey}
-          maxLength={2000}
-        />
-        <div className="composer-actions">
-          {!pending && (
-            <fieldset className="mode">
-              <legend className="visually-hidden">Answering mode</legend>
-              <label>
-                <input
-                  type="radio"
-                  name="mode"
-                  checked={mode === "agent"}
-                  onChange={() => onMode("agent")}
-                />{" "}
-                Agent
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="mode"
-                  checked={mode === "baseline"}
-                  onChange={() => onMode("baseline")}
-                />{" "}
-                Single pass
-              </label>
-            </fieldset>
-          )}
-          <button type="submit" disabled={busy || !text.trim()}>
-            {busy ? "Working…" : pending ? "Reply" : "Ask"}
+        <div className="composer-inner">
+          <label htmlFor="question" className="visually-hidden">
+            {pending ? "Your reply" : "Your question"}
+          </label>
+          <textarea
+            id="question"
+            rows={1}
+            value={text}
+            placeholder={pending ? "Or type your own reply" : "Ask about the documents"}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={onKey}
+            maxLength={2000}
+          />
+          <button type="submit" className="btn btn-primary" disabled={busy || !text.trim()}>
+            {busy ? "Working" : pending ? "Reply" : "Ask"}
           </button>
         </div>
+        <p className="composer-hint meta">Enter to send, Shift and Enter for a new line.</p>
       </form>
-    </section>
+    </>
   );
 }
