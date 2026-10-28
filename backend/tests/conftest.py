@@ -6,6 +6,7 @@ They are skipped when it is not set. Each test module starts from an empty schem
 """
 
 import os
+from pathlib import Path
 
 import psycopg
 import pytest
@@ -15,9 +16,23 @@ TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 if TEST_DATABASE_URL:
     # The app reads its settings from the environment; point it at the test database.
     os.environ["DATABASE_URL"] = TEST_DATABASE_URL
-    os.environ.setdefault("REDIS_URL", "redis://localhost:6399/0")
+    # With TEST_REDIS_URL the app uses a real Redis; otherwise an address where none listens.
+    os.environ["REDIS_URL"] = os.environ.get("TEST_REDIS_URL", "redis://127.0.0.1:1/0")
 
 needs_db = pytest.mark.skipif(not TEST_DATABASE_URL, reason="TEST_DATABASE_URL is not set")
+
+# The API loads the local embedding model at startup; CI and developers download it once into
+# FASTEMBED_CACHE_PATH (see README). Tests that start the app need it.
+MODEL_CACHE = os.environ.get("FASTEMBED_CACHE_PATH", "/opt/models")
+
+
+def _model_present(path: str) -> bool:
+    return Path(path).exists() and any(Path(path).rglob("tokenizer.json"))
+
+
+needs_model = pytest.mark.skipif(
+    not _model_present(MODEL_CACHE), reason=f"embedding model not found in {MODEL_CACHE}"
+)
 
 
 def reset_schema() -> None:
