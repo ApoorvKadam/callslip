@@ -124,3 +124,20 @@ jobs:
       - name: Stop
         if: always()
         run: docker compose down -v
+
+  kubernetes:
+    name: Kubernetes manifests render and validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Render both overlays
+        run: |
+          kubectl kustomize deploy/kubernetes/overlays/ingress > ingress.yaml
+          kubectl kustomize deploy/kubernetes/overlays/openshift > openshift.yaml
+      - name: Validate against the Kubernetes and OpenShift schemas
+        run: >-
+          docker run --rm -v "$PWD:/w" -w /w ghcr.io/yannh/kubeconform:v0.8.0
+          -strict -summary
+          -schema-location default
+          -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+          ingress.yaml openshift.yaml
