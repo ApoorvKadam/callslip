@@ -1,6 +1,6 @@
 # Deployment runbook
 
-Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI), `worker` (ingestion), `postgres` (PostgreSQL 17 + pgvector) and `redis` (cache). Commands below are run from the repository root. Captured output from a real run is in [Evidence](#evidence).
+Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI), `runner` (run workers that answer questions), `worker` (ingestion), `postgres` (PostgreSQL 17 + pgvector) and `redis` (cache). Commands below are run from the repository root. Captured output from a real run is in [Evidence](#evidence).
 
 ## Requirements
 
@@ -62,6 +62,8 @@ scripts/rollback.sh               # back to the previous tag, no rebuild, then v
 scripts/rollback.sh 1a2b3c4       # or any tag still present locally (docker images 'callslip-*')
 ```
 
+A tag older than the run-worker change (`66e3a1d`) is refused: those releases predate private documents and would serve them to anyone, and they have no run worker.
+
 Data is not rolled back: documents, runs and the ledger stay. Because migrations are additive, an older release ignores tables and columns it does not know.
 
 ## Persistence
@@ -87,9 +89,9 @@ The first failed Redis call costs at most one 0.25 s timeout; Redis is then skip
 Every service logs to stdout. Application logs from the API and worker are one JSON object per line (`ts`, `level`, `logger`, `msg` and fields such as `run_id`, `document_id`); uvicorn's access lines stay plain text. Examples:
 
 ```bash
-docker compose logs -f api worker
+docker compose logs -f api runner worker
 # warnings and errors only, from the JSON lines
-docker compose logs api worker --no-log-prefix | grep '^{' | python3 -c "import json,sys; [print(e['ts'], e['level'], e['msg']) for e in map(json.loads, sys.stdin) if e['level'] != 'INFO']"
+docker compose logs api runner worker --no-log-prefix | grep '^{' | python3 -c "import json,sys; [print(e['ts'], e['level'], e['msg']) for e in map(json.loads, sys.stdin) if e['level'] != 'INFO']"
 ```
 
 A failed run shows the user a plain cause and a short reference; the full exception is in the API log under the same reference. Per-run detail (every tool call, model turn, tokens and cost) is in PostgreSQL and in the UI trace; total model spend: `docker compose exec postgres psql -U rag rag -c "select count(*), sum(cost_usd) from llm_calls"`.
@@ -105,7 +107,7 @@ A failed run shows the user a plain cause and a short reference; the full except
 | PostgreSQL | exact vector search | HNSW index past about 100k passages (and check filtered recall); read replicas; raw PDFs to object storage |
 | Model API | SDK retries inside each call's time budget | a per-tenant concurrency limit and a shared rate limiter in Redis |
 
-On Kubernetes or OpenShift the same images become three Deployments (frontend, api, worker) with the existing liveness and readiness endpoints, plus managed PostgreSQL and Redis.
+On Kubernetes or OpenShift the same images become four Deployments (frontend, api, runner, worker) with the existing liveness and readiness endpoints, plus managed PostgreSQL and Redis.
 
 ## Evidence
 

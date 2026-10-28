@@ -160,5 +160,7 @@ async def get_document_file(
         headers={
             "Content-Disposition": f'inline; filename="{safe_filename(filename)}"',
             "X-Content-Type-Options": "nosniff",
+            # A private document must not be kept by shared caches or proxies.
+            "Cache-Control": "private, no-store",
         },
     )

@@ -9,6 +9,13 @@ cd "$(dirname "$0")/.."
 
 tag="${1:-$(cat .deploy/previous 2>/dev/null || true)}"
 if [[ -z "$tag" ]]; then echo "no previous deployment recorded; pass a tag" >&2; exit 1; fi
+# Older releases predate private documents (they would serve them to anyone) and run workers.
+# Only releases from the run-worker change (66e3a1d) on match this database and Compose file.
+if ! git rev-parse --verify --quiet "${tag}^{commit}" > /dev/null ||
+  ! git merge-base --is-ancestor 66e3a1d "${tag}^{commit}"; then
+  echo "rollback refused: ${tag} predates private documents and run workers" >&2
+  exit 1
+fi
 for image in callslip-backend callslip-frontend; do
   docker image inspect "${image}:${tag}" > /dev/null || { echo "missing ${image}:${tag}" >&2; exit 1; }
 done

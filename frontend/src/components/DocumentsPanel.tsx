@@ -97,8 +97,16 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
           disabled={uploading}
           onChange={(e) => void upload(e.target.files)}
         />
-        <span>{uploading ? "Uploading" : signedIn ? "Upload to your documents" : "Upload PDFs"}</span>
+        <span>
+          {uploading ? "Uploading" : signedIn ? "Upload privately" : "Upload to shared collection"}
+        </span>
       </label>
+      {!signedIn && (
+        <p className="meta">
+          Without signing in, uploaded PDFs are visible to everyone using this deployment. Sign in
+          to upload privately.
+        </p>
+      )}
       <p className="notice meta" role="status" aria-live="polite">
         {notice}
       </p>
