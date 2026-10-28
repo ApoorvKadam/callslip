@@ -217,11 +217,11 @@ Results go to a new folder, `eval/results/<UTC timestamp>/` (`results.json`, `re
 
 ## Expected API costs
 
-Measured at Anthropic list prices: Haiku 5.5 $0.10 per million input tokens, $0.50 per million output, $0.01 per million cached input read; Sonnet 5.5 $2, $10 and $0.20. Every call's tokens and estimated cost are recorded in the `llm_calls` table and shown in the trace.
+Measured at Anthropic list prices: Haiku 5.5 $0.10 per million input tokens, $0.50 per million output, $0.01 per million cached input read (for prompts up to 100,000 tokens, which every call here is); Sonnet 5.5 $2, $10 and $0.10. Sonnet's cache-read price fell from $0.20 on October 7, 2026; the Sonnet run's own `report.md` and `results.json` were written with $0.20, so their agent total is $0.820 instead of $0.799. Every call's tokens and estimated cost are recorded in the `llm_calls` table and shown in the trace.
 
 | Item | Haiku 5.5 (default) | Sonnet 5.5 |
 |---|---|---|
 | Ingestion and search | none: embeddings run locally | none |
 | One question, agent | about $0.0026 (case averages $0.0010 to $0.0043) | about $0.027 |
 | One question, single-pass baseline | about $0.0013 | about $0.018 |
-| Full evaluation, 10 cases x 2 systems x 3 repeats (60 runs) | $0.12 | $1.36 |
+| Full evaluation, 10 cases x 2 systems x 3 repeats (60 runs) | $0.12 | $1.34 |

@@ -15,9 +15,10 @@ from anthropic import AsyncAnthropic
 from anthropic.types import Message
 from psycopg_pool import AsyncConnectionPool
 
-# USD per million tokens: input, output, cache write (5-minute TTL), cache read.
+# USD per million tokens: input, output, cache write (5-minute TTL), cache read. Haiku's
+# prices hold for prompts up to 100,000 tokens. Sonnet's cache read fell from 0.20 on 2026-10-07.
 PRICES: dict[str, tuple[float, float, float, float]] = {
-    "claude-sonnet-5-5": (2.00, 10.00, 2.50, 0.20),
+    "claude-sonnet-5-5": (2.00, 10.00, 2.50, 0.10),
     "claude-haiku-5-5": (0.10, 0.50, 0.125, 0.01),
 }
 
