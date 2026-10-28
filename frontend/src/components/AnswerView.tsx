@@ -26,8 +26,15 @@ function bold(text: string, key: string): ReactNode[] {
 }
 
 // Letters and digits only (in any script), so the line-break hyphens and spacing of PDF text
-// do not matter.
-const squash = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+// do not matter. A separator between two digits is kept, so "1.5" never matches "15".
+const squash = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, (sep, at: number, all: string) =>
+      /\p{N}/u.test(all[at - 1] ?? "") && /\p{N}/u.test(all[at + sep.length] ?? "")
+        ? sep.trim() || " "
+        : "",
+    );
 
 // The model often copies a sentence from a source into its answer. Such text is shown in
 // quotation marks, so the reader can tell the document's words from the answer's. Text the

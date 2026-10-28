@@ -109,11 +109,20 @@ function Sources({
             onMouseLeave={() => onHover(null)}
             onClick={() => onChoose({ runId: run.id, n: c.number })}
           >
-            <div className="source-head">
+            {/* The card is selectable by pointer anywhere; this button makes it reachable by
+                keyboard too. Its click (Enter or Space) bubbles to the card's handler. */}
+            <button
+              type="button"
+              className="source-head"
+              aria-pressed={chosen?.runId === run.id && chosen.n === c.number}
+              aria-label={`Source ${c.number}: ${shortCode(c.title)}, page ${c.page_no}`}
+              onFocus={() => onHover({ runId: run.id, n: c.number })}
+              onBlur={() => onHover(null)}
+            >
               <span className="source-number">{c.number}</span>
               <span className="label">{shortCode(c.title)}</span>
               <span className="meta">page {c.page_no}</span>
-            </div>
+            </button>
             <blockquote>{c.cited_text}</blockquote>
             <div className="source-foot meta">
               <span className={found ? "check-ok" : "check-bad"}>
