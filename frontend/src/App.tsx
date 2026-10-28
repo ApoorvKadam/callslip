@@ -195,9 +195,14 @@ export default function App() {
   }
 
   async function onNewSession() {
-    setChosen(null);
-    setHovered(null);
-    await startSession();
+    setError(null);
+    try {
+      await startSession();
+      setChosen(null);
+      setHovered(null);
+    } catch (e) {
+      setError(`Could not start a new conversation: ${errorText(e)}`);
+    }
   }
 
   const selected = runs.find((r) => r.id === selectedId) ?? null;

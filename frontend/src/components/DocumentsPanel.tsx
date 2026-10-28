@@ -116,7 +116,7 @@ export function DocumentsPanel() {
               target="_blank"
               rel="noreferrer"
               title={d.title}
-              aria-label={`${d.title}, opens the PDF`}
+              aria-label={`${d.title}${d.status === "ready" ? "" : `, ${STATUS_LABEL[d.status]}`}, opens the PDF`}
             >
               <span className="doc-code">
                 {shortCode(d.title)}
