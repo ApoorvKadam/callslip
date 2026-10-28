@@ -65,6 +65,7 @@ def main() -> int:
     parser.add_argument("--base", default="http://localhost:8080")
     parser.add_argument("--pdf", help="PDF to upload (default: a generated one-page PDF)")
     parser.add_argument("--title", default=None)
+    parser.add_argument("--query", default=None, help="search query to run after ingestion")
     parser.add_argument("--timeout", type=int, default=240)
     args = parser.parse_args()
 
@@ -103,7 +104,18 @@ def main() -> int:
     seconds = round(time.monotonic() - started, 1)
     print(f"ingest: {doc['status']} after {seconds}s, pages={doc['page_count']}, "
           f"passages={doc['chunk_count']}, error={doc['error']}")
-    return 0 if doc["status"] == "ready" and doc["chunk_count"] > 0 else 1
+    if doc["status"] != "ready" or doc["chunk_count"] == 0:
+        return 1
+
+    query = {"query": args.query or "smoke test document", "document_ids": [doc_id], "top_k": 3}
+    body = json.dumps(query).encode()
+    headers = {"Content-Type": "application/json"}
+    status, result = call("POST", f"{args.base}/api/search", body, headers)
+    hits = result.get("hits", []) if status == 200 else []
+    print(f"search: {status}, {len(hits)} hits, cache={result.get('cache')}, ms={result.get('ms')}")
+    for hit in hits:
+        print(f"  page {hit['page_no']}  score {hit['score']:.4f}  {hit['text'][:90]}")
+    return 0 if hits else 1
 
 
 if __name__ == "__main__":

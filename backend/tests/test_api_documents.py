@@ -5,9 +5,9 @@ import re
 import pytest
 from fastapi.testclient import TestClient
 
-from tests.conftest import make_pdf, needs_db, reset_schema
+from tests.conftest import make_pdf, needs_db, needs_model, reset_schema
 
-pytestmark = needs_db
+pytestmark = [needs_db, needs_model]
 
 
 @pytest.fixture
