@@ -1,0 +1,694 @@
+{
+ "runs": [
+  {
+   "id": "fff8a4d1-ab38-42e7-a3fa-f848ddf0fdbe",
+   "session_id": "2d08a459-7731-4e79-9f06-f742061cf6f5",
+   "mode": "agent",
+   "question": "How long after OMB M-25-22 is issued does it start to apply to new AI contracts?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "M-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "The passage states the same applicability to solicitations and options issued or exercised after the 180-day date.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "The passage states the memorandum does not apply to AI acquired for use as a component of a National Security System.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "M-25-22 applies 180 days after it is issued. ",
+      "citations": []
+     },
+     {
+      "text": "It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": "\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: ",
+      "citations": []
+     },
+     {
+      "text": "this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "citations": [
+     {
+      "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+      "number": 1,
+      "source": "doc-9/p4",
+      "page_no": 4,
+      "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+      "provenance": "verified",
+      "document_id": 9
+     },
+     {
+      "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+      "number": 2,
+      "source": "doc-9/p4",
+      "page_no": 4,
+      "cited_text": "This memorandum does not apply to AI acquired for use as a component of a National Security System. 13 3. AGENCY-LEVEL REQUIREMENTS In addition to the actions described in Section 4 below, this memorandum directs agencies to: b. Update Agency Policies.",
+      "provenance": "verified",
+      "document_id": 9
+     }
+    ],
+    "citations_verified": 2
+   },
+   "model_turns": 2,
+   "tool_calls": 1,
+   "exec_ms": 6220,
+   "created_at": "2026-10-28T15:34:19.780292Z",
+   "finished_at": "2026-10-28T15:34:25.995743Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "How long after OMB M-25-22 is issued does it start to apply to new AI contracts?"
+     },
+     "created_at": "2026-10-28T15:34:19.794060Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 1083,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 8.7e-05,
+      "stop_reason": "tool_use",
+      "input_tokens": 105,
+      "output_tokens": 119,
+      "cache_read_tokens": 1686,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T15:34:20.865366Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 27,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "OMB M-25-22 applies to contracts awarded after effective date, days after issuance"
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+        "excerpt": "v. AI used incidentally by a contractor during performance of a contract ( e.g., AI used at the option of a contractor when not directed or required to fulfill requirements). c. Fu",
+        "page_no": 4,
+        "document_id": 9
+       },
+       {
+        "score": 0.0161,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "implement OMB Memorandum M-24-10\u2019s requirements regarding rights-impacting and safety- impacting AI: i. By November 1st , 2024, agencies shall identify any contracts associated wit",
+        "page_no": 5,
+        "document_id": 8
+       },
+       {
+        "score": 0.0159,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "Appendix II: Implementation Schedule for Requirements Action Section Deadline Agencies shall identify any contracts associated with agency use of rights-impacting or safety-impacti",
+        "page_no": 33,
+        "document_id": 8
+       },
+       {
+        "score": 0.0156,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "60 days 90 days 90 days 180 days 180 days, and every two years until 2036 270 days 270 days 365 days Annually and 30- days after significant modifications 365 days Annually * Exclu",
+        "page_no": 25,
+        "document_id": 7
+       },
+       {
+        "score": 0.0154,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "For new or existing contracts involving agency use of rights-impacting AI systems or services, agencies must ensure these practices are followed for the acquired AI service or syst",
+        "page_no": 18,
+        "document_id": 8
+       },
+       {
+        "score": 0.0152,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "If the agency must obtain any of this information to satisfy legal or policy requirements, then the agency must incorporate requirements for the submission of that information into",
+        "page_no": 16,
+        "document_id": 8
+       },
+       {
+        "score": 0.0149,
+        "title": "OMB M-24-10: Advancing Governance, Innovation, and Risk Management for Agency Use of Artificial Intelligence, March 2024",
+        "excerpt": "34 Appendix II: Consolidated Table of Actions Responsible Entity Action Section Deadline Each Agency Designate an agency Chief AI Officer and notify OMB 3(a)(i) 60 days Each CFO Ac",
+        "page_no": 34,
+        "document_id": 6
+       },
+       {
+        "score": 0.0147,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "4(c)(iv) Ongoing Agency contractual requirements must, where relevant and practicable, reflect the principles outlined in Section 5(a) of this memorandum. 5(a) Ongoing Agencies mus",
+        "page_no": 34,
+        "document_id": 8
+       }
+      ]
+     },
+     "created_at": "2026-10-28T15:34:20.895763Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "M",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T15:34:23.547000Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exerc",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T15:34:23.804667Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": "ised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T15:34:24.074647Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": " day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T15:34:24.338987Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " System.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T15:34:24.377575Z"
+    },
+    {
+     "seq": 9,
+     "type": "model_call",
+     "data": {
+      "ms": 3472,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000708,
+      "stop_reason": "end_turn",
+      "input_tokens": 4975,
+      "output_tokens": 372,
+      "cache_read_tokens": 2483,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T15:34:24.383265Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer",
+     "data": {
+      "text": "M-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+      "segments": [
+       {
+        "text": "M-25-22 applies 180 days after it is issued. ",
+        "citations": []
+       },
+       {
+        "text": "It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": "\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: ",
+        "citations": []
+       },
+       {
+        "text": "this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "citations": [
+       {
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+        "number": 1,
+        "source": "doc-9/p4",
+        "page_no": 4,
+        "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+        "provenance": "verified",
+        "document_id": 9
+       },
+       {
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+        "number": 2,
+        "source": "doc-9/p4",
+        "page_no": 4,
+        "cited_text": "This memorandum does not apply to AI acquired for use as a component of a National Security System. 13 3. AGENCY-LEVEL REQUIREMENTS In addition to the actions described in Section 4 below, this memorandum directs agencies to: b. Update Agency Policies.",
+        "provenance": "verified",
+        "document_id": 9
+       }
+      ],
+      "citations_verified": 2
+     },
+     "created_at": "2026-10-28T15:34:24.387889Z"
+    },
+    {
+     "seq": 11,
+     "type": "support",
+     "data": {
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "The passage states the same applicability to solicitations and options issued or exercised after the 180-day date.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "The passage states the memorandum does not apply to AI acquired for use as a component of a National Security System.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 2,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T15:34:25.988326Z"
+    },
+    {
+     "seq": 12,
+     "type": "run_finished",
+     "data": {
+      "ms": 6220,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.000966,
+      "tool_calls": 1,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 6223,
+      "output_tokens": 604,
+      "cache_read_tokens": 4169,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T15:34:25.992884Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "fff8a4d1-ab38-42e7-a3fa-f848ddf0fdbe",
+  "session_id": "2d08a459-7731-4e79-9f06-f742061cf6f5",
+  "mode": "agent",
+  "question": "How long after OMB M-25-22 is issued does it start to apply to new AI contracts?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "M-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "The passage states the same applicability to solicitations and options issued or exercised after the 180-day date.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "The passage states the memorandum does not apply to AI acquired for use as a component of a National Security System.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "M-25-22 applies 180 days after it is issued. ",
+     "citations": []
+    },
+    {
+     "text": "It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": "\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: ",
+     "citations": []
+    },
+    {
+     "text": "this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "citations": [
+    {
+     "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+     "number": 1,
+     "source": "doc-9/p4",
+     "page_no": 4,
+     "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+     "provenance": "verified",
+     "document_id": 9
+    },
+    {
+     "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+     "number": 2,
+     "source": "doc-9/p4",
+     "page_no": 4,
+     "cited_text": "This memorandum does not apply to AI acquired for use as a component of a National Security System. 13 3. AGENCY-LEVEL REQUIREMENTS In addition to the actions described in Section 4 below, this memorandum directs agencies to: b. Update Agency Policies.",
+     "provenance": "verified",
+     "document_id": 9
+    }
+   ],
+   "citations_verified": 2
+  },
+  "model_turns": 2,
+  "tool_calls": 1,
+  "exec_ms": 6220,
+  "created_at": "2026-10-28T15:34:19.780292Z",
+  "finished_at": "2026-10-28T15:34:25.995743Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "How long after OMB M-25-22 is issued does it start to apply to new AI contracts?"
+    },
+    "created_at": "2026-10-28T15:34:19.794060Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 1083,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 8.7e-05,
+     "stop_reason": "tool_use",
+     "input_tokens": 105,
+     "output_tokens": 119,
+     "cache_read_tokens": 1686,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T15:34:20.865366Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 27,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "OMB M-25-22 applies to contracts awarded after effective date, days after issuance"
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+       "excerpt": "v. AI used incidentally by a contractor during performance of a contract ( e.g., AI used at the option of a contractor when not directed or required to fulfill requirements). c. Fu",
+       "page_no": 4,
+       "document_id": 9
+      },
+      {
+       "score": 0.0161,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "implement OMB Memorandum M-24-10\u2019s requirements regarding rights-impacting and safety- impacting AI: i. By November 1st , 2024, agencies shall identify any contracts associated wit",
+       "page_no": 5,
+       "document_id": 8
+      },
+      {
+       "score": 0.0159,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "Appendix II: Implementation Schedule for Requirements Action Section Deadline Agencies shall identify any contracts associated with agency use of rights-impacting or safety-impacti",
+       "page_no": 33,
+       "document_id": 8
+      },
+      {
+       "score": 0.0156,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "60 days 90 days 90 days 180 days 180 days, and every two years until 2036 270 days 270 days 365 days Annually and 30- days after significant modifications 365 days Annually * Exclu",
+       "page_no": 25,
+       "document_id": 7
+      },
+      {
+       "score": 0.0154,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "For new or existing contracts involving agency use of rights-impacting AI systems or services, agencies must ensure these practices are followed for the acquired AI service or syst",
+       "page_no": 18,
+       "document_id": 8
+      },
+      {
+       "score": 0.0152,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "If the agency must obtain any of this information to satisfy legal or policy requirements, then the agency must incorporate requirements for the submission of that information into",
+       "page_no": 16,
+       "document_id": 8
+      },
+      {
+       "score": 0.0149,
+       "title": "OMB M-24-10: Advancing Governance, Innovation, and Risk Management for Agency Use of Artificial Intelligence, March 2024",
+       "excerpt": "34 Appendix II: Consolidated Table of Actions Responsible Entity Action Section Deadline Each Agency Designate an agency Chief AI Officer and notify OMB 3(a)(i) 60 days Each CFO Ac",
+       "page_no": 34,
+       "document_id": 6
+      },
+      {
+       "score": 0.0147,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "4(c)(iv) Ongoing Agency contractual requirements must, where relevant and practicable, reflect the principles outlined in Section 5(a) of this memorandum. 5(a) Ongoing Agencies mus",
+       "page_no": 34,
+       "document_id": 8
+      }
+     ]
+    },
+    "created_at": "2026-10-28T15:34:20.895763Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "M",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T15:34:23.547000Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exerc",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T15:34:23.804667Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": "ised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T15:34:24.074647Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": " day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T15:34:24.338987Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " System.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T15:34:24.377575Z"
+   },
+   {
+    "seq": 9,
+    "type": "model_call",
+    "data": {
+     "ms": 3472,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000708,
+     "stop_reason": "end_turn",
+     "input_tokens": 4975,
+     "output_tokens": 372,
+     "cache_read_tokens": 2483,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T15:34:24.383265Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer",
+    "data": {
+     "text": "M-25-22 applies 180 days after it is issued. It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+     "segments": [
+      {
+       "text": "M-25-22 applies 180 days after it is issued. ",
+       "citations": []
+      },
+      {
+       "text": "It shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": "\n\nThe memorandum is dated April 2025 in its title, but the passages don't give the exact issue day, so I can't name a calendar date for the start. The rule also has a carve-out: ",
+       "citations": []
+      },
+      {
+       "text": "this memorandum does not apply to AI acquired for use as a component of a National Security System.",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "citations": [
+      {
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+       "number": 1,
+       "source": "doc-9/p4",
+       "page_no": 4,
+       "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+       "provenance": "verified",
+       "document_id": 9
+      },
+      {
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+       "number": 2,
+       "source": "doc-9/p4",
+       "page_no": 4,
+       "cited_text": "This memorandum does not apply to AI acquired for use as a component of a National Security System. 13 3. AGENCY-LEVEL REQUIREMENTS In addition to the actions described in Section 4 below, this memorandum directs agencies to: b. Update Agency Policies.",
+       "provenance": "verified",
+       "document_id": 9
+      }
+     ],
+     "citations_verified": 2
+    },
+    "created_at": "2026-10-28T15:34:24.387889Z"
+   },
+   {
+    "seq": 11,
+    "type": "support",
+    "data": {
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "The passage states the same applicability to solicitations and options issued or exercised after the 180-day date.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "The passage states the memorandum does not apply to AI acquired for use as a component of a National Security System.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 2,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T15:34:25.988326Z"
+   },
+   {
+    "seq": 12,
+    "type": "run_finished",
+    "data": {
+     "ms": 6220,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.000966,
+     "tool_calls": 1,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 6223,
+     "output_tokens": 604,
+     "cache_read_tokens": 4169,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T15:34:25.992884Z"
+   }
+  ]
+ }
+}

@@ -16,7 +16,7 @@ Each folder holds `results.json` (every measurement), `report.md` (the generated
   - **Agent**: the tool loop (list, search, read pages, ask for clarification), up to 10 model turns and 9 tool calls.
   - **Baseline**: one search with the question (top 8 passages), one model call, no tools.
   - Both use the same model at effort `medium`, the same retriever and search executor (timeout, one retry, fault injection), the same answer rules, and the same citation format and checks.
-- **Cases**: [`eval/cases.json`](../eval/cases.json), the eight required behaviours plus a second tool-failure variant (8b) and a real conflict resolved by supersession (9). Each case lists the expected behaviour, gold documents and physical pages (checked by hand against the PDFs), required facts, forbidden content and any injected fault.
+- **Cases**: [`eval/cases.json`](../eval/cases.json), the eight required behaviours plus a second tool-failure variant (8b) and a real conflict resolved by supersession (9). Each case lists the expected behaviour, gold documents and physical pages (checked by hand against the PDFs), required facts, forbidden content and any injected fault. Cases 10 to 14 were added after these runs ([below](#five-questions-the-prompt-was-not-tuned-on)).
 - **Checks** (deterministic, per run): required facts present; forbidden content absent; every citation verified (its quote is in the evidence sent and on the stored page); a gold page cited (in case 5, the page with the deadline the answer gives); the page that settles the question cited, where one does (case 9); in cross-document cases, a gold page cited in each document; plus the behaviour the case expects (clarification asked, missing evidence stated, injected page actually reached the model, retry after a failure, recovery or a reported incomplete). A run passes only if every check passes. A pass means the checks found nothing wrong; it is not a full judgment of correctness, which is why answers were also read by hand (below).
 - **Repeats**: 3 per case and system, 60 runs per model, each in a fresh session.
 
@@ -45,6 +45,22 @@ Every case gave the same result in all three repeats, except the Haiku baseline 
 | 9 Supersession | 365 days (M-24-10) vs 180 days (M-25-21); cite M-25-21 p. 1, which rescinds M-24-10 | 3/3 | 0/3 | 0/3 | 0/3 | 8.3 s | $0.0039 |
 
 Latency is execution time; for case 4 it excludes the time waiting for the user's reply. Agent cost includes prompt caching: the tools and system prompt, resent every turn, are mostly served from the cache, at a tenth of the input price on Haiku and a twentieth on Sonnet. Sonnet costs use its current cache-read price of $0.10 per million tokens; its run report was written with the earlier $0.20 ([reproducibility notes](reproducibility.md#expected-api-costs)).
+
+## Five questions the prompt was not tuned on
+
+The first ten cases shaped the prompt, so they cannot show how the agent does on new questions. Cases 10 to 14 were written later, with expected pages and checks fixed before any run: a penalty the AI RMF never sets (it is voluntary), the acquisition memo that replaced M-24-18, the AI RMF Core's cross-cutting function, two information security risks plus indirect prompt injection across two documents, and when M-25-22 applies to new contracts. All 15 cases, three repeats each, on the same build ([Haiku run](../eval/results/2026-10-28T152942Z/), [Sonnet run](../eval/results/2026-10-28T154456Z/)):
+
+| Model, system | All 15 cases | Cases 10 to 14 | Mean latency | Cost, 45 runs |
+|---|---|---|---|---|
+| Haiku, agent | 39 of 45 | 11 of 15 | 9.3 s | $0.106 |
+| Haiku, baseline | 21 of 45 | 9 of 15 | 9.2 s | $0.073 |
+| Sonnet, agent | 40 of 45 | 13 of 15 | 12.3 s | $1.523 |
+| Sonnet, baseline | 21 of 45 | 9 of 15 | 7.7 s | $1.084 |
+
+- **Case 13, Haiku agent, 0 of 3.** Each answer gives both risks with the right page and describes indirect injection from NIST AI 100-2, but uses none of the words the check requires (external, third party, outside); two say the instructions arrive through content the model processes, not from the user. The check was fixed before the run and stays as it is. Sonnet used the document's phrase, "resource control", and passed.
+- **Case 10, agent, Haiku 2 of 3 and Sonnet 1 of 3.** The failing answers say the framework is voluntary but cite other pages, not p. 7 or p. 47, where the document says so.
+- **The baseline** passes the three single-lookup cases (11, 12, 14) and fails the two that need a second search or a specific page.
+- On the first ten cases this build did about as well as the runs above: Haiku agent 28 of 30 (one miss each in cases 3 and 5), Sonnet agent 27 of 30 (case 9 again).
 
 ## Which model, and why Haiku is the default
 
@@ -94,6 +110,16 @@ The checks are deterministic and narrow, so the first repeat of three columns wa
 The shortfalls are missing evidence, incomplete answers, missing citations, and two answers that went further than their evidence: the baseline's case 5 answer gives the deadline of a different requirement, and Sonnet's case 6 answer treats an unresolved conflict as settled. For the Haiku agent, every sentence without a citation was also checked against the passages it had retrieved (the scorer cannot see those sentences): all restate what a cited passage says, apart from one labelled date calculation in case 9 ("my calculation").
 
 **Citation support.** Provenance is checked in code for every citation: the quote was sent to the model and is on the cited page (535 of 535 across both runs). Whether a quote supports its sentence was reviewed by hand on the earlier runs with the same retriever and corpus (Sonnet agent 56 of 56, Sonnet baseline 40 of 40, Haiku agent 50 of 50, first repeat each); it was not repeated for these runs.
+
+**The support check, measured against hand labels.** Each answer now gets an automatic support check: one Haiku call judges whether each cited quote supports its piece of the answer. [`scripts/support_eval.py`](../scripts/support_eval.py) sends that judge 84 labelled pieces, with the same prompt and reply handling as a run ([`eval/support_check/`](../eval/support_check/)):
+
+| Pieces | Hand label | Judged supported | Partly | Not supported |
+|---|---|---|---|---|
+| 60 cited pieces of the Haiku agent's answers above | supported | 55 | 5 | 0 |
+| 14 of them with a number or rule changed by hand | partly or not supported | 0 | 2 | 12 |
+| 10 paired with a quote about something else | not supported | 1 | 0 | 9 |
+
+It caught every altered piece and 9 of 10 mismatched quotes. The one miss accepted a quote about mitigation measures for a sentence about purpose and benefit. The five "partly" verdicts on supported pieces are listed in the report with the judge's reasons; three are fragments that stop mid-phrase. So the check is shown to the reader as advice next to each source, and the hand review stays the measure of support.
 
 ## Failure analysis
 
