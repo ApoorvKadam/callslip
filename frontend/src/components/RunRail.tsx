@@ -114,7 +114,7 @@ function Sources({
             <button
               type="button"
               className="source-head"
-              aria-pressed={activeN === c.number}
+              aria-pressed={chosen?.runId === run.id && chosen.n === c.number}
               aria-label={`Source ${c.number}: ${shortCode(c.title)}, page ${c.page_no}`}
               onFocus={() => onHover({ runId: run.id, n: c.number })}
               onBlur={() => onHover(null)}
