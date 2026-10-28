@@ -40,6 +40,7 @@ class RunContext:
             "model_call",
             {
                 "turn": self.model_turns,
+                "model": getattr(self.llm, "model", None),
                 "purpose": purpose,
                 "stop_reason": stop_reason,
                 "ms": usage.ms,
