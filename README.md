@@ -2,7 +2,7 @@
 
 Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, a document's outline, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
 
-VIDEO_ATTACHMENT_URL
+https://github.com/user-attachments/assets/bff6965a-f1da-4471-9c2f-91d7484c30c2
 
 The walkthrough above (1920 by 1080, three minutes; [download the MP4](docs/media/callslip-walkthrough.mp4)): signing in and uploading a private PDF, a question across two documents in each answering mode, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, and the saved conversations.
 
