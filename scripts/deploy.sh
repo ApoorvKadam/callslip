@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 # Deploy the current commit: build images tagged with its short SHA, start them, verify.
 #   scripts/deploy.sh            # deploy HEAD
-# The previous tag is kept in .deploy/previous for scripts/rollback.sh.
+# The tag is recorded in .deploy/current only after verification passes; the one it replaces
+# moves to .deploy/previous for scripts/rollback.sh.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 tag="$(git rev-parse --short HEAD)"
 mkdir -p .deploy
-if [[ -f .deploy/current ]]; then cp .deploy/current .deploy/previous; fi
+current="$(cat .deploy/current 2>/dev/null || true)"
 
 echo "building images agentic-rag-*:${tag}"
 IMAGE_TAG="$tag" docker compose build
 echo "starting ${tag}"
 IMAGE_TAG="$tag" docker compose up -d --wait --wait-timeout 240
-echo "$tag" > .deploy/current
 
-scripts/verify.sh
+if ! scripts/verify.sh; then
+  echo "verify failed for ${tag}; last verified: ${current:-none} (scripts/rollback.sh ${current})" >&2
+  exit 1
+fi
+if [[ -n "$current" && "$current" != "$tag" ]]; then echo "$current" > .deploy/previous; fi
+echo "$tag" > .deploy/current
 echo "deployed ${tag} (previous: $(cat .deploy/previous 2>/dev/null || echo none))"

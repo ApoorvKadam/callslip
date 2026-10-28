@@ -13,9 +13,11 @@ for image in agentic-rag-backend agentic-rag-frontend; do
   docker image inspect "${image}:${tag}" > /dev/null || { echo "missing ${image}:${tag}" >&2; exit 1; }
 done
 
+current="$(cat .deploy/current 2>/dev/null || true)"
 echo "rolling back to ${tag}"
 IMAGE_TAG="$tag" docker compose up -d --no-build --wait --wait-timeout 240
-cp .deploy/current .deploy/previous 2>/dev/null || true
-echo "$tag" > .deploy/current
 scripts/verify.sh
+# Recorded only after verification, like deploy.sh.
+if [[ -n "$current" && "$current" != "$tag" ]]; then echo "$current" > .deploy/previous; fi
+echo "$tag" > .deploy/current
 echo "running ${tag}"
