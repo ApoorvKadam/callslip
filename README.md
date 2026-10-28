@@ -27,6 +27,7 @@ The difference is in the cases that need more than one step: two documents, a cl
 
 | Document | What it covers |
 |---|---|
+| [docs/requirements.md](docs/requirements.md) | every requirement of the brief, where it is built, and what proves it works |
 | [docs/architecture.md](docs/architecture.md) | services, data flow, the agent's tools, state and stopping conditions, trade-offs, scaling |
 | [docs/demo.md](docs/demo.md) | the recorded walkthrough, and how to reproduce each step: multi-document question, re-retrieval, clarification, tool failure, limits, Redis outage |
 | [docs/evaluation.md](docs/evaluation.md) | fifteen cases, the agent against a single-pass baseline, latency, the support check, failure analysis |
