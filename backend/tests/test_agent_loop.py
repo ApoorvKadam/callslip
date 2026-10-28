@@ -159,6 +159,16 @@ async def test_no_time_left_stops_without_another_model_call(tools):  # noqa: F8
     assert "stopped before finishing" in run["answer"]["text"]
 
 
+async def test_a_clarification_needs_a_turn_left_to_use_the_reply(tools):  # noqa: F811
+    llm = ReplayLLM(RUNS[AMBIGUOUS])  # recorded: list_documents, then ask_clarification
+    ctx = await new_run(tools, llm, max_model_turns=3)
+    await start_agent(ctx, AMBIGUOUS, [], {})
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "incomplete"  # answered within the limit instead of pausing
+    assert llm.tool_choices[-1] == FINAL
+    assert "limit" in [t for t, _ in await events(ctx)]
+
+
 class TimeoutLLM:
     """A model call whose total time budget runs out (the wait_for in llm.py)."""
 

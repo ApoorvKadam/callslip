@@ -198,14 +198,18 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
             return
 
         if tool_use.name == "ask_clarification":
+            # A question is only asked if a turn is left to use the reply; resume restores the
+            # counts, so clarifications cannot run past the limits either.
+            note = limit_after_tool(ctx)
             try:
                 args = ClarificationArgs.model_validate(tool_use.input)
             except ValidationError as exc:
                 outcome = invalid_input("ask_clarification", exc)
-                note = limit_after_tool(ctx)
             else:
-                await pause_for_clarification(ctx, tool_use.id, args)
-                return
+                if not note:
+                    await pause_for_clarification(ctx, tool_use.id, args)
+                    return
+                outcome = _not_run(note)
         else:
             step += 1
             started = time.monotonic()
