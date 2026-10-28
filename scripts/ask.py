@@ -52,6 +52,8 @@ def main() -> int:
     _, session = client.call("POST", "/api/sessions")
     payload = {"question": args.question, "mode": args.mode}
     if args.fault:
+        if any("=" not in f for f in args.fault):
+            parser.error("--fault must use the form TOOL=MODE")
         payload["faults"] = dict(f.split("=", 1) for f in args.fault)
     status, run = client.call("POST", f"/api/sessions/{session['id']}/runs", payload)
     if status != 202:

@@ -192,6 +192,7 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
                 args = ClarificationArgs.model_validate(tool_use.input)
             except ValidationError as exc:
                 outcome = invalid_input("ask_clarification", exc)
+                note = limit_after_tool(ctx)
             else:
                 await pause_for_clarification(ctx, tool_use.id, args)
                 return
