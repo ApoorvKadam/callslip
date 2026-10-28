@@ -1,0 +1,135 @@
+import { type FormEvent, type KeyboardEvent, useState } from "react";
+import { signIn, signOut } from "../api";
+
+function errorText(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
+}
+
+// Sign in, create an account, or sign out. Signed in, uploads go to the user's own documents,
+// which nobody else sees; the shared collection stays visible to everyone.
+export function AccountMenu({
+  email,
+  onChange,
+}: {
+  email: string | null;
+  onChange: (email: string | null) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      const account = await signIn(address.trim(), password, creating);
+      setPassword("");
+      setOpen(false);
+      onChange(account.email);
+    } catch (err) {
+      setError(errorText(err));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function leave() {
+    setError(null);
+    try {
+      await signOut();
+      onChange(null); // only once the server has ended the sign-in
+    } catch (err) {
+      setError(`Could not sign out: ${errorText(err)}`);
+    }
+  }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") setOpen(false);
+  }
+
+  if (email) {
+    return (
+      <div className="account">
+        <span className="meta account-email">{email}</span>
+        <button type="button" className="text-button" onClick={() => void leave()}>
+          Sign out
+        </button>
+        {error && (
+          <p className="error account-error" role="alert">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="account" onKeyDown={onKeyDown}>
+      <button
+        type="button"
+        className="btn"
+        aria-expanded={open}
+        aria-controls="sign-in"
+        onClick={() => setOpen(!open)}
+      >
+        Sign in
+      </button>
+      {open && (
+        <form
+          id="sign-in"
+          className="sign-in"
+          aria-label={creating ? "Create an account" : "Sign in"}
+          onSubmit={(e) => void submit(e)}
+        >
+          <label>
+            <span className="label">Email</span>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </label>
+          <label>
+            <span className="label">Password</span>
+            <input
+              type="password"
+              required
+              minLength={creating ? 10 : undefined}
+              autoComplete={creating ? "new-password" : "current-password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+          {creating && <p className="meta">At least 10 characters.</p>}
+          {error && (
+            <p className="error" role="alert">
+              {error}
+            </p>
+          )}
+          <button type="submit" className="btn btn-primary" disabled={busy}>
+            {creating ? "Create account" : "Sign in"}
+          </button>
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => {
+              setCreating(!creating);
+              setError(null);
+            }}
+          >
+            {creating ? "I already have an account" : "Create an account"}
+          </button>
+          <p className="meta">
+            Your uploads are visible only to you. The shared collection stays visible to everyone.
+          </p>
+        </form>
+      )}
+    </div>
+  );
+}

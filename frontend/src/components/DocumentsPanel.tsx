@@ -26,7 +26,7 @@ function errorText(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
 }
 
-export function DocumentsPanel() {
+export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
   const [docs, setDocs] = useState<DocumentInfo[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
@@ -42,9 +42,10 @@ export function DocumentsPanel() {
     }
   }, []);
 
+  // Signing in or out changes which documents are visible.
   useEffect(() => {
     void refresh();
-  }, [refresh]);
+  }, [refresh, signedIn]);
 
   // Poll only while something is still being processed.
   const pending = docs.some((d) => d.status === "queued" || d.status === "processing");
@@ -73,6 +74,8 @@ export function DocumentsPanel() {
   }
 
   const ready = docs.filter((d) => d.status === "ready").length;
+  const mine = docs.filter((d) => d.private);
+  const shared = docs.filter((d) => !d.private);
 
   return (
     <section aria-labelledby="documents-heading">
@@ -94,7 +97,7 @@ export function DocumentsPanel() {
           disabled={uploading}
           onChange={(e) => void upload(e.target.files)}
         />
-        <span>{uploading ? "Uploading" : "Upload PDFs"}</span>
+        <span>{uploading ? "Uploading" : signedIn ? "Upload to your documents" : "Upload PDFs"}</span>
       </label>
       <p className="notice meta" role="status" aria-live="polite">
         {notice}
@@ -108,32 +111,46 @@ export function DocumentsPanel() {
       {docs.length === 0 && !loadError && (
         <p className="meta">No documents yet. Upload text-based PDFs to start.</p>
       )}
-      <ul className="doc-list">
-        {docs.map((d) => (
-          <li key={d.id} className="doc">
-            <a
-              href={documentFileUrl(d.id)}
-              target="_blank"
-              rel="noreferrer"
-              title={d.title}
-              aria-label={`${d.title}${d.status === "ready" ? "" : `, ${STATUS_LABEL[d.status]}`}, opens the PDF`}
-            >
-              <span className="doc-code">
-                {shortCode(d.title)}
-                {d.status !== "ready" && (
-                  <span className={STATUS_MARK[d.status]}>{STATUS_LABEL[d.status]}</span>
-                )}
-              </span>
-              <span className="doc-title">{titleRest(d.title)}</span>
-              <span className="meta">
-                {d.page_count ? `${d.page_count} pages` : d.filename}
-                {d.chunk_count ? `, ${d.chunk_count} passages` : ""}
-              </span>
-            </a>
-            {d.error && <p className="error meta">{d.error}</p>}
-          </li>
-        ))}
-      </ul>
+      {signedIn && (
+        <>
+          <h3 className="label doc-group">Your documents</h3>
+          {mine.length === 0 && <p className="meta">Only you can see what you upload here.</p>}
+          <DocList docs={mine} />
+          <h3 className="label doc-group">Shared collection</h3>
+        </>
+      )}
+      <DocList docs={shared} />
     </section>
+  );
+}
+
+function DocList({ docs }: { docs: DocumentInfo[] }) {
+  return (
+    <ul className="doc-list">
+      {docs.map((d) => (
+        <li key={d.id} className="doc">
+          <a
+            href={documentFileUrl(d.id)}
+            target="_blank"
+            rel="noreferrer"
+            title={d.title}
+            aria-label={`${d.title}${d.status === "ready" ? "" : `, ${STATUS_LABEL[d.status]}`}, opens the PDF`}
+          >
+            <span className="doc-code">
+              {shortCode(d.title)}
+              {d.status !== "ready" && (
+                <span className={STATUS_MARK[d.status]}>{STATUS_LABEL[d.status]}</span>
+              )}
+            </span>
+            <span className="doc-title">{titleRest(d.title)}</span>
+            <span className="meta">
+              {d.page_count ? `${d.page_count} pages` : d.filename}
+              {d.chunk_count ? `, ${d.chunk_count} passages` : ""}
+            </span>
+          </a>
+          {d.error && <p className="error meta">{d.error}</p>}
+        </li>
+      ))}
+    </ul>
   );
 }

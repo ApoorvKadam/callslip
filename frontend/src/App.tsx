@@ -10,11 +10,13 @@ import {
   abandon,
   ask,
   createSession,
+  getAccount,
   getRun,
   getSession,
   resume,
   runEventsUrl,
 } from "./api";
+import { AccountMenu } from "./components/AccountMenu";
 import { Conversation, type LiveAnswer, type PendingClarification } from "./components/Conversation";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { RunRail, type RailTab } from "./components/RunRail";
@@ -112,6 +114,14 @@ export default function App() {
     setRuns([]);
     setEvents({});
     setSelectedId(null);
+  }, []);
+
+  // Who is signed in, if anyone: it decides which documents are visible and searched.
+  const [account, setAccount] = useState<string | null>(null);
+  useEffect(() => {
+    getAccount()
+      .then((a) => setAccount(a.email))
+      .catch(() => setAccount(null));
   }, []);
 
   // Restore the last session in this browser, or start a new one.
@@ -301,11 +311,19 @@ export default function App() {
           <button type="button" className="btn" onClick={() => void onNewSession()}>
             New conversation
           </button>
+          <AccountMenu
+            email={account}
+            onChange={(email) => {
+              // A conversation belongs to the account that started it, so start a new one.
+              setAccount(email);
+              void startSession().catch((e) => setError(`Could not start a session: ${errorText(e)}`));
+            }}
+          />
         </div>
       </header>
       <div className="layout">
         <aside className="docs" aria-label="Documents">
-          <DocumentsPanel />
+          <DocumentsPanel signedIn={account !== null} />
         </aside>
         <main className="talk">
           <Conversation

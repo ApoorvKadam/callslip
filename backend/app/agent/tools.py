@@ -168,14 +168,17 @@ def invalid_input(tool: str, exc: ValidationError | ValueError) -> ToolOutcome:
 class Tools:
     """Runs the read tools against the corpus. One instance per run."""
 
-    def __init__(self, search: SearchService, store: RunStore) -> None:
+    def __init__(self, search: SearchService, store: RunStore, viewer: int | None = None) -> None:
         self.search = search
         self.store = store
+        self.viewer = viewer  # the user who asked: shared documents plus their own
 
     async def list_documents(self, args: ListArgs) -> ToolOutcome:
         async with self.store.pool.connection() as conn:
             cur = await conn.execute(
-                "SELECT id, title, page_count FROM documents WHERE status = 'ready' ORDER BY id"
+                "SELECT id, title, page_count FROM documents WHERE status = 'ready'"
+                " AND (owner_user_id IS NULL OR owner_user_id = %s) ORDER BY id",
+                (self.viewer,),
             )
             rows = await cur.fetchall()
         if not rows:
@@ -190,7 +193,10 @@ class Tools:
 
     async def search_documents(self, args: SearchArgs) -> ToolOutcome:
         filters = SearchFilters(
-            tuple(args.document_ids) if args.document_ids else None, args.page_from, args.page_to
+            tuple(args.document_ids) if args.document_ids else None,
+            args.page_from,
+            args.page_to,
+            viewer=self.viewer,
         )
         result = await self.search.search(args.query, filters, args.top_k)
         trace = {"cache": result.cache, "evidence": evidence_summary(result.hits)}
@@ -198,7 +204,7 @@ class Tools:
             payload = {
                 "status": "no_results",
                 "query": args.query,
-                "filters": {k: v for k, v in filters.__dict__.items() if v},
+                "filters": {k: v for k, v in filters.__dict__.items() if v and k != "viewer"},
                 "hint": "Rewrite the query with other terms, or remove filters.",
             }
             return ToolOutcome(_json(payload), False, "no_results", "no passages", trace)
@@ -210,8 +216,9 @@ class Tools:
     async def read_document_section(self, args: SectionArgs) -> ToolOutcome:
         async with self.store.pool.connection() as conn:
             cur = await conn.execute(
-                "SELECT title, page_count, status FROM documents WHERE id = %s",
-                (args.document_id,),
+                "SELECT title, page_count, status FROM documents WHERE id = %s"
+                " AND (owner_user_id IS NULL OR owner_user_id = %s)",
+                (args.document_id, self.viewer),
             )
             doc = await cur.fetchone()
             if doc is None or doc[2] != "ready":

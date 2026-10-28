@@ -118,3 +118,32 @@ async def test_empty_filter_result_is_an_empty_list(pool):
     p, _ = pool
     hits = await hybrid_search(p, "four functions", axis(0), SearchFilters(page_from=500), top_k=5)
     assert hits == []
+
+
+async def test_a_private_document_is_searched_only_for_its_owner(pool):
+    p, _ = pool
+    async with p.connection() as conn:
+        cur = await conn.execute(
+            "INSERT INTO users (email, password_hash) VALUES ('a@x.edu', 'x'), ('b@x.edu', 'x')"
+            " RETURNING id"
+        )
+        owner, other = [r[0] for r in await cur.fetchall()]
+        cur = await conn.execute(
+            "INSERT INTO documents (title, filename, sha256, byte_size, status, owner_user_id)"
+            " VALUES ('notes', 'notes.pdf', 'notes', 1, 'ready', %s) RETURNING id",
+            (owner,),
+        )
+        notes = (await cur.fetchone())[0]
+        await conn.execute(
+            "INSERT INTO chunks (document_id, page_no, chunk_index, text, search_text,"
+            " token_count, embedding) VALUES (%s, 1, 0, 'Private lab notes.', 'Private lab notes.',"
+            " 1, %s)",
+            (notes, axis(7)),
+        )
+
+    def found(viewer):
+        return hybrid_search(p, "private lab notes", axis(7), SearchFilters(viewer=viewer), 10)
+
+    assert notes in {h.document_id for h in await found(owner)}
+    assert notes not in {h.document_id for h in await found(other)}
+    assert notes not in {h.document_id for h in await found(None)}

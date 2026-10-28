@@ -151,11 +151,11 @@ async def start_agent(
 ) -> None:
     first = [{"type": "text", "text": question_text(question, history)}]
     await ctx.store.append_message(ctx.run_id, "user", first)
-    await agent_loop(ctx, Tools(ctx.search, ctx.store), faults)
+    await agent_loop(ctx, Tools(ctx.search, ctx.store, ctx.viewer), faults)
 
 
 async def resume_agent(ctx: RunContext) -> None:
-    await agent_loop(ctx, Tools(ctx.search, ctx.store), {})
+    await agent_loop(ctx, Tools(ctx.search, ctx.store, ctx.viewer), {})
 
 
 async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> None:
