@@ -54,7 +54,7 @@ In the UI, choose Agent or Single pass under the question box. From a terminal: 
 
 ## Answers and citations
 
-Passages go to Claude (`claude-sonnet-5-5`) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. The UI shows each citation as a numbered chip; selecting it shows the quote, the check result and a link that opens the PDF at that page.
+Passages go to Claude (`claude-haiku-5-5` by default, `claude-sonnet-5-5` as an option; see [the comparison](docs/evaluation.md#which-model-and-why-haiku-is-the-default)) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. The UI shows each citation as a numbered chip; selecting it shows the quote, the check result and a link that opens the PDF at that page.
 
 Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the trace, and every model call with tokens and estimated cost. A browser gets a random token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to it, so another browser cannot read them. One question at a time per session.
 

@@ -14,7 +14,7 @@
 
 ## Results in one line
 
-On 10 cases with 3 repeats each, the agent passed 25 of 30 runs and the single-pass baseline 12 of 30, with every one of 290 citations verified on its page. The agent's 5 failures: asked about a fine, it gave the wrong deadline or none in two of three runs; and it never searched for the page saying a newer memo replaces an older one, yet said without a citation that the newer one governs. The agent took 1.9 times the median latency (7.1 s vs 3.7 s) and 1.5 times the cost ($0.026 vs $0.018 per question). Details: [docs/evaluation.md](docs/evaluation.md).
+On 10 cases with 3 repeats each, the agent on Claude Haiku 5.5 passed every check in 30 of 30 runs, against 11 of 30 for a single-pass baseline on the same retriever and model, at $0.0026 per question; every citation was verified on its page. On Claude Sonnet 5.5 the agent passed 27 of 30 at ten times the cost: it never searched for the page that settles which memo governs. Haiku is the default; Sonnet remains a setting. Details: [docs/evaluation.md](docs/evaluation.md).
 
 ## Unfinished, and what I would do with more time
 

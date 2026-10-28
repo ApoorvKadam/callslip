@@ -14,7 +14,7 @@ flowchart LR
         pg[("PostgreSQL 17 + pgvector<br/>documents, pages, chunks + vectors,<br/>sessions, runs, messages, events,<br/>model-call ledger")]
         redis[("Redis 8<br/>cache only: search results,<br/>query embeddings")]
     end
-    claude[["Anthropic API<br/>claude-sonnet-5-5"]]
+    claude[["Anthropic API<br/>claude-haiku-5-5 (default)"]]
 
     user -- "HTTP + server-sent events" --> web
     web -- "/api" --> api

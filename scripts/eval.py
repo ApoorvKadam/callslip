@@ -106,6 +106,10 @@ def totals(runs: list[dict]) -> dict:
         out["tool_calls"] += sum(1 for e in run["events"] if e["type"] == "tool_call")
         out["cost_usd"] += f.get("cost_usd", 0.0)
     out["cost_usd"] = round(out["cost_usd"], 5)
+    out["models"] = sorted(
+        {e["data"].get("model") for r in runs for e in r["events"] if e["type"] == "model_call"}
+        - {None}
+    )
     return out
 
 
@@ -306,7 +310,9 @@ def main() -> int:
                     f"{'; '.join(scored['notes'])}"
                 )
 
-    write(out_dir, {"started": started, "systems": systems, "repeat": args.repeat}, results)
+    models = sorted({m for r in results for m in r.get("models", []) if m})
+    meta = {"started": started, "systems": systems, "repeat": args.repeat, "models": models}
+    write(out_dir, meta, results)
     print(f"\nspent ${spent:.4f}; wrote {out_dir.relative_to(ROOT)}")
     return 0
 

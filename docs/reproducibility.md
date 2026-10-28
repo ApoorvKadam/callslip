@@ -35,7 +35,7 @@ cd backend && uv run python ../scripts/build_fixtures.py   # rebuild the synthet
 
 | Part | Identifier | Settings |
 |---|---|---|
-| Answers (agent and baseline) | `claude-sonnet-5-5` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `medium`, adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto with `disable_parallel_tool_use`, prompt caching on tools and system prompt |
+| Answers (agent and baseline) | `claude-haiku-5-5` by default, `claude-sonnet-5-5` with `ANSWER_MODEL` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `medium`, adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto with `disable_parallel_tool_use`, prompt caching on tools and system prompt |
 | Embeddings | `BAAI/bge-small-en-v1.5` via fastembed 0.9.1 (ONNX, CPU, 384 dimensions) | model files baked into the image; queries use `query_embed`, passages `passage_embed` |
 | Chunking tokenizer | the embedding model's own `tokenizer.json` | about 350 tokens per passage, about 50 overlap, page-bounded |
 | Database | `pgvector/pgvector:0.8.7-pg17` | exact cosine search, GIN full-text index |
@@ -207,21 +207,18 @@ ALLOW_FAULT_INJECTION=true docker compose up -d --build --wait   # the tool-fail
 python3 scripts/load_corpus.py
 python3 scripts/eval.py --repeat 3                              # agent and baseline, all cases
 python3 scripts/eval.py --systems agent --cases 4-ambiguous     # one case, one system
-python3 scripts/eval.py --rescore eval/results/2026-10-28T0217Z  # grade saved answers again
+python3 scripts/eval.py --rescore eval/results/2026-10-28T043802Z  # grade saved answers again
 ```
 
 Results go to a new folder, `eval/results/<UTC timestamp>/` (`results.json`, `report.md`, `traces/`). The runner stops if spending passes `--budget` (default 5 USD). `--rescore` applies the current `eval/cases.json` to a saved run without calling the model; it needs the stack running with the same documents loaded, because cases name documents by title.
 
 ## Expected API costs
 
-Measured with `claude-sonnet-5-5` at Anthropic list prices: $2 per million input tokens, $10 per million output tokens, $0.20 per million cached input tokens read, $2.50 per million written to the cache (5-minute TTL). Every call's tokens and estimated cost are recorded in the `llm_calls` table and shown in the trace.
+Measured at Anthropic list prices: Haiku 5.5 $0.10 per million input tokens, $0.50 per million output, $0.01 per million cached input read; Sonnet 5.5 $2, $10 and $0.20. Every call's tokens and estimated cost are recorded in the `llm_calls` table and shown in the trace.
 
-| Item | Cost |
-|---|---|
-| Ingestion and search | none: embeddings run locally |
-| One question, agent | about $0.026 on average (case averages from $0.012 to $0.056) |
-| One question, single-pass baseline | about $0.018 on average |
-| Full evaluation, 10 cases x 2 systems x 3 repeats (60 runs) | $1.33 |
-| One evaluation pass (`--repeat 1`) | about $0.45 |
-
-`ANSWER_MODEL=claude-haiku-5-5` ($0.10 / $0.50 per million tokens) would cut these by about 20 times, at a quality cost the evaluation would need to measure.
+| Item | Haiku 5.5 (default) | Sonnet 5.5 |
+|---|---|---|
+| Ingestion and search | none: embeddings run locally | none |
+| One question, agent | about $0.0026 (case averages $0.0010 to $0.0043) | about $0.027 |
+| One question, single-pass baseline | about $0.0013 | about $0.018 |
+| Full evaluation, 10 cases x 2 systems x 3 repeats (60 runs) | $0.12 | $1.36 |
