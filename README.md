@@ -1,6 +1,8 @@
-# Agentic RAG over PDFs
+# Callslip
 
-A full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
+Callslip is a full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
+
+The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
 Start with [SUMMARY.md](SUMMARY.md): what was built, the results in one paragraph, and what is unfinished.
 

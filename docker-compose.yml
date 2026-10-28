@@ -1,10 +1,10 @@
 # The whole stack: `docker compose up -d --build`, then open http://localhost:8080
 # Secrets and settings come from .env (copy .env.example); nothing secret is in this file.
-name: agentic-rag
+name: callslip
 
 x-backend: &backend
   build: ./backend
-  image: agentic-rag-backend:${IMAGE_TAG:-dev}
+  image: callslip-backend:${IMAGE_TAG:-dev}
   restart: unless-stopped
   # Optional settings (MAX_TOOL_CALLS, ANSWER_MODEL, ...) are read from .env too; see config.py.
   env_file:
@@ -78,7 +78,7 @@ services:
 
   frontend:
     build: ./frontend
-    image: agentic-rag-frontend:${IMAGE_TAG:-dev}
+    image: callslip-frontend:${IMAGE_TAG:-dev}
     restart: unless-stopped
     ports:
       - "${WEB_PORT:-8080}:8080"
