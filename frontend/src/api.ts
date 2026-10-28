@@ -34,6 +34,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       const detail = body?.detail;
       if (typeof detail === "string") message = detail;
       else if (detail?.message) message = detail.message;
+      // A rejected field: FastAPI's first validation message, e.g. "String should have at least 10 characters".
+      else if (Array.isArray(detail) && typeof detail[0]?.msg === "string") message = detail[0].msg;
     } catch {
       // Not JSON: keep the status text.
     }
