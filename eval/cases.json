@@ -1,5 +1,5 @@
 {
-  "description": "Evaluation cases. Gold pages are physical PDF pages, checked by hand against the PDFs. Documents are named by the start of their title in corpus/manifest.json. Patterns are case-insensitive regular expressions matched against the answer text.",
+  "description": "Evaluation cases. Gold pages are physical PDF pages, checked by hand against the PDFs. Documents are named by the start of their title in corpus/manifest.json. Patterns are case-insensitive regular expressions matched against the answer text. Cases 10 to 14 were added later, written and committed before any run against them.",
   "cases": [
     {
       "id": "1-simple-lookup",
@@ -258,6 +258,128 @@
         }
       ],
       "note": "M-25-21 p. 1 says it rescinds and replaces M-24-10. Saying which deadline governs needs that page cited; a guess from the dates does not count."
+    },
+    {
+      "id": "10-voluntary-framework",
+      "category": "Insufficient evidence (added)",
+      "question": "What penalty does the NIST AI RMF set for an organization that chooses not to adopt it?",
+      "expect": "insufficient",
+      "gold": [
+        {
+          "doc": "NIST AI 100-1",
+          "pages": [
+            7,
+            47
+          ]
+        }
+      ],
+      "required": [
+        "voluntary"
+      ],
+      "insufficient_pattern": "(does not|doesn't|do not|don't) (specify|mention|state|set|include|establish|impose|provide|contain)|no (penalt|fine|sanction|enforcement)|not (specified|mentioned|stated|found|set out)|voluntary",
+      "forbidden": [
+        "\\$\\s?\\d",
+        "fine of \\d",
+        "penalty of \\d"
+      ]
+    },
+    {
+      "id": "11-acquisition-supersession",
+      "category": "Supersession (added)",
+      "question": "Which OMB memo currently governs how federal agencies acquire AI, and what happened to the earlier acquisition memo?",
+      "expect": "answer",
+      "gold": [
+        {
+          "doc": "OMB M-25-22",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "must_cite": [
+        {
+          "doc": "OMB M-25-22",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "required": [
+        "M-25-22",
+        "M-24-18",
+        "(rescind|replac)"
+      ],
+      "forbidden": []
+    },
+    {
+      "id": "12-core-cross-cutting",
+      "category": "Multi-passage, one document (added)",
+      "question": "Which four functions make up the NIST AI RMF Core, and which one is described as cross-cutting?",
+      "expect": "answer",
+      "gold": [
+        {
+          "doc": "NIST AI 100-1",
+          "pages": [
+            25,
+            26,
+            27
+          ]
+        }
+      ],
+      "required": [
+        "GOVERN",
+        "MAP",
+        "MEASURE",
+        "MANAGE",
+        "cross-cutting"
+      ],
+      "forbidden": []
+    },
+    {
+      "id": "13-security-and-injection",
+      "category": "Multi-part / multi-document (added)",
+      "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+      "expect": "answer",
+      "gold": [
+        {
+          "doc": "NIST AI 600-1",
+          "pages": [
+            14
+          ]
+        },
+        {
+          "doc": "NIST AI 100-2",
+          "pages": [
+            52,
+            54,
+            63
+          ]
+        }
+      ],
+      "required": [
+        "attack surface",
+        "(offensive|barrier)",
+        "(external|third[- ]party|outside)"
+      ],
+      "forbidden": []
+    },
+    {
+      "id": "14-contract-start",
+      "category": "Simple lookup, number (added)",
+      "question": "How long after OMB M-25-22 is issued does it start to apply to new AI contracts?",
+      "expect": "answer",
+      "gold": [
+        {
+          "doc": "OMB M-25-22",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "required": [
+        "180"
+      ],
+      "forbidden": []
     }
   ]
 }
