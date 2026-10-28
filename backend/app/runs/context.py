@@ -59,6 +59,7 @@ class RunContext:
                     timeout_s=budget,
                     max_tokens=2000,
                     json_schema=support.SCHEMA,
+                    effort=self.settings.support_effort,
                 )
                 reply = next((b.text for b in message.content if b.type == "text"), None)
             except Exception:

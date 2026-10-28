@@ -35,7 +35,8 @@ cd backend && uv run python ../scripts/build_fixtures.py   # rebuild the synthet
 
 | Part | Identifier | Settings |
 |---|---|---|
-| Answers (agent and baseline) | `claude-haiku-5-5` by default, `claude-sonnet-5-5` with `ANSWER_MODEL` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `medium`, adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto (several tool calls per turn allowed), prompt caching on the tools and system prompt and, from turn to turn, on the conversation |
+| Answers (agent and baseline) | `claude-haiku-5-5` by default, `claude-sonnet-5-5` with `ANSWER_MODEL` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `low` (set with `ANSWER_EFFORT`), adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto (several tool calls per turn allowed), prompt caching on the tools and system prompt and, from turn to turn, on the conversation |
+| Support check (one call per answer) | the answer model | effort `medium` (set with `SUPPORT_EFFORT`), structured output (JSON schema), max 2,000 output tokens; off with `SUPPORT_CHECK=false` |
 | Embeddings | `BAAI/bge-small-en-v1.5` via fastembed 0.9.1 (ONNX, CPU, 384 dimensions) | model files baked into the image; queries use `query_embed`, passages `passage_embed` |
 | Chunking tokenizer | the embedding model's own `tokenizer.json` | about 350 tokens per passage, about 50 overlap, page-bounded |
 | Database | `pgvector/pgvector:0.8.7-pg17` | exact cosine search, GIN full-text index |

@@ -68,18 +68,19 @@ class LLM:
         on_text: Callable[[str], Awaitable[None]] | None = None,
         json_schema: dict | None = None,
         cache_conversation: bool = False,
+        effort: str | None = None,
     ) -> tuple[Message, Usage]:
         """One model call. With `on_text`, the response is streamed and each piece of text is
         passed on as it arrives; the returned message is the same finished message either way.
         With `json_schema`, the reply is one text block of JSON that matches it. With
         `cache_conversation`, the messages so far are cached too, so the next turn of the same
-        run reads them back instead of processing them again."""
+        run reads them back instead of processing them again. `effort` overrides the default."""
         kwargs: dict[str, Any] = {
             "model": self.model,
             "max_tokens": max_tokens,
             "system": system,
             "messages": messages,
-            "output_config": {"effort": self.effort},
+            "output_config": {"effort": effort or self.effort},
         }
         if tools:
             kwargs["tools"] = tools

@@ -23,8 +23,10 @@ from anthropic import AsyncAnthropic
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 from app.agent.support import SCHEMA, SUPPORT_SYSTEM, request, verdicts  # noqa: E402
+from app.config import get_settings  # noqa: E402
 
 FOLDER = ROOT / "eval" / "support_check"
+EFFORT = get_settings().support_effort  # the effort a run uses
 
 
 async def judge(client: AsyncAnthropic, model: str, items: list[dict]) -> list[dict]:
@@ -43,7 +45,7 @@ async def judge(client: AsyncAnthropic, model: str, items: list[dict]) -> list[d
         max_tokens=4000,
         system=[{"type": "text", "text": SUPPORT_SYSTEM}],
         messages=request(claims),
-        output_config={"effort": "medium", "format": {"type": "json_schema", "schema": SCHEMA}},
+        output_config={"effort": EFFORT, "format": {"type": "json_schema", "schema": SCHEMA}},
     )
     reply = next((b.text for b in message.content if b.type == "text"), None)
     return verdicts(claims, reply)
