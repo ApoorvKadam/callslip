@@ -136,7 +136,7 @@ export function Conversation(props: Props) {
       <div className="transcript" ref={transcript}>
         {runs.length === 0 && (
           <>
-            <p className="intro">Ask a question about the documents on the left.</p>
+            <p className="intro">Ask a question about the documents in the library.</p>
             <p className="meta">
               Answers cite their sources by document and page, and each cited quote is checked
               against its page.
