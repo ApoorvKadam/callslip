@@ -4,6 +4,9 @@
 |---|---|---|---|
 | `2026-10-28T165727Z` | `claude-haiku-5-5` | final (main at `09d1b08`) | the default model; 15 cases, both systems, 3 repeats |
 | `2026-10-28T171106Z` | `claude-sonnet-5-5` | final (main at `09d1b08`) | 15 cases, both systems, 3 repeats |
+| `2026-10-28T184548Z` | `claude-haiku-5-5` | shorter answers (not kept) | agent only |
+| `2026-10-28T183723Z` | `claude-haiku-5-5` | a search before the first turn, thinking off, two more instructions (not kept) | agent only |
+| `2026-10-28T182823Z` | `claude-haiku-5-5` | a search on the question before the first turn (not kept) | agent only |
 | `2026-10-28T181548Z` | `claude-haiku-5-5` | faster text delivery, thinking turned off (not kept) | agent only |
 | `2026-10-28T163035Z` | `claude-haiku-5-5` | the latency change, before merging | agent only, answers at effort `low`; the support check also ran at `low` |
 | `2026-10-28T162215Z` | `claude-haiku-5-5` | the latency change, before merging | agent only, answers at effort `medium` |

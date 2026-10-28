@@ -1,0 +1,770 @@
+{
+ "runs": [
+  {
+   "id": "e7be2fcb-cf10-4317-8fe6-566b7ad2f574",
+   "session_id": "947b0220-0499-489b-b5ed-89a02b6c41b5",
+   "mode": "agent",
+   "question": "Which OMB memo currently governs how federal agencies acquire AI, and what happened to the earlier acquisition memo?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-25-22 also sets its own timing. This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum. The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Page 1 states the memorandum rescinds and replaces M-24-18, with the same title (OCR typo '0MB' aside).",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Page 4 states the memorandum applies to contracts awarded from solicitations issued on or after 180 days after issuance.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. ",
+      "citations": []
+     },
+     {
+      "text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": "\n\nM-25-22 also sets its own timing. ",
+      "citations": []
+     },
+     {
+      "text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": ". The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 3788,
+    "citations": [
+     {
+      "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 1",
+      "number": 1,
+      "source": "doc-9/p1",
+      "page_no": 1,
+      "cited_text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government. To that end, there are three grounding themes that drive this memorandum ' s requirements: Ensuring the Government and the Public Benefit from a Competitive American Al Marketplace.",
+      "provenance": "verified",
+      "document_id": 9
+     },
+     {
+      "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+      "number": 2,
+      "source": "doc-9/p4",
+      "page_no": 4,
+      "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+      "provenance": "verified",
+      "document_id": 9
+     }
+    ],
+    "citations_verified": 2
+   },
+   "model_turns": 2,
+   "tool_calls": 1,
+   "exec_ms": 5457,
+   "created_at": "2026-10-28T18:49:00.291651Z",
+   "finished_at": "2026-10-28T18:49:05.965156Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "Which OMB memo currently governs how federal agencies acquire AI, and what happened to the earlier acquisition memo?"
+     },
+     "created_at": "2026-10-28T18:49:00.503500Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 1897,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000139,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 223,
+      "cache_read_tokens": 2684,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T18:49:02.417074Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 17,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "M-25-22 rescinds M-24-18 acquisition of artificial intelligence",
+       "top_k": 6,
+       "document_ids": [
+        8,
+        9
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "6 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0328,
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+        "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFICE OF MANAGEMENT AND BUDGET WASHINGTON, D .C . 20503 THE DIRECTOR April 3, 2025 M-25-22 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS AND ",
+        "page_no": 1,
+        "document_id": 9
+       },
+       {
+        "score": 0.0161,
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+        "excerpt": "v. AI used incidentally by a contractor during performance of a contract ( e.g., AI used at the option of a contractor when not directed or required to fulfill requirements). c. Fu",
+        "page_no": 4,
+        "document_id": 9
+       },
+       {
+        "score": 0.0159,
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+        "excerpt": "1v. Use of Government Data. Ensuring contracts permanently prohibit the use of non\u00ad public inputted agency data and outputted results to further train publicly or commercially avai",
+        "page_no": 6,
+        "document_id": 9
+       },
+       {
+        "score": 0.0156,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFICE OF MANAGEMENT AND BUDGET WASHINGTON, D.C. 20503 THE DIRECTOR September 24, 2024 M-24-18 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS A",
+        "page_no": 1,
+        "document_id": 8
+       },
+       {
+        "score": 0.0154,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "service align with the guidance for agencies provided in OMB Memorandum M-24-10 and advance the other aims identified in section 7224(d)(1) of the Act. This memorandum is that init",
+        "page_no": 3,
+        "document_id": 8
+       },
+       {
+        "score": 0.0152,
+        "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+        "excerpt": "B. Offering systems or services at uniform and publicly available prices and not engaging in self-preferencing; C. Providing equal access on comparable terms to downstream business",
+        "page_no": 24,
+        "document_id": 8
+       }
+      ]
+     },
+     "created_at": "2026-10-28T18:49:02.439510Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "The current govern",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.336555Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "ing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.456982Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": " Government* (April 2025). The earlier acquisition memo, **M-24-18**, was r",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.564060Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": "escinded and replaced. This memorandum rescinds and replaces 0MB Memorandum",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.693441Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.809871Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": "25-22 also sets its own timing. This memorandum shall apply to",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:03.930082Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer_delta",
+     "data": {
+      "text": " any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:04.053501Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": " The documents I found don't say how existing contracts that were awar",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:04.178421Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": "ded under M-24-18 are handled, so I can't say more about that.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T18:49:04.282231Z"
+    },
+    {
+     "seq": 13,
+     "type": "model_call",
+     "data": {
+      "ms": 1830,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000929,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 375,
+      "cache_read_tokens": 2606,
+      "cache_creation_tokens": 5719
+     },
+     "created_at": "2026-10-28T18:49:04.287315Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer",
+     "data": {
+      "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-25-22 also sets its own timing. This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum. The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+      "segments": [
+       {
+        "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. ",
+        "citations": []
+       },
+       {
+        "text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": "\n\nM-25-22 also sets its own timing. ",
+        "citations": []
+       },
+       {
+        "text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": ". The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 3788,
+      "citations": [
+       {
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 1",
+        "number": 1,
+        "source": "doc-9/p1",
+        "page_no": 1,
+        "cited_text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government. To that end, there are three grounding themes that drive this memorandum ' s requirements: Ensuring the Government and the Public Benefit from a Competitive American Al Marketplace.",
+        "provenance": "verified",
+        "document_id": 9
+       },
+       {
+        "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+        "number": 2,
+        "source": "doc-9/p4",
+        "page_no": 4,
+        "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+        "provenance": "verified",
+        "document_id": 9
+       }
+      ],
+      "citations_verified": 2
+     },
+     "created_at": "2026-10-28T18:49:04.292738Z"
+    },
+    {
+     "seq": 15,
+     "type": "support",
+     "data": {
+      "ms": 1663,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Page 1 states the memorandum rescinds and replaces M-24-18, with the same title (OCR typo '0MB' aside).",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Page 4 states the memorandum applies to contracts awarded from solicitations issued on or after 180 days after issuance.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 2,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T18:49:05.958575Z"
+    },
+    {
+     "seq": 16,
+     "type": "run_finished",
+     "data": {
+      "ms": 5457,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001275,
+      "tool_calls": 1,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 1404,
+      "output_tokens": 733,
+      "cache_read_tokens": 5290,
+      "cache_creation_tokens": 5719
+     },
+     "created_at": "2026-10-28T18:49:05.962537Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "e7be2fcb-cf10-4317-8fe6-566b7ad2f574",
+  "session_id": "947b0220-0499-489b-b5ed-89a02b6c41b5",
+  "mode": "agent",
+  "question": "Which OMB memo currently governs how federal agencies acquire AI, and what happened to the earlier acquisition memo?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-25-22 also sets its own timing. This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum. The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Page 1 states the memorandum rescinds and replaces M-24-18, with the same title (OCR typo '0MB' aside).",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Page 4 states the memorandum applies to contracts awarded from solicitations issued on or after 180 days after issuance.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. ",
+     "citations": []
+    },
+    {
+     "text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": "\n\nM-25-22 also sets its own timing. ",
+     "citations": []
+    },
+    {
+     "text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": ". The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 3788,
+   "citations": [
+    {
+     "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 1",
+     "number": 1,
+     "source": "doc-9/p1",
+     "page_no": 1,
+     "cited_text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government. To that end, there are three grounding themes that drive this memorandum ' s requirements: Ensuring the Government and the Public Benefit from a Competitive American Al Marketplace.",
+     "provenance": "verified",
+     "document_id": 9
+    },
+    {
+     "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+     "number": 2,
+     "source": "doc-9/p4",
+     "page_no": 4,
+     "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+     "provenance": "verified",
+     "document_id": 9
+    }
+   ],
+   "citations_verified": 2
+  },
+  "model_turns": 2,
+  "tool_calls": 1,
+  "exec_ms": 5457,
+  "created_at": "2026-10-28T18:49:00.291651Z",
+  "finished_at": "2026-10-28T18:49:05.965156Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "Which OMB memo currently governs how federal agencies acquire AI, and what happened to the earlier acquisition memo?"
+    },
+    "created_at": "2026-10-28T18:49:00.503500Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 1897,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000139,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 223,
+     "cache_read_tokens": 2684,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T18:49:02.417074Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 17,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "M-25-22 rescinds M-24-18 acquisition of artificial intelligence",
+      "top_k": 6,
+      "document_ids": [
+       8,
+       9
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "6 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0328,
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+       "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFICE OF MANAGEMENT AND BUDGET WASHINGTON, D .C . 20503 THE DIRECTOR April 3, 2025 M-25-22 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS AND ",
+       "page_no": 1,
+       "document_id": 9
+      },
+      {
+       "score": 0.0161,
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+       "excerpt": "v. AI used incidentally by a contractor during performance of a contract ( e.g., AI used at the option of a contractor when not directed or required to fulfill requirements). c. Fu",
+       "page_no": 4,
+       "document_id": 9
+      },
+      {
+       "score": 0.0159,
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025",
+       "excerpt": "1v. Use of Government Data. Ensuring contracts permanently prohibit the use of non\u00ad public inputted agency data and outputted results to further train publicly or commercially avai",
+       "page_no": 6,
+       "document_id": 9
+      },
+      {
+       "score": 0.0156,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFICE OF MANAGEMENT AND BUDGET WASHINGTON, D.C. 20503 THE DIRECTOR September 24, 2024 M-24-18 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS A",
+       "page_no": 1,
+       "document_id": 8
+      },
+      {
+       "score": 0.0154,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "service align with the guidance for agencies provided in OMB Memorandum M-24-10 and advance the other aims identified in section 7224(d)(1) of the Act. This memorandum is that init",
+       "page_no": 3,
+       "document_id": 8
+      },
+      {
+       "score": 0.0152,
+       "title": "OMB M-24-18: Advancing the Responsible Acquisition of Artificial Intelligence in Government, October 2024",
+       "excerpt": "B. Offering systems or services at uniform and publicly available prices and not engaging in self-preferencing; C. Providing equal access on comparable terms to downstream business",
+       "page_no": 24,
+       "document_id": 8
+      }
+     ]
+    },
+    "created_at": "2026-10-28T18:49:02.439510Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "The current govern",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.336555Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "ing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.456982Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": " Government* (April 2025). The earlier acquisition memo, **M-24-18**, was r",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.564060Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": "escinded and replaced. This memorandum rescinds and replaces 0MB Memorandum",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.693441Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.809871Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": "25-22 also sets its own timing. This memorandum shall apply to",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:03.930082Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer_delta",
+    "data": {
+     "text": " any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:04.053501Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": " The documents I found don't say how existing contracts that were awar",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:04.178421Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": "ded under M-24-18 are handled, so I can't say more about that.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T18:49:04.282231Z"
+   },
+   {
+    "seq": 13,
+    "type": "model_call",
+    "data": {
+     "ms": 1830,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000929,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 375,
+     "cache_read_tokens": 2606,
+     "cache_creation_tokens": 5719
+    },
+    "created_at": "2026-10-28T18:49:04.287315Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer",
+    "data": {
+     "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.\n\nM-25-22 also sets its own timing. This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum. The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+     "segments": [
+      {
+       "text": "The current governing memo is **OMB M-25-22**, *Driving Efficient Acquisition of Artificial Intelligence in Government* (April 2025). The earlier acquisition memo, **M-24-18**, was rescinded and replaced. ",
+       "citations": []
+      },
+      {
+       "text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": "\n\nM-25-22 also sets its own timing. ",
+       "citations": []
+      },
+      {
+       "text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": ". The documents I found don't say how existing contracts that were awarded under M-24-18 are handled, so I can't say more about that.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 3788,
+     "citations": [
+      {
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 1",
+       "number": 1,
+       "source": "doc-9/p1",
+       "page_no": 1,
+       "cited_text": "This memorandum rescinds and replaces 0MB Memorandum M-24-18, Advancing the Responsible Acquisition ofArtificial Intelligence in Government. To that end, there are three grounding themes that drive this memorandum ' s requirements: Ensuring the Government and the Public Benefit from a Competitive American Al Marketplace.",
+       "provenance": "verified",
+       "document_id": 9
+      },
+      {
+       "title": "OMB M-25-22: Driving Efficient Acquisition of Artificial Intelligence in Government, April 2025, page 4",
+       "number": 2,
+       "source": "doc-9/p4",
+       "page_no": 4,
+       "cited_text": "This memorandum shall apply to any contract awarded pursuant to a solicitation issued on or after the date that is 180 days after issuance of this memorandum, as well as to any option to renew or extend the period of performance exercised on an existing contract after the date that is 180 days after the issuance of this memorandum. d. Applicability to National Security Systems.",
+       "provenance": "verified",
+       "document_id": 9
+      }
+     ],
+     "citations_verified": 2
+    },
+    "created_at": "2026-10-28T18:49:04.292738Z"
+   },
+   {
+    "seq": 15,
+    "type": "support",
+    "data": {
+     "ms": 1663,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Page 1 states the memorandum rescinds and replaces M-24-18, with the same title (OCR typo '0MB' aside).",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Page 4 states the memorandum applies to contracts awarded from solicitations issued on or after 180 days after issuance.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 2,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T18:49:05.958575Z"
+   },
+   {
+    "seq": 16,
+    "type": "run_finished",
+    "data": {
+     "ms": 5457,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001275,
+     "tool_calls": 1,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 1404,
+     "output_tokens": 733,
+     "cache_read_tokens": 5290,
+     "cache_creation_tokens": 5719
+    },
+    "created_at": "2026-10-28T18:49:05.962537Z"
+   }
+  ]
+ }
+}
