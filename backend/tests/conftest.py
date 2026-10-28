@@ -1,0 +1,37 @@
+"""Shared test setup.
+
+Database tests run against a real PostgreSQL with pgvector, named by TEST_DATABASE_URL
+(CI provides one as a service container; locally, point it at the Compose database).
+They are skipped when it is not set. Each test module starts from an empty schema.
+"""
+
+import os
+
+import psycopg
+import pytest
+from fpdf import FPDF
+
+TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
+if TEST_DATABASE_URL:
+    # The app reads its settings from the environment; point it at the test database.
+    os.environ["DATABASE_URL"] = TEST_DATABASE_URL
+    os.environ.setdefault("REDIS_URL", "redis://localhost:6399/0")
+
+needs_db = pytest.mark.skipif(not TEST_DATABASE_URL, reason="TEST_DATABASE_URL is not set")
+
+
+def reset_schema() -> None:
+    with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
+        conn.execute("DROP SCHEMA public CASCADE")
+        conn.execute("CREATE SCHEMA public")
+
+
+def make_pdf(pages: list[str]) -> bytes:
+    """A real text-layer PDF with one string per page."""
+    pdf = FPDF()
+    pdf.set_font("Helvetica", size=11)
+    for text in pages:
+        pdf.add_page()
+        if text:
+            pdf.multi_cell(0, 6, text)
+    return bytes(pdf.output())
