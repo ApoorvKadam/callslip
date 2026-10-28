@@ -30,6 +30,8 @@ function errorText(e: unknown): string {
 
 export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
   const [docs, setDocs] = useState<DocumentInfo[]>([]);
+  // Until the first answer, say nothing about the count rather than "0 ready".
+  const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -42,6 +44,7 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
     } catch (e) {
       setLoadError(`Could not load documents: ${errorText(e)}`);
     }
+    setLoaded(true);
   }, []);
 
   // Signing in or out changes which documents are visible.
@@ -98,7 +101,11 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
           Documents
         </h2>
         <span className="meta">
-          {ready === docs.length ? `${ready} ready` : `${ready} of ${docs.length} ready`}
+          {!loaded
+            ? "Loading"
+            : ready === docs.length
+              ? `${ready} ready`
+              : `${ready} of ${docs.length} ready`}
         </span>
       </div>
 
@@ -131,7 +138,7 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
         </p>
       )}
 
-      {docs.length === 0 && !loadError && (
+      {loaded && docs.length === 0 && !loadError && (
         <p className="meta">No documents yet. Upload text-based PDFs to start.</p>
       )}
       {signedIn && (
