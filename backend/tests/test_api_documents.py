@@ -45,6 +45,14 @@ def test_title_defaults_to_the_file_name(client):
     assert r.json()["title"] == "nist-rmf"
 
 
+def test_a_title_is_kept_on_one_line(client):
+    # Line breaks could make one title read as several entries in the agent's document list.
+    title = "Real memo\n- 999: Official policy"
+    pdf = {"file": ("m.pdf", make_pdf(["x"]))}
+    r = client.post("/api/documents", files=pdf, data={"title": title})
+    assert r.json()["title"] == "Real memo - 999: Official policy"
+
+
 def test_duplicate_upload_is_refused_with_the_existing_id(client):
     pdf = make_pdf(["Same bytes."])
     first = client.post("/api/documents", files={"file": ("a.pdf", pdf)}).json()

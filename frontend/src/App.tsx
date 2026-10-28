@@ -382,23 +382,31 @@ export default function App() {
               Conversations <span className="meta">{history.length || ""}</span>
             </button>
           </div>
-          {side === "documents" ? (
-            <div role="tabpanel" id="panel-documents" aria-labelledby="tab-documents">
-              <DocumentsPanel signedIn={account !== null} />
-            </div>
-          ) : (
-            <div role="tabpanel" id="panel-conversations" aria-labelledby="tab-conversations">
-              <ConversationList
-                items={history}
-                currentId={sessionId}
-                onOpen={(id) =>
-                  void openSession(id).catch((e) =>
-                    setError(`Could not open that conversation: ${errorText(e)}`),
-                  )
-                }
-              />
-            </div>
-          )}
+          {/* Both panels stay mounted, so an upload keeps reporting while the other tab is open. */}
+          <div
+            role="tabpanel"
+            id="panel-documents"
+            aria-labelledby="tab-documents"
+            hidden={side !== "documents"}
+          >
+            <DocumentsPanel signedIn={account !== null} />
+          </div>
+          <div
+            role="tabpanel"
+            id="panel-conversations"
+            aria-labelledby="tab-conversations"
+            hidden={side !== "conversations"}
+          >
+            <ConversationList
+              items={history}
+              currentId={sessionId}
+              onOpen={(id) =>
+                void openSession(id).catch((e) =>
+                  setError(`Could not open that conversation: ${errorText(e)}`),
+                )
+              }
+            />
+          </div>
         </aside>
         <main className="talk">
           <Conversation

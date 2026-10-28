@@ -123,6 +123,7 @@ async def run() -> None:
                     await queue.renew(conn, owner, list(manager.tasks), settings.run_lease_seconds)
                     renewed = time.monotonic()
                 await queue.reap(conn)
+                await queue.expire_queued(conn, settings.max_queue_wait_s)
                 free = settings.run_concurrency - len(manager.tasks)
                 rows = await queue.claim(conn, owner, settings.run_lease_seconds, free)
         except TRANSIENT_DB_ERRORS:

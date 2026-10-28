@@ -52,6 +52,20 @@ async def renew(conn: AsyncConnection, owner: str, run_ids: list, lease_s: int) 
         )
 
 
+async def expire_queued(conn: AsyncConnection, max_wait_s: float) -> int:
+    """Close runs that waited in the queue longer than `max_wait_s`: with no worker free, the
+    user gets an answer that says so, and the question is never run long after they left."""
+    cur = await conn.execute(
+        "UPDATE runs SET status = 'incomplete', work = NULL,"
+        " status_reason = 'no run worker started this question in time; ask it again',"
+        " updated_at = now(), finished_at = now()"
+        " WHERE status = 'running' AND work IS NOT NULL"
+        " AND updated_at < now() - %s * interval '1 second'",
+        (max_wait_s,),
+    )
+    return cur.rowcount
+
+
 async def reap(conn: AsyncConnection) -> int:
     """Close runs whose worker is gone: running, not queued, and with no live lease."""
     cur = await conn.execute(

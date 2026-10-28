@@ -85,6 +85,18 @@ async def test_a_run_whose_lease_ran_out_is_closed_not_rerun(pool):
     assert "stopped" in reason
 
 
+async def test_a_question_no_worker_starts_in_time_is_closed_with_a_reason(pool):
+    run_id = await queue_start(pool, await new_session(pool))
+    async with pool.connection() as conn:
+        assert await queue.expire_queued(conn, 60) == 0  # still within its wait
+        await conn.execute("UPDATE runs SET updated_at = now() - interval '61 seconds'")
+        assert await queue.expire_queued(conn, 60) == 1
+        assert await queue.claim(conn, "late", 60, 5) == []  # never run late
+    state, work, _, reason = await status(pool, run_id)
+    assert (state, work) == ("incomplete", None)
+    assert "in time" in reason
+
+
 async def test_renewing_keeps_a_lease_alive(pool):
     run_id = await queue_start(pool, await new_session(pool))
     async with pool.connection() as conn:
