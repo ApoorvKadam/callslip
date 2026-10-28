@@ -1,0 +1,698 @@
+{
+ "runs": [
+  {
+   "id": "94d490dd-de0a-4b3f-9dc2-c4b2addd922c",
+   "session_id": "4f68471c-b08b-4b0e-86f1-879d3230907a",
+   "mode": "agent",
+   "question": "What penalty does the NIST AI RMF set for an organization that chooses not to adopt it?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework. Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "The passage states the same four attributes and the flexibility for organizations of all sizes and sectors to implement the approaches.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "The passage says the Framework is intended to be flexible and to augment existing risk practices aligned with applicable laws, regulations, and norms.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that ",
+      "citations": []
+     },
+     {
+      "text": "the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": " Its document also says it sits alongside existing obligations: ",
+      "citations": []
+     },
+     {
+      "text": "the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": "\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 3289,
+    "citations": [
+     {
+      "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 7",
+      "number": 1,
+      "source": "doc-1/p7",
+      "page_no": 7,
+      "cited_text": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibil- ity to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+      "provenance": "verified",
+      "document_id": 1
+     },
+     {
+      "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 12",
+      "number": 2,
+      "source": "doc-1/p12",
+      "page_no": 12,
+      "cited_text": "To the extent that challenges for specifying AI risk tolerances remain unresolved, there may be contexts where a risk management framework is not yet readily applicable for mitigating negative AI risks. The Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+      "provenance": "verified",
+      "document_id": 1
+     }
+    ],
+    "citations_verified": 2
+   },
+   "model_turns": 2,
+   "tool_calls": 1,
+   "exec_ms": 4358,
+   "created_at": "2026-10-28T17:09:26.463420Z",
+   "finished_at": "2026-10-28T17:09:30.864091Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "What penalty does the NIST AI RMF set for an organization that chooses not to adopt it?"
+     },
+     "created_at": "2026-10-28T17:09:26.497238Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 1220,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000116,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 180,
+      "cache_read_tokens": 2598,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T17:09:27.727146Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 7,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "penalty for organizations that do not adopt the AI RMF voluntary",
+       "top_k": 5,
+       "document_ids": [
+        1
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "5 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 1.2.2 Risk Tolerance While the AI RMF can be used to prioritize risk, it does not prescribe risk tolerance. Risk tolerance refers to the organization\u2019s or ",
+        "page_no": 12,
+        "document_id": 1
+       },
+       {
+        "score": 0.0161,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 Social responsibility can refer to the organization\u2019s responsibility \u201cfor the impacts of its decisions and activities on society and the environment throug",
+        "page_no": 7,
+        "document_id": 1
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "Table of Contents Executive Summary 1 Part 1: Foundational Information 4 1 Framing Risk 4 1.1 Understanding and Addressing Risks, Impacts, and Harms 4 1.2 Challenges for AI Risk Ma",
+        "page_no": 4,
+        "document_id": 1
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 Organizations need to establish and maintain the appropriate accountability mechanisms, roles and responsibilities, culture, and incentive structures for r",
+        "page_no": 14,
+        "document_id": 1
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "Organizations should follow existing regulations and guidelines for risk criteria, tolerance, and response established by organizational, domain, discipline, sector, or professiona",
+        "page_no": 12,
+        "document_id": 1
+       }
+      ]
+     },
+     "created_at": "2026-10-28T17:09:27.736969Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "The NI",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:28.467158Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "ST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:28.733647Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": " description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:29.008491Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": " Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws,",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:29.267058Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:29.534091Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": " a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T17:09:29.775462Z"
+    },
+    {
+     "seq": 10,
+     "type": "model_call",
+     "data": {
+      "ms": 2031,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000789,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 366,
+      "cache_read_tokens": 2529,
+      "cache_creation_tokens": 4644
+     },
+     "created_at": "2026-10-28T17:09:29.780617Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer",
+     "data": {
+      "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework. Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+      "segments": [
+       {
+        "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that ",
+        "citations": []
+       },
+       {
+        "text": "the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": " Its document also says it sits alongside existing obligations: ",
+        "citations": []
+       },
+       {
+        "text": "the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": "\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 3289,
+      "citations": [
+       {
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 7",
+        "number": 1,
+        "source": "doc-1/p7",
+        "page_no": 7,
+        "cited_text": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibil- ity to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+        "provenance": "verified",
+        "document_id": 1
+       },
+       {
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 12",
+        "number": 2,
+        "source": "doc-1/p12",
+        "page_no": 12,
+        "cited_text": "To the extent that challenges for specifying AI risk tolerances remain unresolved, there may be contexts where a risk management framework is not yet readily applicable for mitigating negative AI risks. The Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+        "provenance": "verified",
+        "document_id": 1
+       }
+      ],
+      "citations_verified": 2
+     },
+     "created_at": "2026-10-28T17:09:29.786322Z"
+    },
+    {
+     "seq": 12,
+     "type": "support",
+     "data": {
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "The passage states the same four attributes and the flexibility for organizations of all sizes and sectors to implement the approaches.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "The passage says the Framework is intended to be flexible and to augment existing risk practices aligned with applicable laws, regulations, and norms.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 2,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T17:09:30.850418Z"
+    },
+    {
+     "seq": 13,
+     "type": "run_finished",
+     "data": {
+      "ms": 4358,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001086,
+      "tool_calls": 1,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 1153,
+      "output_tokens": 679,
+      "cache_read_tokens": 5127,
+      "cache_creation_tokens": 4644
+     },
+     "created_at": "2026-10-28T17:09:30.858718Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "94d490dd-de0a-4b3f-9dc2-c4b2addd922c",
+  "session_id": "4f68471c-b08b-4b0e-86f1-879d3230907a",
+  "mode": "agent",
+  "question": "What penalty does the NIST AI RMF set for an organization that chooses not to adopt it?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework. Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "The passage states the same four attributes and the flexibility for organizations of all sizes and sectors to implement the approaches.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "The passage says the Framework is intended to be flexible and to augment existing risk practices aligned with applicable laws, regulations, and norms.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that ",
+     "citations": []
+    },
+    {
+     "text": "the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": " Its document also says it sits alongside existing obligations: ",
+     "citations": []
+    },
+    {
+     "text": "the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": "\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 3289,
+   "citations": [
+    {
+     "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 7",
+     "number": 1,
+     "source": "doc-1/p7",
+     "page_no": 7,
+     "cited_text": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibil- ity to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+     "provenance": "verified",
+     "document_id": 1
+    },
+    {
+     "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 12",
+     "number": 2,
+     "source": "doc-1/p12",
+     "page_no": 12,
+     "cited_text": "To the extent that challenges for specifying AI risk tolerances remain unresolved, there may be contexts where a risk management framework is not yet readily applicable for mitigating negative AI risks. The Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+     "provenance": "verified",
+     "document_id": 1
+    }
+   ],
+   "citations_verified": 2
+  },
+  "model_turns": 2,
+  "tool_calls": 1,
+  "exec_ms": 4358,
+  "created_at": "2026-10-28T17:09:26.463420Z",
+  "finished_at": "2026-10-28T17:09:30.864091Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "What penalty does the NIST AI RMF set for an organization that chooses not to adopt it?"
+    },
+    "created_at": "2026-10-28T17:09:26.497238Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 1220,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000116,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 180,
+     "cache_read_tokens": 2598,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T17:09:27.727146Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 7,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "penalty for organizations that do not adopt the AI RMF voluntary",
+      "top_k": 5,
+      "document_ids": [
+       1
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "5 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 1.2.2 Risk Tolerance While the AI RMF can be used to prioritize risk, it does not prescribe risk tolerance. Risk tolerance refers to the organization\u2019s or ",
+       "page_no": 12,
+       "document_id": 1
+      },
+      {
+       "score": 0.0161,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 Social responsibility can refer to the organization\u2019s responsibility \u201cfor the impacts of its decisions and activities on society and the environment throug",
+       "page_no": 7,
+       "document_id": 1
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "Table of Contents Executive Summary 1 Part 1: Foundational Information 4 1 Framing Risk 4 1.1 Understanding and Addressing Risks, Impacts, and Harms 4 1.2 Challenges for AI Risk Ma",
+       "page_no": 4,
+       "document_id": 1
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 Organizations need to establish and maintain the appropriate accountability mechanisms, roles and responsibilities, culture, and incentive structures for r",
+       "page_no": 14,
+       "document_id": 1
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "Organizations should follow existing regulations and guidelines for risk criteria, tolerance, and response established by organizational, domain, discipline, sector, or professiona",
+       "page_no": 12,
+       "document_id": 1
+      }
+     ]
+    },
+    "created_at": "2026-10-28T17:09:27.736969Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "The NI",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:28.467158Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "ST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:28.733647Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": " description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:29.008491Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": " Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws,",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:29.267058Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:29.534091Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": " a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T17:09:29.775462Z"
+   },
+   {
+    "seq": 10,
+    "type": "model_call",
+    "data": {
+     "ms": 2031,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000789,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 366,
+     "cache_read_tokens": 2529,
+     "cache_creation_tokens": 4644
+    },
+    "created_at": "2026-10-28T17:09:29.780617Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer",
+    "data": {
+     "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework. Its document also says it sits alongside existing obligations: the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+     "segments": [
+      {
+       "text": "The NIST AI RMF does not set a penalty for organizations that choose not to adopt it. The documents describe the framework as voluntary, not as a mandate with consequences attached.\n\nThe framework's own description is that ",
+       "citations": []
+      },
+      {
+       "text": "the Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibility to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": " Its document also says it sits alongside existing obligations: ",
+       "citations": []
+      },
+      {
+       "text": "the Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": "\n\nI searched only the AI RMF (document 1) and did not find any passage describing penalties, so this answer rests on the absence of such a provision in that document. Any enforcement that applies to a given organization would come from other laws or policies, which the AI RMF does not address.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 3289,
+     "citations": [
+      {
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 7",
+       "number": 1,
+       "source": "doc-1/p7",
+       "page_no": 7,
+       "cited_text": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic, providing flexibil- ity to organizations of all sizes and in all sectors and throughout society to implement the approaches in the Framework.",
+       "provenance": "verified",
+       "document_id": 1
+      },
+      {
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 12",
+       "number": 2,
+       "source": "doc-1/p12",
+       "page_no": 12,
+       "cited_text": "To the extent that challenges for specifying AI risk tolerances remain unresolved, there may be contexts where a risk management framework is not yet readily applicable for mitigating negative AI risks. The Framework is intended to be flexible and to augment existing risk practices which should align with applicable laws, regulations, and norms.",
+       "provenance": "verified",
+       "document_id": 1
+      }
+     ],
+     "citations_verified": 2
+    },
+    "created_at": "2026-10-28T17:09:29.786322Z"
+   },
+   {
+    "seq": 12,
+    "type": "support",
+    "data": {
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "The passage states the same four attributes and the flexibility for organizations of all sizes and sectors to implement the approaches.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "The passage says the Framework is intended to be flexible and to augment existing risk practices aligned with applicable laws, regulations, and norms.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 2,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T17:09:30.850418Z"
+   },
+   {
+    "seq": 13,
+    "type": "run_finished",
+    "data": {
+     "ms": 4358,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001086,
+     "tool_calls": 1,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 1153,
+     "output_tokens": 679,
+     "cache_read_tokens": 5127,
+     "cache_creation_tokens": 4644
+    },
+    "created_at": "2026-10-28T17:09:30.858718Z"
+   }
+  ]
+ }
+}
