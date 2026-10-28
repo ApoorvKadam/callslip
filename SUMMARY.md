@@ -23,5 +23,5 @@ On 10 cases with 3 repeats each, the agent on Claude Haiku 5.5 passed every chec
 - **Token-by-token streaming** of the answer text (steps stream today; the answer arrives whole).
 - **Scaling the API out**: runs execute as background tasks in the API process. Next: a run queue with dedicated workers and Redis pub/sub for live events.
 - **Authentication** (NYU SSO) and per-user document collections; documents are shared in this single-tenant demo.
-- **Kubernetes or OpenShift manifests**: the services and health endpoints map directly; not written.
+- **Running on a cluster**: Kubernetes and OpenShift manifests are written and schema-checked in CI (`docs/kubernetes.md`), but have not been run on a cluster; the API needs a run queue before it can run more than one replica.
 - **A recorded video**: the walkthrough is reproducible from saved traces and commands (`docs/demo.md`).
