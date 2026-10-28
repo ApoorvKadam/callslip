@@ -13,6 +13,7 @@ import socket
 import time
 from pathlib import Path
 
+from psycopg.types.json import Jsonb
 from psycopg_pool import AsyncConnectionPool
 
 from app.config import Settings, get_settings
@@ -20,7 +21,7 @@ from app.db import migrate, open_pool
 from app.embeddings import Embedder
 from app.ingest import jobs
 from app.ingest.chunking import chunk_page
-from app.ingest.pdf import Page, PdfRejected, extract_pages
+from app.ingest.pdf import Page, PdfRejected, parse_pdf
 from app.logs import setup_logging
 
 log = logging.getLogger("worker")
@@ -68,11 +69,17 @@ async def process(
     try:
         async with pool.connection() as conn:
             content = await jobs.load_pdf(conn, job.document_id)
-        pages = await asyncio.to_thread(extract_pages, content, settings.max_pages)
+        parsed = await asyncio.to_thread(parse_pdf, content, settings.max_pages)
+        pages = parsed.pages
         chunks = await asyncio.to_thread(build_chunks, pages, job.title, embedder, settings)
         async with pool.connection() as conn:
             published = await jobs.publish(
-                conn, job.document_id, owner, [(p.page_no, p.text) for p in pages], chunks
+                conn,
+                job.document_id,
+                owner,
+                [(p.page_no, p.text) for p in pages],
+                chunks,
+                parsed.outline,
             )
         if published:
             log.info(
@@ -107,6 +114,35 @@ async def process(
         )
 
 
+async def fill_outlines(pool: AsyncConnectionPool, settings: Settings) -> None:
+    """Read the outline of documents ingested before outlines were kept. Best effort: a document
+    that fails here keeps no outline, and its tool says so."""
+    async with pool.connection() as conn:
+        cur = await conn.execute(
+            "SELECT id FROM documents WHERE status = 'ready' AND outline IS NULL ORDER BY id"
+        )
+        ids = [row[0] for row in await cur.fetchall()]
+    for document_id in ids:
+        try:
+            async with pool.connection() as conn:
+                content = await jobs.load_pdf(conn, document_id)
+            parsed = await asyncio.to_thread(parse_pdf, content, settings.max_pages)
+            outline = parsed.outline
+        except Exception as exc:
+            log.warning(
+                "outline not read",
+                extra={"fields": {"document_id": document_id, "error": str(exc)}},
+            )
+            outline = []
+        async with pool.connection() as conn:
+            await conn.execute(
+                "UPDATE documents SET outline = %s WHERE id = %s AND outline IS NULL",
+                (Jsonb(outline), document_id),
+            )
+    if ids:
+        log.info("outlines filled", extra={"fields": {"documents": len(ids)}})
+
+
 async def run() -> None:
     settings = get_settings()
     setup_logging(settings.log_level)
@@ -126,6 +162,7 @@ async def run() -> None:
         loop.add_signal_handler(sig, stop.set)
     log.info("worker started", extra={"fields": {"owner": owner, "model": settings.embed_model}})
     beat = asyncio.create_task(heartbeat(stop))
+    await fill_outlines(pool, settings)
 
     while not stop.is_set():
         async with pool.connection() as conn:

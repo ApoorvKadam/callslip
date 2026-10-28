@@ -1,7 +1,8 @@
-"""The agent's tools: three read-only corpus tools and one control tool.
+"""The agent's tools: four read-only corpus tools and one control tool.
 
 Contract for every read tool, documented to the model and tested:
-- success: `search_result` blocks (search, read section) or a JSON object (list documents);
+- success: `search_result` blocks (search, read section) or a JSON object (list documents,
+  outline);
 - empty: JSON text `{"status": "no_results", ...}`, which is not an error;
 - invalid arguments: `is_error` result with JSON `{"status": "invalid_input", "error": ...}`
   explaining how to fix the call (never retried: the model has to change the call);
@@ -81,6 +82,21 @@ TOOL_DEFINITIONS: list[dict] = [
         },
     },
     {
+        "name": "document_outline",
+        "description": (
+            "List the sections of one document from its own bookmarks, each with the page it "
+            "starts on (the page numbers read_document_section uses). Use it to find where a "
+            "document covers a topic, for example when search fails or finds only a summary. "
+            'Returns {"status": "no_outline"} when the PDF has no bookmarks.'
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {"document_id": {"type": "integer"}},
+            "required": ["document_id"],
+            "additionalProperties": False,
+        },
+    },
+    {
         "name": "ask_clarification",
         "description": (
             "Ask the user one targeted question when the request has several plausible readings "
@@ -142,6 +158,10 @@ class ClarificationArgs(BaseModel, extra="forbid"):
 
 class ListArgs(BaseModel, extra="forbid"):
     pass
+
+
+class OutlineArgs(BaseModel, extra="forbid"):
+    document_id: int
 
 
 @dataclass
@@ -263,11 +283,42 @@ class Tools:
         summary = f"pages {args.page_start}-{args.page_end} of {title}"
         return ToolOutcome(blocks, False, "ok", summary, {"evidence": evidence})
 
+    async def document_outline(self, args: OutlineArgs) -> ToolOutcome:
+        async with self.store.pool.connection() as conn:
+            cur = await conn.execute(
+                "SELECT title, status, outline FROM documents WHERE id = %s"
+                " AND (owner_user_id IS NULL OR owner_user_id = %s)",
+                (args.document_id, self.viewer),
+            )
+            doc = await cur.fetchone()
+        if doc is None or doc[1] != "ready":
+            return invalid_input(
+                "document_outline",
+                ValueError(
+                    f"no ready document with id {args.document_id}; "
+                    "call list_documents for valid ids"
+                ),
+            )
+        title, _, outline = doc
+        if not outline:
+            payload = {
+                "status": "no_outline",
+                "document_id": args.document_id,
+                "message": "This PDF has no bookmarks. Its first pages may hold a table of "
+                "contents; its printed page numbers can differ from the PDF's.",
+            }
+            summary = f"no outline for {title}"
+            return ToolOutcome(_json(payload), False, "no_results", summary, {"document": title})
+        payload = {"document_id": args.document_id, "title": title, "sections": outline}
+        summary = f"{len(outline)} sections of {title}"
+        return ToolOutcome(_json(payload), False, "ok", summary, {"document": title})
+
 
 ARG_MODELS = {
     "list_documents": ListArgs,
     "search_documents": SearchArgs,
     "read_document_section": SectionArgs,
+    "document_outline": OutlineArgs,
 }
 
 
