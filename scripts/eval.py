@@ -207,6 +207,8 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
         "citations_verified": verified,
         "gold_pages_cited": sorted(f"{titles.get(d, d)[:24]} p{p}" for d, p in cited & gold),
         "documents_cited": len({c["document_id"] for c in citations}),
+        "cited_pages": sorted({f"{titles.get(d, d)[:24]} p{p}" for d, p in cited}),
+        "answer": answer["text"],
         "clarification": record.get("clarification"),
         "asked_in_text": record["asked_in_text"],
         "notes": notes,
@@ -217,10 +219,10 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
 def report(results: list[dict], systems: list[str], started: str) -> str:
     lines = [f"# Evaluation results, {started}", ""]
     lines += [
-        "| System | Cases passed | Mean latency (s) | Median time to answer (s) "
+        "| System | Cases passed | Completed | Mean latency (s) | Median time to answer (s) "
         "| Mean tool calls | Mean model calls | Citations verified | Total tokens "
         "| Total cost (USD) |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for system in systems:
         rows = [r for r in results if r["system"] == system]
@@ -230,6 +232,7 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
         answered = [r["answer_ms"] for r in rows if r.get("answer_ms") is not None]
         lines.append(
             f"| {system} | {sum(r['passed'] for r in rows)} of {len(rows)} "
+            f"| {sum(r['status'] == 'complete' for r in rows)} of {len(rows)} "
             f"| {sum(r['ms'] for r in rows) / len(rows) / 1000:.1f} "
             f"| {f'{median(answered) / 1000:.1f}' if answered else '-'} "
             f"| {sum(r['tool_calls'] for r in rows) / len(rows):.1f} "
@@ -259,7 +262,46 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
             f"| {to_answer} "
             f"| {r['input_tokens']}/{r['output_tokens']} | {r['cost_usd']:.4f} | {notes} |"
         )
+    lines += expected_and_actual(results, systems)
     return "\n".join(lines) + "\n"
+
+
+def expected_and_actual(results: list[dict], systems: list[str]) -> list[str]:
+    """Per case, what was expected and what each system answered in its first repeat."""
+    cases = {c["id"]: c for c in json.loads(CASES.read_text())["cases"]}
+    lines = ["", "## Each case: expected and actual (first repeat)"]
+    for case_id in dict.fromkeys(r["case"] for r in results):
+        case = cases.get(case_id)
+        if case is None:
+            continue
+        gold = "; ".join(f"{g['doc']} p. {', '.join(map(str, g['pages']))}" for g in case["gold"])
+        lines += [
+            "",
+            f"### {case_id}",
+            "",
+            f"Question: {case['question']}",
+            "",
+            f"Expected: {case['category']} (`{case['expect']}`); required: "
+            f"{', '.join(case.get('required', [])) or 'none'}; gold pages: {gold}.",
+        ]
+        for system in systems:
+            run = next((r for r in results if r["case"] == case_id and r["system"] == system), None)
+            if run is None:
+                continue
+            seconds = "-" if run.get("answer_ms") is None else f"{run['answer_ms'] / 1000:.1f} s"
+            cited = ", ".join(run.get("cited_pages", [])) or "nothing"
+            notes = "; ".join(run["notes"])
+            lines += [
+                "",
+                f"- **{system}**: {'pass' if run['passed'] else 'fail'}, {run['status']}, "
+                f"{run['tool_calls']} tool calls, {seconds} to answer, "
+                f"{run['input_tokens'] + run['output_tokens']} tokens, cited {cited}."
+                + (f" {notes}." if notes else ""),
+            ]
+            answer = " ".join((run.get("answer") or "").split())
+            if answer:
+                lines.append(f"  > {answer[:700]}{' ...' if len(answer) > 700 else ''}")
+    return lines
 
 
 def write(out_dir: Path, meta: dict, results: list[dict]) -> None:

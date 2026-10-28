@@ -24,14 +24,14 @@ Each folder holds `results.json` (every measurement), `report.md` (the generated
 
 ## Results
 
-| Model, system | Runs passing every check | Citations verified | Time to answer, median | Total with the support check, median | Mean tool calls | Mean model turns | Cost, 45 runs | Cost per question |
-|---|---|---|---|---|---|---|---|---|
-| Haiku, agent | **43 of 45** | 206 of 206 | 5.5 s | 7.6 s | 1.8 | 2.4 | $0.088 | $0.0020 |
-| Haiku, baseline | **21 of 45** | 121 of 121 | 5.2 s | 6.9 s | 1.1 | 1.1 | $0.063 | $0.0014 |
-| Sonnet, agent | **40 of 45** | 218 of 218 | 5.6 s | 8.3 s | 1.4 | 2.3 | $1.136 | $0.0252 |
-| Sonnet, baseline | **21 of 45** | 164 of 164 | 4.0 s | 7.0 s | 1.1 | 1.1 | $1.066 | $0.0237 |
+| Model, system | Runs passing every check | Completed | Citations verified | Time to answer, median | Total with the support check, median | Mean tool calls | Mean model turns | Cost, 45 runs | Cost per question |
+|---|---|---|---|---|---|---|---|---|---|
+| Haiku, agent | **43 of 45** | 45 of 45 | 206 of 206 | 5.5 s | 7.6 s | 1.8 | 2.4 | $0.088 | $0.0020 |
+| Haiku, baseline | **21 of 45** | 42 of 45 | 121 of 121 | 5.2 s | 6.9 s | 1.1 | 1.1 | $0.063 | $0.0014 |
+| Sonnet, agent | **40 of 45** | 45 of 45 | 218 of 218 | 5.6 s | 8.3 s | 1.4 | 2.3 | $1.136 | $0.0252 |
+| Sonnet, baseline | **21 of 45** | 42 of 45 | 164 of 164 | 4.0 s | 7.0 s | 1.1 | 1.1 | $1.066 | $0.0237 |
 
-Costs include the support check and prompt caching. The agent resends the tools, the system prompt and earlier turns every turn, and most of that is read from the cache. A cache read costs a tenth of the input price on Haiku and a twentieth on Sonnet.
+*Completed* counts runs that ended with an answer rather than an incomplete status; the single pass stops incomplete when its one search keeps failing (case 8b). Each run's `report.md` also lists, case by case, the question, what was expected, and what each system answered in its first repeat. Costs include the support check and prompt caching. The agent resends the tools, the system prompt and earlier turns every turn, and most of that is read from the cache. A cache read costs a tenth of the input price on Haiku and a twentieth on Sonnet.
 
 | Case | Expected behaviour | Haiku agent | Haiku baseline | Sonnet agent | Sonnet baseline | Haiku agent, time to answer | Haiku agent, cost |
 |---|---|---|---|---|---|---|---|
@@ -261,6 +261,7 @@ All from the final Haiku run unless marked.
 | What it shows | Trace |
 |---|---|
 | Cross-document question: one filtered search per document, both in the first turn | [`2-multi-doc-a.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/2-multi-doc-a.agent.1.json) |
+| A query rewritten after the first results miss: "penalty ..." becomes "framework is voluntary ...", which finds p. 47 | [`10-voluntary-framework.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/10-voluntary-framework.agent.1.json) |
 | Clarification asked in the first turn, answered, same run continues | [`4-ambiguous.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/4-ambiguous.agent.1.json) |
 | Change of plan after failures: search fails, the agent reads pages instead | [`8b-tool-keeps-failing.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/8b-tool-keeps-failing.agent.1.json) |
 | Bounded retry after a timeout | [`8a-tool-timeout-recovers.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/8a-tool-timeout-recovers.agent.1.json) |

@@ -1,8 +1,8 @@
 # Evaluation results, 2026-10-28T220519Z
 
-| System | Cases passed | Mean latency (s) | Median time to answer (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
-|---|---|---|---|---|---|---|---|---|
-| agent | 36 of 40 | 9.3 | 6.7 | 2.6 | 4.1 | 279 of 279 | 189746 | 0.0820 |
+| System | Cases passed | Completed | Mean latency (s) | Median time to answer (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
+|---|---|---|---|---|---|---|---|---|---|
+| agent | 36 of 40 | 40 of 40 | 9.3 | 6.7 | 2.6 | 4.1 | 279 of 279 | 189746 | 0.0820 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | To answer (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -46,3 +46,23 @@
 | 13-security-and-injection | agent | yes | complete | 9/9 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.6 | 6.6 | 3900/1928 | 0.0028 |  |
 | 8b-tool-keeps-failing | agent | yes | complete | 7/7 | NIST AI 600-1: AI Risk M p11 | 3 | 5 | 9.1 | 6.8 | 3087/1714 | 0.0014 | recovered. |
 | 13-security-and-injection | agent | yes | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 11.2 | 8.6 | 3412/1771 | 0.0022 |  |
+
+## Each case: expected and actual (first repeat)
+
+### 8b-tool-keeps-failing
+
+Question: How does the NIST Generative AI Profile describe data privacy risks?
+
+Expected: Tool failure or timeout (persistent) (`recover_or_incomplete`); required: none; gold pages: NIST AI 600-1 p. 11, 12.
+
+- **agent**: pass, complete, 3 tool calls, 6.7 s to answer, 4603 tokens, cited NIST AI 600-1: AI Risk M p11.
+  > The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. The search tool failed, so I read pages 11–12 directly. **Core concern:** The profile warns that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification. **Opacity and exposure:** It notes that developers rarely reveal their training sources, so people often cannot tell whether their personal data was used. It adds that models may leak, generate, or correctly infer sensitive information about individuals. **Memorization:** The profile describes extracti ...
+
+### 13-security-and-injection
+
+Question: What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?
+
+Expected: Multi-part / multi-document (added) (`answer`); required: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); gold pages: NIST AI 600-1 p. 14; NIST AI 100-2 p. 52, 54, 63.
+
+- **agent**: pass, complete, 2 tool calls, 7.5 s to answer, 4463 tokens, cited NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 600-1: AI Risk M p14.
+  > **Information security risks in the NIST Generative AI Profile (NIST AI 600-1)** The Profile names two primary risks. First, generative AI could lower the cost of offensive cyber activity. GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. Second, the technology itself widens the target area: it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. **Indirect prompt injection in NIST AI 100-2** The glossary defines the term as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in ...
