@@ -27,6 +27,8 @@ export function count(n: number, one: string, many = `${one}s`): string {
   return `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
 }
 
+// A short model turn can cost less than a hundredth of a cent, which would print as $0.0000.
 export function dollars(value: number): string {
+  if (value > 0 && value < 0.0001) return "under $0.0001";
   return `$${value.toFixed(4)}`;
 }
