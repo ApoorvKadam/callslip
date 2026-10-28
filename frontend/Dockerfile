@@ -7,6 +7,8 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:1.30-alpine
+# Unprivileged nginx (port 8080, any UID), so the same image runs under OpenShift's restricted
+# security context as well as in Compose.
+FROM nginxinc/nginx-unprivileged:1.30-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /web/dist /usr/share/nginx/html
