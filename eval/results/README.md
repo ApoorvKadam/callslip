@@ -5,6 +5,9 @@
 | `2026-10-28T165727Z` | `claude-haiku-5-5` | final (main at `09d1b08`) | the default model; 15 cases, both systems, 3 repeats |
 | `2026-10-28T171106Z` | `claude-sonnet-5-5` | final (main at `09d1b08`) | 15 cases, both systems, 3 repeats |
 | `2026-10-28T192415Z` | `claude-haiku-5-5` | thinking guided by the documented prompt, two more instructions (kept) | agent only |
+| `2026-10-28T211637Z` | `claude-haiku-5-5` | read on to the section when search fails, first wording (not kept) | agent only |
+| `2026-10-28T212651Z` | `claude-haiku-5-5` | read on to the section when search fails, second wording (not kept) | agent only |
+| `2026-10-28T212457Z` | `claude-haiku-5-5` | second wording, case 8b only (not kept) | agent only, 6 repeats (`--cases 8b-tool-keeps-failing --repeat 6`) |
 | `2026-10-28T184548Z` | `claude-haiku-5-5` | shorter answers (not kept) | agent only |
 | `2026-10-28T183723Z` | `claude-haiku-5-5` | a search before the first turn, thinking off, two more instructions (not kept) | agent only |
 | `2026-10-28T182823Z` | `claude-haiku-5-5` | a search on the question before the first turn (not kept) | agent only |
