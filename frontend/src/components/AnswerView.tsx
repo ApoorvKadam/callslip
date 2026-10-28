@@ -1,110 +1,125 @@
-import { type ReactNode, useState } from "react";
-import { type Answer, type Citation, documentFileUrl } from "../api";
+import type { ReactNode } from "react";
+import type { Answer } from "../api";
+import type { CiteRef } from "../App";
+import { shortCode } from "../format";
 
-// Answers come back as plain text with light Markdown (paragraphs, "- " lists, **bold**).
-// Citations are attached to text segments; they are rendered as numbered buttons in place.
+// Answers arrive as segments: a piece of text plus the numbers of the sources that support it.
+// Text uses light Markdown (paragraphs, "- " lists, **bold**). Each supported piece is wrapped
+// so that hovering it, or its number, highlights the piece and its source card together.
 
-const CITE = /\[\[cite:(\d+)\]\]|\*\*(.+?)\*\*/g;
+interface Fragment {
+  text: string;
+  cites: number[]; // the segment's citations
+  last: boolean; // the segment's final fragment: its citation numbers follow it
+}
 
-function inline(text: string, onCite: (n: number) => void, key: string): ReactNode[] {
+function bold(text: string, key: string): ReactNode[] {
   const out: ReactNode[] = [];
   let last = 0;
-  for (const m of text.matchAll(CITE)) {
+  for (const m of text.matchAll(/\*\*(.+?)\*\*/g)) {
     if (m.index > last) out.push(text.slice(last, m.index));
-    if (m[1]) {
-      const n = Number(m[1]);
-      out.push(
-        <button
-          key={`${key}-c${m.index}`}
-          type="button"
-          className="cite"
-          aria-label={`Show source ${n}`}
-          onClick={() => onCite(n)}
-        >
-          {n}
-        </button>,
-      );
-    } else {
-      out.push(<strong key={`${key}-b${m.index}`}>{m[2]}</strong>);
-    }
+    out.push(<strong key={`${key}-${m.index}`}>{m[1]}</strong>);
     last = m.index + m[0].length;
   }
   if (last < text.length) out.push(text.slice(last));
   return out;
 }
 
-function renderText(answer: Answer, onCite: (n: number) => void): ReactNode[] {
-  // Put citation markers right after the text they support, then lay out the lines:
-  // consecutive "- " lines become one list, other lines become paragraphs.
-  const marked = answer.segments
-    .map((s) => s.text + s.citations.map((n) => `[[cite:${n}]]`).join(""))
-    .join("");
-  const out: ReactNode[] = [];
-  let items: string[] = [];
-  const flushList = () => {
-    if (items.length === 0) return;
-    const k = out.length;
-    out.push(
-      <ul key={k}>
-        {items.map((item, j) => (
-          <li key={j}>{inline(item, onCite, `${k}-${j}`)}</li>
-        ))}
-      </ul>,
-    );
-    items = [];
-  };
-  for (const line of marked.split("\n")) {
-    if (!line.trim()) {
-      flushList();
-      continue;
-    }
-    const bullet = line.match(/^\s*[-*] (.*)$/);
-    if (bullet) {
-      items.push(bullet[1]);
-      continue;
-    }
-    flushList();
-    const k = out.length;
-    out.push(<p key={k}>{inline(line.replace(/^#+\s*/, ""), onCite, String(k))}</p>);
+// Split the segments into lines of fragments, keeping each fragment's citations.
+function lines(answer: Answer): Fragment[][] {
+  const out: Fragment[][] = [[]];
+  for (const seg of answer.segments) {
+    const parts = seg.text.split("\n");
+    parts.forEach((text, i) => {
+      if (i > 0) out.push([]);
+      out[out.length - 1].push({ text, cites: seg.citations, last: i === parts.length - 1 });
+    });
   }
-  flushList();
   return out;
 }
 
-function SourceCard({ c }: { c: Citation }) {
-  const verified = c.provenance === "verified";
-  return (
-    <div className="source-card">
-      <div className="source-head">
-        <span className="cite static">{c.number}</span>
-        <span className="source-title">{c.title}</span>
-        <span className={`badge ${verified ? "badge-ready" : "badge-failed"}`}>
-          {verified ? "Quote found on page" : `Check failed: ${c.provenance.replace(/_/g, " ")}`}
-        </span>
-      </div>
-      <blockquote>{c.cited_text}</blockquote>
-      {c.document_id !== null && c.page_no !== null && (
-        <a href={documentFileUrl(c.document_id, c.page_no)} target="_blank" rel="noreferrer">
-          Open page {c.page_no}
-        </a>
-      )}
-    </div>
-  );
+interface Props {
+  runId: string;
+  answer: Answer;
+  active: CiteRef | null;
+  onHover: (ref: CiteRef | null) => void;
+  onChoose: (ref: CiteRef) => void;
 }
 
-export function AnswerView({ answer }: { answer: Answer }) {
-  const [shown, setShown] = useState<number | null>(null);
-  const selected = answer.citations.find((c) => c.number === shown);
-  return (
-    <div className="answer">
-      <div className="answer-text">{renderText(answer, setShown)}</div>
-      {answer.citations.length > 0 && (
-        <p className="muted small">
-          {answer.citations_verified} of {answer.citations.length} citations checked against the
-          source page. Select a number to see the quote.
-        </p>
-      )}
-      {selected && <SourceCard c={selected} />}
-    </div>
-  );
+export function AnswerView({ runId, answer, active, onHover, onChoose }: Props) {
+  const activeN = active?.runId === runId ? active.n : null;
+  const byNumber = new Map(answer.citations.map((c) => [c.number, c]));
+
+  function renderFragment(f: Fragment, key: string): ReactNode {
+    const text = bold(f.text, key);
+    if (f.cites.length === 0) return <span key={key}>{text}</span>;
+    const isActive = activeN !== null && f.cites.includes(activeN);
+    return (
+      <span key={key}>
+        <span
+          className={`cited${isActive ? " active" : ""}`}
+          onMouseEnter={() => onHover({ runId, n: f.cites[0] })}
+          onMouseLeave={() => onHover(null)}
+        >
+          {text}
+        </span>
+        {f.last &&
+          f.cites.map((n) => {
+            const c = byNumber.get(n);
+            const where = c ? `${shortCode(c.title)}, page ${c.page_no}` : "";
+            return (
+              <button
+                key={`${key}-c${n}`}
+                type="button"
+                className={`cite${activeN === n ? " active" : ""}`}
+                aria-label={`Source ${n}: ${where}`}
+                onMouseEnter={() => onHover({ runId, n })}
+                onMouseLeave={() => onHover(null)}
+                onFocus={() => onHover({ runId, n })}
+                onBlur={() => onHover(null)}
+                onClick={() => onChoose({ runId, n })}
+              >
+                {n}
+              </button>
+            );
+          })}
+      </span>
+    );
+  }
+
+  // Lay out the lines: consecutive "- " lines become one list, other lines paragraphs.
+  const blocks: ReactNode[] = [];
+  let items: ReactNode[] = [];
+  const flush = () => {
+    if (items.length) blocks.push(<ul key={`ul-${blocks.length}`}>{items}</ul>);
+    items = [];
+  };
+  lines(answer).forEach((frags, i) => {
+    const text = frags.map((f) => f.text).join("");
+    if (!text.trim()) {
+      flush();
+      return;
+    }
+    const bullet = /^\s*[-*] /.exec(text);
+    const heading = /^#+\s*/.exec(text);
+    const strip = bullet?.[0].length ?? heading?.[0].length ?? 0;
+    // Remove the list or heading marker from the first fragment(s).
+    let left = strip;
+    const shown = frags.map((f) => {
+      if (left <= 0) return f;
+      const cut = Math.min(left, f.text.length);
+      left -= cut;
+      return { ...f, text: f.text.slice(cut) };
+    });
+    const content = shown.map((f, j) => renderFragment(f, `${i}-${j}`));
+    if (bullet) {
+      items.push(<li key={`li-${i}`}>{content}</li>);
+    } else {
+      flush();
+      blocks.push(<p key={`p-${i}`}>{content}</p>);
+    }
+  });
+  flush();
+
+  return <div className="answer">{blocks}</div>;
 }
