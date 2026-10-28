@@ -148,13 +148,15 @@ The shortfalls are missing evidence, incomplete answers, missing citations, and 
 
 | Pieces | Hand label | Judged supported | Partly | Not supported |
 |---|---|---|---|---|
-| 60 cited pieces of the Haiku agent's answers above | supported | 55 | 5 | 0 |
-| 14 of them with a number or rule changed by hand | partly or not supported | 0 | 2 | 12 |
-| 10 paired with a quote about something else | not supported | 1 | 0 | 9 |
+| 60 cited pieces of the Haiku agent's answers above | supported | 56 | 4 | 0 |
+| 14 of them with a number or rule changed by hand | partly or not supported | 0 | 3 | 11 |
+| 10 paired with a quote about something else | not supported | 0 | 5 | 5 |
 
-It caught every altered piece and 9 of 10 mismatched quotes. The one miss accepted a quote about mitigation measures for a sentence about purpose and benefit. The five "partly" verdicts on supported pieces are listed in the report with the judge's reasons; three are fragments that stop mid-phrase. So the check is shown to the reader as advice next to each source, and the hand review stays the measure of support.
+It judged none of the 24 altered or mismatched pieces supported. The four "partly" verdicts on supported pieces are listed in the report with the judge's reasons; two are fragments that stop mid-phrase. So the check is shown to the reader as advice next to each source, and the hand review stays the measure of support.
 
-**The support check in the final runs.** On the Haiku run it judged 233 of the agent's 245 cited pieces supported, 11 partly and 1 not supported. For the baseline: 137 of 141 supported, 4 partly. The one "not supported" is a quote of M-24-10's 365-day rule, cited for that rule. The judge gave this reason: the passage does not name M-24-10. It is right that the quote alone does not: the judge sees each quote without its document title. Sending the title and page with each quote is the next step for the check.
+Each quote goes to the judge with the title and page of its document. Before that, the judge saw quotes alone: it accepted one mismatched quote and called 55 of the 60 supported pieces supported, and in the final runs below it called one correctly attributed quote "not supported" because the quote does not name its document.
+
+**The support check in the final runs.** On the Haiku run it judged 233 of the agent's 245 cited pieces supported, 11 partly and 1 not supported. For the baseline: 137 of 141 supported, 4 partly. The one "not supported" is a quote of M-24-10's 365-day rule, cited for that rule. The judge gave this reason: the passage does not name M-24-10. These runs predate the change above; the judge now gets each quote's document title and page.
 
 ## Failure analysis
 

@@ -178,7 +178,7 @@ async def catalog(tools: Tools) -> str:
     if documents is None:
         return "No documents are ready to search yet."
     lines = [
-        f"- {d['document_id']}: {d['title']} ({d['page_count']} pages)"
+        f"- {d['document_id']}: {' '.join(d['title'].split())[:200]} ({d['page_count']} pages)"
         for d in documents[:CATALOG_LIMIT]
     ]
     if len(documents) > CATALOG_LIMIT:

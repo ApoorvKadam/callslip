@@ -12,8 +12,18 @@ ANSWER = {
         {"text": "   ", "citations": [2]},
     ],
     "citations": [
-        {"number": 1, "cited_text": "Within 180 days, each agency must develop an AI Strategy."},
-        {"number": 2, "cited_text": "Within 180 days, each agency must submit a plan."},
+        {
+            "number": 1,
+            "title": "OMB M-25-21",
+            "page_no": 5,
+            "cited_text": "Within 180 days, each agency must develop an AI Strategy.",
+        },
+        {
+            "number": 2,
+            "title": "OMB M-25-21",
+            "page_no": 12,
+            "cited_text": "Within 180 days, each agency must submit a plan.",
+        },
     ],
 }
 
@@ -31,7 +41,10 @@ def test_only_cited_pieces_with_text_are_claims_and_they_carry_context():
         "claim": 2,
         "text": "Plans follow the same timeline.",
         "context": "The memo sets two deadlines. Strategies are due in 180 days.",
-        "passages": [c["cited_text"] for c in ANSWER["citations"]],
+        "passages": [
+            {"document": "OMB M-25-21", "page": 5, "text": ANSWER["citations"][0]["cited_text"]},
+            {"document": "OMB M-25-21", "page": 12, "text": ANSWER["citations"][1]["cited_text"]},
+        ],
     }
 
 

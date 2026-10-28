@@ -84,7 +84,9 @@ async def upload_document(
     filename = safe_filename(file.filename)
     # The title is display text (never a header), so it keeps the original characters.
     original_stem = PurePath(file.filename or "").stem
-    clean_title = ((title or "").strip() or original_stem or PurePath(filename).stem)[:300]
+    # One line: a title with line breaks could pass for more entries in the agent's document list.
+    clean_title = " ".join((title or "").split()) or original_stem or PurePath(filename).stem
+    clean_title = " ".join(clean_title.split())[:300]
     digest = hashlib.sha256(content).hexdigest()
     try:
         async with pool.connection() as conn, conn.transaction():

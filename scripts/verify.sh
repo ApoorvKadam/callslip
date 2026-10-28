@@ -24,5 +24,7 @@ if [[ -n "$unhealthy" ]]; then
 fi
 # The smoke test's own account; its password comes from .env when set there.
 smoke_password="$(sed -n 's/^SMOKE_PASSWORD=//p' .env 2>/dev/null | tail -1)"
+# Compose allows a quoted value; the quotes are not part of the password.
+smoke_password="${smoke_password#[\"\']}" && smoke_password="${smoke_password%[\"\']}"
 SMOKE_PASSWORD="${SMOKE_PASSWORD:-$smoke_password}" python3 scripts/smoke_test.py --base "$base"
 echo "verify: ok"

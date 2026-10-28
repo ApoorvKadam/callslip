@@ -228,7 +228,7 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
         lines.append(
             f"| {system} | {sum(r['passed'] for r in rows)} of {len(rows)} "
             f"| {sum(r['ms'] for r in rows) / len(rows) / 1000:.1f} "
-            f"| {median(answered) / 1000 if answered else 0:.1f} "
+            f"| {f'{median(answered) / 1000:.1f}' if answered else '-'} "
             f"| {sum(r['tool_calls'] for r in rows) / len(rows):.1f} "
             f"| {sum(r['model_calls'] for r in rows) / len(rows):.1f} "
             f"| {sum(r['citations_verified'] for r in rows)} of {cites} "

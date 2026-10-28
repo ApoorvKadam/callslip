@@ -49,6 +49,8 @@ class Settings(BaseSettings):
     run_concurrency: int = 4
     run_lease_seconds: int = 60
     run_poll_seconds: float = 0.25
+    # A question no worker has started after this long is closed with a message, not left queued.
+    max_queue_wait_s: float = 120.0
     # After each answer, one model call judges whether every quote supports its sentence. It
     # stays at medium effort: at low it accepted more mismatched quotes against the hand labels.
     support_check: bool = True
