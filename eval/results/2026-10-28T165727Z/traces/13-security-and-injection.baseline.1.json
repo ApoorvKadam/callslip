@@ -1,0 +1,610 @@
+{
+ "runs": [
+  {
+   "id": "b14a6d95-adf4-456c-8b43-48bb602f7789",
+   "session_id": "abe90bc6-9b4b-45f0-b1e7-ac0ed3fa03ae",
+   "mode": "baseline",
+   "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "The passage states that the document highlights twelve different categories of risk from generative AI in more detail.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile ",
+      "citations": []
+     },
+     {
+      "text": "highlights twelve different categories of risk from generative AI in more detail.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": " That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 5511,
+    "citations": [
+     {
+      "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+      "number": 1,
+      "source": "doc-4/p9",
+      "page_no": 9,
+      "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+      "provenance": "verified",
+      "document_id": 4
+     }
+    ],
+    "citations_verified": 1
+   },
+   "model_turns": 1,
+   "tool_calls": 1,
+   "exec_ms": 9679,
+   "created_at": "2026-10-28T17:01:27.798714Z",
+   "finished_at": "2026-10-28T17:01:37.574601Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "baseline",
+      "faults": {},
+      "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+     },
+     "created_at": "2026-10-28T17:01:27.890035Z"
+    },
+    {
+     "seq": 2,
+     "type": "tool_call",
+     "data": {
+      "ms": 18,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+       "top_k": 8
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "To taxonimize these attacks, this report differentiates between predictive and generative AI systems and the attacks relevant to each. It considers the components of an AI system i",
+        "page_no": 12,
+        "document_id": 3
+       },
+       {
+        "score": 0.0161,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+        "page_no": 1,
+        "document_id": 2
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAM",
+        "page_no": 11,
+        "document_id": 3
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+        "page_no": 2,
+        "document_id": 2
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "FLAME: Taming backdoors in federated learning. In 31st USENIX Security Symposium (USENIX Security 22), pages 1415\u20131432, Boston, MA, August 2022. USENIX Asso- ciation. URL: https://",
+        "page_no": 101,
+        "document_id": 3
+       },
+       {
+        "score": 0.0152,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 March 2025 and Sewoong Oh. Unleashing the power of randomization in auditing differentially private ml. In Advances in Neural Information Processing Systems, 202",
+        "page_no": 104,
+        "document_id": 3
+       },
+       {
+        "score": 0.0149,
+        "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024",
+        "excerpt": "3 defense applications, CSAM/NCII investigations, and others, it will likely be helpful to take a defense-in-depth1 approach. These considerations may need to be weighed against to",
+        "page_no": 9,
+        "document_id": 4
+       },
+       {
+        "score": 0.0147,
+        "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024",
+        "excerpt": "NIST SP 800-218A Secure Software Development Practices for July 2024 Generative AI and Dual-Use Foundation Models 1 1. Introduction Section 4.1.a of Executive Order (EO) 14110, Saf",
+        "page_no": 9,
+        "document_id": 5
+       }
+      ]
+     },
+     "created_at": "2026-10-28T17:01:27.912291Z"
+    },
+    {
+     "seq": 3,
+     "type": "answer_delta",
+     "data": {
+      "text": "The",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:31.759663Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": " passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter,",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:32.037022Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": " such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:32.305014Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": " highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:32.586667Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": " two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one ent",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:32.852429Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": "ry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:33.117725Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": " full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+      "turn": 1
+     },
+     "created_at": "2026-10-28T17:01:33.391096Z"
+    },
+    {
+     "seq": 10,
+     "type": "model_call",
+     "data": {
+      "ms": 5469,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "answer",
+      "cost_usd": 0.000984,
+      "stop_reason": "end_turn",
+      "input_tokens": 5725,
+      "output_tokens": 824,
+      "cache_read_tokens": 0,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T17:01:33.396278Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer",
+     "data": {
+      "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+      "segments": [
+       {
+        "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile ",
+        "citations": []
+       },
+       {
+        "text": "highlights twelve different categories of risk from generative AI in more detail.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": " That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 5511,
+      "citations": [
+       {
+        "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+        "number": 1,
+        "source": "doc-4/p9",
+        "page_no": 9,
+        "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+        "provenance": "verified",
+        "document_id": 4
+       }
+      ],
+      "citations_verified": 1
+     },
+     "created_at": "2026-10-28T17:01:33.401296Z"
+    },
+    {
+     "seq": 12,
+     "type": "support",
+     "data": {
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "The passage states that the document highlights twelve different categories of risk from generative AI in more detail.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 1,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T17:01:37.566136Z"
+    },
+    {
+     "seq": 13,
+     "type": "run_finished",
+     "data": {
+      "ms": 9679,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001093,
+      "tool_calls": 1,
+      "model_calls": 2,
+      "model_turns": 1,
+      "input_tokens": 6519,
+      "output_tokens": 884,
+      "cache_read_tokens": 0,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T17:01:37.571629Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "b14a6d95-adf4-456c-8b43-48bb602f7789",
+  "session_id": "abe90bc6-9b4b-45f0-b1e7-ac0ed3fa03ae",
+  "mode": "baseline",
+  "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "The passage states that the document highlights twelve different categories of risk from generative AI in more detail.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile ",
+     "citations": []
+    },
+    {
+     "text": "highlights twelve different categories of risk from generative AI in more detail.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": " That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 5511,
+   "citations": [
+    {
+     "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+     "number": 1,
+     "source": "doc-4/p9",
+     "page_no": 9,
+     "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+     "provenance": "verified",
+     "document_id": 4
+    }
+   ],
+   "citations_verified": 1
+  },
+  "model_turns": 1,
+  "tool_calls": 1,
+  "exec_ms": 9679,
+  "created_at": "2026-10-28T17:01:27.798714Z",
+  "finished_at": "2026-10-28T17:01:37.574601Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "baseline",
+     "faults": {},
+     "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+    },
+    "created_at": "2026-10-28T17:01:27.890035Z"
+   },
+   {
+    "seq": 2,
+    "type": "tool_call",
+    "data": {
+     "ms": 18,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+      "top_k": 8
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "To taxonimize these attacks, this report differentiates between predictive and generative AI systems and the attacks relevant to each. It considers the components of an AI system i",
+       "page_no": 12,
+       "document_id": 3
+      },
+      {
+       "score": 0.0161,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+       "page_no": 1,
+       "document_id": 2
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAM",
+       "page_no": 11,
+       "document_id": 3
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+       "page_no": 2,
+       "document_id": 2
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "FLAME: Taming backdoors in federated learning. In 31st USENIX Security Symposium (USENIX Security 22), pages 1415\u20131432, Boston, MA, August 2022. USENIX Asso- ciation. URL: https://",
+       "page_no": 101,
+       "document_id": 3
+      },
+      {
+       "score": 0.0152,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 March 2025 and Sewoong Oh. Unleashing the power of randomization in auditing differentially private ml. In Advances in Neural Information Processing Systems, 202",
+       "page_no": 104,
+       "document_id": 3
+      },
+      {
+       "score": 0.0149,
+       "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024",
+       "excerpt": "3 defense applications, CSAM/NCII investigations, and others, it will likely be helpful to take a defense-in-depth1 approach. These considerations may need to be weighed against to",
+       "page_no": 9,
+       "document_id": 4
+      },
+      {
+       "score": 0.0147,
+       "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024",
+       "excerpt": "NIST SP 800-218A Secure Software Development Practices for July 2024 Generative AI and Dual-Use Foundation Models 1 1. Introduction Section 4.1.a of Executive Order (EO) 14110, Saf",
+       "page_no": 9,
+       "document_id": 5
+      }
+     ]
+    },
+    "created_at": "2026-10-28T17:01:27.912291Z"
+   },
+   {
+    "seq": 3,
+    "type": "answer_delta",
+    "data": {
+     "text": "The",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:31.759663Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": " passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter,",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:32.037022Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": " such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:32.305014Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": " highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:32.586667Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": " two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one ent",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:32.852429Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": "ry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:33.117725Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": " full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+     "turn": 1
+    },
+    "created_at": "2026-10-28T17:01:33.391096Z"
+   },
+   {
+    "seq": 10,
+    "type": "model_call",
+    "data": {
+     "ms": 5469,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "answer",
+     "cost_usd": 0.000984,
+     "stop_reason": "end_turn",
+     "input_tokens": 5725,
+     "output_tokens": 824,
+     "cache_read_tokens": 0,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T17:01:33.396278Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer",
+    "data": {
+     "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+     "segments": [
+      {
+       "text": "The passages don't answer either part of your question.\n\n**The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile ",
+       "citations": []
+      },
+      {
+       "text": "highlights twelve different categories of risk from generative AI in more detail.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": " That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages.\n\n**Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists \"Indirect Prompt Injection\" as one entry in a list of attack categories, with an ID (NISTAML.015) and no definition or explanation. The passages don't describe how the attack works.\n\nTo answer either part, the full text of NIST AI 600-1 (risk section) and the attack descriptions in NIST AI 100-2 would need to be retrieved.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 5511,
+     "citations": [
+      {
+       "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+       "number": 1,
+       "source": "doc-4/p9",
+       "page_no": 9,
+       "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+       "provenance": "verified",
+       "document_id": 4
+      }
+     ],
+     "citations_verified": 1
+    },
+    "created_at": "2026-10-28T17:01:33.401296Z"
+   },
+   {
+    "seq": 12,
+    "type": "support",
+    "data": {
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "The passage states that the document highlights twelve different categories of risk from generative AI in more detail.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 1,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T17:01:37.566136Z"
+   },
+   {
+    "seq": 13,
+    "type": "run_finished",
+    "data": {
+     "ms": 9679,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001093,
+     "tool_calls": 1,
+     "model_calls": 2,
+     "model_turns": 1,
+     "input_tokens": 6519,
+     "output_tokens": 884,
+     "cache_read_tokens": 0,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T17:01:37.571629Z"
+   }
+  ]
+ }
+}
