@@ -444,3 +444,17 @@ async def test_a_document_list_that_cannot_load_is_reported_not_empty(
     monkeypatch.setattr(Tools, "list_documents", broken)
     text = await catalog(tools)
     assert "could not be loaded" in text and "list_documents" in text
+
+
+async def test_a_clarification_too_long_to_ask_shows_in_the_steps(tools):  # noqa: F811
+    turn = tool_turn(("ask_clarification", {"question": "Which memo? " * 60}))
+    ctx = await new_run(tools, ReplayLLM([turn, DONE]))
+    await start_agent(ctx, "q", [], {})
+
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "complete"  # the model was told why, and went on
+    calls = [d for t, d in await events(ctx) if t == "tool_call"]
+    assert [(c["step"], c["tool"], c["status"]) for c in calls] == [
+        (1, "ask_clarification", "invalid_input")
+    ]
+    assert "500 characters" in calls[0]["summary"]

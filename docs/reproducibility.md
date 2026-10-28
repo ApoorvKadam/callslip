@@ -178,13 +178,15 @@ Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the 
       "type": "object",
       "properties": {
         "question": {
-          "type": "string"
+          "type": "string",
+          "description": "One short question, at most 500 characters."
         },
         "options": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Up to 6 short choices the user can pick from."
         }
       },
       "required": [

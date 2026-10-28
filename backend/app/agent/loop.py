@@ -260,6 +260,9 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
                     await pause_for_clarification(ctx, calls[0].id, args)
                     return
                 outcomes = [_not_run(note)]
+            # A question that was not asked still shows in the trace, with the reason.
+            step += 1
+            await tool_event(ctx, step, calls[0], outcomes[0], 0, [], 0)
         else:
             outcomes, note, step = await run_tools(ctx, tools, calls, faults, step)
 
@@ -308,21 +311,34 @@ async def run_tools(
     results = await asyncio.gather(*(run(c, r) for c, r in zip(calls, planned, strict=True)))
     for call, (outcome, attempts, retries, ms) in zip(calls, results, strict=True):
         step += 1
-        await ctx.emit(
-            "tool_call",
-            {
-                "step": step,
-                "tool": call.name,
-                "input": call.input,
-                "status": outcome.status,
-                "summary": outcome.summary,
-                "ms": ms,
-                "attempts": attempts,
-                "retries": retries,
-                **outcome.trace,
-            },
-        )
+        await tool_event(ctx, step, call, outcome, attempts, retries, ms)
     return [r[0] for r in results], note or limit_after_tool(ctx), step
+
+
+async def tool_event(
+    ctx: RunContext,
+    step: int,
+    call,
+    outcome: ToolOutcome,
+    attempts: int,
+    retries: list[str],
+    ms: int,
+) -> None:
+    """One tool call in the trace: what was asked, what came back, and how long it took."""
+    await ctx.emit(
+        "tool_call",
+        {
+            "step": step,
+            "tool": call.name,
+            "input": call.input,
+            "status": outcome.status,
+            "summary": outcome.summary,
+            "ms": ms,
+            "attempts": attempts,
+            "retries": retries,
+            **outcome.trace,
+        },
+    )
 
 
 async def pause_for_clarification(ctx: RunContext, tool_use_id: str, args: ClarificationArgs):
