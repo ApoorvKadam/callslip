@@ -1,6 +1,6 @@
 # Callslip
 
-Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
+Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, a document's outline, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
 
 ![A question that spans two documents: each search listed as it happens, the answer as it is written, then its sources](docs/media/callslip-hero.gif)
 
@@ -70,6 +70,7 @@ A plain tool-use loop over the Claude Messages API (no agent framework), in `bac
 | `list_documents()` | yes | JSON list of ready documents: id, title, page count |
 | `search_documents(query, document_ids?, page_from?, page_to?, top_k?)` | yes | citable passages (`search_result` blocks), or `{"status": "no_results"}` |
 | `read_document_section(document_id, page_start, page_end)` | yes | up to 3 full pages as citable passages |
+| `document_outline(document_id)` | yes | the document's sections from its own PDF bookmarks, each with the page it starts on, or `{"status": "no_outline"}` |
 | `ask_clarification(question, options?)` | control | pauses the run until the user replies |
 
 Every tool input is validated (Pydantic); a bad call comes back as an error the model can fix. The read tools of one turn run at the same time, so a question with independent parts costs one turn, not one per part; a clarification is only asked on its own. Limits, all configurable: model turns (10), tool calls (9), per-tool timeout (8 s) with one retry, and a run deadline (90 s) with a reserve for the final answer. At a limit, the model must answer from what it has, marked incomplete; with no time left at all, the run stops with a summary of what it found and no further model call. Clarification pauses the run (`needs_clarification`); the reply resumes the same run, exactly once (idempotency key), and the time spent waiting does not count.

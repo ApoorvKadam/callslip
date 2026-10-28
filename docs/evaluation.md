@@ -215,6 +215,11 @@ No failure invented a figure or a quote.
 - An earlier Haiku run passed 29 of 30 but its answers had three small errors in uncited sentences: an added "signed by both parties" in case 7, and a misread risk taxonomy in cases 8a and 8b. The answer rules now ask for a citation on every factual sentence, including connecting ones, and for no detail beyond the passages; the agent is also told to answer every part of a clarified question. Both models were then run again on that prompt (the runs above), and the hand review found none of those errors.
 - Before that prompt change, the Sonnet agent also missed the strategy deadline in two of three case 5 runs (25 of 30 overall). With it, case 5 passes on both models.
 
+**Kept: each document's outline.** With search failing, the agent read pages from the front of the NIST Generative AI Profile and sometimes stopped at the list of risks on pages 7 and 8, never reaching the section on data privacy (section 2.4, pages 11 and 12). Instructions to read on did not settle it (below). Many PDFs carry their own bookmarks with the physical page of each section; 7 of the 14 here do, the Profile among them. The parser now keeps them, and the tool `document_outline` returns them. A failed search names it as the next step.
+- Case 8b passed 20 of 20 runs ([`220519Z`](../eval/results/2026-10-28T220519Z/)), against 1 of 3 on the prompt before it. In every run the agent took the outline and went straight to section 2.4: it read pages 11 and 12 in 19 runs, and page 11 alone in one.
+- Case 13 passed 16 of 20 in the same run. Two answers left out "attack surface"; two left out the definition of indirect injection.
+- All fifteen cases, three repeats: 43 of 45 ([`221200Z`](../eval/results/2026-10-28T221200Z/)), against 42 on the prompt before it. Cases 8b and 13 passed every repeat; case 2 left out one characteristic once, and case 4 left out the AI strategy once.
+
 **Tried and not kept**:
 - Telling the agent, when search fails, to read on until it reaches the section on the topic. In case 8b it sometimes answers from the list of risks on pages 7 and 8 and never reaches section 2.4 (pages 11 and 12); the submitted prompt passed 8b in 1 of 3 runs, and the prompt before it in 2 of 3. With the second wording of the instruction, 8b passed 6 of 9 ([`212457Z`](../eval/results/2026-10-28T212457Z/) and the full run). But the full runs gave 43 of 45 (first wording) and 40 of 45 (second) against 42 ([`211637Z`](../eval/results/2026-10-28T211637Z/), [`212651Z`](../eval/results/2026-10-28T212651Z/)), and the misses moved between cases (4, 5, 9, 10 once each). That is within the spread between runs, so the prompt stays as it was.
 - Answers with the model's thinking turned off ([`181548Z`](../eval/results/2026-10-28T181548Z/), Haiku agent, the build with faster text delivery). The full answer came sooner (median 4.2 s instead of 5.5 s), but 39 of 45 runs passed instead of 43. With search failing, it gave up instead of reading the pages (case 8b, 0 of 3), and it never searched for which memo governs (case 9, 0 of 3). Thinking stays on; the setting `ANSWER_THINKING` keeps the choice explicit.
@@ -247,7 +252,7 @@ Three checks rejected correct answers. Each was corrected so that it accepts wha
 | `211637Z`, `212651Z` read-on instruction | 41, 38 of 45 | 43, 40 of 45 | | |
 | `043802Z`, `044638Z` first ten cases | 30, 27 of 30 | 30, 27 of 30 | 11, 12 of 30 | 11, 12 of 30 |
 
-The remaining agent misses are real: in case 8b the agent sometimes stops reading before the section on the topic, and in case 9 it once left the page that settles the conflict uncited.
+The remaining agent misses were real: in case 8b the agent sometimes stopped reading before the section on the topic, and in case 9 it once left the page that settles the conflict uncited. The outline tool below addresses case 8b.
 
 ## Representative traces
 

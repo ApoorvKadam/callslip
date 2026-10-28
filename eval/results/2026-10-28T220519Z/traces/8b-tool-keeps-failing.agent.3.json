@@ -1,0 +1,1650 @@
+{
+ "runs": [
+  {
+   "id": "1302cd0a-5c8a-4898-9b5b-a3639ebeb5b3",
+   "session_id": "d832be8c-47b2-4c6d-a831-c17b999596d2",
+   "mode": "agent",
+   "question": "How does the NIST Generative AI Profile describe data privacy risks?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.\n- **Downstream harms:** Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states training on personal data raises risks to transparency, individual participation including consent, and purpose specification.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Passage says models may leak, generate, or correctly infer sensitive information, and developers rarely disclose data sources.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 3,
+      "reason": "Passage states LLMs revealed public-domain sensitive data from training, called data memorization, with exacerbated risks even for small samples.",
+      "verdict": "supported",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "claim": 4,
+      "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage or harm.",
+      "verdict": "supported",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "claim": 5,
+      "reason": "Passage states predictive inferences based on PII or protected attributes can contribute to adverse decisions and representational or allocative harms.",
+      "verdict": "supported",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "claim": 6,
+      "reason": "Passage lists Data Privacy among risks also relevant to jailbreaking-type output restriction failures, alongside the other named risks.",
+      "verdict": "supported",
+      "citations": [
+       6
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** ",
+      "citations": []
+     },
+     {
+      "text": "Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": "\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. ",
+      "citations": []
+     },
+     {
+      "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": "\n- **Memorization:** ",
+      "citations": []
+     },
+     {
+      "text": "LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "text": "\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. ",
+      "citations": []
+     },
+     {
+      "text": "Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "text": "\n- **Downstream harms:** Beyond exposure, ",
+      "citations": []
+     },
+     {
+      "text": "predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "text": "\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is ",
+      "citations": []
+     },
+     {
+      "text": "also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content",
+      "citations": [
+       6
+      ]
+     },
+     {
+      "text": ".\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 6394,
+    "citations": [
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 1,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "GAI system training requires large volumes of data, which in some cases may include personal data. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 2,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 3,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 4,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 5,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "For example, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups (see Harmful Bias and Homogenization below).",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 6,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "Many current systems restrict model outputs to limit certain content or in response to certain prompts, but this approach may still produce harmful recommendations in response to other less-explicit, novel prompts (also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content).",
+      "provenance": "verified",
+      "document_id": 2
+     }
+    ],
+    "citations_verified": 6
+   },
+   "model_turns": 4,
+   "tool_calls": 3,
+   "exec_ms": 11922,
+   "created_at": "2026-10-28T22:06:00.057296Z",
+   "finished_at": "2026-10-28T22:06:12.133399Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {
+       "search_documents": "error"
+      },
+      "question": "How does the NIST Generative AI Profile describe data privacy risks?"
+     },
+     "created_at": "2026-10-28T22:06:00.252502Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 847,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 8.3e-05,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 106,
+      "cache_read_tokens": 2941,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T22:06:01.134700Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 0,
+      "step": 1,
+      "tool": "search_documents",
+      "input": {
+       "query": "data privacy risks generative AI",
+       "top_k": 6,
+       "document_ids": [
+        2
+       ]
+      },
+      "status": "error",
+      "retries": [
+       "the search backend is unavailable (injected fault)",
+       "the search backend is unavailable (injected fault)"
+      ],
+      "summary": "failed: the search backend is unavailable (injected fault)",
+      "attempts": 2
+     },
+     "created_at": "2026-10-28T22:06:01.140072Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "The",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:06:01.635733Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": " search back",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:06:01.835525Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": "end failed, so I'll look up the document's outline to find the privacy section.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:06:01.921218Z"
+    },
+    {
+     "seq": 7,
+     "type": "model_call",
+     "data": {
+      "ms": 762,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 7e-05,
+      "stop_reason": "tool_use",
+      "input_tokens": 2,
+      "output_tokens": 77,
+      "cache_read_tokens": 3142,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T22:06:01.934026Z"
+    },
+    {
+     "seq": 8,
+     "type": "tool_call",
+     "data": {
+      "ms": 3,
+      "step": 2,
+      "tool": "document_outline",
+      "input": {
+       "document_id": 2
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "26 sections of NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+      "attempts": 1,
+      "document": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024"
+     },
+     "created_at": "2026-10-28T22:06:01.943244Z"
+    },
+    {
+     "seq": 9,
+     "type": "model_call",
+     "data": {
+      "ms": 690,
+      "turn": 3,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000199,
+      "stop_reason": "tool_use",
+      "input_tokens": 2,
+      "output_tokens": 97,
+      "cache_read_tokens": 3142,
+      "cache_creation_tokens": 950
+     },
+     "created_at": "2026-10-28T22:06:02.609155Z"
+    },
+    {
+     "seq": 10,
+     "type": "tool_call",
+     "data": {
+      "ms": 4,
+      "step": 3,
+      "tool": "read_document_section",
+      "input": {
+       "page_end": 12,
+       "page_start": 11,
+       "document_id": 2
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "pages 11-12 of NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+      "attempts": 1,
+      "evidence": [
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "7 unethical behavior. Text-to-image models also make it easy to create images that could be used to promote dangerous or violent messages. Similar concerns are present for other GA",
+        "page_no": 11,
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "8 Trustworthy AI Characteristics: Accountable and Transparent, Privacy Enhanced, Safe, Secure and Resilient 2.5. Environmental Impacts Training, maintaining, and operating (running",
+        "page_no": 12,
+        "document_id": 2
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:06:02.619039Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": "The",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:03.578380Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": " NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a dist",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:03.703530Z"
+    },
+    {
+     "seq": 13,
+     "type": "answer_delta",
+     "data": {
+      "text": "inct GAI risk in Section 2.4. Search was unavailable, so I read p",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:03.824364Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer_delta",
+     "data": {
+      "text": "ages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy iss",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:03.945156Z"
+    },
+    {
+     "seq": 15,
+     "type": "answer_delta",
+     "data": {
+      "text": "ues beyond those of earlier AI systems. Its main points are:\n\n- **Training data",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.067745Z"
+    },
+    {
+     "seq": 16,
+     "type": "answer_delta",
+     "data": {
+      "text": ":** Training on personal data raises risks to widely accep",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.190990Z"
+    },
+    {
+     "seq": 17,
+     "type": "answer_delta",
+     "data": {
+      "text": "ted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opa",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.312544Z"
+    },
+    {
+     "seq": 18,
+     "type": "answer_delta",
+     "data": {
+      "text": "que sourcing:** Developers rarely reveal their",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.432622Z"
+    },
+    {
+     "seq": 19,
+     "type": "answer_delta",
+     "data": {
+      "text": " data sources, which leaves users unable to tell whether personally identifiable information was used",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.540931Z"
+    },
+    {
+     "seq": 20,
+     "type": "answer_delta",
+     "data": {
+      "text": ". Models may leak, generate, or correctly infer sensitive information about individuals.",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.656857Z"
+    },
+    {
+     "seq": 21,
+     "type": "answer_delta",
+     "data": {
+      "text": "\n- **Memorization:** LLMs have revealed sensitive information from the public dom",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.779795Z"
+    },
+    {
+     "seq": 22,
+     "type": "answer_delta",
+     "data": {
+      "text": "ain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:04.902116Z"
+    },
+    {
+     "seq": 23,
+     "type": "answer_delta",
+     "data": {
+      "text": " for data present only in a small number of training samples.\n- **Inference:** Models can inf",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.024793Z"
+    },
+    {
+     "seq": 24,
+     "type": "answer_delta",
+     "data": {
+      "text": "er personal data that was never in their training set or sup",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.144756Z"
+    },
+    {
+     "seq": 25,
+     "type": "answer_delta",
+     "data": {
+      "text": "plied by the user by combining information from different sources. Such inferences can har",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.250419Z"
+    },
+    {
+     "seq": 26,
+     "type": "answer_delta",
+     "data": {
+      "text": "m people even when they are wrong. Inferences can have negative imp",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.371508Z"
+    },
+    {
+     "seq": 27,
+     "type": "answer_delta",
+     "data": {
+      "text": "act on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.493623Z"
+    },
+    {
+     "seq": 28,
+     "type": "answer_delta",
+     "data": {
+      "text": " or that could be used to disadvantage or harm them.\n- **Downstream harms:**",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.619102Z"
+    },
+    {
+     "seq": 29,
+     "type": "answer_delta",
+     "data": {
+      "text": " Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adver",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.737723Z"
+    },
+    {
+     "seq": 30,
+     "type": "answer_delta",
+     "data": {
+      "text": "se decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags priv",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.859134Z"
+    },
+    {
+     "seq": 31,
+     "type": "answer_delta",
+     "data": {
+      "text": "acy as a factor in other risks, such as jailbreaking, where output rest",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:05.982718Z"
+    },
+    {
+     "seq": 32,
+     "type": "answer_delta",
+     "data": {
+      "text": "rictions may fail against novel prompts, a",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:06.102126Z"
+    },
+    {
+     "seq": 33,
+     "type": "answer_delta",
+     "data": {
+      "text": " risk it notes is also relevant to CBRN Information or",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:06.226715Z"
+    },
+    {
+     "seq": 34,
+     "type": "answer_delta",
+     "data": {
+      "text": " Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:06.351121Z"
+    },
+    {
+     "seq": 35,
+     "type": "answer_delta",
+     "data": {
+      "text": "\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:06.471826Z"
+    },
+    {
+     "seq": 36,
+     "type": "answer_delta",
+     "data": {
+      "text": " answer covers only how the risk is described.",
+      "turn": 4
+     },
+     "created_at": "2026-10-28T22:06:06.578542Z"
+    },
+    {
+     "seq": 37,
+     "type": "model_call",
+     "data": {
+      "ms": 3942,
+      "turn": 4,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.001036,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 804,
+      "cache_read_tokens": 2879,
+      "cache_creation_tokens": 4838
+     },
+     "created_at": "2026-10-28T22:06:06.587604Z"
+    },
+    {
+     "seq": 38,
+     "type": "answer",
+     "data": {
+      "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.\n- **Downstream harms:** Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+      "segments": [
+       {
+        "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** ",
+        "citations": []
+       },
+       {
+        "text": "Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": "\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. ",
+        "citations": []
+       },
+       {
+        "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": "\n- **Memorization:** ",
+        "citations": []
+       },
+       {
+        "text": "LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "text": "\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. ",
+        "citations": []
+       },
+       {
+        "text": "Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "text": "\n- **Downstream harms:** Beyond exposure, ",
+        "citations": []
+       },
+       {
+        "text": "predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "text": "\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is ",
+        "citations": []
+       },
+       {
+        "text": "also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content",
+        "citations": [
+         6
+        ]
+       },
+       {
+        "text": ".\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 6394,
+      "citations": [
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 1,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "GAI system training requires large volumes of data, which in some cases may include personal data. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 2,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 3,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 4,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 5,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "For example, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups (see Harmful Bias and Homogenization below).",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 6,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "Many current systems restrict model outputs to limit certain content or in response to certain prompts, but this approach may still produce harmful recommendations in response to other less-explicit, novel prompts (also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content).",
+        "provenance": "verified",
+        "document_id": 2
+       }
+      ],
+      "citations_verified": 6
+     },
+     "created_at": "2026-10-28T22:06:06.600701Z"
+    },
+    {
+     "seq": 39,
+     "type": "support",
+     "data": {
+      "ms": 5519,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states training on personal data raises risks to transparency, individual participation including consent, and purpose specification.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Passage says models may leak, generate, or correctly infer sensitive information, and developers rarely disclose data sources.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 3,
+        "reason": "Passage states LLMs revealed public-domain sensitive data from training, called data memorization, with exacerbated risks even for small samples.",
+        "verdict": "supported",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "claim": 4,
+        "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage or harm.",
+        "verdict": "supported",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "claim": 5,
+        "reason": "Passage states predictive inferences based on PII or protected attributes can contribute to adverse decisions and representational or allocative harms.",
+        "verdict": "supported",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "claim": 6,
+        "reason": "Passage lists Data Privacy among risks also relevant to jailbreaking-type output restriction failures, alongside the other named risks.",
+        "verdict": "supported",
+        "citations": [
+         6
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 6,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T22:06:12.125458Z"
+    },
+    {
+     "seq": 40,
+     "type": "run_finished",
+     "data": {
+      "ms": 11922,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001826,
+      "tool_calls": 3,
+      "model_calls": 5,
+      "model_turns": 4,
+      "input_tokens": 2543,
+      "output_tokens": 1454,
+      "cache_read_tokens": 12104,
+      "cache_creation_tokens": 5788
+     },
+     "created_at": "2026-10-28T22:06:12.131039Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "1302cd0a-5c8a-4898-9b5b-a3639ebeb5b3",
+  "session_id": "d832be8c-47b2-4c6d-a831-c17b999596d2",
+  "mode": "agent",
+  "question": "How does the NIST Generative AI Profile describe data privacy risks?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.\n- **Downstream harms:** Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states training on personal data raises risks to transparency, individual participation including consent, and purpose specification.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Passage says models may leak, generate, or correctly infer sensitive information, and developers rarely disclose data sources.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 3,
+     "reason": "Passage states LLMs revealed public-domain sensitive data from training, called data memorization, with exacerbated risks even for small samples.",
+     "verdict": "supported",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "claim": 4,
+     "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage or harm.",
+     "verdict": "supported",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "claim": 5,
+     "reason": "Passage states predictive inferences based on PII or protected attributes can contribute to adverse decisions and representational or allocative harms.",
+     "verdict": "supported",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "claim": 6,
+     "reason": "Passage lists Data Privacy among risks also relevant to jailbreaking-type output restriction failures, alongside the other named risks.",
+     "verdict": "supported",
+     "citations": [
+      6
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** ",
+     "citations": []
+    },
+    {
+     "text": "Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": "\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. ",
+     "citations": []
+    },
+    {
+     "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": "\n- **Memorization:** ",
+     "citations": []
+    },
+    {
+     "text": "LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "text": "\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. ",
+     "citations": []
+    },
+    {
+     "text": "Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "text": "\n- **Downstream harms:** Beyond exposure, ",
+     "citations": []
+    },
+    {
+     "text": "predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "text": "\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is ",
+     "citations": []
+    },
+    {
+     "text": "also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content",
+     "citations": [
+      6
+     ]
+    },
+    {
+     "text": ".\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 6394,
+   "citations": [
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 1,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "GAI system training requires large volumes of data, which in some cases may include personal data. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 2,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 3,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 4,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 5,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "For example, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups (see Harmful Bias and Homogenization below).",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 6,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "Many current systems restrict model outputs to limit certain content or in response to certain prompts, but this approach may still produce harmful recommendations in response to other less-explicit, novel prompts (also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content).",
+     "provenance": "verified",
+     "document_id": 2
+    }
+   ],
+   "citations_verified": 6
+  },
+  "model_turns": 4,
+  "tool_calls": 3,
+  "exec_ms": 11922,
+  "created_at": "2026-10-28T22:06:00.057296Z",
+  "finished_at": "2026-10-28T22:06:12.133399Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {
+      "search_documents": "error"
+     },
+     "question": "How does the NIST Generative AI Profile describe data privacy risks?"
+    },
+    "created_at": "2026-10-28T22:06:00.252502Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 847,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 8.3e-05,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 106,
+     "cache_read_tokens": 2941,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T22:06:01.134700Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 0,
+     "step": 1,
+     "tool": "search_documents",
+     "input": {
+      "query": "data privacy risks generative AI",
+      "top_k": 6,
+      "document_ids": [
+       2
+      ]
+     },
+     "status": "error",
+     "retries": [
+      "the search backend is unavailable (injected fault)",
+      "the search backend is unavailable (injected fault)"
+     ],
+     "summary": "failed: the search backend is unavailable (injected fault)",
+     "attempts": 2
+    },
+    "created_at": "2026-10-28T22:06:01.140072Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "The",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:06:01.635733Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": " search back",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:06:01.835525Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": "end failed, so I'll look up the document's outline to find the privacy section.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:06:01.921218Z"
+   },
+   {
+    "seq": 7,
+    "type": "model_call",
+    "data": {
+     "ms": 762,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 7e-05,
+     "stop_reason": "tool_use",
+     "input_tokens": 2,
+     "output_tokens": 77,
+     "cache_read_tokens": 3142,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T22:06:01.934026Z"
+   },
+   {
+    "seq": 8,
+    "type": "tool_call",
+    "data": {
+     "ms": 3,
+     "step": 2,
+     "tool": "document_outline",
+     "input": {
+      "document_id": 2
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "26 sections of NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+     "attempts": 1,
+     "document": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024"
+    },
+    "created_at": "2026-10-28T22:06:01.943244Z"
+   },
+   {
+    "seq": 9,
+    "type": "model_call",
+    "data": {
+     "ms": 690,
+     "turn": 3,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000199,
+     "stop_reason": "tool_use",
+     "input_tokens": 2,
+     "output_tokens": 97,
+     "cache_read_tokens": 3142,
+     "cache_creation_tokens": 950
+    },
+    "created_at": "2026-10-28T22:06:02.609155Z"
+   },
+   {
+    "seq": 10,
+    "type": "tool_call",
+    "data": {
+     "ms": 4,
+     "step": 3,
+     "tool": "read_document_section",
+     "input": {
+      "page_end": 12,
+      "page_start": 11,
+      "document_id": 2
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "pages 11-12 of NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+     "attempts": 1,
+     "evidence": [
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "7 unethical behavior. Text-to-image models also make it easy to create images that could be used to promote dangerous or violent messages. Similar concerns are present for other GA",
+       "page_no": 11,
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "8 Trustworthy AI Characteristics: Accountable and Transparent, Privacy Enhanced, Safe, Secure and Resilient 2.5. Environmental Impacts Training, maintaining, and operating (running",
+       "page_no": 12,
+       "document_id": 2
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:06:02.619039Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": "The",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:03.578380Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": " NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a dist",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:03.703530Z"
+   },
+   {
+    "seq": 13,
+    "type": "answer_delta",
+    "data": {
+     "text": "inct GAI risk in Section 2.4. Search was unavailable, so I read p",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:03.824364Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer_delta",
+    "data": {
+     "text": "ages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy iss",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:03.945156Z"
+   },
+   {
+    "seq": 15,
+    "type": "answer_delta",
+    "data": {
+     "text": "ues beyond those of earlier AI systems. Its main points are:\n\n- **Training data",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.067745Z"
+   },
+   {
+    "seq": 16,
+    "type": "answer_delta",
+    "data": {
+     "text": ":** Training on personal data raises risks to widely accep",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.190990Z"
+   },
+   {
+    "seq": 17,
+    "type": "answer_delta",
+    "data": {
+     "text": "ted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opa",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.312544Z"
+   },
+   {
+    "seq": 18,
+    "type": "answer_delta",
+    "data": {
+     "text": "que sourcing:** Developers rarely reveal their",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.432622Z"
+   },
+   {
+    "seq": 19,
+    "type": "answer_delta",
+    "data": {
+     "text": " data sources, which leaves users unable to tell whether personally identifiable information was used",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.540931Z"
+   },
+   {
+    "seq": 20,
+    "type": "answer_delta",
+    "data": {
+     "text": ". Models may leak, generate, or correctly infer sensitive information about individuals.",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.656857Z"
+   },
+   {
+    "seq": 21,
+    "type": "answer_delta",
+    "data": {
+     "text": "\n- **Memorization:** LLMs have revealed sensitive information from the public dom",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.779795Z"
+   },
+   {
+    "seq": 22,
+    "type": "answer_delta",
+    "data": {
+     "text": "ain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:04.902116Z"
+   },
+   {
+    "seq": 23,
+    "type": "answer_delta",
+    "data": {
+     "text": " for data present only in a small number of training samples.\n- **Inference:** Models can inf",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.024793Z"
+   },
+   {
+    "seq": 24,
+    "type": "answer_delta",
+    "data": {
+     "text": "er personal data that was never in their training set or sup",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.144756Z"
+   },
+   {
+    "seq": 25,
+    "type": "answer_delta",
+    "data": {
+     "text": "plied by the user by combining information from different sources. Such inferences can har",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.250419Z"
+   },
+   {
+    "seq": 26,
+    "type": "answer_delta",
+    "data": {
+     "text": "m people even when they are wrong. Inferences can have negative imp",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.371508Z"
+   },
+   {
+    "seq": 27,
+    "type": "answer_delta",
+    "data": {
+     "text": "act on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.493623Z"
+   },
+   {
+    "seq": 28,
+    "type": "answer_delta",
+    "data": {
+     "text": " or that could be used to disadvantage or harm them.\n- **Downstream harms:**",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.619102Z"
+   },
+   {
+    "seq": 29,
+    "type": "answer_delta",
+    "data": {
+     "text": " Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adver",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.737723Z"
+   },
+   {
+    "seq": 30,
+    "type": "answer_delta",
+    "data": {
+     "text": "se decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags priv",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.859134Z"
+   },
+   {
+    "seq": 31,
+    "type": "answer_delta",
+    "data": {
+     "text": "acy as a factor in other risks, such as jailbreaking, where output rest",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:05.982718Z"
+   },
+   {
+    "seq": 32,
+    "type": "answer_delta",
+    "data": {
+     "text": "rictions may fail against novel prompts, a",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:06.102126Z"
+   },
+   {
+    "seq": 33,
+    "type": "answer_delta",
+    "data": {
+     "text": " risk it notes is also relevant to CBRN Information or",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:06.226715Z"
+   },
+   {
+    "seq": 34,
+    "type": "answer_delta",
+    "data": {
+     "text": " Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:06.351121Z"
+   },
+   {
+    "seq": 35,
+    "type": "answer_delta",
+    "data": {
+     "text": "\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:06.471826Z"
+   },
+   {
+    "seq": 36,
+    "type": "answer_delta",
+    "data": {
+     "text": " answer covers only how the risk is described.",
+     "turn": 4
+    },
+    "created_at": "2026-10-28T22:06:06.578542Z"
+   },
+   {
+    "seq": 37,
+    "type": "model_call",
+    "data": {
+     "ms": 3942,
+     "turn": 4,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.001036,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 804,
+     "cache_read_tokens": 2879,
+     "cache_creation_tokens": 4838
+    },
+    "created_at": "2026-10-28T22:06:06.587604Z"
+   },
+   {
+    "seq": 38,
+    "type": "answer",
+    "data": {
+     "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.\n- **Downstream harms:** Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+     "segments": [
+      {
+       "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** ",
+       "citations": []
+      },
+      {
+       "text": "Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": "\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. ",
+       "citations": []
+      },
+      {
+       "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": "\n- **Memorization:** ",
+       "citations": []
+      },
+      {
+       "text": "LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "text": "\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. ",
+       "citations": []
+      },
+      {
+       "text": "Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "text": "\n- **Downstream harms:** Beyond exposure, ",
+       "citations": []
+      },
+      {
+       "text": "predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "text": "\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is ",
+       "citations": []
+      },
+      {
+       "text": "also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content",
+       "citations": [
+        6
+       ]
+      },
+      {
+       "text": ".\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 6394,
+     "citations": [
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 1,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "GAI system training requires large volumes of data, which in some cases may include personal data. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 2,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 3,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 4,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 5,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "For example, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups (see Harmful Bias and Homogenization below).",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 6,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "Many current systems restrict model outputs to limit certain content or in response to certain prompts, but this approach may still produce harmful recommendations in response to other less-explicit, novel prompts (also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content).",
+       "provenance": "verified",
+       "document_id": 2
+      }
+     ],
+     "citations_verified": 6
+    },
+    "created_at": "2026-10-28T22:06:06.600701Z"
+   },
+   {
+    "seq": 39,
+    "type": "support",
+    "data": {
+     "ms": 5519,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states training on personal data raises risks to transparency, individual participation including consent, and purpose specification.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Passage says models may leak, generate, or correctly infer sensitive information, and developers rarely disclose data sources.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 3,
+       "reason": "Passage states LLMs revealed public-domain sensitive data from training, called data memorization, with exacerbated risks even for small samples.",
+       "verdict": "supported",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "claim": 4,
+       "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage or harm.",
+       "verdict": "supported",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "claim": 5,
+       "reason": "Passage states predictive inferences based on PII or protected attributes can contribute to adverse decisions and representational or allocative harms.",
+       "verdict": "supported",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "claim": 6,
+       "reason": "Passage lists Data Privacy among risks also relevant to jailbreaking-type output restriction failures, alongside the other named risks.",
+       "verdict": "supported",
+       "citations": [
+        6
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 6,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T22:06:12.125458Z"
+   },
+   {
+    "seq": 40,
+    "type": "run_finished",
+    "data": {
+     "ms": 11922,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001826,
+     "tool_calls": 3,
+     "model_calls": 5,
+     "model_turns": 4,
+     "input_tokens": 2543,
+     "output_tokens": 1454,
+     "cache_read_tokens": 12104,
+     "cache_creation_tokens": 5788
+    },
+    "created_at": "2026-10-28T22:06:12.131039Z"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1198 @@
+{
+ "runs": [
+  {
+   "id": "8a793668-dcda-4ba9-b779-4ba78bedef6e",
+   "session_id": "dcf79f26-38a0-465d-badb-2fd1faca1e5a",
+   "mode": "agent",
+   "question": "What fine does OMB M-25-21 set for an agency that misses its AI strategy deadline?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states the 180-day deadline and the strategy requirement for CFO Act agencies, matching the claim exactly.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Passage covers discontinuing high-impact AI not performing appropriately; the claim omits that condition, dropping the 'high-impact, not performing' context.",
+      "verdict": "partly",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. ",
+      "citations": []
+     },
+     {
+      "text": "Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": "\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, ",
+      "citations": []
+     },
+     {
+      "text": "agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": "\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 4793,
+    "citations": [
+     {
+      "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 5",
+      "number": 1,
+      "source": "doc-7/p5",
+      "page_no": 5,
+      "cited_text": "Developing Agency AI Strategies Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+      "provenance": "verified",
+      "document_id": 7
+     },
+     {
+      "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 3",
+      "number": 2,
+      "source": "doc-7/p3",
+      "page_no": 3,
+      "cited_text": "When the high-impact AI is not performing at an appropriate level, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+      "provenance": "verified",
+      "document_id": 7
+     }
+    ],
+    "citations_verified": 2
+   },
+   "model_turns": 3,
+   "tool_calls": 3,
+   "exec_ms": 6232,
+   "created_at": "2026-10-28T22:12:36.329099Z",
+   "finished_at": "2026-10-28T22:12:42.646633Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "What fine does OMB M-25-21 set for an agency that misses its AI strategy deadline?"
+     },
+     "created_at": "2026-10-28T22:12:36.404610Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 925,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000218,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 177,
+      "cache_read_tokens": 2082,
+      "cache_creation_tokens": 867
+     },
+     "created_at": "2026-10-28T22:12:37.368452Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 13,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "fine penalty for agency missing AI strategy deadline",
+       "document_ids": [
+        7
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "F. recruit, hire, train, retain, and empower an AI-ready workforce and achieve AI literacy for non-practitioners involved in AI; and G. identify, track, and facilitate future AI in",
+        "page_no": 6,
+        "document_id": 7
+       },
+       {
+        "score": 0.0161,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "b. Agency Governance Responsibilities Agencies must enable responsible AI governance and ensure innovative and appropriate use of AI agency-wide. Agency heads must: 1. Empower Agen",
+        "page_no": 12,
+        "document_id": 7
+       },
+       {
+        "score": 0.0159,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "As a step towards accelerating responsible adoption, agencies must establish clear expectations for their workforce on appropriate AI use\u00ad particularly when an agency is using AI t",
+        "page_no": 2,
+        "document_id": 7
+       },
+       {
+        "score": 0.0156,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "trustworthy AI, ensuring that rapid AI innovation is not achieved at the expense of the American people or any violations of their trust. As such, agencies are directed to implemen",
+        "page_no": 3,
+        "document_id": 7
+       },
+       {
+        "score": 0.0154,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "available on the agency's website. To ensure accountability to the taxpayer, strategies should be understandable, accessible to the public, and transparent about how their investme",
+        "page_no": 6,
+        "document_id": 7
+       },
+       {
+        "score": 0.0152,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "Agencies should focus on improving mission effectiveness through the use of AI by building upon their existing capabilities to drive responsible AI innovation, strengthen their AI ",
+        "page_no": 5,
+        "document_id": 7
+       },
+       {
+        "score": 0.0149,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "For other agencies, the CAIO must be at or above Grade 14 of the General Schedule (GS), or the equivalent for agencies that do not use the GS classification system. CAIOs must have",
+        "page_no": 10,
+        "document_id": 7
+       },
+       {
+        "score": 0.0147,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "Consolidated Table of Actions Each Agency Retain or designate a Chief AI Officer. 3(a)(i) Each CFO Convene relevant agency officials to coordinate 3( a)(ii) Act Agency and govern i",
+        "page_no": 25,
+        "document_id": 7
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:12:37.389126Z"
+    },
+    {
+     "seq": 4,
+     "type": "tool_call",
+     "data": {
+      "ms": 15,
+      "step": 2,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "AI strategy deadline consequences non-compliance",
+       "document_ids": [
+        7
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "trustworthy AI, ensuring that rapid AI innovation is not achieved at the expense of the American people or any violations of their trust. As such, agencies are directed to implemen",
+        "page_no": 3,
+        "document_id": 7
+       },
+       {
+        "score": 0.0161,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "available on the agency's website. To ensure accountability to the taxpayer, strategies should be understandable, accessible to the public, and transparent about how their investme",
+        "page_no": 6,
+        "document_id": 7
+       },
+       {
+        "score": 0.0159,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "G. risk acceptance, supported by a signature from the individual accepting the risk. 111. Conduct Ongoing Monitoring for Performance and Potential Adverse Impacts. Agencies must co",
+        "page_no": 17,
+        "document_id": 7
+       },
+       {
+        "score": 0.0156,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "Agencies should focus on improving mission effectiveness through the use of AI by building upon their existing capabilities to drive responsible AI innovation, strengthen their AI ",
+        "page_no": 5,
+        "document_id": 7
+       },
+       {
+        "score": 0.0154,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "1. regulatory actions designed to prescribe law or policy regarding non-agency uses of AI; 6 11. assessments of particular AI applications because the AI provider is the target or ",
+        "page_no": 5,
+        "document_id": 7
+       },
+       {
+        "score": 0.0152,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "The CAIO's responsibility under this paragraph shall not be delegated down to other officials. 111. Tracking Waivers from Minimum Practices for High-Impact AI. In addition to the c",
+        "page_no": 15,
+        "document_id": 7
+       },
+       {
+        "score": 0.0149,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "of AI. Agencies are directed to accelerate the Federal use of AI by focusing on three key priorities: innovation, governance, and public trust.3 Consistent with these goals, agenci",
+        "page_no": 2,
+        "document_id": 7
+       },
+       {
+        "score": 0.0147,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "by 0MB. If a particular high-impact use case is not compliant with the minimum practices then the agency must safely discontinue use of the AI functionality. Pilot programs for a p",
+        "page_no": 15,
+        "document_id": 7
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:12:37.394402Z"
+    },
+    {
+     "seq": 5,
+     "type": "model_call",
+     "data": {
+      "ms": 1335,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.001633,
+      "stop_reason": "tool_use",
+      "input_tokens": 2,
+      "output_tokens": 182,
+      "cache_read_tokens": 2879,
+      "cache_creation_tokens": 12108
+     },
+     "created_at": "2026-10-28T22:12:38.762765Z"
+    },
+    {
+     "seq": 6,
+     "type": "tool_call",
+     "data": {
+      "ms": 32,
+      "step": 3,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "civil monetary penalty fine dollars agency AI memorandum",
+       "document_ids": [
+        7
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "Appendix: M-25-21 Implementation Guidance for Agencies 1. SCOPE This memorandum provides guidance to agencies on how to innovate and promote the responsible adoption, use, and cont",
+        "page_no": 4,
+        "document_id": 7
+       },
+       {
+        "score": 0.0161,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "\u00a7 3003. b. Covered AI. This memorandum provides requirements and recommendations that apply to new and existing AI that is developed, used, or acquired by or on behalf of covered a",
+        "page_no": 4,
+        "document_id": 7
+       },
+       {
+        "score": 0.0159,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "b. Agency Governance Responsibilities Agencies must enable responsible AI governance and ensure innovative and appropriate use of AI agency-wide. Agency heads must: 1. Empower Agen",
+        "page_no": 12,
+        "document_id": 7
+       },
+       {
+        "score": 0.0156,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFlCEOFMANAGEMENTANDBUDGET WASHINGTON, D.C. 20503 T HE DIR ECTOR April 3, 2025 M-25-21 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS AND AGEN",
+        "page_no": 1,
+        "document_id": 7
+       },
+       {
+        "score": 0.0154,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "As a step towards accelerating responsible adoption, agencies must establish clear expectations for their workforce on appropriate AI use\u00ad particularly when an agency is using AI t",
+        "page_no": 2,
+        "document_id": 7
+       },
+       {
+        "score": 0.0152,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "E. maintain the agency's AI Use Case Inventory;20 F. ensure processes are in place for the agency's high-impact AI use, consistent with Section 4 of this memorandum, by: 1. establi",
+        "page_no": 11,
+        "document_id": 7
+       },
+       {
+        "score": 0.0149,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "1. regulatory actions designed to prescribe law or policy regarding non-agency uses of AI; 6 11. assessments of particular AI applications because the AI provider is the target or ",
+        "page_no": 5,
+        "document_id": 7
+       },
+       {
+        "score": 0.0147,
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+        "excerpt": "Agencies must ensure their AI use is trustworthy, secure, and accountable, in accordance with Executive Order 13960. In the pursuit of agency-wide AI adoption and use, the Federal ",
+        "page_no": 13,
+        "document_id": 7
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:12:38.799542Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": "I could",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:39.892425Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.018706Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": " the document turned up no monetary penalty or fine language.\n\nThe memo does",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.139417Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer_delta",
+     "data": {
+      "text": " set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act ag",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.266621Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": "ency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the ma",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.392660Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": "turity of their applications.\n\nThe only consequence I found is tied to high",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.513897Z"
+    },
+    {
+     "seq": 13,
+     "type": "answer_delta",
+     "data": {
+      "text": "-impact AI that is not meeting the memo's requirements, not to a late strategy.",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.644330Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer_delta",
+     "data": {
+      "text": " In that case, agencies must have a plan to discontinue its use until act",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.759152Z"
+    },
+    {
+     "seq": 15,
+     "type": "answer_delta",
+     "data": {
+      "text": "ions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:40.882208Z"
+    },
+    {
+     "seq": 16,
+     "type": "answer_delta",
+     "data": {
+      "text": "\n\nThe memo may still have a penalty I did not surface, so the full",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:41.006243Z"
+    },
+    {
+     "seq": 17,
+     "type": "answer_delta",
+     "data": {
+      "text": " text or OMB's implementation guidance would be the place to conf",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:41.125948Z"
+    },
+    {
+     "seq": 18,
+     "type": "answer_delta",
+     "data": {
+      "text": "irm.",
+      "turn": 3
+     },
+     "created_at": "2026-10-28T22:12:41.170942Z"
+    },
+    {
+     "seq": 19,
+     "type": "model_call",
+     "data": {
+      "ms": 2354,
+      "turn": 3,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.001101,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 434,
+      "cache_read_tokens": 14987,
+      "cache_creation_tokens": 5875
+     },
+     "created_at": "2026-10-28T22:12:41.183382Z"
+    },
+    {
+     "seq": 20,
+     "type": "answer",
+     "data": {
+      "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+      "segments": [
+       {
+        "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. ",
+        "citations": []
+       },
+       {
+        "text": "Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": "\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, ",
+        "citations": []
+       },
+       {
+        "text": "agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": "\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 4793,
+      "citations": [
+       {
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 5",
+        "number": 1,
+        "source": "doc-7/p5",
+        "page_no": 5,
+        "cited_text": "Developing Agency AI Strategies Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+        "provenance": "verified",
+        "document_id": 7
+       },
+       {
+        "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 3",
+        "number": 2,
+        "source": "doc-7/p3",
+        "page_no": 3,
+        "cited_text": "When the high-impact AI is not performing at an appropriate level, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+        "provenance": "verified",
+        "document_id": 7
+       }
+      ],
+      "citations_verified": 2
+     },
+     "created_at": "2026-10-28T22:12:41.198434Z"
+    },
+    {
+     "seq": 21,
+     "type": "support",
+     "data": {
+      "ms": 1426,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states the 180-day deadline and the strategy requirement for CFO Act agencies, matching the claim exactly.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Passage covers discontinuing high-impact AI not performing appropriately; the claim omits that condition, dropping the 'high-impact, not performing' context.",
+        "verdict": "partly",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 1,
+       "supported": 1,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T22:12:42.631910Z"
+    },
+    {
+     "seq": 22,
+     "type": "run_finished",
+     "data": {
+      "ms": 6232,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.003159,
+      "tool_calls": 3,
+      "model_calls": 4,
+      "model_turns": 3,
+      "input_tokens": 1370,
+      "output_tokens": 934,
+      "cache_read_tokens": 19948,
+      "cache_creation_tokens": 18850
+     },
+     "created_at": "2026-10-28T22:12:42.642732Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "8a793668-dcda-4ba9-b779-4ba78bedef6e",
+  "session_id": "dcf79f26-38a0-465d-badb-2fd1faca1e5a",
+  "mode": "agent",
+  "question": "What fine does OMB M-25-21 set for an agency that misses its AI strategy deadline?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states the 180-day deadline and the strategy requirement for CFO Act agencies, matching the claim exactly.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Passage covers discontinuing high-impact AI not performing appropriately; the claim omits that condition, dropping the 'high-impact, not performing' context.",
+     "verdict": "partly",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. ",
+     "citations": []
+    },
+    {
+     "text": "Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": "\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, ",
+     "citations": []
+    },
+    {
+     "text": "agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": "\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 4793,
+   "citations": [
+    {
+     "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 5",
+     "number": 1,
+     "source": "doc-7/p5",
+     "page_no": 5,
+     "cited_text": "Developing Agency AI Strategies Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+     "provenance": "verified",
+     "document_id": 7
+    },
+    {
+     "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 3",
+     "number": 2,
+     "source": "doc-7/p3",
+     "page_no": 3,
+     "cited_text": "When the high-impact AI is not performing at an appropriate level, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+     "provenance": "verified",
+     "document_id": 7
+    }
+   ],
+   "citations_verified": 2
+  },
+  "model_turns": 3,
+  "tool_calls": 3,
+  "exec_ms": 6232,
+  "created_at": "2026-10-28T22:12:36.329099Z",
+  "finished_at": "2026-10-28T22:12:42.646633Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "What fine does OMB M-25-21 set for an agency that misses its AI strategy deadline?"
+    },
+    "created_at": "2026-10-28T22:12:36.404610Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 925,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000218,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 177,
+     "cache_read_tokens": 2082,
+     "cache_creation_tokens": 867
+    },
+    "created_at": "2026-10-28T22:12:37.368452Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 13,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "fine penalty for agency missing AI strategy deadline",
+      "document_ids": [
+       7
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "F. recruit, hire, train, retain, and empower an AI-ready workforce and achieve AI literacy for non-practitioners involved in AI; and G. identify, track, and facilitate future AI in",
+       "page_no": 6,
+       "document_id": 7
+      },
+      {
+       "score": 0.0161,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "b. Agency Governance Responsibilities Agencies must enable responsible AI governance and ensure innovative and appropriate use of AI agency-wide. Agency heads must: 1. Empower Agen",
+       "page_no": 12,
+       "document_id": 7
+      },
+      {
+       "score": 0.0159,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "As a step towards accelerating responsible adoption, agencies must establish clear expectations for their workforce on appropriate AI use\u00ad particularly when an agency is using AI t",
+       "page_no": 2,
+       "document_id": 7
+      },
+      {
+       "score": 0.0156,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "trustworthy AI, ensuring that rapid AI innovation is not achieved at the expense of the American people or any violations of their trust. As such, agencies are directed to implemen",
+       "page_no": 3,
+       "document_id": 7
+      },
+      {
+       "score": 0.0154,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "available on the agency's website. To ensure accountability to the taxpayer, strategies should be understandable, accessible to the public, and transparent about how their investme",
+       "page_no": 6,
+       "document_id": 7
+      },
+      {
+       "score": 0.0152,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "Agencies should focus on improving mission effectiveness through the use of AI by building upon their existing capabilities to drive responsible AI innovation, strengthen their AI ",
+       "page_no": 5,
+       "document_id": 7
+      },
+      {
+       "score": 0.0149,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "For other agencies, the CAIO must be at or above Grade 14 of the General Schedule (GS), or the equivalent for agencies that do not use the GS classification system. CAIOs must have",
+       "page_no": 10,
+       "document_id": 7
+      },
+      {
+       "score": 0.0147,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "Consolidated Table of Actions Each Agency Retain or designate a Chief AI Officer. 3(a)(i) Each CFO Convene relevant agency officials to coordinate 3( a)(ii) Act Agency and govern i",
+       "page_no": 25,
+       "document_id": 7
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:12:37.389126Z"
+   },
+   {
+    "seq": 4,
+    "type": "tool_call",
+    "data": {
+     "ms": 15,
+     "step": 2,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "AI strategy deadline consequences non-compliance",
+      "document_ids": [
+       7
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "trustworthy AI, ensuring that rapid AI innovation is not achieved at the expense of the American people or any violations of their trust. As such, agencies are directed to implemen",
+       "page_no": 3,
+       "document_id": 7
+      },
+      {
+       "score": 0.0161,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "available on the agency's website. To ensure accountability to the taxpayer, strategies should be understandable, accessible to the public, and transparent about how their investme",
+       "page_no": 6,
+       "document_id": 7
+      },
+      {
+       "score": 0.0159,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "G. risk acceptance, supported by a signature from the individual accepting the risk. 111. Conduct Ongoing Monitoring for Performance and Potential Adverse Impacts. Agencies must co",
+       "page_no": 17,
+       "document_id": 7
+      },
+      {
+       "score": 0.0156,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "Agencies should focus on improving mission effectiveness through the use of AI by building upon their existing capabilities to drive responsible AI innovation, strengthen their AI ",
+       "page_no": 5,
+       "document_id": 7
+      },
+      {
+       "score": 0.0154,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "1. regulatory actions designed to prescribe law or policy regarding non-agency uses of AI; 6 11. assessments of particular AI applications because the AI provider is the target or ",
+       "page_no": 5,
+       "document_id": 7
+      },
+      {
+       "score": 0.0152,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "The CAIO's responsibility under this paragraph shall not be delegated down to other officials. 111. Tracking Waivers from Minimum Practices for High-Impact AI. In addition to the c",
+       "page_no": 15,
+       "document_id": 7
+      },
+      {
+       "score": 0.0149,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "of AI. Agencies are directed to accelerate the Federal use of AI by focusing on three key priorities: innovation, governance, and public trust.3 Consistent with these goals, agenci",
+       "page_no": 2,
+       "document_id": 7
+      },
+      {
+       "score": 0.0147,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "by 0MB. If a particular high-impact use case is not compliant with the minimum practices then the agency must safely discontinue use of the AI functionality. Pilot programs for a p",
+       "page_no": 15,
+       "document_id": 7
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:12:37.394402Z"
+   },
+   {
+    "seq": 5,
+    "type": "model_call",
+    "data": {
+     "ms": 1335,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.001633,
+     "stop_reason": "tool_use",
+     "input_tokens": 2,
+     "output_tokens": 182,
+     "cache_read_tokens": 2879,
+     "cache_creation_tokens": 12108
+    },
+    "created_at": "2026-10-28T22:12:38.762765Z"
+   },
+   {
+    "seq": 6,
+    "type": "tool_call",
+    "data": {
+     "ms": 32,
+     "step": 3,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "civil monetary penalty fine dollars agency AI memorandum",
+      "document_ids": [
+       7
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "Appendix: M-25-21 Implementation Guidance for Agencies 1. SCOPE This memorandum provides guidance to agencies on how to innovate and promote the responsible adoption, use, and cont",
+       "page_no": 4,
+       "document_id": 7
+      },
+      {
+       "score": 0.0161,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "\u00a7 3003. b. Covered AI. This memorandum provides requirements and recommendations that apply to new and existing AI that is developed, used, or acquired by or on behalf of covered a",
+       "page_no": 4,
+       "document_id": 7
+      },
+      {
+       "score": 0.0159,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "b. Agency Governance Responsibilities Agencies must enable responsible AI governance and ensure innovative and appropriate use of AI agency-wide. Agency heads must: 1. Empower Agen",
+       "page_no": 12,
+       "document_id": 7
+      },
+      {
+       "score": 0.0156,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "EXECUTIVE OFFICE OF THE PRESIDENT OFFlCEOFMANAGEMENTANDBUDGET WASHINGTON, D.C. 20503 T HE DIR ECTOR April 3, 2025 M-25-21 MEMORANDUM FOR THE HEADS OF EXECUTIVE DEPARTMENTS AND AGEN",
+       "page_no": 1,
+       "document_id": 7
+      },
+      {
+       "score": 0.0154,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "As a step towards accelerating responsible adoption, agencies must establish clear expectations for their workforce on appropriate AI use\u00ad particularly when an agency is using AI t",
+       "page_no": 2,
+       "document_id": 7
+      },
+      {
+       "score": 0.0152,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "E. maintain the agency's AI Use Case Inventory;20 F. ensure processes are in place for the agency's high-impact AI use, consistent with Section 4 of this memorandum, by: 1. establi",
+       "page_no": 11,
+       "document_id": 7
+      },
+      {
+       "score": 0.0149,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "1. regulatory actions designed to prescribe law or policy regarding non-agency uses of AI; 6 11. assessments of particular AI applications because the AI provider is the target or ",
+       "page_no": 5,
+       "document_id": 7
+      },
+      {
+       "score": 0.0147,
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025",
+       "excerpt": "Agencies must ensure their AI use is trustworthy, secure, and accountable, in accordance with Executive Order 13960. In the pursuit of agency-wide AI adoption and use, the Federal ",
+       "page_no": 13,
+       "document_id": 7
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:12:38.799542Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": "I could",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:39.892425Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.018706Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": " the document turned up no monetary penalty or fine language.\n\nThe memo does",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.139417Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer_delta",
+    "data": {
+     "text": " set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act ag",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.266621Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": "ency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the ma",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.392660Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": "turity of their applications.\n\nThe only consequence I found is tied to high",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.513897Z"
+   },
+   {
+    "seq": 13,
+    "type": "answer_delta",
+    "data": {
+     "text": "-impact AI that is not meeting the memo's requirements, not to a late strategy.",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.644330Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer_delta",
+    "data": {
+     "text": " In that case, agencies must have a plan to discontinue its use until act",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.759152Z"
+   },
+   {
+    "seq": 15,
+    "type": "answer_delta",
+    "data": {
+     "text": "ions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:40.882208Z"
+   },
+   {
+    "seq": 16,
+    "type": "answer_delta",
+    "data": {
+     "text": "\n\nThe memo may still have a penalty I did not surface, so the full",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:41.006243Z"
+   },
+   {
+    "seq": 17,
+    "type": "answer_delta",
+    "data": {
+     "text": " text or OMB's implementation guidance would be the place to conf",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:41.125948Z"
+   },
+   {
+    "seq": 18,
+    "type": "answer_delta",
+    "data": {
+     "text": "irm.",
+     "turn": 3
+    },
+    "created_at": "2026-10-28T22:12:41.170942Z"
+   },
+   {
+    "seq": 19,
+    "type": "model_call",
+    "data": {
+     "ms": 2354,
+     "turn": 3,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.001101,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 434,
+     "cache_read_tokens": 14987,
+     "cache_creation_tokens": 5875
+    },
+    "created_at": "2026-10-28T22:12:41.183382Z"
+   },
+   {
+    "seq": 20,
+    "type": "answer",
+    "data": {
+     "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+     "segments": [
+      {
+       "text": "I could not find any fine in OMB M-25-21 for an agency that misses its AI strategy deadline. Three searches of the document turned up no monetary penalty or fine language.\n\nThe memo does set the deadline. ",
+       "citations": []
+      },
+      {
+       "text": "Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": "\n\nThe only consequence I found is tied to high-impact AI that is not meeting the memo's requirements, not to a late strategy. In that case, ",
+       "citations": []
+      },
+      {
+       "text": "agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": "\n\nThe memo may still have a penalty I did not surface, so the full text or OMB's implementation guidance would be the place to confirm.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 4793,
+     "citations": [
+      {
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 5",
+       "number": 1,
+       "source": "doc-7/p5",
+       "page_no": 5,
+       "cited_text": "Developing Agency AI Strategies Within 180 days of the issuance of this memorandum, each CFO Act agency must develop an AI Strategy for identifying and removing barriers to their responsible use of AI and for achieving enterprise-wide improvements in the maturity of their applications.",
+       "provenance": "verified",
+       "document_id": 7
+      },
+      {
+       "title": "OMB M-25-21: Accelerating Federal Use of AI through Innovation, Governance, and Public Trust, April 2025, page 3",
+       "number": 2,
+       "source": "doc-7/p3",
+       "page_no": 3,
+       "cited_text": "When the high-impact AI is not performing at an appropriate level, agencies must have a plan to discontinue its use until actions are taken to achieve compliance with this memorandum. If proper risk mitigation is not possible, agencies must cease the use of the AI.",
+       "provenance": "verified",
+       "document_id": 7
+      }
+     ],
+     "citations_verified": 2
+    },
+    "created_at": "2026-10-28T22:12:41.198434Z"
+   },
+   {
+    "seq": 21,
+    "type": "support",
+    "data": {
+     "ms": 1426,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states the 180-day deadline and the strategy requirement for CFO Act agencies, matching the claim exactly.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Passage covers discontinuing high-impact AI not performing appropriately; the claim omits that condition, dropping the 'high-impact, not performing' context.",
+       "verdict": "partly",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 1,
+      "supported": 1,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T22:12:42.631910Z"
+   },
+   {
+    "seq": 22,
+    "type": "run_finished",
+    "data": {
+     "ms": 6232,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.003159,
+     "tool_calls": 3,
+     "model_calls": 4,
+     "model_turns": 3,
+     "input_tokens": 1370,
+     "output_tokens": 934,
+     "cache_read_tokens": 19948,
+     "cache_creation_tokens": 18850
+    },
+    "created_at": "2026-10-28T22:12:42.642732Z"
+   }
+  ]
+ }
+}

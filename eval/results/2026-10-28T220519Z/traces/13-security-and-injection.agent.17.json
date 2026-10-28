@@ -1,0 +1,1890 @@
+{
+ "runs": [
+  {
+   "id": "f879ca26-e3b8-47d4-a279-a9ff218e54a0",
+   "session_id": "f87cefd8-7768-46f3-b3c2-06755fc2a61a",
+   "mode": "agent",
+   "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that GAI-based systems present two primary information security risks. The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI is vulnerable to attacks like prompt injection or data poisoning. It adds that offensive capabilities advanced by GAI may augment cybersecurity attacks such as hacking, malware, and phishing. It also reports that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Techniques can resemble direct attacks: using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. Attackers may also hide their injections, for example by hiding injections in non-visible portions of a resource.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states 'GAI-based systems present two primary information security risks' on page 14.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Passage says GAI itself is vulnerable to attacks like prompt injection or data poisoning, expanding the attack surface.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 3,
+      "reason": "Passage states offensive cyber capabilities advanced by GAI may augment hacking, malware, and phishing attacks.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 4,
+      "reason": "Passage reports LLMs are already able to discover vulnerabilities in systems and write code to exploit them.",
+      "verdict": "supported",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "claim": 5,
+      "reason": "Glossary passage defines indirect prompt injection as PROMPT INJECTION via RESOURCE CONTROL rather than user input, as in direct injection.",
+      "verdict": "supported",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "claim": 6,
+      "reason": "Passage states attackers may use indirect prompt injection to hijack a GenAI agent toward attacker-specified tasks instead of or in addition to intended tasks.",
+      "verdict": "supported",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "claim": 7,
+      "reason": "Passage says attackers can use a jailbreak to substitute their own malicious instructions in place of the system prompt.",
+      "verdict": "supported",
+      "citations": [
+       6
+      ]
+     },
+     {
+      "claim": 8,
+      "reason": "Passage states the knowledge database of a RAG system can be poisoned to achieve targeted LLM output for specific queries.",
+      "verdict": "supported",
+      "citations": [
+       7
+      ]
+     },
+     {
+      "claim": 9,
+      "reason": "Passage says attackers may hide injections in non-visible portions of a resource under injection hiding.",
+      "verdict": "supported",
+      "citations": [
+       8
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that ",
+      "citations": []
+     },
+     {
+      "text": "GAI-based systems present two primary information security risks",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI ",
+      "citations": []
+     },
+     {
+      "text": "is vulnerable to attacks like prompt injection or data poisoning",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": ". It adds that offensive capabilities advanced by GAI ",
+      "citations": []
+     },
+     {
+      "text": "may augment cybersecurity attacks such as hacking, malware, and phishing.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": " It also reports that ",
+      "citations": []
+     },
+     {
+      "text": "LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "text": "\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as ",
+      "citations": []
+     },
+     {
+      "text": "a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "text": " In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers ",
+      "citations": []
+     },
+     {
+      "text": "may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "text": ". Techniques can resemble direct attacks: ",
+      "citations": []
+     },
+     {
+      "text": "using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT.",
+      "citations": [
+       6
+      ]
+     },
+     {
+      "text": " In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where ",
+      "citations": []
+     },
+     {
+      "text": "the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries",
+      "citations": [
+       7
+      ]
+     },
+     {
+      "text": ". Attackers may also hide their injections, for example ",
+      "citations": []
+     },
+     {
+      "text": "by hiding injections in non-visible portions of a resource",
+      "citations": [
+       8
+      ]
+     },
+     {
+      "text": ".",
+      "citations": []
+     }
+    ],
+    "answer_ms": 6898,
+    "citations": [
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+      "number": 1,
+      "source": "doc-2/p14",
+      "page_no": 14,
+      "cited_text": "Information Security Information security for computer systems and data is a mature \ufb01eld with widely accepted and standardized practices for o\ufb00ensive and defensive cyber capabilities. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities;",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+      "number": 2,
+      "source": "doc-2/p14",
+      "page_no": 14,
+      "cited_text": "simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. O\ufb00ensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+      "number": 3,
+      "source": "doc-2/p14",
+      "page_no": 14,
+      "cited_text": "Reports have indicated that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 123",
+      "number": 4,
+      "source": "doc-3/p123",
+      "page_no": 123,
+      "cited_text": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hidden but not its hyperparameters. 31 I indirect prompt injection A type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+      "provenance": "verified",
+      "document_id": 3
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+      "number": 5,
+      "source": "doc-3/p65",
+      "page_no": 65,
+      "cited_text": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task [353]. Attacker techniques.",
+      "provenance": "verified",
+      "document_id": 3
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+      "number": 6,
+      "source": "doc-3/p65",
+      "page_no": 65,
+      "cited_text": "Attackers can leverage techniques for indirect prompt injection that are similar to those used in direct prompt injection attacks, such as using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model\u2019s SYSTEM PROMPT.",
+      "provenance": "verified",
+      "document_id": 3
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+      "number": 7,
+      "source": "doc-3/p65",
+      "page_no": 65,
+      "cited_text": "These execution triggers can also persist through RAG processing pipelines that include multiple phases, such as chunking and contextual filtering. \u2022 Knowledge base poisoning. The knowledge database of a RAG system can be poi- soned to achieved targeted LLM output to specific user queries, as in PoisonedRAG [449].",
+      "provenance": "verified",
+      "document_id": 3
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+      "number": 8,
+      "source": "doc-3/p65",
+      "page_no": 65,
+      "cited_text": "Recently, a general optimization framework called Phantom [75] has shown how a single poisoned document can be crafted and inserted into the knowledge database of a RAG system to induce a number of adversarial objectives in the LLM generator . \u2022 Injection hiding. Attackers may use techniques to hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource;",
+      "provenance": "verified",
+      "document_id": 3
+     }
+    ],
+    "citations_verified": 8
+   },
+   "model_turns": 2,
+   "tool_calls": 2,
+   "exec_ms": 9468,
+   "created_at": "2026-10-28T22:10:48.086474Z",
+   "finished_at": "2026-10-28T22:10:57.752500Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+     },
+     "created_at": "2026-10-28T22:10:48.273744Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 1755,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000178,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 296,
+      "cache_read_tokens": 2964,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T22:10:50.064563Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 3,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "hit",
+      "input": {
+       "query": "information security risks generative AI confabulation data privacy cybersecurity",
+       "top_k": 6,
+       "document_ids": [
+        2
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "6 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Additionally, generative AI models can assist malicious actors in creating fraudulent content intended to impersonate others. Trustworthy AI Characteristics: Accountable and Transp",
+        "page_no": 14,
+        "document_id": 2
+       },
+       {
+        "score": 0.0161,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Table of Contents 1. Introduction ..............................................................................................................................................1 2.",
+        "page_no": 4,
+        "document_id": 2
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Informatio",
+        "page_no": 7,
+        "document_id": 2
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "undesired homogeneity that skews system or model outputs, which may be erroneous, lead to ill-founded decision-making, or amplify harmful biases. 7. Human-AI Con\ufb01guration: Arrangem",
+        "page_no": 8,
+        "document_id": 2
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Enumerate and rank risks based on their likelihood and potential impact, and determine how well provenance solutions address speci\ufb01c risks and/or harms. Information Integrity; Dang",
+        "page_no": 31,
+        "document_id": 2
+       },
+       {
+        "score": 0.0152,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Consider: Clear assignment of liability and responsibility for incidents, GAI system changes over time (e.g., \ufb01ne-tuning, drift, decay); Request: Noti\ufb01cation and disclosure for ser",
+        "page_no": 26,
+        "document_id": 2
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:10:50.074095Z"
+    },
+    {
+     "seq": 4,
+     "type": "tool_call",
+     "data": {
+      "ms": 4,
+      "step": 2,
+      "tool": "search_documents",
+      "cache": "hit",
+      "input": {
+       "query": "indirect prompt injection description attacker data retrieved by model",
+       "top_k": 6,
+       "document_ids": [
+        3
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "6 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "or sensitive information that the model accesses such as the knowledge base of a GenAI RETRIEVAL-AUGMENTED GEN- ERATION (RAG) application. 7, 40 prompt extraction An attack that tr",
+        "page_no": 124,
+        "document_id": 3
+       },
+       {
+        "score": 0.0161,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": ". . . . . . . . . . . . . . . . . . . . . . . 48 3.4. Indirect Prompt Injection Attacks and Mitigations . . . . . . . . . . . . . . 50 3.4.1. Availability Attacks . . . . . . . . .",
+        "page_no": 6,
+        "document_id": 3
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hi",
+        "page_no": 123,
+        "document_id": 3
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, at",
+        "page_no": 65,
+        "document_id": 3
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "Attacker Capabilities . . . . . . . . . . . . . . . . . . . . . . . . . . . 40 3.2. Supply Chain Attacks and Mitigations . . . . . . . . . . . . . . . . . . . . . 41 3.2.1. Data Po",
+        "page_no": 6,
+        "document_id": 3
+       },
+       {
+        "score": 0.0152,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "A PROMPT INJECTION overrides these instructions, exploiting the concatena- tion of untrusted user output to the system prompt to induce unintended behavior . For example, an attack",
+        "page_no": 51,
+        "document_id": 3
+       }
+      ]
+     },
+     "created_at": "2026-10-28T22:10:50.079559Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "**",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.308234Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": "NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Prof",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.423636Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": "ile says that GAI-based systems present two primary information security risks",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.552812Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI wid",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.673457Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": "ens the attack surface, since the GAI system itself can be attacked. The Prof",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.796999Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer_delta",
+     "data": {
+      "text": "ile notes that GAI is vulnerable to attac",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:52.921576Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": "ks like prompt injection or data poisoning. It adds that offensive cap",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.044443Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": "abilities advanced by GAI may augment cybersecurity attacks such as hacking, malware",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.171000Z"
+    },
+    {
+     "seq": 13,
+     "type": "answer_delta",
+     "data": {
+      "text": ", and phishing. It also reports that L",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.298036Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer_delta",
+     "data": {
+      "text": "LMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**N",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.417571Z"
+    },
+    {
+     "seq": 15,
+     "type": "answer_delta",
+     "data": {
+      "text": "IST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.538342Z"
+    },
+    {
+     "seq": 16,
+     "type": "answer_delta",
+     "data": {
+      "text": " glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through R",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.661693Z"
+    },
+    {
+     "seq": 17,
+     "type": "answer_delta",
+     "data": {
+      "text": "ESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.807103Z"
+    },
+    {
+     "seq": 18,
+     "type": "answer_delta",
+     "data": {
+      "text": " other words, the malicious instruction arrives through content the model processes, not through what",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:53.938863Z"
+    },
+    {
+     "seq": 19,
+     "type": "answer_delta",
+     "data": {
+      "text": " the user types.\n\nThe report describes the attacker's goal as taking over the",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.051412Z"
+    },
+    {
+     "seq": 20,
+     "type": "answer_delta",
+     "data": {
+      "text": " model's task. Attackers may also use indir",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.157832Z"
+    },
+    {
+     "seq": 21,
+     "type": "answer_delta",
+     "data": {
+      "text": "ect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in add",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.278030Z"
+    },
+    {
+     "seq": 22,
+     "type": "answer_delta",
+     "data": {
+      "text": "ition to) its intended, user-provided task. Techniques can resemble dire",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.400223Z"
+    },
+    {
+     "seq": 23,
+     "type": "answer_delta",
+     "data": {
+      "text": "ct attacks: using a JAILBREAK that allows the attacker to",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.520413Z"
+    },
+    {
+     "seq": 24,
+     "type": "answer_delta",
+     "data": {
+      "text": " substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augm",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.645023Z"
+    },
+    {
+     "seq": 25,
+     "type": "answer_delta",
+     "data": {
+      "text": "ented generation (RAG) systems, the report also covers knowledge base poisoning",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.767242Z"
+    },
+    {
+     "seq": 26,
+     "type": "answer_delta",
+     "data": {
+      "text": ", where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to spec",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:54.892012Z"
+    },
+    {
+     "seq": 27,
+     "type": "answer_delta",
+     "data": {
+      "text": "ific user queries. Attackers may also hide their injections, for example ",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:55.014229Z"
+    },
+    {
+     "seq": 28,
+     "type": "answer_delta",
+     "data": {
+      "text": "by hiding injections in non-visible portions of a resource.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T22:10:55.142571Z"
+    },
+    {
+     "seq": 29,
+     "type": "model_call",
+     "data": {
+      "ms": 5046,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000596,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 970,
+      "cache_read_tokens": 11117,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T22:10:55.156008Z"
+    },
+    {
+     "seq": 30,
+     "type": "answer",
+     "data": {
+      "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that GAI-based systems present two primary information security risks. The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI is vulnerable to attacks like prompt injection or data poisoning. It adds that offensive capabilities advanced by GAI may augment cybersecurity attacks such as hacking, malware, and phishing. It also reports that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Techniques can resemble direct attacks: using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. Attackers may also hide their injections, for example by hiding injections in non-visible portions of a resource.",
+      "segments": [
+       {
+        "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that ",
+        "citations": []
+       },
+       {
+        "text": "GAI-based systems present two primary information security risks",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI ",
+        "citations": []
+       },
+       {
+        "text": "is vulnerable to attacks like prompt injection or data poisoning",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": ". It adds that offensive capabilities advanced by GAI ",
+        "citations": []
+       },
+       {
+        "text": "may augment cybersecurity attacks such as hacking, malware, and phishing.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": " It also reports that ",
+        "citations": []
+       },
+       {
+        "text": "LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "text": "\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as ",
+        "citations": []
+       },
+       {
+        "text": "a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "text": " In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers ",
+        "citations": []
+       },
+       {
+        "text": "may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "text": ". Techniques can resemble direct attacks: ",
+        "citations": []
+       },
+       {
+        "text": "using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT.",
+        "citations": [
+         6
+        ]
+       },
+       {
+        "text": " In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where ",
+        "citations": []
+       },
+       {
+        "text": "the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries",
+        "citations": [
+         7
+        ]
+       },
+       {
+        "text": ". Attackers may also hide their injections, for example ",
+        "citations": []
+       },
+       {
+        "text": "by hiding injections in non-visible portions of a resource",
+        "citations": [
+         8
+        ]
+       },
+       {
+        "text": ".",
+        "citations": []
+       }
+      ],
+      "answer_ms": 6898,
+      "citations": [
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+        "number": 1,
+        "source": "doc-2/p14",
+        "page_no": 14,
+        "cited_text": "Information Security Information security for computer systems and data is a mature \ufb01eld with widely accepted and standardized practices for o\ufb00ensive and defensive cyber capabilities. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities;",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+        "number": 2,
+        "source": "doc-2/p14",
+        "page_no": 14,
+        "cited_text": "simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. O\ufb00ensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+        "number": 3,
+        "source": "doc-2/p14",
+        "page_no": 14,
+        "cited_text": "Reports have indicated that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 123",
+        "number": 4,
+        "source": "doc-3/p123",
+        "page_no": 123,
+        "cited_text": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hidden but not its hyperparameters. 31 I indirect prompt injection A type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+        "provenance": "verified",
+        "document_id": 3
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+        "number": 5,
+        "source": "doc-3/p65",
+        "page_no": 65,
+        "cited_text": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task [353]. Attacker techniques.",
+        "provenance": "verified",
+        "document_id": 3
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+        "number": 6,
+        "source": "doc-3/p65",
+        "page_no": 65,
+        "cited_text": "Attackers can leverage techniques for indirect prompt injection that are similar to those used in direct prompt injection attacks, such as using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model\u2019s SYSTEM PROMPT.",
+        "provenance": "verified",
+        "document_id": 3
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+        "number": 7,
+        "source": "doc-3/p65",
+        "page_no": 65,
+        "cited_text": "These execution triggers can also persist through RAG processing pipelines that include multiple phases, such as chunking and contextual filtering. \u2022 Knowledge base poisoning. The knowledge database of a RAG system can be poi- soned to achieved targeted LLM output to specific user queries, as in PoisonedRAG [449].",
+        "provenance": "verified",
+        "document_id": 3
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+        "number": 8,
+        "source": "doc-3/p65",
+        "page_no": 65,
+        "cited_text": "Recently, a general optimization framework called Phantom [75] has shown how a single poisoned document can be crafted and inserted into the knowledge database of a RAG system to induce a number of adversarial objectives in the LLM generator . \u2022 Injection hiding. Attackers may use techniques to hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource;",
+        "provenance": "verified",
+        "document_id": 3
+       }
+      ],
+      "citations_verified": 8
+     },
+     "created_at": "2026-10-28T22:10:55.173089Z"
+    },
+    {
+     "seq": 31,
+     "type": "support",
+     "data": {
+      "ms": 2554,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states 'GAI-based systems present two primary information security risks' on page 14.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Passage says GAI itself is vulnerable to attacks like prompt injection or data poisoning, expanding the attack surface.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 3,
+        "reason": "Passage states offensive cyber capabilities advanced by GAI may augment hacking, malware, and phishing attacks.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 4,
+        "reason": "Passage reports LLMs are already able to discover vulnerabilities in systems and write code to exploit them.",
+        "verdict": "supported",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "claim": 5,
+        "reason": "Glossary passage defines indirect prompt injection as PROMPT INJECTION via RESOURCE CONTROL rather than user input, as in direct injection.",
+        "verdict": "supported",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "claim": 6,
+        "reason": "Passage states attackers may use indirect prompt injection to hijack a GenAI agent toward attacker-specified tasks instead of or in addition to intended tasks.",
+        "verdict": "supported",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "claim": 7,
+        "reason": "Passage says attackers can use a jailbreak to substitute their own malicious instructions in place of the system prompt.",
+        "verdict": "supported",
+        "citations": [
+         6
+        ]
+       },
+       {
+        "claim": 8,
+        "reason": "Passage states the knowledge database of a RAG system can be poisoned to achieve targeted LLM output for specific queries.",
+        "verdict": "supported",
+        "citations": [
+         7
+        ]
+       },
+       {
+        "claim": 9,
+        "reason": "Passage says attackers may hide injections in non-visible portions of a resource under injection hiding.",
+        "verdict": "supported",
+        "citations": [
+         8
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 9,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T22:10:57.734345Z"
+    },
+    {
+     "seq": 32,
+     "type": "run_finished",
+     "data": {
+      "ms": 9468,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001406,
+      "tool_calls": 2,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 3576,
+      "output_tokens": 1816,
+      "cache_read_tokens": 14081,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-28T22:10:57.746328Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "f879ca26-e3b8-47d4-a279-a9ff218e54a0",
+  "session_id": "f87cefd8-7768-46f3-b3c2-06755fc2a61a",
+  "mode": "agent",
+  "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that GAI-based systems present two primary information security risks. The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI is vulnerable to attacks like prompt injection or data poisoning. It adds that offensive capabilities advanced by GAI may augment cybersecurity attacks such as hacking, malware, and phishing. It also reports that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Techniques can resemble direct attacks: using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. Attackers may also hide their injections, for example by hiding injections in non-visible portions of a resource.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states 'GAI-based systems present two primary information security risks' on page 14.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Passage says GAI itself is vulnerable to attacks like prompt injection or data poisoning, expanding the attack surface.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 3,
+     "reason": "Passage states offensive cyber capabilities advanced by GAI may augment hacking, malware, and phishing attacks.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 4,
+     "reason": "Passage reports LLMs are already able to discover vulnerabilities in systems and write code to exploit them.",
+     "verdict": "supported",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "claim": 5,
+     "reason": "Glossary passage defines indirect prompt injection as PROMPT INJECTION via RESOURCE CONTROL rather than user input, as in direct injection.",
+     "verdict": "supported",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "claim": 6,
+     "reason": "Passage states attackers may use indirect prompt injection to hijack a GenAI agent toward attacker-specified tasks instead of or in addition to intended tasks.",
+     "verdict": "supported",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "claim": 7,
+     "reason": "Passage says attackers can use a jailbreak to substitute their own malicious instructions in place of the system prompt.",
+     "verdict": "supported",
+     "citations": [
+      6
+     ]
+    },
+    {
+     "claim": 8,
+     "reason": "Passage states the knowledge database of a RAG system can be poisoned to achieve targeted LLM output for specific queries.",
+     "verdict": "supported",
+     "citations": [
+      7
+     ]
+    },
+    {
+     "claim": 9,
+     "reason": "Passage says attackers may hide injections in non-visible portions of a resource under injection hiding.",
+     "verdict": "supported",
+     "citations": [
+      8
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that ",
+     "citations": []
+    },
+    {
+     "text": "GAI-based systems present two primary information security risks",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI ",
+     "citations": []
+    },
+    {
+     "text": "is vulnerable to attacks like prompt injection or data poisoning",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": ". It adds that offensive capabilities advanced by GAI ",
+     "citations": []
+    },
+    {
+     "text": "may augment cybersecurity attacks such as hacking, malware, and phishing.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": " It also reports that ",
+     "citations": []
+    },
+    {
+     "text": "LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "text": "\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as ",
+     "citations": []
+    },
+    {
+     "text": "a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "text": " In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers ",
+     "citations": []
+    },
+    {
+     "text": "may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "text": ". Techniques can resemble direct attacks: ",
+     "citations": []
+    },
+    {
+     "text": "using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT.",
+     "citations": [
+      6
+     ]
+    },
+    {
+     "text": " In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where ",
+     "citations": []
+    },
+    {
+     "text": "the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries",
+     "citations": [
+      7
+     ]
+    },
+    {
+     "text": ". Attackers may also hide their injections, for example ",
+     "citations": []
+    },
+    {
+     "text": "by hiding injections in non-visible portions of a resource",
+     "citations": [
+      8
+     ]
+    },
+    {
+     "text": ".",
+     "citations": []
+    }
+   ],
+   "answer_ms": 6898,
+   "citations": [
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+     "number": 1,
+     "source": "doc-2/p14",
+     "page_no": 14,
+     "cited_text": "Information Security Information security for computer systems and data is a mature \ufb01eld with widely accepted and standardized practices for o\ufb00ensive and defensive cyber capabilities. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities;",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+     "number": 2,
+     "source": "doc-2/p14",
+     "page_no": 14,
+     "cited_text": "simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. O\ufb00ensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+     "number": 3,
+     "source": "doc-2/p14",
+     "page_no": 14,
+     "cited_text": "Reports have indicated that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 123",
+     "number": 4,
+     "source": "doc-3/p123",
+     "page_no": 123,
+     "cited_text": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hidden but not its hyperparameters. 31 I indirect prompt injection A type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+     "provenance": "verified",
+     "document_id": 3
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+     "number": 5,
+     "source": "doc-3/p65",
+     "page_no": 65,
+     "cited_text": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task [353]. Attacker techniques.",
+     "provenance": "verified",
+     "document_id": 3
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+     "number": 6,
+     "source": "doc-3/p65",
+     "page_no": 65,
+     "cited_text": "Attackers can leverage techniques for indirect prompt injection that are similar to those used in direct prompt injection attacks, such as using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model\u2019s SYSTEM PROMPT.",
+     "provenance": "verified",
+     "document_id": 3
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+     "number": 7,
+     "source": "doc-3/p65",
+     "page_no": 65,
+     "cited_text": "These execution triggers can also persist through RAG processing pipelines that include multiple phases, such as chunking and contextual filtering. \u2022 Knowledge base poisoning. The knowledge database of a RAG system can be poi- soned to achieved targeted LLM output to specific user queries, as in PoisonedRAG [449].",
+     "provenance": "verified",
+     "document_id": 3
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+     "number": 8,
+     "source": "doc-3/p65",
+     "page_no": 65,
+     "cited_text": "Recently, a general optimization framework called Phantom [75] has shown how a single poisoned document can be crafted and inserted into the knowledge database of a RAG system to induce a number of adversarial objectives in the LLM generator . \u2022 Injection hiding. Attackers may use techniques to hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource;",
+     "provenance": "verified",
+     "document_id": 3
+    }
+   ],
+   "citations_verified": 8
+  },
+  "model_turns": 2,
+  "tool_calls": 2,
+  "exec_ms": 9468,
+  "created_at": "2026-10-28T22:10:48.086474Z",
+  "finished_at": "2026-10-28T22:10:57.752500Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+    },
+    "created_at": "2026-10-28T22:10:48.273744Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 1755,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000178,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 296,
+     "cache_read_tokens": 2964,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T22:10:50.064563Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 3,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "hit",
+     "input": {
+      "query": "information security risks generative AI confabulation data privacy cybersecurity",
+      "top_k": 6,
+      "document_ids": [
+       2
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "6 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Additionally, generative AI models can assist malicious actors in creating fraudulent content intended to impersonate others. Trustworthy AI Characteristics: Accountable and Transp",
+       "page_no": 14,
+       "document_id": 2
+      },
+      {
+       "score": 0.0161,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Table of Contents 1. Introduction ..............................................................................................................................................1 2.",
+       "page_no": 4,
+       "document_id": 2
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Informatio",
+       "page_no": 7,
+       "document_id": 2
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "undesired homogeneity that skews system or model outputs, which may be erroneous, lead to ill-founded decision-making, or amplify harmful biases. 7. Human-AI Con\ufb01guration: Arrangem",
+       "page_no": 8,
+       "document_id": 2
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Enumerate and rank risks based on their likelihood and potential impact, and determine how well provenance solutions address speci\ufb01c risks and/or harms. Information Integrity; Dang",
+       "page_no": 31,
+       "document_id": 2
+      },
+      {
+       "score": 0.0152,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Consider: Clear assignment of liability and responsibility for incidents, GAI system changes over time (e.g., \ufb01ne-tuning, drift, decay); Request: Noti\ufb01cation and disclosure for ser",
+       "page_no": 26,
+       "document_id": 2
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:10:50.074095Z"
+   },
+   {
+    "seq": 4,
+    "type": "tool_call",
+    "data": {
+     "ms": 4,
+     "step": 2,
+     "tool": "search_documents",
+     "cache": "hit",
+     "input": {
+      "query": "indirect prompt injection description attacker data retrieved by model",
+      "top_k": 6,
+      "document_ids": [
+       3
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "6 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "or sensitive information that the model accesses such as the knowledge base of a GenAI RETRIEVAL-AUGMENTED GEN- ERATION (RAG) application. 7, 40 prompt extraction An attack that tr",
+       "page_no": 124,
+       "document_id": 3
+      },
+      {
+       "score": 0.0161,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": ". . . . . . . . . . . . . . . . . . . . . . . 48 3.4. Indirect Prompt Injection Attacks and Mitigations . . . . . . . . . . . . . . 50 3.4.1. Availability Attacks . . . . . . . . .",
+       "page_no": 6,
+       "document_id": 3
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hi",
+       "page_no": 123,
+       "document_id": 3
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, at",
+       "page_no": 65,
+       "document_id": 3
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "Attacker Capabilities . . . . . . . . . . . . . . . . . . . . . . . . . . . 40 3.2. Supply Chain Attacks and Mitigations . . . . . . . . . . . . . . . . . . . . . 41 3.2.1. Data Po",
+       "page_no": 6,
+       "document_id": 3
+      },
+      {
+       "score": 0.0152,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "A PROMPT INJECTION overrides these instructions, exploiting the concatena- tion of untrusted user output to the system prompt to induce unintended behavior . For example, an attack",
+       "page_no": 51,
+       "document_id": 3
+      }
+     ]
+    },
+    "created_at": "2026-10-28T22:10:50.079559Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "**",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.308234Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": "NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Prof",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.423636Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": "ile says that GAI-based systems present two primary information security risks",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.552812Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI wid",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.673457Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": "ens the attack surface, since the GAI system itself can be attacked. The Prof",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.796999Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer_delta",
+    "data": {
+     "text": "ile notes that GAI is vulnerable to attac",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:52.921576Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": "ks like prompt injection or data poisoning. It adds that offensive cap",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.044443Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": "abilities advanced by GAI may augment cybersecurity attacks such as hacking, malware",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.171000Z"
+   },
+   {
+    "seq": 13,
+    "type": "answer_delta",
+    "data": {
+     "text": ", and phishing. It also reports that L",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.298036Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer_delta",
+    "data": {
+     "text": "LMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**N",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.417571Z"
+   },
+   {
+    "seq": 15,
+    "type": "answer_delta",
+    "data": {
+     "text": "IST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.538342Z"
+   },
+   {
+    "seq": 16,
+    "type": "answer_delta",
+    "data": {
+     "text": " glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through R",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.661693Z"
+   },
+   {
+    "seq": 17,
+    "type": "answer_delta",
+    "data": {
+     "text": "ESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.807103Z"
+   },
+   {
+    "seq": 18,
+    "type": "answer_delta",
+    "data": {
+     "text": " other words, the malicious instruction arrives through content the model processes, not through what",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:53.938863Z"
+   },
+   {
+    "seq": 19,
+    "type": "answer_delta",
+    "data": {
+     "text": " the user types.\n\nThe report describes the attacker's goal as taking over the",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.051412Z"
+   },
+   {
+    "seq": 20,
+    "type": "answer_delta",
+    "data": {
+     "text": " model's task. Attackers may also use indir",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.157832Z"
+   },
+   {
+    "seq": 21,
+    "type": "answer_delta",
+    "data": {
+     "text": "ect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in add",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.278030Z"
+   },
+   {
+    "seq": 22,
+    "type": "answer_delta",
+    "data": {
+     "text": "ition to) its intended, user-provided task. Techniques can resemble dire",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.400223Z"
+   },
+   {
+    "seq": 23,
+    "type": "answer_delta",
+    "data": {
+     "text": "ct attacks: using a JAILBREAK that allows the attacker to",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.520413Z"
+   },
+   {
+    "seq": 24,
+    "type": "answer_delta",
+    "data": {
+     "text": " substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augm",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.645023Z"
+   },
+   {
+    "seq": 25,
+    "type": "answer_delta",
+    "data": {
+     "text": "ented generation (RAG) systems, the report also covers knowledge base poisoning",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.767242Z"
+   },
+   {
+    "seq": 26,
+    "type": "answer_delta",
+    "data": {
+     "text": ", where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to spec",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:54.892012Z"
+   },
+   {
+    "seq": 27,
+    "type": "answer_delta",
+    "data": {
+     "text": "ific user queries. Attackers may also hide their injections, for example ",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:55.014229Z"
+   },
+   {
+    "seq": 28,
+    "type": "answer_delta",
+    "data": {
+     "text": "by hiding injections in non-visible portions of a resource.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T22:10:55.142571Z"
+   },
+   {
+    "seq": 29,
+    "type": "model_call",
+    "data": {
+     "ms": 5046,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000596,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 970,
+     "cache_read_tokens": 11117,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T22:10:55.156008Z"
+   },
+   {
+    "seq": 30,
+    "type": "answer",
+    "data": {
+     "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that GAI-based systems present two primary information security risks. The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI is vulnerable to attacks like prompt injection or data poisoning. It adds that offensive capabilities advanced by GAI may augment cybersecurity attacks such as hacking, malware, and phishing. It also reports that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Techniques can resemble direct attacks: using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. Attackers may also hide their injections, for example by hiding injections in non-visible portions of a resource.",
+     "segments": [
+      {
+       "text": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that ",
+       "citations": []
+      },
+      {
+       "text": "GAI-based systems present two primary information security risks",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": ". The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI ",
+       "citations": []
+      },
+      {
+       "text": "is vulnerable to attacks like prompt injection or data poisoning",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": ". It adds that offensive capabilities advanced by GAI ",
+       "citations": []
+      },
+      {
+       "text": "may augment cybersecurity attacks such as hacking, malware, and phishing.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": " It also reports that ",
+       "citations": []
+      },
+      {
+       "text": "LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "text": "\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as ",
+       "citations": []
+      },
+      {
+       "text": "a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "text": " In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers ",
+       "citations": []
+      },
+      {
+       "text": "may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "text": ". Techniques can resemble direct attacks: ",
+       "citations": []
+      },
+      {
+       "text": "using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT.",
+       "citations": [
+        6
+       ]
+      },
+      {
+       "text": " In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where ",
+       "citations": []
+      },
+      {
+       "text": "the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries",
+       "citations": [
+        7
+       ]
+      },
+      {
+       "text": ". Attackers may also hide their injections, for example ",
+       "citations": []
+      },
+      {
+       "text": "by hiding injections in non-visible portions of a resource",
+       "citations": [
+        8
+       ]
+      },
+      {
+       "text": ".",
+       "citations": []
+      }
+     ],
+     "answer_ms": 6898,
+     "citations": [
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+       "number": 1,
+       "source": "doc-2/p14",
+       "page_no": 14,
+       "cited_text": "Information Security Information security for computer systems and data is a mature \ufb01eld with widely accepted and standardized practices for o\ufb00ensive and defensive cyber capabilities. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities;",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+       "number": 2,
+       "source": "doc-2/p14",
+       "page_no": 14,
+       "cited_text": "simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. O\ufb00ensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 14",
+       "number": 3,
+       "source": "doc-2/p14",
+       "page_no": 14,
+       "cited_text": "Reports have indicated that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 123",
+       "number": 4,
+       "source": "doc-3/p123",
+       "page_no": 123,
+       "cited_text": "NIST AI 100-2e2025 March 2025 events that depend on internal factors that are not directly observable. In ma- chine learning, it is assumed that the internal state of a model is hidden but not its hyperparameters. 31 I indirect prompt injection A type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION.",
+       "provenance": "verified",
+       "document_id": 3
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+       "number": 5,
+       "source": "doc-3/p65",
+       "page_no": 65,
+       "cited_text": "NIST AI 100-2e2025 Mar ch 2025 contain downloadable malware. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task [353]. Attacker techniques.",
+       "provenance": "verified",
+       "document_id": 3
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+       "number": 6,
+       "source": "doc-3/p65",
+       "page_no": 65,
+       "cited_text": "Attackers can leverage techniques for indirect prompt injection that are similar to those used in direct prompt injection attacks, such as using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model\u2019s SYSTEM PROMPT.",
+       "provenance": "verified",
+       "document_id": 3
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+       "number": 7,
+       "source": "doc-3/p65",
+       "page_no": 65,
+       "cited_text": "These execution triggers can also persist through RAG processing pipelines that include multiple phases, such as chunking and contextual filtering. \u2022 Knowledge base poisoning. The knowledge database of a RAG system can be poi- soned to achieved targeted LLM output to specific user queries, as in PoisonedRAG [449].",
+       "provenance": "verified",
+       "document_id": 3
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 65",
+       "number": 8,
+       "source": "doc-3/p65",
+       "page_no": 65,
+       "cited_text": "Recently, a general optimization framework called Phantom [75] has shown how a single poisoned document can be crafted and inserted into the knowledge database of a RAG system to induce a number of adversarial objectives in the LLM generator . \u2022 Injection hiding. Attackers may use techniques to hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource;",
+       "provenance": "verified",
+       "document_id": 3
+      }
+     ],
+     "citations_verified": 8
+    },
+    "created_at": "2026-10-28T22:10:55.173089Z"
+   },
+   {
+    "seq": 31,
+    "type": "support",
+    "data": {
+     "ms": 2554,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states 'GAI-based systems present two primary information security risks' on page 14.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Passage says GAI itself is vulnerable to attacks like prompt injection or data poisoning, expanding the attack surface.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 3,
+       "reason": "Passage states offensive cyber capabilities advanced by GAI may augment hacking, malware, and phishing attacks.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 4,
+       "reason": "Passage reports LLMs are already able to discover vulnerabilities in systems and write code to exploit them.",
+       "verdict": "supported",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "claim": 5,
+       "reason": "Glossary passage defines indirect prompt injection as PROMPT INJECTION via RESOURCE CONTROL rather than user input, as in direct injection.",
+       "verdict": "supported",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "claim": 6,
+       "reason": "Passage states attackers may use indirect prompt injection to hijack a GenAI agent toward attacker-specified tasks instead of or in addition to intended tasks.",
+       "verdict": "supported",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "claim": 7,
+       "reason": "Passage says attackers can use a jailbreak to substitute their own malicious instructions in place of the system prompt.",
+       "verdict": "supported",
+       "citations": [
+        6
+       ]
+      },
+      {
+       "claim": 8,
+       "reason": "Passage states the knowledge database of a RAG system can be poisoned to achieve targeted LLM output for specific queries.",
+       "verdict": "supported",
+       "citations": [
+        7
+       ]
+      },
+      {
+       "claim": 9,
+       "reason": "Passage says attackers may hide injections in non-visible portions of a resource under injection hiding.",
+       "verdict": "supported",
+       "citations": [
+        8
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 9,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T22:10:57.734345Z"
+   },
+   {
+    "seq": 32,
+    "type": "run_finished",
+    "data": {
+     "ms": 9468,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001406,
+     "tool_calls": 2,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 3576,
+     "output_tokens": 1816,
+     "cache_read_tokens": 14081,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-28T22:10:57.746328Z"
+   }
+  ]
+ }
+}
