@@ -4,6 +4,7 @@ import {
   type Mode,
   type Run,
   type RunEvent,
+  type RunStatus,
   abandon,
   ask,
   createSession,
@@ -76,10 +77,25 @@ export default function App() {
         });
       };
       EVENT_TYPES.forEach((t) => source.addEventListener(t, add(t)));
-      source.addEventListener("end", () => {
+      source.addEventListener("end", (msg: MessageEvent) => {
         source.close();
         delete streams.current[id];
-        void refreshRun(id);
+        // Take the final status from the stream at once, then read the finished run; a failed
+        // read is retried, so the question never stays "Working" because of one lost request.
+        const { status } = JSON.parse(msg.data) as { status: RunStatus };
+        setRuns((all) => all.map((r) => (r.id === id ? { ...r, status } : r)));
+        void (async () => {
+          for (const delay of [0, 1000, 3000, 9000]) {
+            await new Promise((done) => setTimeout(done, delay));
+            try {
+              await refreshRun(id);
+              return;
+            } catch {
+              // try again
+            }
+          }
+          setError("Could not load the finished answer. Reload the page to see it.");
+        })();
       });
     },
     [refreshRun],
@@ -111,8 +127,13 @@ export default function App() {
           }
           return;
         }
-      } catch {
-        // Unknown or expired session: start fresh.
+      } catch (e) {
+        // Only an unknown or expired session starts afresh. Any other failure keeps the saved
+        // conversation, so a brief outage does not replace it.
+        if (!(e instanceof ApiError && e.status === 404)) {
+          setError(`Could not load the saved conversation: ${errorText(e)}. Reload to try again.`);
+          return;
+        }
       }
       try {
         await startSession();

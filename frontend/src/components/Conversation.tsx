@@ -100,8 +100,8 @@ export function Conversation(props: Props) {
           <>
             <p className="intro">Ask a question about the documents on the left.</p>
             <p className="meta">
-              Answers cite the document and page for every claim, and each quote is checked
-              against the page before it is shown.
+              Answers cite their sources by document and page, and each cited quote is checked
+              against its page.
             </p>
           </>
         )}
