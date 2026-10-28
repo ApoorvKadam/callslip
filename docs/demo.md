@@ -1,14 +1,17 @@
 # Walkthrough
 
-**Recorded:** [the two-minute walkthrough (MP4)](media/callslip-walkthrough.mp4), made against the local stack on the final build. In order, it shows:
+**Recorded:** [the walkthrough (MP4, under three minutes)](media/callslip-walkthrough.mp4), made against the local stack on the final build. In order, it shows:
 
 | Part | What happens |
 |---|---|
 | Sign in and upload | A PDF uploaded while signed in is parsed, chunked and embedded, and only that account can see or search it. |
-| A question across two documents | One search in each document in the same turn, the answer as it is written, then each citation's quote on its page. |
+| Two ways to answer | Agent can search again, read pages or ask; Single pass searches once. The line under the question box says which is on. |
+| A question across two documents | One search in each document in the same turn, each listed as it happens, the answer as it is written, then each citation's quote on its page. |
+| The same question, Single pass | One search over everything. Its passages came from one document, so it said it could not verify the other part. |
 | Re-retrieval | The first search finds two different deadlines in two memos, so the agent searches again for which memo replaces the other. |
 | Clarification | In a new conversation, "the memo" could be any of four memos, so the agent asks, then answers in the same run. |
 | A failed tool call | Search is made to fail (an injected fault). Each search fails after one retry, and the agent reads the pages instead. |
+| Your own document | A question answered from the private upload, then the upload deleted from the list. |
 | Saved conversations | Earlier conversations, with their steps, timing, tokens and cost. |
 
 The recording is scripted with Playwright, so it can be made again after a change. Below, each behaviour the brief asks to see has the command or UI action, what happens, and a saved trace from the committed evaluation run.
@@ -31,13 +34,17 @@ Ask in Agent mode: *What change to the NIST AI RMF does America's AI Action Plan
 
 ![A two-document answer with its first source selected](images/1-multi-document.png)
 
-The answer appears as the model writes it; the line under the question then shows the time to the answer ("Answered in 6.2 s") and "Checking quotes" until the support check is done. Selecting a citation number highlights the text it supports and opens its source: the quote, the page check ("Quote found on page 7"), the support check's verdict ("Supports its sentence") and a link to the PDF page (Action Plan p. 7, AI RMF p. 17). A cited piece of eight or more words that matches its source word for word, apart from spacing and line-break hyphens, is shown in quotation marks.
+While the agent works, the conversation lists what it is doing ("Choosing where to look", then each search). The answer appears as the model writes it; the line under the question then shows the time to the answer ("Answered in 4.3 s") and "Checking quotes" until the support check is done. Selecting a citation number highlights the text it supports and opens its source: the quote, the page check ("Quote found on page 7"), the support check's verdict ("Supports its sentence") and a link to the PDF page (Action Plan p. 7, AI RMF p. 17). A cited piece of eight or more words that matches its source word for word, apart from spacing and line-break hyphens, is shown in quotation marks.
 
 ![The same answer with its steps](images/2-steps.png)
 
 The Steps tab shows the plan the model chose. The first message already lists the documents, so in its first turn it searched once in each document (`search_documents` with a `document_ids` filter), both searches at the same time, then answered. Each model turn shows its time, tokens and cost, and the run's totals close the list.
 
 Saved trace: [`2-multi-doc-a.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/2-multi-doc-a.agent.1.json). The single-pass baseline on the same question ([`2-multi-doc-a.baseline.1.json`](../eval/results/2026-10-28T165727Z/traces/2-multi-doc-a.baseline.1.json)) only retrieved AI RMF passages and said it could not answer the Action Plan part.
+
+The same question in Single pass (switch at the top of the page) does the same in the interface: one search over everything, passages from the AI RMF only, and an answer that says it cannot verify the Action Plan part.
+
+![The same question answered in Single pass](images/6-single-pass.png)
 
 ## 2. Evidence-driven re-retrieval
 
@@ -54,7 +61,7 @@ python3 scripts/ask.py "How does the NIST Generative AI Profile describe data pr
   --fault search_documents=error
 ```
 
-Search fails on every call (injected below the cache; the server must run with `ALLOW_FAULT_INJECTION=true`). A first search in the Profile fails after its retry, and a rewritten one fails too. The agent then switches to `read_document_section`: it reads pages 5 to 7, 9 to 10 and 11 to 13 until it reaches the section on data privacy. It answers with citations from pages 7 and 11 and says that search was unavailable.
+Search fails on every call (injected below the cache; the server must run with `ALLOW_FAULT_INJECTION=true`). A first search in the Profile fails after its retry, and a rewritten one fails too. The agent then switches to `read_document_section`: in the run shown it reads pages 5 to 7, 8 to 10 and 11 to 12 until it reaches the section on data privacy (section 2.4). It answers with citations from those pages and says that search was unavailable.
 
 ![Steps of a run whose searches fail](images/5-tool-failure.png)
 
@@ -66,11 +73,11 @@ Start a new conversation, then ask: *What does the memo require agencies to do w
 
 ![The agent asks which memo](images/3-clarification-asked.png)
 
-The document list in the agent's first message shows four OMB memos, so it asks which one, offering each memo as a button. The run is paused (`needs_clarification`). The question box now sends a reply, and the question can also be skipped. Choose M-25-21:
+Four OMB memos in the collection set 180-day deadlines, so the agent asks which one, offering each memo as a button. In the run shown it searched all documents first and found deadlines in all four; in the evaluation run it asked in its first turn, from the document list alone. The run is paused (`needs_clarification`). The question box now sends a reply, and the question can also be skipped. Choose M-25-21:
 
 ![Answer after the reply](images/4-clarification-answered.png)
 
-The same run continues: the reply becomes the result of the `ask_clarification` call, the agent searches only M-25-21, and answers with both 180-day requirements (AI strategy, p. 5; compliance plan, p. 12). The Steps tab shows the question and the reply as steps of the same run. From a terminal: `python3 scripts/ask.py "What does the memo require agencies to do within 180 days?" --reply "OMB M-25-21"`.
+The same run continues: the reply becomes the result of the `ask_clarification` call, and the agent answers with both 180-day requirements of M-25-21 (AI strategy, p. 5; compliance plan, p. 12). In the run shown it answered from the passages it had already found; when it asked before searching, it then searched only M-25-21. The Steps tab shows the question and the reply as steps of the same run. From a terminal: `python3 scripts/ask.py "What does the memo require agencies to do within 180 days?" --reply "OMB M-25-21"`.
 
 In a conversation that already discussed one memo, the same question may not be ambiguous: earlier questions and answers are part of what the agent reads, and it may answer for that memo.
 

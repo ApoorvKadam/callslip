@@ -2,9 +2,9 @@
 
 Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
 
-![A question that spans two documents: one search in each document in the same turn, the answer as it is written, then its sources](docs/media/callslip-hero.gif)
+![A question that spans two documents: each search listed as it happens, the answer as it is written, then its sources](docs/media/callslip-hero.gif)
 
-**[Watch the two-minute walkthrough (MP4)](docs/media/callslip-walkthrough.mp4)**: signing in and uploading a private PDF, a question across two documents, a second search driven by what the first found, a clarification, a failed tool call, and the saved conversations.
+**[Watch the walkthrough (MP4, under three minutes)](docs/media/callslip-walkthrough.mp4)**: signing in and uploading a private PDF, a question across two documents in each answering mode, a second search driven by what the first found, a clarification, a failed tool call, a question about the private PDF and its deletion, and the saved conversations.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
