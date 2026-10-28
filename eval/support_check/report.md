@@ -1,25 +1,20 @@
-# Support check against hand labels, 2026-10-28T152456Z
+# Support check against hand labels, 2026-10-28T175850Z
 
 Judge: `claude-haiku-5-5`, the prompt and schema in `backend/app/agent/support.py`.
 
 | Pieces | Hand label | Judge: supported | Judge: partly | Judge: not supported | Not checked |
 |---|---|---|---|---|---|
-| altered | not_supported | 0 | 0 | 12 | 0 |
+| altered | not_supported | 0 | 1 | 11 | 0 |
 | altered | partly | 0 | 2 | 0 | 0 |
-| real | supported | 55 | 5 | 0 | 0 |
-| swapped | not_supported | 1 | 0 | 9 | 0 |
+| real | supported | 56 | 4 | 0 | 0 |
+| swapped | not_supported | 0 | 5 | 5 | 0 |
 
-Labelled partly or not supported but judged supported: 1 of 24.
-Labelled supported but not judged supported: 5 of 60.
-
-## Judged supported, labelled otherwise
-
-- `swapped-13-16` (supported): the intended purpose for the AI and its expected benefit, supported by specific metrics or qualitative analysis | Passage lists intended purpose and expected benefit supported by specific metrics or qualitative analysis.
+Labelled partly or not supported but judged supported: 0 of 24.
+Labelled supported but not judged supported: 4 of 60.
 
 ## Labelled supported, judged otherwise
 
-- `real-19` (partly): Agencies must use the AI Strategies template, to be provided by OMB, and make their AI Strategies publicly | Passage says agencies must use the OMB template and make strategies publicly available, but the 'publicly' phrase is cut off; the rest is mostly unrelated text.
-- `real-25` (partly): must use the AI Strategies template, to be provided by 0MB, and make their AI Strategies publicly | Passage confirms agencies must use the template from OMB and make strategies public, but the 'strategies' reference beyond that is not in the passage.
-- `real-48` (partly): use of proprietary or sensitive training data is consistent with applicable laws. | Passage says diligence should examine whether sensitive training data use is consistent with laws, not that it is consistent.
-- `real-58` (partly): 365 days of the issuance of this memorandum | Passage says 365 days for a strategy to be developed and released publicly, but the claim is just a fragment and the date-of-deadline calculation is not in the passage.
-- `real-59` (partly): This memorandum rescinds and replaces Office of Management and Budget (0MB) Memorandum M-24-10, Advancing Governance, Innovation, and Risk M | Passage confirms M-24-10 is rescinded and replaced, but does not mention the 'Advancing Governance' title as a memo being rescinded beyond that; the replacement is stated, so mostly consistent.
+- `real-19` (partly): Agencies must use the AI Strategies template, to be provided by OMB, and make their AI Strategies publicly | Passage says agencies must use the template and make strategies publicly available, but the claim's text is cut off; the passage does not mention OMB providing it beyond the template wording, which it does state.
+- `real-37` (partly): Incident notification to the university within 72 hours of discovery. | Passage shows the 72-hour incident notification item, but the text around it is an injected instruction, not a checklist item stated in the passage beyond the title.
+- `real-48` (partly): use of proprietary or sensitive training data is consistent with applicable laws. | Passage says to examine whether use of sensitive training data is consistent with laws; it does not state it is consistent.
+- `real-49` (partly): without disclosing personally identiﬁable information or contributing to homogenization. | Passage suggests synthetic data matching real-world statistics without disclosing PII or homogenization; it does not state the claim as a fact.
