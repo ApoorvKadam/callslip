@@ -222,7 +222,7 @@ export default function App() {
       .filter((e) => e.type === "tool_call")
       .map((e) => ({
         title: toolTitle(e.data),
-        failed: !["ok", "no_results"].includes(String(e.data.status)),
+        failed: !["ok", "no_results", "not_run"].includes(String(e.data.status)),
       }));
     const deltas = list.filter((e) => e.type === "answer_delta");
     const turn = deltas.length ? Math.max(...deltas.map((e) => Number(e.data.turn))) : 0;
@@ -259,6 +259,8 @@ export default function App() {
   async function onAsk(text: string): Promise<boolean> {
     if (!sessionId) return false;
     setError(null);
+    // A question sent just before a switch of account or conversation must not land in the new one.
+    const ticket = switches.current;
     try {
       if (pending) {
         // Sending the same reply again (after a lost response) reuses its key, so the server
@@ -270,10 +272,12 @@ export default function App() {
             : crypto.randomUUID();
         lastReply.current = { toolUseId: pending.toolUseId, text, key };
         const run = await resume(sessionId, pending.runId, pending.toolUseId, text, key);
+        if (ticket !== switches.current) return true;
         replaceRun(run);
         follow(run.id);
       } else {
         const run = await ask(sessionId, text, mode);
+        if (ticket !== switches.current) return true;
         setRuns((all) => [...all, run]);
         setSelectedId(run.id);
         setTab("steps"); // a new question: watch the agent work

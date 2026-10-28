@@ -45,6 +45,13 @@ def estimate_cost(model: str, usage: Any) -> float:
     return round(cost, 6)
 
 
+def thinking_param(model: str, thinking: str) -> dict[str, str]:
+    # Sonnet 5.5 refuses "disabled" with a 400; "between_tools" is how it turns thinking off.
+    if thinking == "disabled" and model.startswith("claude-sonnet-5-5"):
+        thinking = "between_tools"
+    return {"type": thinking}
+
+
 class LLM:
     def __init__(self, client: AsyncAnthropic, pool: AsyncConnectionPool, model: str, effort: str):
         if model not in PRICES:
@@ -93,7 +100,7 @@ class LLM:
         if cache_conversation:
             kwargs["cache_control"] = {"type": "ephemeral"}
         if thinking:
-            kwargs["thinking"] = {"type": thinking}
+            kwargs["thinking"] = thinking_param(self.model, thinking)
 
         client = self.client.with_options(timeout=timeout_s)
 

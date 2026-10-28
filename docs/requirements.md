@@ -15,11 +15,11 @@ Each requirement of the take-home brief, where it is built, and what shows that 
 | G | A database; Redis with a real purpose, its keys, expiry and invalidation, and behaviour when Redis is down | PostgreSQL holds everything; `backend/app/cache.py` caches searches and query embeddings ([keys and expiry](../README.md#search)) | `test_cache`; CI stops Redis and checks that search still works; [captured outage](runbook.md#redis-outage) |
 | H | Dockerfiles, Compose, configuration, health checks, volumes, secrets, CI tests and builds; smoke test, persistence across restart, Redis outage, update and rollback | `backend/Dockerfile`, `frontend/Dockerfile`, `docker-compose.yml`, `.github/workflows/ci.yml`, `scripts/deploy.sh`, `rollback.sh`, `verify.sh`, `smoke_test.py` | CI on every pull request; [runbook evidence](runbook.md#evidence): update, rollback, a failed deploy, a full restart and a Redis outage |
 | I | At least eight cases with expected behaviour and sources, actual results, failure analysis, a single-pass baseline on the same corpus and model, traces, exclusions | `eval/cases.json` (15 cases), `scripts/eval.py` | [docs/evaluation.md](evaluation.md): both models, both systems, three repeats, failure analysis, exclusions |
-| J | Good engineering practice, organisation and documentation | one pull request per change, each squash-merged; lint and 127 backend tests | the git history and CI |
+| J | Good engineering practice, organisation and documentation | one pull request per change, each squash-merged; lint and 128 backend tests | the git history and CI |
 
 ## The eight required behaviours
 
-The Haiku agent on the final build, three repeats each ([run](../eval/results/2026-10-28T165727Z/)):
+The Haiku agent in the recorded comparison at commit `09d1b08`, three repeats each ([run](../eval/results/2026-10-28T165727Z/)). On the submitted prompt it passed 40 of 45 again ([run](../eval/results/2026-10-28T192415Z/)).
 
 | | Behaviour | What must happen | Agent | Single pass |
 |---|---|---|---|---|

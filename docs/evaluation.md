@@ -1,11 +1,12 @@
 # Evaluation: agent vs single-pass baseline
 
-The evaluation on the final build (main at `09d1b08`), run once per answering model on 2026-10-28:
+The comparison below was recorded at commit `09d1b08`, once per answering model, on 2026-10-28. The agent's prompt changed once after that ([kept after the latency runs](#what-a-user-waits-for-measured-in-the-browser)). On the same fifteen cases with three repeats, the Haiku agent on the submitted prompt passed 40 of 45 again, with 199 of 199 citations verified and a median time to answer of 5.4 s (third row). Each table keeps the numbers of the run it comes from.
 
 | Model | Run | Command |
 |---|---|---|
 | `claude-haiku-5-5` (the default) | [`eval/results/2026-10-28T165727Z/`](../eval/results/2026-10-28T165727Z/) | `ANSWER_MODEL=claude-haiku-5-5`, then `python3 scripts/eval.py --repeat 3` |
 | `claude-sonnet-5-5` | [`eval/results/2026-10-28T171106Z/`](../eval/results/2026-10-28T171106Z/) | `ANSWER_MODEL=claude-sonnet-5-5`, then `python3 scripts/eval.py --repeat 3` |
+| `claude-haiku-5-5`, agent only, submitted prompt | [`eval/results/2026-10-28T192415Z/`](../eval/results/2026-10-28T192415Z/) | `python3 scripts/eval.py --repeat 3 --systems agent` |
 
 Each folder holds `results.json` (every measurement), `report.md` (the generated tables) and `traces/` (every run as the API returned it). Earlier runs are kept for comparison and listed in [`eval/results/README.md`](../eval/results/README.md): the first ten cases, all fifteen before the latency change, and the latency change itself.
 
@@ -143,7 +144,7 @@ From the first ten cases ([`2026-10-28T043802Z`](../eval/results/2026-10-28T0438
 - **It helps when one search cannot see everything the question needs**: questions spanning documents (2, 3), a question whose wording favours a document's front matter (8a), ambiguous questions (4), and questions with a side fact to find (5) or a conflict to settle (9). These are every baseline failure.
 - **It adds a turn when one search is enough** (cases 1 and 12, and often 6, 7 and 14): a first turn to choose the search, then the answer. Prompt caching keeps that turn cheap, and the median time to answer is within half a second of the baseline (5.5 s against 5.2 s on Haiku).
 - **It is not always cheaper**: in 8b the agent spends several reads to recover where the baseline spends almost nothing to report the failure. Whether the recovery is worth it is a product decision; the limits cap the worst case.
-- **Overall (Haiku, final build)**: 40 passing runs against 21, at about 1.4 times the cost of the baseline per question ($0.0020 against $0.0014).
+- **Overall (Haiku, recorded comparison)**: 40 passing runs against 21, at about 1.4 times the cost of the baseline per question ($0.0020 against $0.0014).
 
 ## Hand review (the ten-case runs, first repeat)
 

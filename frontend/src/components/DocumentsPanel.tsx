@@ -80,7 +80,8 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
 
   // Deleting is final, so it asks first; the list then shows what is left.
   async function remove(doc: DocumentInfo) {
-    if (!window.confirm(`Delete "${doc.title}"? It is removed for good, with its passages.`)) return;
+    const question = `Delete "${doc.title}"? Its file and passages are removed. Saved answers that quote it keep those quotes.`;
+    if (!window.confirm(question)) return;
     try {
       await deleteDocument(doc.id);
       setNotice(`${doc.title}: deleted`);

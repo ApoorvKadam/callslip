@@ -185,6 +185,7 @@ Edge cases found in a full read of the code and left for after the submission, e
 | Several workers, very long documents | A lease is 5 minutes and is not renewed. A document that takes longer can be claimed by a second worker; the first worker's result is then discarded. | Renew the lease while working. |
 | Text without spaces (for example Chinese) | A passage longer than the token budget cannot be split at word boundaries, so it stays oversized. The corpus is English. | Split by tokenizer offsets. |
 | Failed sign-in counts | They live in the cache Redis, which drops the least recently used keys when full. Someone who fills the cache can clear a count and try five more passwords; when Redis is down there is no limit. | Keep the counts in PostgreSQL or a Redis that never evicts. |
+| Many emails from one address | The limit is per email and address, so one address can try five passwords on each of many emails. A limit per address alone would let one user on a shared network lock out everyone else on it. | A larger budget per address, or a delay that grows with failures. |
 | Rescoring an old evaluation | Citations are mapped to titles through the current database, so a reloaded corpus with new ids would change the grading. | Save the id-to-title map with each run. |
 
 ## Scaling path
