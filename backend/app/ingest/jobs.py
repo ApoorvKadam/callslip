@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from psycopg import AsyncConnection
+from psycopg.types.json import Jsonb
 
 
 @dataclass(frozen=True)
@@ -85,6 +86,7 @@ async def publish(
     owner: str,
     pages: list[tuple[int, str]],
     chunks: list[ChunkRow],
+    outline: list[dict] | None = None,
 ) -> bool:
     """Write pages and chunks and mark the document ready, in one transaction.
 
@@ -123,9 +125,9 @@ async def publish(
                 ],
             )
         await conn.execute(
-            "UPDATE documents SET status = 'ready', page_count = %s, error = NULL,"
+            "UPDATE documents SET status = 'ready', page_count = %s, outline = %s, error = NULL,"
             " lease_owner = NULL, lease_until = NULL, updated_at = now() WHERE id = %s",
-            (len(pages), document_id),
+            (len(pages), Jsonb(outline) if outline is not None else None, document_id),
         )
         await conn.execute("UPDATE corpus_state SET version = version + 1 WHERE id = 1")
     return True

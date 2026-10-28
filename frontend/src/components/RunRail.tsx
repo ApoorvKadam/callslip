@@ -185,6 +185,10 @@ export function toolTitle(d: Record<string, unknown>): string {
     const doc = evidence[0] ? shortCode(evidence[0].title) : `document ${input.document_id}`;
     return `Read ${doc}, pages ${input.page_start} to ${input.page_end}`;
   }
+  if (tool === "document_outline") {
+    const doc = d.document ? shortCode(String(d.document)) : `document ${input.document_id}`;
+    return `Outline of ${doc}`;
+  }
   if (tool === "list_documents") return "Listed the documents";
   if (tool === "ask_clarification") return "Clarifying question, not asked";
   return tool;

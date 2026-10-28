@@ -136,6 +136,11 @@ async def execute_tool(
         if attempt == 2 or not retryable or ctx.remaining_s() <= ctx.settings.finalize_reserve_s:
             break
     payload = {"status": status, "tool": name, "error": reason, "attempts": len(retries)}
+    if name == "search_documents":
+        payload["hint"] = (
+            "Search is not working. document_outline lists a document's sections with their "
+            "pages; read them with read_document_section."
+        )
     return (
         ToolOutcome(json.dumps(payload), True, status, f"failed: {reason}"),
         len(retries),

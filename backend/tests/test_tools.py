@@ -11,7 +11,7 @@ import pytest
 from pydantic import ValidationError
 
 from app.agent.loop import execute_tool, limit_after_tool, limit_before_tool
-from app.agent.tools import ClarificationArgs, SearchArgs, SectionArgs, Tools
+from app.agent.tools import ClarificationArgs, OutlineArgs, SearchArgs, SectionArgs, Tools
 from app.cache import Cache
 from app.config import get_settings
 from app.db import migrate, open_pool
@@ -118,6 +118,46 @@ async def test_read_section_of_a_document_that_is_not_ready_is_invalid_input(too
     assert "list_documents" in json.loads(out.content)["error"]
 
 
+async def test_outline_lists_the_bookmarked_sections_with_their_pages(tools):
+    outline = [{"title": "1. Core", "page": 2, "level": 0}]
+    async with tools.store.pool.connection() as conn:
+        await conn.execute("UPDATE documents SET outline = %s WHERE id = 1", (json.dumps(outline),))
+    out = await tools.document_outline(OutlineArgs(document_id=1))
+    assert (out.status, out.is_error) == ("ok", False)
+    expected = {"document_id": 1, "title": "NIST AI RMF", "sections": outline}
+    assert json.loads(out.content) == expected
+
+
+async def test_outline_of_a_pdf_without_bookmarks_is_an_empty_result(tools):
+    out = await tools.document_outline(OutlineArgs(document_id=2))
+    assert (out.status, out.is_error) == ("no_results", False)
+    assert json.loads(out.content)["status"] == "no_outline"
+
+
+async def test_outline_of_another_users_document_is_not_found(tools):
+    async with tools.store.pool.connection() as conn:
+        cur = await conn.execute(
+            "INSERT INTO users (email, password_hash) VALUES ('ada@nyu.edu', 'x') RETURNING id"
+        )
+        owner = (await cur.fetchone())[0]
+        await conn.execute("UPDATE documents SET owner_user_id = %s WHERE id = 2", (owner,))
+    out = await tools.document_outline(OutlineArgs(document_id=2))
+    assert out.status == "invalid_input"
+    assert "list_documents" in json.loads(out.content)["error"]
+
+
+async def test_the_worker_fills_a_missing_outline_when_idle(tools):
+    from app.worker import fill_one_outline
+
+    async with tools.store.pool.connection() as conn:
+        await conn.execute("UPDATE documents SET outline = NULL WHERE id = 2")
+    assert await fill_one_outline(tools.store.pool, get_settings())
+    async with tools.store.pool.connection() as conn:
+        cur = await conn.execute("SELECT outline FROM documents WHERE id = 2")
+        assert (await cur.fetchone())[0] == []  # read, and the PDF has no bookmarks
+    assert not await fill_one_outline(tools.store.pool, get_settings())  # nothing left
+
+
 def test_argument_rules():
     with pytest.raises(ValidationError):
         SearchArgs(query="   ")
@@ -161,7 +201,9 @@ async def test_executor_gives_up_after_one_retry(tools):
         {"search_documents": "error"},
     )
     assert (outcome.status, outcome.is_error, attempts) == ("error", True, 2)
-    assert json.loads(outcome.content)["attempts"] == 2
+    payload = json.loads(outcome.content)
+    assert payload["attempts"] == 2
+    assert "document_outline" in payload["hint"]  # where to go when search is down
 
 
 async def test_executor_does_not_retry_without_time_for_it(tools):

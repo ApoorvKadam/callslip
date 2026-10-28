@@ -1,6 +1,8 @@
 """Page-by-page text extraction with pypdf.
 
 Page numbers are physical PDF pages, 1-based, which is what a PDF viewer opens with `#page=N`.
+The PDF's own bookmarks, when it has them, are kept as an outline: section titles with the
+physical page each one opens at.
 Text is kept exactly as extracted except that whitespace runs collapse to one space; OCR noise
 in scanned-then-OCRed PDFs is preserved, never repaired, because it is quoted back as evidence.
 
@@ -20,6 +22,8 @@ from pypdf import PdfReader
 from pypdf.errors import PdfReadError
 
 _WHITESPACE = re.compile(r"\s+")
+_LETTER = re.compile(r"[^\W\d_]")
+MAX_OUTLINE = 300
 
 
 class PdfRejected(Exception):
@@ -32,11 +36,45 @@ class Page:
     text: str
 
 
+@dataclass(frozen=True)
+class ParsedPdf:
+    pages: list[Page]
+    outline: list[dict]  # {"title", "page", "level"}; empty when the PDF has no bookmarks
+
+
 def normalize_whitespace(text: str) -> str:
     return _WHITESPACE.sub(" ", text).strip()
 
 
-def _extract(content: bytes, max_pages: int, max_chars: int) -> list[Page]:
+def _outline(reader: PdfReader) -> list[dict]:
+    """The PDF's bookmarks in order, each with the physical page it opens. A broken outline
+    is skipped, never a reason to reject the document."""
+    entries: list[dict] = []
+
+    def walk(items: list, level: int) -> None:
+        for item in items:
+            if isinstance(item, list):
+                walk(item, level + 1)
+                continue
+            if len(entries) >= MAX_OUTLINE:
+                return
+            try:
+                page = reader.get_destination_page_number(item)
+                title = normalize_whitespace(str(item.title or ""))[:200]
+            except Exception:  # one unreadable bookmark does not cost the others
+                continue
+            # Entries without a page or without words ("1.", "2.") do not help navigation.
+            if page is not None and page >= 0 and _LETTER.search(title):
+                entries.append({"title": title, "page": page + 1, "level": level})
+
+    try:
+        walk(reader.outline, 0)
+    except Exception:
+        return entries  # the outline itself could not be read past this point
+    return entries
+
+
+def _extract(content: bytes, max_pages: int, max_chars: int) -> ParsedPdf:
     try:
         reader = PdfReader(io.BytesIO(content))
         # Many public PDFs are "encrypted" only to restrict editing; an empty password opens them.
@@ -61,7 +99,7 @@ def _extract(content: bytes, max_pages: int, max_chars: int) -> list[Page]:
         pages.append(Page(page_no, text))
     if not any(page.text for page in pages):
         raise PdfRejected("no text layer found (image-only PDF); OCR is not supported")
-    return pages
+    return ParsedPdf(pages, _outline(reader))
 
 
 def _child(content: bytes, max_pages: int, max_chars: int, mem_bytes: int, out: Connection):
@@ -77,13 +115,13 @@ def _child(content: bytes, max_pages: int, max_chars: int, mem_bytes: int, out: 
         out.send(("error", f"{type(exc).__name__}: {exc}"))
 
 
-def extract_pages(
+def parse_pdf(
     content: bytes,
     max_pages: int,
     timeout_s: float = 120.0,
     max_chars: int = 5_000_000,
     mem_bytes: int = 768 * 1024 * 1024,
-) -> list[Page]:
+) -> ParsedPdf:
     ctx = multiprocessing.get_context("spawn")
     receive, send = ctx.Pipe(duplex=False)
     proc = ctx.Process(

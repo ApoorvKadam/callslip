@@ -68,11 +68,13 @@ flowchart TD
     decide -- "list_documents" --> list[List ready documents]
     decide -- "search_documents" --> search[Hybrid search: vector + full-text, fused by rank]
     decide -- "read_document_section" --> read[Read up to 3 pages]
+    decide -- "document_outline" --> outline[Sections and their pages, from the PDF bookmarks]
     decide -- "ask_clarification" --> pause[["Pause: needs_clarification"]]
     pause -- "user replies (once, idempotent)" --> decide
     list --> check
     search --> check
     read --> check
+    outline --> check
     check{"Limits left?<br/>turns, tool calls, time"}
     check -- yes --> decide
     check -- "no, time for one call" --> final["Final call, tool_choice none:<br/>answer from evidence so far"]
@@ -92,6 +94,7 @@ The result-driven change of action is the point of the loop: after each tool res
 | `list_documents` | none | JSON: id, title, pages | `{"status":"no_results"}` | |
 | `search_documents` | `query` (1-500 chars), `document_ids`, `page_from`, `page_to`, `top_k` 1-10 | citable `search_result` blocks | `{"status":"no_results","query":...,"hint":...}` | `is_error` + `{"status":"invalid_input"\|"error"\|"timeout",...}` |
 | `read_document_section` | `document_id`, `page_start`, `page_end` (at most 3 pages, must exist) | one citable block per page | `{"status":"no_results"}` | as above |
+| `document_outline` | `document_id` (must be visible to the user) | JSON: title, sections with title, page and level | `{"status":"no_outline"}` when the PDF has no bookmarks | as above |
 | `ask_clarification` | `question`, `options` | pauses the run | | invalid input is returned to the model |
 
 Read tools only run parameterized SQL over the indexed corpus. None can write, call the network or touch the file system, so an instruction hidden in a document has nothing to act on.
@@ -136,7 +139,7 @@ stateDiagram-v2
 
 ## Retrieval and citations
 
-- **Ingestion**: page by page with pypdf. Pages keep their physical number (what a PDF viewer opens with `#page=N`). Each page is split on sentence boundaries into passages of about 350 tokens of the embedding model, with about 50 tokens of overlap, never crossing a page. Text is embedded and indexed with a header (document title and page), so a query that names a document finds it even when the body is noisy OCR; the original text is what the model sees and quotes.
+- **Ingestion**: page by page with pypdf. Pages keep their physical number (what a PDF viewer opens with `#page=N`). Each page is split on sentence boundaries into passages of about 350 tokens of the embedding model, with about 50 tokens of overlap, never crossing a page. Text is embedded and indexed with a header (document title and page), so a query that names a document finds it even when the body is noisy OCR; the original text is what the model sees and quotes. The PDF's own bookmarks, when it has them, are read in the same child process and kept as the document's outline: each section's title and the physical page it starts on. Documents ingested before outlines were kept get theirs when the worker starts.
 - **Search**: exact cosine similarity (pgvector) and PostgreSQL full-text (`websearch_to_tsquery`, ranked by `ts_rank_cd`) over the same filtered candidates, each taking its top 30, fused with reciprocal rank fusion (k=60). Exact on purpose: at a few thousand passages a scan takes milliseconds, and filters can never under-fill results the way an approximate index can. `ts_rank_cd` is cover-density ranking, not BM25.
 - **Citations**: passages reach Claude as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Each returned citation is checked: it must point at evidence this run actually sent (index across the whole conversation, source, quoted blocks), and the quote must appear on the stored page. The UI shows the quote, the check result and a link to the page.
 
@@ -163,7 +166,7 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 
 | Decision | Why | Trade-off, and when to revisit |
 |---|---|---|
-| Plain tool-use loop, no agent framework | One agent, four tools: the loop is under 300 lines with every step visible; nothing hidden to debug live | LangGraph would add checkpointing and graph tooling; worth it with several cooperating agents or long-lived workflows |
+| Plain tool-use loop, no agent framework | One agent, five tools: the loop is under 300 lines with every step visible; nothing hidden to debug live | LangGraph would add checkpointing and graph tooling; worth it with several cooperating agents or long-lived workflows |
 | Claude's native `search_result` citations | Quotes can only come from evidence sent; no extra output format to parse | Provenance is guaranteed, support is not: checked by evaluation |
 | Several read tools per turn, run together; a clarification only on its own | A question with independent parts costs one model turn, not one per part; results and trace keep the model's order | A batch takes its tool-call slots before it starts, so a large batch can use the budget at once; the run can only pause with nothing else in flight |
 | The user's document list in the first message | The model can name the candidates of an ambiguous question, or filter a search, without a turn spent on `list_documents` | About 25 tokens per document, cached after the first turn; capped at 50, the rest through `list_documents` |

@@ -57,7 +57,7 @@ How to work:
 - For a multi-part question, search for each part separately; when the parts do not depend on each other, make those searches in the same turn. For a question that spans documents, make sure you have evidence from each document involved.
 - After every search, check whether the passages actually answer the question. If they do not, rewrite the query (other terms, the document's own vocabulary, a document filter) or read the surrounding pages with read_document_section, then decide again.
 - When a list or table is cut off at the end of a passage, read the page to get all of it.
-- If a tool fails, retry once with a changed call or use another tool: when search keeps failing, read the likely pages directly with read_document_section. If the evidence still cannot be obtained, answer with what you have and say what is missing.
+- If a tool fails, retry once with a changed call or use another tool: when search keeps failing, find the section on the topic with document_outline and read it with read_document_section, or read the likely pages when there is no outline. If the evidence still cannot be obtained, answer with what you have and say what is missing.
 - When two documents give different answers to the same question, search for whether one replaces, rescinds or overrides the other before you answer.
 - Stop when you have evidence for every part, or when more searching is unlikely to help.
 - After the user answers a clarifying question, answer every part of the clarified question.
@@ -98,7 +98,7 @@ How to answer:
 
 ## Tool schemas
 
-Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the API. Inputs are validated again in code with Pydantic (`SearchArgs`, `SectionArgs`, `ClarificationArgs`).
+Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the API. Inputs are validated again in code with Pydantic (`SearchArgs`, `SectionArgs`, `OutlineArgs`, `ClarificationArgs`).
 
 ```json
 [
@@ -169,6 +169,22 @@ Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the 
         "document_id",
         "page_start",
         "page_end"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "document_outline",
+    "description": "List the sections of one document from its own bookmarks, each with the page it starts on (the page numbers read_document_section uses). Use it to find where a document covers a topic, for example when search fails or finds only a summary. Returns {\"status\": \"no_outline\"} when the PDF has no bookmarks.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "document_id"
       ],
       "additionalProperties": false
     }
