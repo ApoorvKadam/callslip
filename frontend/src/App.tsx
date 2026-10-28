@@ -5,6 +5,7 @@ import {
   type Run,
   type Answer,
   type RunEvent,
+  type SessionSummary,
   type SupportCheck,
   type RunStatus,
   abandon,
@@ -13,11 +14,13 @@ import {
   getAccount,
   getRun,
   getSession,
+  listSessions,
   resume,
   runEventsUrl,
 } from "./api";
 import { AccountMenu } from "./components/AccountMenu";
 import { Conversation, type LiveAnswer, type PendingClarification } from "./components/Conversation";
+import { ConversationList } from "./components/ConversationList";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { RunRail, type RailTab } from "./components/RunRail";
 
@@ -107,8 +110,14 @@ export default function App() {
     [refreshRun],
   );
 
+  // Each switch of conversation takes a ticket; a reply for an older ticket is ignored, so a
+  // slow load can never replace the conversation chosen after it.
+  const switches = useRef(0);
+
   const startSession = useCallback(async () => {
+    const ticket = ++switches.current;
     const { id } = await createSession();
+    if (ticket !== switches.current) return;
     localStorage.setItem(SESSION_KEY, id);
     setSessionId(id);
     setRuns([]);
@@ -124,21 +133,47 @@ export default function App() {
       .catch(() => setAccount(null));
   }, []);
 
+  // Show a conversation: its questions, with the last one selected and followed if running.
+  const openSession = useCallback(
+    async (id: string) => {
+      const ticket = ++switches.current;
+      const session = await getSession(id);
+      if (ticket !== switches.current) return;
+      localStorage.setItem(SESSION_KEY, session.id);
+      setSessionId(session.id);
+      setRuns(session.runs);
+      setEvents({});
+      setSelectedId(null);
+      const last = session.runs.at(-1);
+      if (last) {
+        setSelectedId(last.id);
+        if (last.status === "running") follow(last.id);
+        else await refreshRun(last.id);
+      }
+    },
+    [follow, refreshRun],
+  );
+
+  // Earlier conversations, kept current as questions are asked and accounts change.
+  const [history, setHistory] = useState<SessionSummary[]>([]);
+  const [side, setSide] = useState<"documents" | "conversations">("documents");
+  useEffect(() => {
+    let current = true;
+    listSessions()
+      .then((list) => current && setHistory(list))
+      .catch(() => current && setHistory([]));
+    return () => {
+      current = false;
+    };
+  }, [sessionId, runs.length, account]);
+
   // Restore the last session in this browser, or start a new one.
   useEffect(() => {
     const saved = localStorage.getItem(SESSION_KEY);
     (async () => {
       try {
         if (saved) {
-          const session = await getSession(saved);
-          setSessionId(session.id);
-          setRuns(session.runs);
-          const last = session.runs.at(-1);
-          if (last) {
-            setSelectedId(last.id);
-            if (last.status === "running") follow(last.id);
-            else await refreshRun(last.id);
-          }
+          await openSession(saved);
           return;
         }
       } catch (e) {
@@ -155,7 +190,7 @@ export default function App() {
         setError(`Could not start a session: ${errorText(e)}`);
       }
     })();
-  }, [follow, refreshRun, startSession]);
+  }, [openSession, startSession]);
 
   // What each question's events already show: its answer as soon as the answer event arrives,
   // or, while the model is still writing it, the text so far. A turn that ended in a tool call
@@ -322,8 +357,48 @@ export default function App() {
         </div>
       </header>
       <div className="layout">
-        <aside className="docs" aria-label="Documents">
-          <DocumentsPanel signedIn={account !== null} />
+        <aside className="docs" aria-label="Documents and conversations">
+          <div className="tabs side-tabs" role="tablist" aria-label="Library">
+            <button
+              type="button"
+              role="tab"
+              id="tab-documents"
+              aria-controls="panel-documents"
+              aria-selected={side === "documents"}
+              className="tab"
+              onClick={() => setSide("documents")}
+            >
+              Documents
+            </button>
+            <button
+              type="button"
+              role="tab"
+              id="tab-conversations"
+              aria-controls="panel-conversations"
+              aria-selected={side === "conversations"}
+              className="tab"
+              onClick={() => setSide("conversations")}
+            >
+              Conversations <span className="meta">{history.length || ""}</span>
+            </button>
+          </div>
+          {side === "documents" ? (
+            <div role="tabpanel" id="panel-documents" aria-labelledby="tab-documents">
+              <DocumentsPanel signedIn={account !== null} />
+            </div>
+          ) : (
+            <div role="tabpanel" id="panel-conversations" aria-labelledby="tab-conversations">
+              <ConversationList
+                items={history}
+                currentId={sessionId}
+                onOpen={(id) =>
+                  void openSession(id).catch((e) =>
+                    setError(`Could not open that conversation: ${errorText(e)}`),
+                  )
+                }
+              />
+            </div>
+          )}
         </aside>
         <main className="talk">
           <Conversation

@@ -58,20 +58,28 @@ def valid_token(token: str | None) -> bool:
     return bool(token and _TOKEN.fullmatch(token))
 
 
-def owner_key(token: str, user: int | None) -> str:
-    """Whose a conversation is: this browser's token, plus the account signed in when it was
-    started. Signing in or out therefore starts a new conversation, and one account never sees
-    another's answers, which can quote private documents, on a shared browser. A signed-in key
-    hashes a JSON pair, which a bare token can never equal."""
-    return owner_hash(token if user is None else json.dumps([token, user]))
+def owner_key(token: str | None, user: int | None) -> str:
+    """Whose a conversation is. Signed in, it belongs to the account, so its history follows the
+    user to any browser; signed out, it belongs to this browser's token. Signing in or out
+    therefore switches to the other set of conversations, and one account never sees another's
+    answers, which can quote private documents, on a shared browser. An account key hashes a
+    JSON pair, which a bare token can never equal."""
+    return owner_hash(json.dumps(["account", user]) if user is not None else str(token))
+
+
+def owner_or_none(request: Request, user: int | None) -> str | None:
+    if user is not None:
+        return owner_key(None, user)
+    token = request.cookies.get(COOKIE)
+    return owner_key(token, None) if valid_token(token) else None
 
 
 def current_owner(request: Request, user: Viewer) -> str:
-    token = request.cookies.get(COOKIE)
-    if not valid_token(token):
+    owner = owner_or_none(request, user)
+    if owner is None:
         # Same answer as an unknown id: nothing to learn from probing.
         raise HTTPException(404, "Not found.")
-    return owner_key(token, user)
+    return owner
 
 
 Owner = Annotated[str, Depends(current_owner)]
@@ -112,6 +120,26 @@ async def create_session(request: Request, response: Response, pool: Pool, user:
             (session_id, owner_key(token, user)),
         )
     return {"id": str(session_id)}
+
+
+@router.get("/sessions")
+async def list_sessions(request: Request, pool: Pool, user: Viewer) -> list[dict]:
+    """Past conversations, the most recently used first: each one's first question, its number
+    of questions and when it was last used. Conversations with no question yet are left out."""
+    owner = owner_or_none(request, user)
+    if owner is None:
+        return []
+    async with pool.connection() as conn:
+        cur = conn.cursor(row_factory=dict_row)
+        await cur.execute(
+            "SELECT s.id, s.created_at, count(r.id) AS questions, max(r.created_at) AS last_at,"
+            "       (array_agg(r.question ORDER BY r.created_at))[1] AS title"
+            "  FROM sessions s JOIN runs r ON r.session_id = s.id"
+            " WHERE s.owner_hash = %s"
+            " GROUP BY s.id ORDER BY last_at DESC LIMIT 50",
+            (owner,),
+        )
+        return await cur.fetchall()
 
 
 @router.get("/sessions/{session_id}")

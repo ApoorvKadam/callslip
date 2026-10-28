@@ -150,6 +150,19 @@ export function createSession(): Promise<{ id: string }> {
   return request("/api/sessions", { method: "POST" });
 }
 
+// One earlier conversation in the list: its first question, how many, and when last used.
+export interface SessionSummary {
+  id: string;
+  title: string;
+  questions: number;
+  created_at: string;
+  last_at: string;
+}
+
+export function listSessions(): Promise<SessionSummary[]> {
+  return request("/api/sessions");
+}
+
 export function getSession(id: string): Promise<Session> {
   return request(`/api/sessions/${id}`);
 }
