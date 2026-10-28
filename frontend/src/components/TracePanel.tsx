@@ -34,7 +34,11 @@ function Step({ e }: { e: RunEvent }) {
             {String(d.summary ?? "")} · {num(d.ms)} ms
             {d.cache ? ` · cache ${String(d.cache)}` : ""}
           </div>
-          {typeof d.error === "string" && <p className="error small">{d.error}</p>}
+          {Array.isArray(d.retries) && d.retries.length > 0 && (
+            <p className="small">
+              Retried after: {(d.retries as string[]).join("; ")} ({num(d.attempts)} attempts)
+            </p>
+          )}
           {evidence.length > 0 && (
             <ol className="evidence">
               {evidence.map((ev, i) => (
@@ -62,6 +66,35 @@ function Step({ e }: { e: RunEvent }) {
             {num(d.cache_read_tokens) ? ` · ${num(d.cache_read_tokens)} cached` : ""} · $
             {num(d.cost_usd).toFixed(4)}
           </div>
+        </li>
+      );
+    case "clarification":
+      return (
+        <li className="step">
+          <div className="step-head">
+            <strong>ask_clarification</strong>
+            <span className="badge badge-processing">waiting for you</span>
+          </div>
+          <p className="small">{String(d.question)}</p>
+        </li>
+      );
+    case "clarification_answered":
+      return (
+        <li className="step">
+          <div className="step-head">
+            <strong>Your reply</strong>
+          </div>
+          <p className="small">{String(d.reply)}</p>
+        </li>
+      );
+    case "limit":
+      return (
+        <li className="step">
+          <div className="step-head">
+            <strong>Limit reached</strong>
+            <span className="badge badge-failed">stopping</span>
+          </div>
+          <p className="small">{String(d.reason)}</p>
         </li>
       );
     case "answer":
