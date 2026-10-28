@@ -19,6 +19,7 @@ can be rebuilt from the database exactly as the model saw it.
 
 import asyncio
 import json
+import logging
 import time
 
 import anthropic
@@ -37,11 +38,14 @@ from app.agent.tools import (
 )
 from app.runs.context import RunContext, content_dicts, question_text
 
+log = logging.getLogger(__name__)
+
 AUTO = {"type": "auto", "disable_parallel_tool_use": True}
 FINAL = {"type": "none"}
 MIN_MODEL_CALL_S = 5.0
 TRANSIENT_MODEL_ERRORS = (
-    anthropic.APIConnectionError,  # includes timeouts
+    anthropic.APIConnectionError,  # includes the SDK's own timeouts
+    TimeoutError,  # the call's total time budget (llm.py) ran out
     anthropic.RateLimitError,
     anthropic.InternalServerError,
 )
@@ -110,6 +114,11 @@ async def execute_tool(
             status = "timeout"
         except ToolFailure as exc:
             reason = str(exc)
+            status = "error"
+        except Exception as exc:  # a real failure (database, bug) reaches the model the same way
+            fields = {"run_id": str(ctx.run_id), "tool": name}
+            log.exception("tool failed", extra={"fields": fields})
+            reason = f"failed unexpectedly ({type(exc).__name__})"
             status = "error"
         retries.append(reason)
         if attempt == 2 or ctx.remaining_s() <= ctx.settings.finalize_reserve_s:
