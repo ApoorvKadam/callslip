@@ -32,6 +32,7 @@ WITH candidates AS (
       FROM chunks c
       JOIN documents d ON d.id = c.document_id
      WHERE d.status = 'ready'
+       AND (d.owner_user_id IS NULL OR d.owner_user_id = %(viewer)s::bigint)
        AND (%(doc_ids)s::bigint[] IS NULL OR c.document_id = ANY(%(doc_ids)s::bigint[]))
        AND (%(page_from)s::int IS NULL OR c.page_no >= %(page_from)s::int)
        AND (%(page_to)s::int IS NULL OR c.page_no <= %(page_to)s::int)
@@ -70,6 +71,9 @@ class SearchFilters:
     document_ids: tuple[int, ...] | None = None
     page_from: int | None = None
     page_to: int | None = None
+    # Who is searching: the shared collection plus this user's own documents. It is part of the
+    # cache key, so one user's results are never served to another.
+    viewer: int | None = None
 
 
 @dataclass(frozen=True)
@@ -103,6 +107,7 @@ async def hybrid_search(
         "doc_ids": list(filters.document_ids) if filters.document_ids else None,
         "page_from": filters.page_from,
         "page_to": filters.page_to,
+        "viewer": filters.viewer,
         "qvec": query_vector,
         "qtext": query,
         "pool": max(CANDIDATE_POOL, top_k),

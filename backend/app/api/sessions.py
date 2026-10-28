@@ -8,6 +8,7 @@ not own. Documents are shared on purpose: this is a single-tenant demo corpus.
 
 import hashlib
 import json
+import re
 import secrets
 import time
 from collections.abc import Coroutine
@@ -23,6 +24,7 @@ from pydantic import BaseModel, StringConstraints
 
 from app.agent.baseline import run_baseline
 from app.agent.loop import resume_agent, start_agent
+from app.api.auth import Viewer
 from app.api.deps import get_pool
 from app.runs.context import RunContext
 
@@ -52,12 +54,28 @@ def owner_hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 
-def current_owner(request: Request) -> str:
+# What secrets.token_urlsafe(32) produces; any other cookie value is treated as no token.
+_TOKEN = re.compile(r"[A-Za-z0-9_-]{43}")
+
+
+def valid_token(token: str | None) -> bool:
+    return bool(token and _TOKEN.fullmatch(token))
+
+
+def owner_key(token: str, user: int | None) -> str:
+    """Whose a conversation is: this browser's token, plus the account signed in when it was
+    started. Signing in or out therefore starts a new conversation, and one account never sees
+    another's answers, which can quote private documents, on a shared browser. A signed-in key
+    hashes a JSON pair, which a bare token can never equal."""
+    return owner_hash(token if user is None else json.dumps([token, user]))
+
+
+def current_owner(request: Request, user: Viewer) -> str:
     token = request.cookies.get(COOKIE)
-    if not token or len(token) < 32:
+    if not valid_token(token):
         # Same answer as an unknown id: nothing to learn from probing.
         raise HTTPException(404, "Not found.")
-    return owner_hash(token)
+    return owner_key(token, user)
 
 
 Owner = Annotated[str, Depends(current_owner)]
@@ -78,9 +96,9 @@ async def owned_session(pool: AsyncConnectionPool, session_id: UUID, owner: str)
 
 
 @router.post("/sessions", status_code=201)
-async def create_session(request: Request, response: Response, pool: Pool) -> dict:
+async def create_session(request: Request, response: Response, pool: Pool, user: Viewer) -> dict:
     token = request.cookies.get(COOKIE)
-    if not token or len(token) < 32:
+    if not valid_token(token):
         token = secrets.token_urlsafe(32)
         response.set_cookie(
             COOKIE,
@@ -94,7 +112,8 @@ async def create_session(request: Request, response: Response, pool: Pool) -> di
     session_id = uuid4()
     async with pool.connection() as conn:
         await conn.execute(
-            "INSERT INTO sessions (id, owner_hash) VALUES (%s, %s)", (session_id, owner_hash(token))
+            "INSERT INTO sessions (id, owner_hash) VALUES (%s, %s)",
+            (session_id, owner_key(token, user)),
         )
     return {"id": str(session_id)}
 
@@ -152,7 +171,9 @@ async def first_event_then(ctx: RunContext, type_: str, data: dict, work: Corout
 
 
 @router.post("/sessions/{session_id}/runs", status_code=202)
-async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, owner: Owner):
+async def ask(
+    session_id: UUID, body: AskRequest, request: Request, pool: Pool, owner: Owner, user: Viewer
+):
     await owned_session(pool, session_id, owner)
     state = request.app.state
     if state.llm is None:
@@ -166,9 +187,9 @@ async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, 
         async with pool.connection() as conn:
             cur = conn.cursor(row_factory=dict_row)
             await cur.execute(
-                "INSERT INTO runs (id, session_id, mode, question) VALUES (%s, %s, %s, %s)"
-                f" RETURNING {RUN_FIELDS}",
-                (run_id, session_id, body.mode, question),
+                "INSERT INTO runs (id, session_id, mode, question, user_id)"
+                f" VALUES (%s, %s, %s, %s, %s) RETURNING {RUN_FIELDS}",
+                (run_id, session_id, body.mode, question, user),
             )
             run = await cur.fetchone()
     except errors.UniqueViolation:
@@ -177,6 +198,7 @@ async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, 
         ) from None
 
     ctx = RunContext(run_id, session_id, state.store, state.llm, state.search, state.settings)
+    ctx.viewer = user
     if body.mode == "agent":
         work = start_agent(ctx, question, history, dict(body.faults or {}))
     else:
@@ -207,7 +229,13 @@ async def owned_run_for_update(conn, session_id: UUID, run_id: UUID, owner: str)
 
 @router.post("/sessions/{session_id}/runs/{run_id}/resume", status_code=202)
 async def resume(
-    session_id: UUID, run_id: UUID, body: ResumeRequest, request: Request, pool: Pool, owner: Owner
+    session_id: UUID,
+    run_id: UUID,
+    body: ResumeRequest,
+    request: Request,
+    pool: Pool,
+    owner: Owner,
+    user: Viewer,
 ):
     """Answer the agent's clarifying question. Exactly once: a retry with the same key and reply
     gets the recorded outcome; the same key with another reply, or a stale reply, gets 409."""
@@ -247,6 +275,7 @@ async def resume(
     # Waiting for the user does not count against the run's time budget.
     ctx.started = time.monotonic() - run["exec_ms"] / 1000
     ctx.model_turns, ctx.tool_calls = run["model_turns"], run["tool_calls"]
+    ctx.viewer = user  # the conversation's owner key ties it to the account that started it
     answered = {"reply": body.reply}
     state.runs.start(
         run_id, first_event_then(ctx, "clarification_answered", answered, resume_agent(ctx))

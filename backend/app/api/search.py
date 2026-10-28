@@ -9,6 +9,7 @@ from typing import Annotated
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, Field, StringConstraints, model_validator
 
+from app.api.auth import Viewer
 from app.retrieval.search import SearchFilters, SearchService
 
 router = APIRouter(prefix="/api", tags=["search"])
@@ -46,10 +47,13 @@ class SearchResponse(BaseModel):
 
 
 @router.post("/search")
-async def search(body: SearchRequest, request: Request) -> SearchResponse:
+async def search(body: SearchRequest, request: Request, user: Viewer) -> SearchResponse:
     service: SearchService = request.app.state.search
     filters = SearchFilters(
-        tuple(body.document_ids) if body.document_ids else None, body.page_from, body.page_to
+        tuple(body.document_ids) if body.document_ids else None,
+        body.page_from,
+        body.page_to,
+        viewer=user,
     )
     result = await service.search(body.query, filters, body.top_k)
     return SearchResponse(

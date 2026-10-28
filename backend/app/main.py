@@ -7,7 +7,7 @@ from anthropic import AsyncAnthropic
 from fastapi import FastAPI
 from redis.asyncio import Redis
 
-from app.api import documents, health, runs, search, sessions
+from app.api import auth, documents, health, runs, search, sessions
 from app.cache import Cache
 from app.config import get_settings
 from app.db import migrate, open_pool
@@ -64,6 +64,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(title="Callslip", version="0.1.0", lifespan=lifespan)
     app.include_router(health.router)
+    app.include_router(auth.router)
     app.include_router(documents.router)
     app.include_router(search.router)
     app.include_router(sessions.router)

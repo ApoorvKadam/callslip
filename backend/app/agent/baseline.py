@@ -24,7 +24,7 @@ async def run_baseline(
     # ones). A longer question is searched by its first 500; the model still reads all of it.
     query = {"query": question[:500], "top_k": ctx.settings.top_k}
     outcome, attempts, retries = await execute_tool(
-        ctx, Tools(ctx.search, ctx.store), "search_documents", query, faults or {}
+        ctx, Tools(ctx.search, ctx.store, ctx.viewer), "search_documents", query, faults or {}
     )
     ctx.tool_calls += 1
     await ctx.emit(

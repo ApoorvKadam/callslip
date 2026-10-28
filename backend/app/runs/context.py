@@ -29,6 +29,7 @@ class RunContext:
     started: float = field(default_factory=time.monotonic)
     model_turns: int = 0
     tool_calls: int = 0
+    viewer: int | None = None  # the signed-in user who asked, if any
 
     def elapsed_s(self) -> float:
         return time.monotonic() - self.started

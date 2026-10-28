@@ -13,6 +13,7 @@ export interface DocumentInfo {
   chunk_count: number;
   created_at: string;
   updated_at: string;
+  private: boolean; // the signed-in user's own upload
 }
 
 export class ApiError extends Error {
@@ -38,7 +39,29 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     }
     throw new ApiError(message, response.status);
   }
+  if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
+}
+
+// The signed-in user's email, or null.
+export function getAccount(): Promise<{ email: string | null }> {
+  return request("/api/auth/me");
+}
+
+export function signIn(
+  email: string,
+  password: string,
+  create: boolean,
+): Promise<{ email: string }> {
+  return request(create ? "/api/auth/register" : "/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function signOut(): Promise<void> {
+  return request("/api/auth/logout", { method: "POST" });
 }
 
 export function listDocuments(): Promise<DocumentInfo[]> {
