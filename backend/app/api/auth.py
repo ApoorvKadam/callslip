@@ -11,6 +11,7 @@ import asyncio
 import base64
 import hashlib
 import hmac
+import logging
 import secrets
 from typing import Annotated
 
@@ -18,6 +19,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from psycopg import errors
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel, StringConstraints
+from redis.exceptions import RedisError
 
 from app.api.deps import get_pool
 
@@ -120,8 +122,56 @@ async def register(body: Credentials, request: Request, response: Response, pool
     return {"email": body.email}
 
 
+log = logging.getLogger(__name__)
+
+# Sign-in attempts are counted in Redis per email and client address, before the password is
+# checked: each attempt takes a number in one atomic step, so attempts sent at the same moment
+# cannot all slip past the limit. Beyond LOGIN_LIMIT attempts within LOGIN_WINDOW_S of the first,
+# that email is refused from that address until the window ends, whatever the password; others
+# can still sign in to it, so nobody can lock an account by failing on purpose. A successful
+# sign-in clears the count. If Redis is down, sign-in still works.
+LOGIN_LIMIT = 5
+LOGIN_WINDOW_S = 900
+_TAKE_ATTEMPT = """
+local n = redis.call('INCR', KEYS[1])
+if n == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end
+return {n, redis.call('TTL', KEYS[1])}
+"""
+
+
+def _failures_key(email: str, address: str) -> str:
+    who = f"{email.strip().lower()}|{address}"
+    return "login:fail:" + hashlib.sha256(who.encode()).hexdigest()
+
+
+async def _take_attempt(redis, key: str) -> int:
+    """Count this attempt. Returns the seconds to wait when it is over the limit, else 0."""
+    try:
+        count, ttl = await redis.eval(_TAKE_ATTEMPT, 1, key, LOGIN_WINDOW_S)
+    except (RedisError, OSError):
+        log.warning("sign-in limit unavailable; not enforced")
+        return 0
+    return max(int(ttl), 1) if int(count) > LOGIN_LIMIT else 0
+
+
+async def _clear_attempts(redis, key: str) -> None:
+    try:
+        await redis.delete(key)
+    except (RedisError, OSError):
+        log.warning("sign-in limit unavailable; count not cleared")
+
+
 @router.post("/login")
 async def login(body: Credentials, request: Request, response: Response, pool: Pool) -> dict:
+    address = request.client.host if request.client else "unknown"
+    redis, key = request.app.state.redis, _failures_key(body.email, address)
+    wait = await _take_attempt(redis, key)
+    if wait:
+        raise HTTPException(
+            429,
+            "Too many failed sign-ins for this email from here. Try again later.",
+            headers={"Retry-After": str(wait)},
+        )
     async with pool.connection() as conn:
         cur = await conn.execute(
             "SELECT id, email, password_hash FROM users WHERE lower(email) = lower(%s)",
@@ -133,6 +183,7 @@ async def login(body: Credentials, request: Request, response: Response, pool: P
     ok = await asyncio.to_thread(check_password, body.password, stored)
     if not (row and ok):
         raise HTTPException(401, "The email or the password is not right.")
+    await _clear_attempts(redis, key)
     await sign_in(response, request, pool, row[0])
     return {"email": row[1]}
 

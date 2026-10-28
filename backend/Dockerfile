@@ -29,4 +29,6 @@ USER app
 EXPOSE 8000
 # The standard asyncio loop: with uvloop, a Redis connect that times out during a DNS lookup
 # leaves an unretrieved future and an ERROR log line (MagicStack/uvloop issue 437).
+# X-Forwarded-For is trusted only from the proxies named in FORWARDED_ALLOW_IPS (Compose and the
+# Kubernetes manifests set it); the client address counts failed sign-ins.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--loop", "asyncio"]

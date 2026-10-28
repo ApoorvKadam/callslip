@@ -1,8 +1,9 @@
-import { Upload } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   type DocumentInfo,
   type DocumentStatus,
+  deleteDocument,
   documentFileUrl,
   listDocuments,
   uploadDocument,
@@ -74,6 +75,18 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
     await refresh();
   }
 
+  // Deleting is final, so it asks first; the list then shows what is left.
+  async function remove(doc: DocumentInfo) {
+    if (!window.confirm(`Delete "${doc.title}"? It is removed for good, with its passages.`)) return;
+    try {
+      await deleteDocument(doc.id);
+      setNotice(`${doc.title}: deleted`);
+    } catch (e) {
+      setNotice(`${doc.title}: ${errorText(e)}`);
+    }
+    await refresh();
+  }
+
   const ready = docs.filter((d) => d.status === "ready").length;
   const mine = docs.filter((d) => d.private);
   const shared = docs.filter((d) => !d.private);
@@ -125,7 +138,7 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
         <>
           <h3 className="label doc-group">Your documents</h3>
           {mine.length === 0 && <p className="meta">Only you can see what you upload here.</p>}
-          <DocList docs={mine} />
+          <DocList docs={mine} onDelete={(d) => void remove(d)} />
           <h3 className="label doc-group">Shared collection</h3>
         </>
       )}
@@ -134,11 +147,17 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
   );
 }
 
-function DocList({ docs }: { docs: DocumentInfo[] }) {
+function DocList({
+  docs,
+  onDelete,
+}: {
+  docs: DocumentInfo[];
+  onDelete?: (doc: DocumentInfo) => void;
+}) {
   return (
     <ul className="doc-list">
       {docs.map((d) => (
-        <li key={d.id} className="doc">
+        <li key={d.id} className={onDelete ? "doc doc-own" : "doc"}>
           <a
             href={documentFileUrl(d.id)}
             target="_blank"
@@ -158,6 +177,17 @@ function DocList({ docs }: { docs: DocumentInfo[] }) {
               {d.chunk_count ? `, ${d.chunk_count} passages` : ""}
             </span>
           </a>
+          {onDelete && d.status !== "queued" && d.status !== "processing" && (
+            <button
+              type="button"
+              className="icon-button"
+              aria-label={`Delete ${d.title}`}
+              title="Delete"
+              onClick={() => onDelete(d)}
+            >
+              <Trash2 size={15} aria-hidden="true" />
+            </button>
+          )}
           {d.error && <p className="error meta">{d.error}</p>}
         </li>
       ))}

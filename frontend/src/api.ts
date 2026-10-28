@@ -74,6 +74,11 @@ export function uploadDocument(file: File): Promise<DocumentInfo> {
   return request("/api/documents", { method: "POST", body: form });
 }
 
+// Delete one of your own uploads.
+export function deleteDocument(id: number): Promise<void> {
+  return request(`/api/documents/${id}`, { method: "DELETE" });
+}
+
 export function documentFileUrl(id: number, page?: number): string {
   return `/api/documents/${id}/file${page ? `#page=${page}` : ""}`;
 }
