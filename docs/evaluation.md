@@ -50,7 +50,7 @@ Latency is execution time; for case 4 it excludes the time waiting for the user'
 
 - **More tasks done, at a tenth of the cost.** The Haiku agent passed 30 of 30 runs at $0.0026 per question; the Sonnet agent passed 27 of 30 at $0.0273. Median latency is about the same (6.9 s against 7.6 s).
 - **The difference is one decision.** On case 9 the Haiku agent searched for "M-25-21 rescinds M-24-10", found page 1 and cited it, in every repeat. The Sonnet agent found both deadlines and stopped, in every repeat ([Failure analysis](#failure-analysis)).
-- **Sonnet writes cleaner prose.** Haiku sometimes repeats a sentence and then the quoted source text beside it, and once (baseline, case 6) it answered correctly without a single citation, which failed the check. Sonnet did neither.
+- **Sonnet writes cleaner prose.** Haiku sometimes repeats a sentence and then the quoted source text beside it, or a fact once per source ("September 1, 2026 and September 1, 2026"), and once (baseline, case 6) it answered correctly without a single citation, which failed the check. Sonnet's slip is different: on case 6 it leads with its own reading of which policy wins.
 - **Both stay available.** Set `ANSWER_MODEL=claude-sonnet-5-5` in `.env` to use Sonnet. Ten cases on one corpus are evidence for this workload, not a general ranking of the two models.
 
 ## What each case showed (Haiku agent, first repeat, unless noted)
@@ -84,12 +84,12 @@ The checks are deterministic and narrow, so the first repeat of three columns wa
 | 3 | correct and complete | no answer to either part, and it says so | correct and complete |
 | 4 | correct and complete: both 180-day requirements | partial: the compliance plan only | correct and complete |
 | 5 | correct and complete | partial: no fine (right), the deadline of a different requirement | correct and complete |
-| 6 | correct and complete | correct, but no citations | correct and complete |
+| 6 | correct and complete | correct, but no citations | partial: explains the conflict, then leads with "no" as if settled, without saying that is its own reading |
 | 7 | correct and complete | correct and complete | correct and complete |
 | 8a | correct and complete | partial: the Profile's privacy section not reached, and it says so | correct and complete |
 | 8b | correct and complete, after reading pages instead of searching | no answer; reports the failed search | correct and complete |
 | 9 | correct and complete: the rescission cited | partial: both deadlines, cannot say which governs | partial: both deadlines right, "the later one shortens it", rescission not found |
-| **Total** | **10 correct and complete** | **2 correct and complete, 1 correct without citations, 5 partial, 2 no answer** | **9 correct and complete, 1 partial** |
+| **Total** | **10 correct and complete** | **2 correct and complete, 1 correct without citations, 5 partial, 2 no answer** | **8 correct and complete, 2 partial** |
 
 No answer in any column was wrong. For the Haiku agent, every sentence without a citation was also checked against the passages it had retrieved (the scorer cannot see those sentences): all restate what a cited passage says, apart from one labelled date calculation in case 9 ("my calculation").
 
