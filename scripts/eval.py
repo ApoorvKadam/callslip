@@ -120,9 +120,8 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
         return {i for i, t in titles.items() if t.startswith(prefix)}
 
     gold = {(i, p) for g in case["gold"] for i in ids(g["doc"]) for p in g["pages"]}
-    gold_docs = {i for g in case["gold"] for i in ids(g["doc"])}
     cited = {(c["document_id"], c["page_no"]) for c in citations}
-    docs_cited = {c["document_id"] for c in citations} & gold_docs
+    docs_cited = {d for d, _ in cited & gold}  # documents with one of their gold pages cited
     events = [e for r in record["runs"] for e in r["events"]]
     tool_events = [e["data"] for e in events if e["type"] == "tool_call"]
     retrieved = {ev["title"] for t in tool_events for ev in t.get("evidence", [])}
@@ -135,7 +134,7 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
         "citations_verified": verified == len(citations),
     }
     expect = case["expect"]
-    if expect in ("answer", "clarify", "conflict"):
+    if expect in ("answer", "clarify", "conflict", "insufficient"):
         checks["completed"] = run["status"] == "complete"
         checks["gold_page_cited"] = bool(cited & gold)
     if case.get("must_cite"):

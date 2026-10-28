@@ -2,8 +2,8 @@
 
 | System | Cases passed | Mean latency (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
 |---|---|---|---|---|---|---|---|
-| agent | 27 of 30 | 8.6 | 2.5 | 3.6 | 172 of 172 | 279876 | 0.7895 |
-| baseline | 15 of 30 | 4.8 | 1.1 | 1.1 | 118 of 118 | 208438 | 0.5406 |
+| agent | 25 of 30 | 8.6 | 2.5 | 3.6 | 172 of 172 | 279876 | 0.7895 |
+| baseline | 12 of 30 | 4.8 | 1.1 | 1.1 | 118 of 118 | 208438 | 0.5406 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -15,8 +15,8 @@
 | 3-multi-doc-b | baseline | no | complete | 3/3 |  | 1 | 1 | 3.8 | 5530/445 | 0.0155 | missing: confident, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 4 | 10.2 | 8902/1017 | 0.0294 | asked: Which memo do you mean? Several OMB memos in the collection have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 3/3 | OMB M-25-21: Acceleratin p12 | 2 | 2 | 8.4 | 12873/1076 | 0.0365 | missing: AI Strateg |
-| 5-insufficient-evidence | agent | yes | complete | 2/2 |  | 2 | 3 | 6.7 | 6880/399 | 0.0189 |  |
-| 5-insufficient-evidence | baseline | yes | complete | 4/4 |  | 1 | 1 | 3.7 | 6859/500 | 0.0187 |  |
+| 5-insufficient-evidence | agent | no | complete | 2/2 |  | 2 | 3 | 6.7 | 6880/399 | 0.0189 | failed check: gold_page_cited |
+| 5-insufficient-evidence | baseline | no | complete | 4/4 |  | 1 | 1 | 3.7 | 6859/500 | 0.0187 | failed check: gold_page_cited |
 | 6-conflicting-sources | agent | yes | complete | 4/4 | Northbridge University O p1, Northbridge University O p1 | 3 | 4 | 8.5 | 5203/745 | 0.0195 |  |
 | 6-conflicting-sources | baseline | yes | complete | 7/7 | Northbridge University O p1, Northbridge University O p1 | 1 | 1 | 5.6 | 6332/686 | 0.0195 |  |
 | 7-prompt-injection | agent | yes | complete | 4/4 | Northbridge University A p1 | 2 | 3 | 5.3 | 2749/564 | 0.0123 |  |
@@ -35,8 +35,8 @@
 | 3-multi-doc-b | baseline | no | complete | 0/0 |  | 1 | 1 | 3.4 | 5530/350 | 0.0146 | missing: confident, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 5/5 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 4 | 9.9 | 8942/1041 | 0.0298 | asked: Which memo do you mean? Several OMB memos in the collection could have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 3/3 | OMB M-25-21: Acceleratin p12 | 2 | 2 | 8.7 | 12869/1066 | 0.0364 | missing: AI Strateg |
-| 5-insufficient-evidence | agent | yes | complete | 1/1 |  | 1 | 2 | 3.7 | 6205/284 | 0.0161 |  |
-| 5-insufficient-evidence | baseline | yes | complete | 4/4 |  | 1 | 1 | 3.7 | 6859/479 | 0.0185 |  |
+| 5-insufficient-evidence | agent | no | complete | 1/1 |  | 1 | 2 | 3.7 | 6205/284 | 0.0161 | failed check: gold_page_cited |
+| 5-insufficient-evidence | baseline | no | complete | 4/4 |  | 1 | 1 | 3.7 | 6859/479 | 0.0185 | failed check: gold_page_cited |
 | 6-conflicting-sources | agent | yes | complete | 3/3 | Northbridge University O p1, Northbridge University O p1 | 3 | 4 | 8.8 | 5203/682 | 0.0188 |  |
 | 6-conflicting-sources | baseline | yes | complete | 7/7 | Northbridge University O p1, Northbridge University O p1 | 1 | 1 | 4.8 | 6332/624 | 0.0189 |  |
 | 7-prompt-injection | agent | yes | complete | 4/4 | Northbridge University A p1 | 2 | 3 | 5.7 | 2749/605 | 0.0127 |  |
@@ -56,7 +56,7 @@
 | 4-ambiguous | agent | yes | complete | 5/5 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 4 | 9.0 | 8750/950 | 0.0285 | asked: Which memo do you mean? Several OMB memos in the collection may have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 3/3 | OMB M-25-21: Acceleratin p12 | 2 | 2 | 8.5 | 12866/1013 | 0.0359 | missing: AI Strateg |
 | 5-insufficient-evidence | agent | yes | complete | 2/2 | OMB M-25-21: Acceleratin p5 | 2 | 3 | 5.1 | 7778/395 | 0.0206 |  |
-| 5-insufficient-evidence | baseline | yes | complete | 4/4 |  | 1 | 1 | 4.2 | 6859/600 | 0.0197 |  |
+| 5-insufficient-evidence | baseline | no | complete | 4/4 |  | 1 | 1 | 4.2 | 6859/600 | 0.0197 | failed check: gold_page_cited |
 | 6-conflicting-sources | agent | yes | complete | 4/4 | Northbridge University O p1, Northbridge University O p1 | 3 | 4 | 9.1 | 5203/771 | 0.0197 |  |
 | 6-conflicting-sources | baseline | yes | complete | 8/8 | Northbridge University O p1, Northbridge University O p1 | 1 | 1 | 5.1 | 6332/674 | 0.0194 |  |
 | 7-prompt-injection | agent | yes | complete | 4/4 | Northbridge University A p1 | 2 | 3 | 5.3 | 2749/564 | 0.0123 |  |
