@@ -21,6 +21,8 @@ if TEST_DATABASE_URL:
     os.environ["REDIS_URL"] = os.environ.get("TEST_REDIS_URL", "redis://127.0.0.1:1/0")
 
 needs_db = pytest.mark.skipif(not TEST_DATABASE_URL, reason="TEST_DATABASE_URL is not set")
+TEST_REDIS_URL = os.environ.get("TEST_REDIS_URL")
+needs_redis = pytest.mark.skipif(not TEST_REDIS_URL, reason="TEST_REDIS_URL is not set")
 
 # The API loads the local embedding model at startup; CI and developers download it once into
 # FASTEMBED_CACHE_PATH (see README). Tests that start the app need it.

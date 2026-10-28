@@ -146,8 +146,9 @@ stateDiagram-v2
 |---|---|---|
 | `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and `top_k` | 10 min. `corpus_version` increases in the transaction that publishes a document; `corpus_epoch` is a random id per database, so a recreated database never reads old entries; restoring a backup sets a new epoch (runbook) |
 | `qemb:v1:{model}:{hash}` | a query's embedding | 24 h; keyed by model |
+| `login:fail:{sha256(email, client address)}` | failed sign-ins for one email from one address | 15 min from the first failure, set atomically with the first count; 5 failures refuse that email from that address (429 with `Retry-After`) until it expires; a successful sign-in deletes it. The API trusts X-Forwarded-For only from the proxies in `FORWARDED_ALLOW_IPS`: the frontend proxy in Compose, which replaces any client-sent value, and the cluster network on Kubernetes |
 
-When Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, the trace shows `cache unavailable`, and `/api/ready` reports `degraded`. Answers keep working. Sessions, jobs and locks are deliberately not in Redis: PostgreSQL already has them durably, and a cache must be safe to lose.
+When Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, the trace shows `cache unavailable`, and `/api/ready` reports `degraded`. Answers keep working, and sign-in works without the limit. Sessions, jobs and locks are deliberately not in Redis: PostgreSQL already has them durably, and a cache must be safe to lose.
 
 ## Safety
 

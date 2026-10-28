@@ -48,6 +48,10 @@ spec:
             - name: ANTHROPIC_API_KEY
               valueFrom:
                 secretKeyRef: {name: callslip-secrets, key: ANTHROPIC_API_KEY}
+            # The ingress or router reaches the API directly. Trust X-Forwarded-For only from
+            # the cluster's own network, where the ingress runs; set this to that network.
+            - name: FORWARDED_ALLOW_IPS
+              value: "10.0.0.0/8"
           # Ready means the database answers; a missing Redis only degrades (200, "degraded").
           readinessProbe:
             httpGet: {path: /api/ready, port: http}

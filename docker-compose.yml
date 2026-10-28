@@ -17,6 +17,9 @@ x-backend: &backend
     LOG_LEVEL: ${LOG_LEVEL:-INFO}
     # Evaluation only: lets a request inject tool failures. Keep false in normal use.
     ALLOW_FAULT_INJECTION: ${ALLOW_FAULT_INJECTION:-false}
+    # Only the frontend proxy reaches the API here (its port is not published), and the proxy
+    # replaces X-Forwarded-For with the client it sees, so the API may trust that header.
+    FORWARDED_ALLOW_IPS: "*"
   depends_on:
     postgres:
       condition: service_healthy

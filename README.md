@@ -87,7 +87,8 @@ Each question is a run with its own state, stored in PostgreSQL: the exact model
 ## Accounts and conversations
 
 Without signing in, a browser gets a random token in an HttpOnly, SameSite=Strict cookie; its conversations belong to that token, so another browser cannot read them. Signing in (a local account, standing in for NYU single sign-on) adds two things:
-- **Private documents.** Uploads belong to the account. Search, the agent's tools and citations see the shared collection plus the account's own documents, and nobody else's.
+- **Private documents.** Uploads belong to the account. Search, the agent's tools and citations see the shared collection plus the account's own documents, and nobody else's. The owner can delete them; their passages go too, and no cached search that included them is read again.
+- **Sign-in limits.** After five failed sign-ins for an email from one address within 15 minutes, that address is refused for that email until the window ends. A password cannot be guessed by trying many, and nobody can lock an account by failing on purpose from elsewhere.
 - **History that follows the account.** The Conversations tab lists earlier conversations, newest first; selecting one opens it with its answers, sources and steps, in any browser signed in to the account.
 
 One question at a time per conversation.
@@ -118,13 +119,14 @@ Hybrid retrieval over the same filtered candidate set (ready documents, optional
 - **Keywords:** PostgreSQL full-text search ranked by `ts_rank_cd` (cover density; not BM25).
 - **Fusion:** reciprocal rank fusion (k=60), so a passage found by both ranks highest. Scores order results; they are not probabilities.
 
-Redis caches search results and query embeddings:
+Redis caches search results and query embeddings, and counts failed sign-ins:
 
 | Key | Holds | TTL and invalidation |
 |---|---|---|
 | `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and top_k | 10 minutes; `corpus_version` increases in the same transaction that publishes a document, and `corpus_epoch` is a random id per database, so stale results are never read, even after the database is recreated (a restore from backup sets a new epoch, see the runbook) |
 | `qemb:v1:{model}:{hash}` | a query's embedding | 24 hours; keyed by model |
+| `login:fail:{sha256(email, client address)}` | failed sign-ins for one email from one address | 15 minutes from the first failure; after 5 that email is refused from that address until it expires; a successful sign-in deletes it |
 
-If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working.
+If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working, and sign-in works without the limit.
 
 CI runs on every pull request: backend and script lint, tests against real PostgreSQL, Redis and the embedding model, frontend typecheck and build, a render and schema check of the Kubernetes manifests, then a Compose build, smoke test, full restart (data must survive) and a Redis outage (search must keep working).

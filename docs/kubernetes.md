@@ -47,6 +47,7 @@ On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the clus
 | `runner`, heartbeat file check | Deployment of 2; the same heartbeat check as a liveness probe |
 | `worker`, heartbeat file check | Deployment; the same heartbeat check as a liveness probe |
 | `frontend` (nginx, also proxying `/api`) | Deployment of 2; the Ingress or Route sends `/api` straight to the API |
+| `FORWARDED_ALLOW_IPS: "*"` (only the frontend proxy reaches the API) | `FORWARDED_ALLOW_IPS: 10.0.0.0/8`: X-Forwarded-For is trusted only from the cluster network, where the ingress or router runs. Set it to that network; failed sign-ins are counted per client address |
 | `.env` | ConfigMap `callslip-settings` (non-secret settings) and Secret `callslip-secrets` |
 | `mem_limit` | the same limits as `resources.limits.memory` |
 

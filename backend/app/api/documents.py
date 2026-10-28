@@ -164,3 +164,26 @@ async def get_document_file(
             "Cache-Control": "private, no-store",
         },
     )
+
+
+@router.delete("/{document_id}", status_code=204)
+async def delete_document(
+    document_id: int, pool: Annotated[AsyncConnectionPool, Depends(get_pool)], user: Viewer
+) -> None:
+    """Delete one of your own uploads: its pages, passages and file go with it. Shared documents
+    cannot be deleted here, and another user's document is not found."""
+    if user is None:
+        raise HTTPException(401, "Sign in to delete your documents.")
+    async with pool.connection() as conn, conn.transaction():
+        cur = await conn.execute(
+            "SELECT status FROM documents WHERE id = %s AND owner_user_id = %s FOR UPDATE",
+            (document_id, user),
+        )
+        row = await cur.fetchone()
+        if row is None:
+            raise HTTPException(404, "Document not found.")
+        if row[0] in ("queued", "processing"):
+            raise HTTPException(409, "The document is still being processed; try again shortly.")
+        await conn.execute("DELETE FROM documents WHERE id = %s", (document_id,))
+        # Cached searches name the corpus version, so none that included it is read again.
+        await conn.execute("UPDATE corpus_state SET version = version + 1 WHERE id = 1")
