@@ -88,8 +88,15 @@ def run_case(client: Client, case: dict, mode: str, timeout: int) -> dict:
 
 
 def totals(runs: list[dict]) -> dict:
-    out = {"ms": 0, "model_calls": 0, "tool_calls": 0, "input_tokens": 0, "output_tokens": 0,
-           "cache_read_tokens": 0, "cost_usd": 0.0}
+    out = {
+        "ms": 0,
+        "model_calls": 0,
+        "tool_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cache_read_tokens": 0,
+        "cost_usd": 0.0,
+    }
     for run in runs:
         finished = [e["data"] for e in run["events"] if e["type"] == "run_finished"]
         f = finished[-1] if finished else {}
@@ -181,9 +188,11 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
 
 def report(results: list[dict], systems: list[str], started: str) -> str:
     lines = [f"# Evaluation results, {started}", ""]
-    lines += ["| System | Cases passed | Mean latency (s) | Mean tool calls | Mean model calls "
-              "| Citations verified | Total tokens | Total cost (USD) |",
-              "|---|---|---|---|---|---|---|---|"]
+    lines += [
+        "| System | Cases passed | Mean latency (s) | Mean tool calls | Mean model calls "
+        "| Citations verified | Total tokens | Total cost (USD) |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
     for system in systems:
         rows = [r for r in results if r["system"] == system]
         if not rows:
@@ -198,9 +207,12 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
             f"| {sum(r['input_tokens'] + r['output_tokens'] for r in rows)} "
             f"| {sum(r['cost_usd'] for r in rows):.4f} |"
         )
-    lines += ["", "| Case | System | Pass | Status | Citations (verified/total) | Gold pages cited "
-              "| Tools | Model calls | Latency (s) | Tokens in/out | Cost (USD) | Notes |",
-              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    lines += [
+        "",
+        "| Case | System | Pass | Status | Citations (verified/total) | Gold pages cited "
+        "| Tools | Model calls | Latency (s) | Tokens in/out | Cost (USD) | Notes |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+    ]
     for r in results:
         notes = "; ".join(r["notes"]) or ""
         if r["outcome"]:
@@ -233,8 +245,10 @@ def rescore(out_dir: Path, titles: dict[int, str]) -> int:
         scored.update({k: old[k] for k in ("case", "category", "system", "repeat")})
         results.append(scored)
         if scored["passed"] != old["passed"]:
-            print(f"{name}: {'PASS' if old['passed'] else 'FAIL'} -> "
-                  f"{'PASS' if scored['passed'] else 'FAIL'} {'; '.join(scored['notes'])}")
+            print(
+                f"{name}: {'PASS' if old['passed'] else 'FAIL'} -> "
+                f"{'PASS' if scored['passed'] else 'FAIL'} {'; '.join(scored['notes'])}"
+            )
     meta["rescored"] = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     write(out_dir, meta, results)
     for system in meta["systems"]:
@@ -279,16 +293,19 @@ def main() -> int:
                     break
                 record = run_case(client, case, system, args.timeout)
                 scored = score(case, record, titles)
-                scored.update(case=case["id"], category=case["category"], system=system,
-                              repeat=repeat)
+                scored.update(
+                    case=case["id"], category=case["category"], system=system, repeat=repeat
+                )
                 results.append(scored)
                 spent += scored["cost_usd"]
                 trace = out_dir / "traces" / f"{case['id']}.{system}.{repeat}.json"
                 trace.write_text(json.dumps(record, indent=1, default=str))
-                print(f"{case['id']:<28} {system:<9} {'PASS' if scored['passed'] else 'FAIL'} "
-                      f"{scored['status']:<12} {scored['ms'] / 1000:5.1f}s "
-                      f"tools {scored['tool_calls']} ${scored['cost_usd']:.4f} "
-                      f"{'; '.join(scored['notes'])}")
+                print(
+                    f"{case['id']:<28} {system:<9} {'PASS' if scored['passed'] else 'FAIL'} "
+                    f"{scored['status']:<12} {scored['ms'] / 1000:5.1f}s "
+                    f"tools {scored['tool_calls']} ${scored['cost_usd']:.4f} "
+                    f"{'; '.join(scored['notes'])}"
+                )
 
     write(out_dir, {"started": started, "systems": systems, "repeat": args.repeat}, results)
     print(f"\nspent ${spent:.4f}; wrote {out_dir.relative_to(ROOT)}")

@@ -60,9 +60,9 @@ jobs:
           uv run python -c "from fastembed import TextEmbedding;
           TextEmbedding('BAAI/bge-small-en-v1.5', cache_dir='$FASTEMBED_CACHE_PATH')"
       - name: Lint
-        run: uv run ruff check .
+        run: uv run ruff check . ../scripts
       - name: Format
-        run: uv run ruff format --check .
+        run: uv run ruff format --check . ../scripts
       - name: Tests (real PostgreSQL, Redis and embedding model; no LLM calls)
         run: uv run pytest -q
 

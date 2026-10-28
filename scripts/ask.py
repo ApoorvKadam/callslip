@@ -41,8 +41,12 @@ def main() -> int:
     parser.add_argument("--mode", default="agent", choices=["agent", "baseline"])
     parser.add_argument("--reply", help="answer to send if the agent asks a clarifying question")
     parser.add_argument(
-        "--fault", action="append", default=[], metavar="TOOL=MODE",
-        help="inject a tool failure (needs ALLOW_FAULT_INJECTION=true), e.g. search_documents=timeout",
+        "--fault",
+        action="append",
+        default=[],
+        metavar="TOOL=MODE",
+        help="inject a tool failure (needs ALLOW_FAULT_INJECTION=true), "
+        "e.g. search_documents=timeout",
     )
     parser.add_argument("--base", default="http://localhost:8080")
     parser.add_argument("--timeout", type=int, default=180)
@@ -70,8 +74,11 @@ def main() -> int:
             if not args.reply:
                 break
             print(f"replying: {args.reply}")
-            body = {"tool_use_id": asked["tool_use_id"], "idempotency_key": uuid.uuid4().hex,
-                    "reply": args.reply}
+            body = {
+                "tool_use_id": asked["tool_use_id"],
+                "idempotency_key": uuid.uuid4().hex,
+                "reply": args.reply,
+            }
             status, run = client.call(
                 "POST", f"/api/sessions/{session['id']}/runs/{run['id']}/resume", body
             )
@@ -87,13 +94,17 @@ def main() -> int:
             print(f"  {event['type']}: {json.dumps(data)}")
         elif event["type"] == "tool_call":
             retried = f", retried after {data['retries']}" if data.get("retries") else ""
-            print(f"  tool {data['tool']} {json.dumps(data['input'])} -> {data['status']}, "
-                  f"{data.get('summary', '')}, cache {data.get('cache')}, {data.get('ms')} ms"
-                  f"{retried}")
+            print(
+                f"  tool {data['tool']} {json.dumps(data['input'])} -> {data['status']}, "
+                f"{data.get('summary', '')}, cache {data.get('cache')}, {data.get('ms')} ms"
+                f"{retried}"
+            )
         elif event["type"] == "model_call":
-            print(f"  model turn {data['turn']} ({data['purpose']}): {data['ms']} ms, "
-                  f"in {data['input_tokens']} out {data['output_tokens']} tokens, "
-                  f"${data['cost_usd']:.4f}, stop {data['stop_reason']}")
+            print(
+                f"  model turn {data['turn']} ({data['purpose']}): {data['ms']} ms, "
+                f"in {data['input_tokens']} out {data['output_tokens']} tokens, "
+                f"${data['cost_usd']:.4f}, stop {data['stop_reason']}"
+            )
     answer = run.get("answer")
     if answer:
         text = "".join(
@@ -101,13 +112,17 @@ def main() -> int:
         )
         print("\n" + text + "\n")
         for c in answer["citations"]:
-            print(f"[{c['number']}] {c['title']} (doc {c['document_id']}, page {c['page_no']}) "
-                  f"{c['provenance']}: \"{c['cited_text'][:120]}\"")
+            print(
+                f"[{c['number']}] {c['title']} (doc {c['document_id']}, page {c['page_no']}) "
+                f'{c["provenance"]}: "{c["cited_text"][:120]}"'
+            )
     finished = [e["data"] for e in run.get("events", []) if e["type"] == "run_finished"]
     if finished:
         f = finished[-1]
-        print(f"\ntotals: {f.get('ms')} ms, {f.get('model_calls')} model calls, "
-              f"{f.get('tool_calls')} tool calls, ${f.get('cost_usd', 0):.4f}")
+        print(
+            f"\ntotals: {f.get('ms')} ms, {f.get('model_calls')} model calls, "
+            f"{f.get('tool_calls')} tool calls, ${f.get('cost_usd', 0):.4f}"
+        )
     return 0 if run["status"] == "complete" else 1
 
 

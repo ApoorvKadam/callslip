@@ -44,7 +44,10 @@ def tiny_pdf(text: str) -> bytes:
     xref = len(out)
     out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objects) + 1)
     out += b"".join(b"%010d 00000 n \n" % off for off in offsets)
-    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (len(objects) + 1, xref)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (
+        len(objects) + 1,
+        xref,
+    )
     return bytes(out)
 
 
@@ -53,7 +56,9 @@ def upload(base: str, filename: str, content: bytes, title: str):
     parts = [
         f'--{boundary}\r\nContent-Disposition: form-data; name="title"\r\n\r\n{title}\r\n'.encode(),
         f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{filename}"\r\n'
-        "Content-Type: application/pdf\r\n\r\n".encode() + content + b"\r\n",
+        "Content-Type: application/pdf\r\n\r\n".encode()
+        + content
+        + b"\r\n",
         f"--{boundary}--\r\n".encode(),
     ]
     headers = {"Content-Type": f"multipart/form-data; boundary={boundary}"}
@@ -102,8 +107,10 @@ def main() -> int:
         time.sleep(2)
         _, doc = call("GET", f"{args.base}/api/documents/{doc_id}")
     seconds = round(time.monotonic() - started, 1)
-    print(f"ingest: {doc['status']} after {seconds}s, pages={doc['page_count']}, "
-          f"passages={doc['chunk_count']}, error={doc['error']}")
+    print(
+        f"ingest: {doc['status']} after {seconds}s, pages={doc['page_count']}, "
+        f"passages={doc['chunk_count']}, error={doc['error']}"
+    )
     if doc["status"] != "ready" or doc["chunk_count"] == 0:
         return 1
 
