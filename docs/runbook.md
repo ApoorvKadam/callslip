@@ -135,7 +135,7 @@ verify: ok
 deployed 48858cb (previous: none)
 ```
 
-The smoke test finds its document already present (409) and reuses it, so verifying never adds documents.
+The smoke test signs in to its own account (`smoke-test@callslip.invalid`), so its document is private: users and the agent never see it. It finds that document already present (409) and reuses it, so verifying never adds documents.
 
 ### Update: commit `cccefb1`, 02:04, 24 s
 
