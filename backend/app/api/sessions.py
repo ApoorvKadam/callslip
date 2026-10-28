@@ -192,15 +192,19 @@ async def owned_run_for_update(conn, session_id: UUID, run_id: UUID, owner: str)
 async def resume(
     session_id: UUID, run_id: UUID, body: ResumeRequest, request: Request, pool: Pool, owner: Owner
 ):
-    """Answer the agent's clarifying question. Exactly once: a retry with the same key gets the
-    recorded outcome; a stale or conflicting reply gets 409."""
+    """Answer the agent's clarifying question. Exactly once: a retry with the same key and reply
+    gets the recorded outcome; the same key with another reply, or a stale reply, gets 409."""
     state = request.app.state
     if state.llm is None:
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
     async with pool.connection() as conn, conn.transaction():
         run = await owned_run_for_update(conn, session_id, run_id, owner)
-        if run["resume_key"] == body.idempotency_key:
+        reply_hash = hashlib.sha256(f"{body.tool_use_id}\n{body.reply}".encode()).hexdigest()
+        resume_key = f"{body.idempotency_key}:{reply_hash[:16]}"
+        if run["resume_key"] == resume_key:
             return {k: run[k] for k in RUN_COLUMNS}  # the same reply, sent again
+        if (run["resume_key"] or "").rpartition(":")[0] == body.idempotency_key:
+            raise HTTPException(409, "This key was already used for a different reply.")
         if run["status"] != "needs_clarification" or run["pending_tool_use_id"] != body.tool_use_id:
             raise HTTPException(409, "This question is not waiting for that reply.")
         result = {
@@ -217,7 +221,7 @@ async def resume(
         await cur.execute(
             "UPDATE runs SET status = 'running', pending_tool_use_id = NULL, resume_key = %s,"
             f" updated_at = now() WHERE id = %s RETURNING {RUN_FIELDS}",
-            (body.idempotency_key, run_id),
+            (resume_key, run_id),
         )
         updated = await cur.fetchone()
 

@@ -109,3 +109,26 @@ def test_event_stream_replays_with_ids_and_ends_when_the_run_is_over(client):
     # Reconnecting with Last-Event-ID only sends what was missed.
     resumed = client.get(f"/api/runs/{run}/events", headers={"Last-Event-ID": "2"}).text
     assert "id: 1\n" not in resumed and "id: 3\nevent: run_finished" in resumed
+
+
+class NoModel:
+    """Stands in for the model client so resume is allowed; the resumed run stops at once."""
+
+    async def create(self, **_):
+        raise TimeoutError
+
+
+def test_a_reply_is_accepted_once_per_key(client):
+    session = new_browser(client)
+    client.app.state.llm = NoModel()
+    run = insert_run(session, "needs_clarification")
+    with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
+        conn.execute(
+            "UPDATE runs SET mode = 'agent', pending_tool_use_id = 'toolu_1' WHERE id = %s", (run,)
+        )
+    url = f"/api/sessions/{session}/runs/{run}/resume"
+    body = {"tool_use_id": "toolu_1", "idempotency_key": "key-0001", "reply": "OMB M-25-21"}
+    assert client.post(url, json=body).status_code == 202
+    assert client.post(url, json=body).status_code == 202  # the same reply, sent again
+    assert client.post(url, json={**body, "reply": "OMB M-24-10"}).status_code == 409
+    assert client.post(url, json={**body, "idempotency_key": "key-0002"}).status_code == 409
