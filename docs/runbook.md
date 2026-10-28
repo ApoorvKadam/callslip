@@ -106,86 +106,77 @@ On Kubernetes or OpenShift the same images become three Deployments (frontend, a
 
 ## Evidence
 
-Captured on 2026-10-27 (ET) on the development machine (WSL 2, Docker 29.9, Compose 5.6), against a database that already held the 14 corpus documents. CI runs the same smoke, restart and Redis checks on every pull request.
+Captured on 2026-10-28 (ET) on the development machine (WSL 2, Docker 29.9, Compose 5.6), right after the rename to Callslip. The old project's data volume had been copied into `callslip_pgdata`, so the database already held the 14 corpus documents. CI runs the same smoke, restart and Redis checks on every pull request.
 
-### First deploy: commit `5d4f6e6`, 22:57, 42 s
+### First deploy: commit `48858cb`, 02:02, 99 s
 
-PostgreSQL and Redis were already running and were left alone; Compose recreates only the containers whose image changed.
+The first build under the new image names; the frontend image was rebuilt because its package name changed.
 
 ```text
 $ scripts/deploy.sh
-building images agentic-rag-*:5d4f6e6
-starting 5d4f6e6
-SERVICE    STATUS
-api        Up 23 seconds (healthy)
-frontend   Up 11 seconds (healthy)
-postgres   Up 56 minutes (healthy)
-redis      Up 5 minutes (healthy)
-worker     Up 23 seconds (healthy)
-health: 200 {'status': 'ok'}
-ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
-upload: 202 document 30 queued
-ingest: ready after 6.0s, pages=1, passages=1, error=None
-search: 200, 1 hits, cache=miss, ms=24
-  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
-verify: ok
-deployed 5d4f6e6 (previous: none)
-```
-
-### Update: commit `fd1da89`, 23:08, 31 s
-
-The docs commit `c1e797b` had been deployed in between, so it is the previous tag.
-
-```text
-$ git pull && scripts/deploy.sh
-building images agentic-rag-*:fd1da89
-starting fd1da89
+building images callslip-*:48858cb
+...
 SERVICE    STATUS
 api        Up 16 seconds (healthy)
 frontend   Up 10 seconds (healthy)
-postgres   Up 6 minutes (healthy)
-redis      Up About a minute (healthy)
-worker     Up 17 seconds (healthy)
-health: 200 {'status': 'ok'}
-ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
-upload: already present as document 30
-ingest: ready after 0.0s, pages=1, passages=1, error=None
-search: 200, 1 hits, cache=miss, ms=29
-  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
-verify: ok
-deployed fd1da89 (previous: c1e797b)
-```
-
-A second run of the smoke test finds its document already present (409) and reuses it, so verifying never adds documents.
-
-### Roll back: 23:09:37 to 23:09:57, no rebuild
-
-```text
-$ scripts/rollback.sh
-rolling back to c1e797b
-SERVICE    STATUS
-api        Up 16 seconds (healthy)
-frontend   Up 10 seconds (healthy)
-postgres   Up 7 minutes (healthy)
-redis      Up 44 seconds (healthy)
+postgres   Up 22 seconds (healthy)
+redis      Up 22 seconds (healthy)
 worker     Up 16 seconds (healthy)
 health: 200 {'status': 'ok'}
 ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
 upload: already present as document 30
 ingest: ready after 0.0s, pages=1, passages=1, error=None
-search: 200, 1 hits, cache=miss, ms=24
+search: 200, 1 hits, cache=miss, ms=20
   page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
 verify: ok
-running c1e797b
+deployed 48858cb (previous: none)
 ```
 
-Then forward again to the newest tag:
+The smoke test finds its document already present (409) and reuses it, so verifying never adds documents.
+
+### Update: commit `cccefb1`, 02:04, 24 s
+
+PostgreSQL and Redis were left alone; Compose recreates only the containers whose image changed.
 
 ```text
-$ scripts/rollback.sh fd1da89
-rolling back to fd1da89
+$ git pull && scripts/deploy.sh
+building images callslip-*:cccefb1
+...
+SERVICE    STATUS
+api        Up 16 seconds (healthy)
+frontend   Up 10 seconds (healthy)
+postgres   Up About a minute (healthy)
+redis      Up About a minute (healthy)
+worker     Up 16 seconds (healthy)
+health: 200 {'status': 'ok'}
+ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
+upload: already present as document 30
+ingest: ready after 0.0s, pages=1, passages=1, error=None
+search: 200, 1 hits, cache=hit, ms=3
+  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
 verify: ok
-running fd1da89
+deployed cccefb1 (previous: 48858cb)
+```
+
+### Roll back: 02:04:39 to 02:04:59, no rebuild
+
+```text
+$ scripts/rollback.sh
+rolling back to 48858cb
+SERVICE    STATUS
+api        Up 16 seconds (healthy)
+frontend   Up 10 seconds (healthy)
+postgres   Up About a minute (healthy)
+redis      Up About a minute (healthy)
+worker     Up 16 seconds (healthy)
+health: 200 {'status': 'ok'}
+ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
+upload: already present as document 30
+ingest: ready after 0.0s, pages=1, passages=1, error=None
+search: 200, 1 hits, cache=hit, ms=2
+  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
+verify: ok
+running 48858cb
 ```
 
 ### A deploy that fails verification
@@ -196,17 +187,26 @@ Simulated by pointing the check at a closed port; the recorded tags stay as they
 $ BASE_URL=http://localhost:1 scripts/deploy.sh
 ...
 urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
-verify failed for 4058c15; last verified: fd1da89 (scripts/rollback.sh fd1da89)
+verify failed for cccefb1; last verified: 48858cb (scripts/rollback.sh 48858cb)
 $ cat .deploy/current .deploy/previous
-fd1da89
-c1e797b
+48858cb
+cccefb1
+```
+
+Then forward to the newest tag, verified this time:
+
+```text
+$ scripts/rollback.sh cccefb1
+rolling back to cccefb1
+verify: ok
+running cccefb1
 ```
 
 ### Full restart keeps all data
 
 ```text
 $ docker compose down && IMAGE_TAG=$(cat .deploy/current) docker compose up -d --wait
-documents before: 15, after: 15; runs before: 97, after: 97
+documents before: 15, after: 15; runs before: 414, after: 414
 ```
 
 The 15 documents are the 14 corpus PDFs and the smoke test document.
@@ -219,9 +219,9 @@ $ curl -s localhost:8080/api/ready
 {"status":"degraded","checks":{"database":"up","redis":"down"}}
 $ python3 scripts/ask.py "What are the four functions of the NIST AI RMF Core?"
 status: complete
-  tool search_documents {"query": "AI RMF Core four functions Govern Map Measure Manage"} -> ok, 8 passages, cache unavailable, 310 ms
+  tool search_documents {"query": "NIST AI RMF Core four functions GOVERN MAP MEASURE MANAGE", "top_k": 5} -> ok, 5 passages, cache unavailable, 322 ms
 [1] NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25 (doc 1, page 25) verified: "NIST AI 100-1 AI  ...
-totals: 5733 ms, 2 model calls, 1 tool calls, $0.0286
+totals: 3607 ms, 2 model calls, 1 tool calls, $0.0011
 $ docker compose start redis && curl -s localhost:8080/api/ready
 {"status":"ok","checks":{"database":"up","redis":"up"}}
 ```
@@ -229,7 +229,7 @@ $ docker compose start redis && curl -s localhost:8080/api/ready
 The only log line in the API during the outage was the expected warning:
 
 ```text
-2026-10-28T03:09:03.173+00:00 WARNING app.cache redis unavailable; continuing without cache
+{"ts": "2026-10-28T06:07:06.943+00:00", "level": "WARNING", "logger": "app.cache", "msg": "redis unavailable; continuing without cache", "error": "network:TimeoutError", "retry_after_s": 30.0}
 ```
 
 An earlier run of the same check also logged `Future exception was never retrieved` at ERROR. It came from uvloop (issue 437 in its tracker), so the API now runs on the standard asyncio loop.
