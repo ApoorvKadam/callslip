@@ -28,6 +28,23 @@ class Settings(BaseSettings):
     lease_seconds: int = 300
     max_attempts: int = 3
 
+    # Answering. The same model and settings serve the agent and the single-pass baseline.
+    anthropic_api_key: str = ""
+    answer_model: str = "claude-sonnet-5-5"
+    answer_effort: str = "medium"
+    top_k: int = 8
+    history_turns: int = 3
+
+    # Execution limits for one run (one question).
+    run_deadline_s: float = 90.0
+    finalize_reserve_s: float = 20.0
+    llm_timeout_s: float = 60.0
+    max_model_turns: int = 10
+    max_tool_calls: int = 9
+    tool_timeout_s: float = 8.0
+    # Lets the evaluation inject tool failures. Off unless explicitly enabled.
+    allow_fault_injection: bool = False
+
 
 @lru_cache
 def get_settings() -> Settings:
