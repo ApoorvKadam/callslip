@@ -88,9 +88,12 @@ def main() -> int:
             content = f.read()
         filename = args.pdf.rsplit("/", 1)[-1]
     else:
-        content = tiny_pdf(f"Smoke test document {uuid.uuid4().hex[:8]}.")
+        # Same bytes every time: a second run finds it already uploaded (409), so checking a
+        # deployment leaves one small test document, not one per run.
+        content = tiny_pdf("Smoke test document, uploaded by scripts/smoke_test.py.")
         filename = "smoke-test.pdf"
-    status, body = upload(args.base, filename, content, args.title or filename)
+    title = args.title or ("Smoke test document" if not args.pdf else filename)
+    status, body = upload(args.base, filename, content, title)
     if status == 409:
         doc_id = body["detail"]["document_id"]
         print("upload: already present as document", doc_id)
