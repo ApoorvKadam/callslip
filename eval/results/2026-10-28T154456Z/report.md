@@ -12,7 +12,7 @@
 | 2-multi-doc-a | agent | yes | complete | 2/2 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 5 | 8.3 | 6.5 | 13016/721 | 0.0341 |  |
 | 2-multi-doc-a | baseline | no | complete | 3/3 | NIST AI 100-1: Artificia p8 | 1 | 2 | 5.5 | 2.7 | 8215/509 | 0.0215 | missing: misinformation, climate change; failed check: documents_covered |
 | 3-multi-doc-b | agent | yes | complete | 9/9 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 3 | 5 | 13.4 | 8.0 | 14425/1518 | 0.0449 |  |
-| 3-multi-doc-b | baseline | no | complete | 4/4 |  | 1 | 2 | 10.5 | 4.1 | 7246/727 | 0.0218 | missing: confident, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
+| 3-multi-doc-b | baseline | no | complete | 4/4 |  | 1 | 2 | 10.5 | 4.1 | 7246/727 | 0.0218 | missing: \bconfiden(?:t(?:ly)?|ce)\b, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 5 | 12.6 | 8.4 | 10749/1175 | 0.0340 | asked: Which memo do you mean? Several OMB memos in the collection may have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 2/2 | OMB M-25-21: Acceleratin p12 | 2 | 4 | 14.5 | 9.2 | 17122/1527 | 0.0495 | missing: AI Strateg |
 | 5-insufficient-evidence | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p5 | 2 | 4 | 8.5 | 5.7 | 9103/610 | 0.0249 |  |
@@ -34,7 +34,7 @@
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 5.8 | 3.7 | 7480/488 | 0.0203 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 5.3 | 2.2 | 7846/408 | 0.0198 |  |
 | 13-security-and-injection | agent | yes | complete | 12/12 | NIST AI 600-1: AI Risk M p14 | 3 | 5 | 16.5 | 12.1 | 22010/1880 | 0.0636 |  |
-| 13-security-and-injection | baseline | no | complete | 4/4 |  | 1 | 2 | 7.5 | 4.9 | 7652/716 | 0.0225 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside); failed check: gold_page_cited |
+| 13-security-and-injection | baseline | no | complete | 4/4 |  | 1 | 2 | 7.5 | 4.9 | 7652/716 | 0.0225 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
 | 14-contract-start | agent | yes | complete | 1/1 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 4.6 | 3.0 | 6708/308 | 0.0169 |  |
 | 14-contract-start | baseline | yes | complete | 4/4 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 10.3 | 2.8 | 7872/601 | 0.0217 |  |
 | 1-simple-lookup | agent | yes | complete | 8/8 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 9.7 | 5.6 | 8945/1187 | 0.0302 |  |
@@ -42,7 +42,7 @@
 | 2-multi-doc-a | agent | yes | complete | 2/2 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 5 | 8.1 | 6.3 | 13014/729 | 0.0341 |  |
 | 2-multi-doc-a | baseline | no | complete | 4/4 | NIST AI 100-1: Artificia p8 | 1 | 2 | 4.7 | 2.8 | 8317/502 | 0.0216 | missing: misinformation, climate change; failed check: documents_covered |
 | 3-multi-doc-b | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p10, NIST AI 600-1: AI Risk M p8, OMB M-25-21: Acceleratin p16 | 3 | 5 | 12.6 | 8.3 | 14491/1639 | 0.0462 |  |
-| 3-multi-doc-b | baseline | no | complete | 3/3 |  | 1 | 2 | 7.1 | 4.3 | 7042/654 | 0.0206 | missing: confident, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
+| 3-multi-doc-b | baseline | no | complete | 3/3 |  | 1 | 2 | 7.1 | 4.3 | 7042/654 | 0.0206 | missing: \bconfiden(?:t(?:ly)?|ce)\b, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 5 | 14.4 | 8.8 | 10756/1111 | 0.0334 | asked: Which memo do you mean? Several OMB memos in the collection may have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 2/2 | OMB M-25-21: Acceleratin p12 | 2 | 4 | 13.0 | 7.7 | 17363/1629 | 0.0510 | missing: AI Strateg |
 | 5-insufficient-evidence | agent | yes | complete | 2/2 | OMB M-25-21: Acceleratin p5 | 2 | 4 | 7.8 | 6.1 | 8535/506 | 0.0227 |  |
@@ -64,7 +64,7 @@
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 9.5 | 4.3 | 7463/487 | 0.0202 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 4.2 | 2.3 | 7829/409 | 0.0198 |  |
 | 13-security-and-injection | agent | yes | complete | 8/8 | NIST AI 100-2 E2025: Adv p63, NIST AI 600-1: AI Risk M p14 | 4 | 6 | 22.1 | 14.5 | 33413/1709 | 0.0850 |  |
-| 13-security-and-injection | baseline | no | complete | 5/5 |  | 1 | 2 | 7.4 | 3.9 | 7844/730 | 0.0230 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside); failed check: gold_page_cited |
+| 13-security-and-injection | baseline | no | complete | 5/5 |  | 1 | 2 | 7.4 | 3.9 | 7844/730 | 0.0230 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 6.2 | 4.4 | 6885/422 | 0.0184 |  |
 | 14-contract-start | baseline | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 5.0 | 2.5 | 7693/544 | 0.0208 |  |
 | 1-simple-lookup | agent | yes | complete | 5/5 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p26, NIST AI 100-1: Artificia p8 | 1 | 3 | 8.9 | 4.5 | 8273/826 | 0.0252 |  |
@@ -72,7 +72,7 @@
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 5 | 11.3 | 8.8 | 13236/841 | 0.0357 |  |
 | 2-multi-doc-a | baseline | no | complete | 4/4 | NIST AI 100-1: Artificia p8 | 1 | 2 | 4.8 | 3.2 | 8322/511 | 0.0217 | missing: misinformation, climate change; failed check: documents_covered |
 | 3-multi-doc-b | agent | yes | complete | 8/8 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 3 | 5 | 14.7 | 8.0 | 14231/1444 | 0.0437 |  |
-| 3-multi-doc-b | baseline | no | complete | 4/4 |  | 1 | 2 | 7.6 | 4.3 | 7295/782 | 0.0224 | missing: confident, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
+| 3-multi-doc-b | baseline | no | complete | 4/4 |  | 1 | 2 | 7.6 | 4.3 | 7295/782 | 0.0224 | missing: \bconfiden(?:t(?:ly)?|ce)\b, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 5/5 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 5 | 13.3 | 8.8 | 11260/1301 | 0.0363 | asked: Which memo do you mean? Several OMB memos in the collection may have 180-day requirements. |
 | 4-ambiguous | baseline | no | complete | 2/2 | OMB M-25-21: Acceleratin p12 | 2 | 4 | 13.4 | 6.8 | 16699/1418 | 0.0476 | missing: AI Strateg |
 | 5-insufficient-evidence | agent | yes | complete | 2/2 | OMB M-25-21: Acceleratin p5 | 2 | 4 | 8.8 | 6.2 | 8687/521 | 0.0232 |  |
@@ -94,6 +94,6 @@
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 5.5 | 3.4 | 7480/488 | 0.0203 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 5.3 | 2.6 | 7844/407 | 0.0198 |  |
 | 13-security-and-injection | agent | yes | complete | 12/12 | NIST AI 600-1: AI Risk M p14 | 3 | 5 | 18.8 | 14.3 | 22196/1858 | 0.0638 |  |
-| 13-security-and-injection | baseline | no | complete | 4/4 |  | 1 | 2 | 9.4 | 6.2 | 8266/847 | 0.0250 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside); failed check: gold_page_cited |
+| 13-security-and-injection | baseline | no | complete | 4/4 |  | 1 | 2 | 9.4 | 6.2 | 8266/847 | 0.0250 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 13.0 | 11.2 | 6689/381 | 0.0176 |  |
 | 14-contract-start | baseline | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 5.0 | 2.3 | 7600/459 | 0.0198 |  |

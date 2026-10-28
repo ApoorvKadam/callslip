@@ -2,7 +2,7 @@
 
 | System | Cases passed | Mean latency (s) | Median time to answer (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
 |---|---|---|---|---|---|---|---|---|
-| agent | 41 of 45 | 7.9 | 5.5 | 1.8 | 3.4 | 190 of 190 | 136655 | 0.0858 |
+| agent | 44 of 45 | 7.9 | 5.5 | 1.8 | 3.4 | 190 of 190 | 136655 | 0.0858 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | To answer (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -19,7 +19,7 @@
 | 10-voluntary-framework | agent | yes | complete | 1/1 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.1 | 3.9 | 911/632 | 0.0019 |  |
 | 11-acquisition-supersession | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p1 | 1 | 3 | 5.4 | 4.1 | 1445/924 | 0.0015 |  |
 | 12-core-cross-cutting | agent | yes | complete | 1/1 | NIST AI 100-1: Artificia p25 | 1 | 3 | 3.5 | 2.6 | 912/422 | 0.0010 |  |
-| 13-security-and-injection | agent | no | complete | 6/6 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 10.4 | 7.8 | 2549/1757 | 0.0026 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 6/6 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 10.4 | 7.8 | 2549/1757 | 0.0026 |  |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 8.9 | 6.1 | 1539/1206 | 0.0023 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 5.2 | 2.6 | 1480/594 | 0.0010 |  |
 | 2-multi-doc-a | agent | yes | complete | 2/2 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.0 | 5.8 | 1424/1285 | 0.0023 |  |
@@ -34,7 +34,7 @@
 | 10-voluntary-framework | agent | yes | complete | 1/1 | NIST AI 100-1: Artificia p7 | 1 | 3 | 4.9 | 4.0 | 899/694 | 0.0012 |  |
 | 11-acquisition-supersession | agent | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 6.8 | 5.1 | 1771/1212 | 0.0022 |  |
 | 12-core-cross-cutting | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.1 | 2.5 | 1148/487 | 0.0014 |  |
-| 13-security-and-injection | agent | no | complete | 9/9 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.6 | 6.0 | 3289/1992 | 0.0029 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 9/9 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.6 | 6.0 | 3289/1992 | 0.0029 |  |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 4.9 | 3.6 | 1382/669 | 0.0014 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 3.8 | 2.3 | 1521/648 | 0.0012 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.5 | 5.9 | 1458/1360 | 0.0025 |  |
@@ -49,5 +49,5 @@
 | 10-voluntary-framework | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.1 | 3.5 | 1323/844 | 0.0017 |  |
 | 11-acquisition-supersession | agent | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 7.4 | 5.3 | 1777/1267 | 0.0020 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 3.9 | 2.5 | 1450/598 | 0.0013 |  |
-| 13-security-and-injection | agent | no | complete | 9/9 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.5 | 6.0 | 3046/1972 | 0.0024 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 9/9 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.5 | 6.0 | 3046/1972 | 0.0024 |  |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 4.7 | 3.5 | 1351/548 | 0.0005 |  |

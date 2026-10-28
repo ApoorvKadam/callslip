@@ -12,11 +12,11 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). After one more prompt change, the agent passed 40 of 45 again ([run](eval/results/2026-10-28T192415Z/)).
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). After one more prompt change, the agent passed 42 of 45 ([run](eval/results/2026-10-28T192415Z/)). Scores use the checks after three [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|
-| Runs passing every check | **40 of 45** | 21 of 45 |
+| Runs passing every check | **43 of 45** | 21 of 45 |
 | Citations found on the page they cite | 206 of 206 | 121 of 121 |
 | Time to the full answer, median | 5.5 s | 5.2 s |
 | Cost per question | $0.0020 | $0.0014 |

@@ -2,7 +2,7 @@
 
 | System | Cases passed | Mean latency (s) | Median time to answer (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
 |---|---|---|---|---|---|---|---|---|
-| agent | 38 of 45 | 8.1 | 5.1 | 2.0 | 3.4 | 195 of 195 | 156133 | 0.0832 |
+| agent | 40 of 45 | 8.1 | 5.1 | 2.0 | 3.4 | 195 of 195 | 156133 | 0.0832 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | To answer (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -19,7 +19,7 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.9 | 4.2 | 1320/757 | 0.0017 |  |
 | 11-acquisition-supersession | agent | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 9.1 | 7.1 | 2018/1179 | 0.0025 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.9 | 2.4 | 1711/626 | 0.0013 |  |
-| 13-security-and-injection | agent | no | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.6 | 6.0 | 4104/1872 | 0.0024 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | no | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 8.6 | 6.0 | 4104/1872 | 0.0024 | missing: (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input) |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.5 | 3.8 | 1569/561 | 0.0014 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 5.8 | 3.2 | 1714/613 | 0.0006 |  |
 | 2-multi-doc-a | agent | yes | complete | 4/4 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.4 | 3.8 | 2317/1083 | 0.0023 |  |
@@ -38,7 +38,7 @@
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.9 | 4.6 | 1264/566 | 0.0005 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 4.4 | 2.7 | 2056/739 | 0.0007 |  |
 | 2-multi-doc-a | agent | yes | complete | 4/4 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 6.7 | 5.0 | 2022/1238 | 0.0023 |  |
-| 3-multi-doc-b | agent | no | complete | 9/9 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 9.3 | 7.1 | 3583/1944 | 0.0021 | missing: confident |
+| 3-multi-doc-b | agent | yes | complete | 9/9 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 9.3 | 7.1 | 3583/1944 | 0.0021 |  |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 1 | 4 | 11.3 | 8.5 | 2225/1424 | 0.0019 | asked: Which memo do you mean? Several OMB AI memos are in the collection, and more than one may set a 180-day deadline. |
 | 5-insufficient-evidence | agent | no | complete | 2/2 | OMB M-25-21: Acceleratin p5 | 3 | 4 | 6.5 | 5.2 | 1314/928 | 0.0015 | failed check: says_evidence_missing |
 | 6-conflicting-sources | agent | yes | complete | 3/3 | Northbridge University O p1, Northbridge University O p1 | 3 | 4 | 8.0 | 6.1 | 1983/1383 | 0.0018 |  |
@@ -49,5 +49,5 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.5 | 4.2 | 1315/758 | 0.0016 |  |
 | 11-acquisition-supersession | agent | yes | complete | 5/5 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 7.7 | 5.9 | 2508/1322 | 0.0025 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.0 | 2.2 | 1692/574 | 0.0006 |  |
-| 13-security-and-injection | agent | no | complete | 7/7 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.8 | 5.8 | 3348/1637 | 0.0026 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 7/7 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.8 | 5.8 | 3348/1637 | 0.0026 |  |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.6 | 3.9 | 1361/751 | 0.0006 |  |

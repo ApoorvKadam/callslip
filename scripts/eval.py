@@ -22,6 +22,7 @@ import json
 import re
 import sys
 import time
+import unicodedata
 from datetime import UTC, datetime
 from pathlib import Path
 from statistics import median
@@ -131,7 +132,9 @@ def totals(runs: list[dict]) -> dict:
 def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
     run = record["final"]
     answer = run.get("answer") or {"text": "", "citations": []}
-    text = answer["text"]
+    # NFKC turns PDF ligatures (U+FB01 "ﬁ") into plain letters, so a quote copied from a page
+    # matches the same words as the rest of the answer.
+    text = unicodedata.normalize("NFKC", answer["text"])
     citations = answer["citations"]
     verified = sum(c["provenance"] == "verified" for c in citations)
 
