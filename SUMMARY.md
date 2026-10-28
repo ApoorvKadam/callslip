@@ -26,4 +26,5 @@ On 10 cases with 3 repeats each, the agent on Claude Haiku 5.5 passed every chec
 - Scaling the API out. Runs execute as background tasks in the API process. Next: a run queue with its own workers, and Redis pub/sub for live events.
 - Authentication (NYU SSO) and per-user collections. In this single-tenant demo, everyone shares the documents.
 - Running on a cluster. The Kubernetes and OpenShift manifests are schema-checked in CI ([docs/kubernetes.md](docs/kubernetes.md)) but have not run on a cluster. The API needs the run queue before it can run more than one replica.
+- Edge cases in run handling and ingestion, each with its fix: [docs/architecture.md](docs/architecture.md#known-limits).
 - A recorded video. The walkthrough in [docs/demo.md](docs/demo.md) can be reproduced from saved traces and commands.

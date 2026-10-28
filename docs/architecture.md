@@ -166,6 +166,20 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 | Runs as background tasks in the API process | Simple; state is in PostgreSQL | Assumes one API instance (startup closes interrupted runs); a worker queue for runs when scaling out |
 | Local embeddings (bge-small, 384-d) | Free, private, reproducible, no extra key | Smaller model; a hosted embedding model for harder retrieval (a small reranker was measured and did not help) |
 
+## Known limits
+
+Edge cases found in a full read of the code and left for after the submission. None occurred in the evaluation or the walkthrough.
+
+| Where | What can happen | Fix |
+|---|---|---|
+| Resuming after a clarification | The run is marked running, then its first event is written. If that write fails, the run stays "running" with no task, and the session refuses new questions. | Write the event inside the run's task, so a failure closes the run like any other. |
+| Two questions sent at once in one session | The second can read the conversation history before the first finishes, and miss the first answer. The interface sends one question at a time. | Insert the run before reading the history. |
+| A run that fails unexpectedly | Its final event carries no token or cost totals, though the model-call ledger has them. | Close every run through one finalizer that reads the ledger. |
+| Fault injection with a clarification | A resumed run does not keep the faults it started with. No evaluation case combines the two. | Store the faults with the run. |
+| Several workers, very long documents | A lease is 5 minutes and is not renewed. A document that takes longer can be claimed by a second worker; the first worker's result is then discarded. | Renew the lease while working. |
+| Text without spaces (for example Chinese) | A passage longer than the token budget cannot be split at word boundaries, so it stays oversized. The corpus is English. | Split by tokenizer offsets. |
+| Rescoring an old evaluation | Citations are mapped to titles through the current database, so a reloaded corpus with new ids would change the grading. | Save the id-to-title map with each run. |
+
 ## Scaling path
 
 1. Several API replicas: move live events to Redis pub/sub, and runs to a queue consumed by run workers, so no run depends on the process that accepted it.
