@@ -54,8 +54,9 @@ services:
       interval: 10s
       timeout: 3s
       retries: 12
-      start_period: 20s
-    mem_limit: 768m
+      start_period: 30s
+    # Holds the query-embedding model in memory.
+    mem_limit: 1g
 
   worker:
     <<: *backend
