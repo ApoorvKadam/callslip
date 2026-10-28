@@ -1,0 +1,19 @@
+# Only the ingress controller reaches the API, so a client address in X-Forwarded-For can only
+# come from it (failed sign-ins are counted per address). ingress-nginx runs in the
+# ingress-nginx namespace by default; change the name if your controller runs elsewhere.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 8000

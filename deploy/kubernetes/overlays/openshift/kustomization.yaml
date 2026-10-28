@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ../../base
   - routes.yaml
+  - api-network-policy.yaml
 patches:
   - target: {kind: StatefulSet, name: postgres}
     patch: |-

@@ -47,11 +47,11 @@ On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the clus
 | `runner`, heartbeat file check | Deployment of 2; the same heartbeat check as a liveness probe |
 | `worker`, heartbeat file check | Deployment; the same heartbeat check as a liveness probe |
 | `frontend` (nginx, also proxying `/api`) | Deployment of 2; the Ingress or Route sends `/api` straight to the API |
-| `FORWARDED_ALLOW_IPS: "*"` (only the frontend proxy reaches the API) | `FORWARDED_ALLOW_IPS: 10.0.0.0/8`: X-Forwarded-For is trusted only from the cluster network, where the ingress or router runs. Set it to that network; failed sign-ins are counted per client address |
+| `FORWARDED_ALLOW_IPS: "*"` (only the frontend proxy reaches the API) | `FORWARDED_ALLOW_IPS: 10.0.0.0/8`, and a network policy in each overlay that lets only the ingress controller or router reach the API. Failed sign-ins are counted per client address, so no other pod may set that address |
 | `.env` | ConfigMap `callslip-settings` (non-secret settings) and Secret `callslip-secrets` |
 | `mem_limit` | the same limits as `resources.limits.memory` |
 
-Every container runs as a non-root user with no added capabilities, no privilege escalation and the default seccomp profile. Network policies let only the API and the two kinds of worker reach PostgreSQL, and only the API and the run workers reach Redis, which has no password of its own. The frontend image is the unprivileged nginx build on port 8080, so it runs under OpenShift's restricted security context unchanged.
+Every container runs as a non-root user with no added capabilities, no privilege escalation and the default seccomp profile. Network policies let only the API and the two kinds of worker reach PostgreSQL, and only the API and the run workers reach Redis, which has no password of its own. Only the ingress controller (namespace `ingress-nginx`) or the OpenShift router reaches the API. The frontend image is the unprivileged nginx build on port 8080, so it runs under OpenShift's restricted security context unchanged.
 
 ## What is checked, and what is not
 
