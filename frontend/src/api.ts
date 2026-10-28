@@ -137,3 +137,25 @@ export function getRun(id: string): Promise<Run> {
 export function runEventsUrl(id: string): string {
   return `/api/runs/${id}/events`;
 }
+
+export function resume(
+  sessionId: string,
+  runId: string,
+  toolUseId: string,
+  reply: string,
+): Promise<Run> {
+  return request(`/api/sessions/${sessionId}/runs/${runId}/resume`, {
+    method: "POST",
+    headers: json,
+    // A fresh key per reply: a retried request with the same key is accepted only once.
+    body: JSON.stringify({
+      tool_use_id: toolUseId,
+      idempotency_key: crypto.randomUUID(),
+      reply,
+    }),
+  });
+}
+
+export function abandon(sessionId: string, runId: string): Promise<{ status: string }> {
+  return request(`/api/sessions/${sessionId}/runs/${runId}/abandon`, { method: "POST" });
+}

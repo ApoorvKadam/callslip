@@ -2,7 +2,7 @@
 
 A full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
 
-Status: in progress. The stack runs end to end: uploaded PDFs become page-tagged passages, hybrid search finds them, and questions get answers whose citations are checked against the source pages. This first answering mode is the single-pass baseline (retrieve once, answer once); the agent loop, evaluation and full documentation follow in later changes.
+Status: in progress. The stack runs end to end: uploaded PDFs become page-tagged passages, hybrid search finds them, and an agent answers questions with citations checked against the source pages. A single-pass baseline (retrieve once, answer once) runs through the same stack for comparison. The evaluation and full documentation follow in later changes.
 
 ## Stack
 
@@ -25,6 +25,21 @@ python3 scripts/smoke_test.py # health, readiness, upload, ingestion, search
 ```
 
 Open http://localhost:8080, upload PDFs and ask questions. Each document moves from queued to processing to ready; failures show their reason. From a terminal: `python3 scripts/ask.py "your question"` prints the answer, each citation with its page and check result, and the run's steps, time, tokens and cost.
+
+## The agent
+
+A plain tool-use loop over the Claude Messages API (no agent framework), in `backend/app/agent/loop.py`. Each turn the model sees the whole conversation and picks one action:
+
+| Tool | Read-only? | What it returns |
+|---|---|---|
+| `list_documents()` | yes | JSON list of ready documents: id, title, page count |
+| `search_documents(query, document_ids?, page_from?, page_to?, top_k?)` | yes | citable passages (`search_result` blocks), or `{"status": "no_results"}` |
+| `read_document_section(document_id, page_start, page_end)` | yes | up to 3 full pages as citable passages |
+| `ask_clarification(question, options?)` | control | pauses the run until the user replies |
+
+Every tool input is validated (Pydantic); a bad call comes back as an error the model can fix. One tool call per turn keeps the order simple and a clarification never mixed with other calls. Limits, all configurable: model turns (10), tool calls (9), per-tool timeout (8 s) with one retry, and a run deadline (90 s) with a reserve for the final answer. At a limit, the model must answer from what it has, marked incomplete; with no time left at all, the run stops with a summary of what it found and no further model call. Clarification pauses the run (`needs_clarification`); the reply resumes the same run, exactly once (idempotency key), and the time spent waiting does not count.
+
+In the UI, choose Agent or Single pass under the question box. From a terminal: `python3 scripts/ask.py "question" [--mode baseline] [--reply "answer to a clarifying question"]`.
 
 ## Answers and citations
 

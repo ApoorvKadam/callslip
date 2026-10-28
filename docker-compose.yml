@@ -11,6 +11,8 @@ x-backend: &backend
     REDIS_URL: redis://redis:6379/0
     ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    # Evaluation only: lets a request inject tool failures. Keep false in normal use.
+    ALLOW_FAULT_INJECTION: ${ALLOW_FAULT_INJECTION:-false}
   depends_on:
     postgres:
       condition: service_healthy

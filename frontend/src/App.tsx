@@ -1,19 +1,31 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  type Mode,
   type Run,
   type RunEvent,
+  abandon,
   ask,
   createSession,
   getRun,
   getSession,
+  resume,
   runEventsUrl,
 } from "./api";
-import { Conversation } from "./components/Conversation";
+import { Conversation, type PendingClarification } from "./components/Conversation";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { TracePanel } from "./components/TracePanel";
 
 const SESSION_KEY = "agentic-rag.session";
-const EVENT_TYPES = ["run_started", "tool_call", "model_call", "answer", "run_finished"];
+const EVENT_TYPES = [
+  "run_started",
+  "tool_call",
+  "model_call",
+  "limit",
+  "clarification",
+  "clarification_answered",
+  "answer",
+  "run_finished",
+];
 
 function errorText(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
@@ -25,6 +37,7 @@ export default function App() {
   const [events, setEvents] = useState<Record<string, RunEvent[]>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<Mode>("agent");
   const streams = useRef<Record<string, EventSource>>({});
 
   const replaceRun = useCallback((run: Run) => {
@@ -98,18 +111,49 @@ export default function App() {
     })();
   }, [follow, refreshRun, startSession]);
 
-  async function onAsk(question: string): Promise<boolean> {
+  // A run waiting for the user's reply, and the question it asked (from its last event).
+  const waiting = runs.find((r) => r.status === "needs_clarification");
+  const asked = waiting
+    ? (events[waiting.id] ?? []).filter((e) => e.type === "clarification").at(-1)
+    : undefined;
+  const pending: PendingClarification | null =
+    waiting && asked
+      ? {
+          runId: waiting.id,
+          toolUseId: String(asked.data.tool_use_id),
+          question: String(asked.data.question),
+          options: (asked.data.options as string[]) ?? [],
+        }
+      : null;
+
+  async function onAsk(text: string): Promise<boolean> {
     if (!sessionId) return false;
     setError(null);
     try {
-      const run = await ask(sessionId, question, "baseline");
-      setRuns((all) => [...all, run]);
-      setSelectedId(run.id);
-      follow(run.id);
+      if (pending) {
+        const run = await resume(sessionId, pending.runId, pending.toolUseId, text);
+        replaceRun(run);
+        follow(run.id);
+      } else {
+        const run = await ask(sessionId, text, mode);
+        setRuns((all) => [...all, run]);
+        setSelectedId(run.id);
+        follow(run.id);
+      }
       return true;
     } catch (e) {
       setError(errorText(e));
       return false;
+    }
+  }
+
+  async function onSkip() {
+    if (!sessionId || !pending) return;
+    try {
+      await abandon(sessionId, pending.runId);
+      await refreshRun(pending.runId);
+    } catch (e) {
+      setError(errorText(e));
     }
   }
 
@@ -136,6 +180,10 @@ export default function App() {
             selectedId={selectedId}
             onSelect={(id) => void onSelect(id)}
             onAsk={onAsk}
+            mode={mode}
+            onMode={setMode}
+            pending={pending}
+            onSkip={() => void onSkip()}
             onNewSession={() => void startSession()}
             error={error}
           />
