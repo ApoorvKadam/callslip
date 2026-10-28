@@ -1,6 +1,6 @@
 # Walkthrough
 
-**Recorded:** [the walkthrough (MP4, under three minutes)](media/callslip-walkthrough.mp4), made against the local stack on the final build. In order, it shows:
+**Recorded:** [the walkthrough (MP4, 1920 by 1080, three minutes)](media/callslip-walkthrough.mp4), made against the local stack on the final build. In order, it shows:
 
 | Part | What happens |
 |---|---|
@@ -10,7 +10,7 @@
 | The same question, Single pass | One search over everything. Its passages came from one document, so it said it could not verify the other part. |
 | Re-retrieval | The first search finds two different deadlines in two memos, so the agent searches again for which memo replaces the other. |
 | Clarification | In a new conversation, "the memo" could be any of four memos, so the agent asks, then answers in the same run. |
-| A failed tool call | Search is made to fail (an injected fault). Each search fails after one retry, and the agent reads the pages instead. |
+| A failed tool call | Search is made to fail (an injected fault). It fails after one retry; the agent takes the document's outline, goes to the section on the topic and reads it. |
 | Your own document | A question answered from the private upload, then the upload deleted from the list. |
 | Saved conversations | Earlier conversations, with their steps, timing, tokens and cost. |
 
@@ -61,7 +61,7 @@ python3 scripts/ask.py "How does the NIST Generative AI Profile describe data pr
   --fault search_documents=error
 ```
 
-Search fails on every call (injected below the cache; the server must run with `ALLOW_FAULT_INJECTION=true`). A first search in the Profile fails after its retry, and a rewritten one fails too. The agent then switches to `read_document_section`: in the run shown it reads pages 5 to 7, 8 to 10 and 11 to 12 until it reaches the section on data privacy (section 2.4). It answers with citations from those pages and says that search was unavailable.
+Search fails on every call (injected below the cache; the server must run with `ALLOW_FAULT_INJECTION=true`). A search in the Profile fails after its retry; the error says the outline and page reads still work. The agent calls `document_outline`, which lists the Profile's sections from its own bookmarks, finds section 2.4, Data Privacy, on page 11, and reads pages 11 and 12 with `read_document_section`. It answers with citations from those pages and says that search was unavailable.
 
 ![Steps of a run whose searches fail](images/5-tool-failure.png)
 
@@ -73,11 +73,11 @@ Start a new conversation, then ask: *What does the memo require agencies to do w
 
 ![The agent asks which memo](images/3-clarification-asked.png)
 
-Four OMB memos in the collection set 180-day deadlines, so the agent asks which one, offering each memo as a button. In the run shown it searched all documents first and found deadlines in all four; in the evaluation run it asked in its first turn, from the document list alone. The run is paused (`needs_clarification`). The question box now sends a reply, and the question can also be skipped. Choose M-25-21:
+Four OMB memos in the collection set 180-day deadlines, so the agent asks which one, offering each memo as a button. In the run shown it asked in its first turn, before any search, from the document list alone. The run is paused (`needs_clarification`). The question box now sends a reply, and the question can also be skipped. Choose M-25-21:
 
 ![Answer after the reply](images/4-clarification-answered.png)
 
-The same run continues: the reply becomes the result of the `ask_clarification` call, and the agent answers with both 180-day requirements of M-25-21 (AI strategy, p. 5; compliance plan, p. 12). In the run shown it answered from the passages it had already found; when it asked before searching, it then searched only M-25-21. The Steps tab shows the question and the reply as steps of the same run. From a terminal: `python3 scripts/ask.py "What does the memo require agencies to do within 180 days?" --reply "OMB M-25-21"`.
+The same run continues: the reply becomes the result of the `ask_clarification` call, and the agent answers with both 180-day requirements of M-25-21 (AI strategy, p. 5; compliance plan, p. 12). It then searches only M-25-21. The Steps tab shows the question and the reply as steps of the same run. From a terminal: `python3 scripts/ask.py "What does the memo require agencies to do within 180 days?" --reply "OMB M-25-21"`.
 
 In a conversation that already discussed one memo, the same question may not be ambiguous: earlier questions and answers are part of what the agent reads, and it may answer for that memo.
 
