@@ -30,7 +30,9 @@ class Settings(BaseSettings):
 
     # Answering. The same model and settings serve the agent and the single-pass baseline.
     anthropic_api_key: str = ""
-    answer_model: str = "claude-sonnet-5-5"
+    # Haiku 5.5 passed more evaluation runs than Sonnet 5.5 at about a tenth of the cost
+    # (docs/evaluation.md); set ANSWER_MODEL=claude-sonnet-5-5 to use Sonnet instead.
+    answer_model: str = "claude-haiku-5-5"
     answer_effort: str = "medium"
     top_k: int = 8
     history_turns: int = 3
