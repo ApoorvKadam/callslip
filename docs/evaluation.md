@@ -73,6 +73,28 @@ A question took about 9 seconds before this change, and almost all of it was mod
 - **Effort `low` for answers.** It passed as many runs as `medium` and wrote less before answering. The support check stays at `medium`: against the 84 hand labels, at `low` it accepted 2 of 24 bad pieces, at `medium` 1. In the third column the support check also ran at `low`, which is why its total is shorter than the final build's.
 - **What is left.** The last turn writes the answer: a median of 3.5 s and 645 output tokens. The answer is shown as it is written, so the text starts at the first answer text time above. Case 8a waits 8 s for its injected timeout.
 
+### What a user waits for, measured in the browser
+
+The times above come from the server. [`scripts/browser_latency.mjs`](../scripts/browser_latency.mjs) measures what a user sees instead: it asks five questions three times each through the interface, and records when the first answer text appears, when the checked answer is shown, and when the quote check is done. Text from a turn that ended in a tool call does not count as answer text. The same 15 questions ran on each build, on this machine (medians, 15 runs each):
+
+| Build | First answer text | Answer shown | Check done | Evaluation, 45 runs |
+|---|---|---|---|---|
+| Final build above | 3.3 s | 5.3 s | 7.3 s | 40 of 45 |
+| Text sent every 0.1 s, drawn like the final answer (kept) | 3.4 s | 5.4 s | 6.9 s | unchanged answers |
+| Thinking turned off | 2.5 s | 3.9 s | 6.2 s | 36 of 45 ([`181548Z`](../eval/results/2026-10-28T181548Z/)) |
+| One search on the question before the first turn | 3.2 s | 4.8 s | 6.6 s | 36 of 45 ([`182823Z`](../eval/results/2026-10-28T182823Z/)) |
+| That search, thinking off, and two more instructions | 1.3 s | 3.2 s | 5.3 s | 28 of 45 ([`183723Z`](../eval/results/2026-10-28T183723Z/)) |
+| Shorter answers | 3.4 s | 4.6 s | 6.3 s | 36 of 45 ([`184548Z`](../eval/results/2026-10-28T184548Z/)) |
+
+- **Kept:** sending text every 0.1 s instead of 0.4 s, and drawing it like the final answer. The median did not move, but the slowest first answers came sooner (90th percentile 5.3 s to 4.3 s), and text no longer arrives in bursts or changes look.
+- **Not kept:** every change that made answers faster also lost required behaviour.
+  - Thinking off: the agent gave up when search kept failing (8b) and stopped looking for which memo governs (9).
+  - The search before the first turn: twice it answered case 10 without the page that says the framework is voluntary, and twice case 9 without the page that settles which memo governs.
+  - That search with thinking off and two more instructions: cases 4, 5, 8b and 10 failed in every repeat.
+  - Shorter answers: case 9 failed in every repeat, and one answer to case 4 left out a requirement.
+- **Instead:** the conversation shows what the agent is doing from the moment a question is sent ("Choosing where to look", then each search), so a user sees progress at once and the answer from about 3 s.
+- Each row is one sample of 45 runs; a difference of two or three runs is within the spread seen between repeats.
+
 ## Five questions the prompt was not tuned on
 
 The first ten cases shaped the prompt, so they cannot show how the agent does on new questions. Cases 10 to 14 were written later, with expected pages and checks fixed before any run. They ask about:
