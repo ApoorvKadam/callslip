@@ -94,6 +94,7 @@ The times above come from the server. [`scripts/browser_latency.mjs`](../scripts
   - Shorter answers: case 9 failed in every repeat, and one answer to case 4 left out a requirement.
 - **Instead:** the conversation shows what the agent is doing from the moment a question is sent ("Choosing where to look", then each search), so a user sees progress at once and the answer from about 3 s.
 - Each row is one sample of 45 runs; a difference of two or three runs is within the spread seen between repeats.
+- **Kept after these runs:** the guidance Anthropic documents for adaptive thinking ("Thinking adds latency and should only be used when it will meaningfully improve the answer ... When in doubt, respond directly"), plus two general instructions: when search keeps failing, read the likely pages; when two documents disagree, search for whether one replaces the other. Thinking stays on. On the evaluation ([`192415Z`](../eval/results/2026-10-28T192415Z/)) it passed 40 of 45, as before, and case 9 passed in every repeat; in the browser the answer was shown at a median of 4.9 s instead of 5.3 s. Case 9 is one of the cases the prompt was tuned on, so its pass here is not evidence on new questions.
 
 ## Five questions the prompt was not tuned on
 

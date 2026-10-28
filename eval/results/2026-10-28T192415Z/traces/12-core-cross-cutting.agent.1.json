@@ -1,0 +1,700 @@
+{
+ "runs": [
+  {
+   "id": "c25fb80f-9867-4933-a804-5d0375b7b56e",
+   "session_id": "0dc59e8a-c399-468f-b1aa-e14ed237f499",
+   "mode": "agent",
+   "question": "Which four functions make up the NIST AI RMF Core, and which one is described as cross-cutting?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .\n\nGOVERN is the cross-cutting one. Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states the Core is composed of four functions GOVERN, MAP, MEASURE, and MANAGE, as illustrated in Figure 5.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Passage states governance is designed as a cross-cutting function to inform and be infused throughout the other three functions.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. ",
+      "citations": []
+     },
+     {
+      "text": "As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": "\n\nGOVERN is the cross-cutting one. ",
+      "citations": []
+     },
+     {
+      "text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": "\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 2697,
+    "citations": [
+     {
+      "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+      "number": 1,
+      "source": "doc-1/p25",
+      "page_no": 25,
+      "cited_text": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems. As illus- trated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+      "provenance": "verified",
+      "document_id": 1
+     },
+     {
+      "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+      "number": 2,
+      "source": "doc-1/p25",
+      "page_no": 25,
+      "cited_text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions. Risk management should be continuous, timely, and performed throughout the AI system lifecycle dimensions.",
+      "provenance": "verified",
+      "document_id": 1
+     }
+    ],
+    "citations_verified": 2
+   },
+   "model_turns": 2,
+   "tool_calls": 1,
+   "exec_ms": 4345,
+   "created_at": "2026-10-28T19:26:02.364575Z",
+   "finished_at": "2026-10-28T19:26:06.883026Z",
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {},
+      "question": "Which four functions make up the NIST AI RMF Core, and which one is described as cross-cutting?"
+     },
+     "created_at": "2026-10-28T19:26:02.532104Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 1508,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000193,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 130,
+      "cache_read_tokens": 1887,
+      "cache_creation_tokens": 868
+     },
+     "created_at": "2026-10-28T19:26:04.067204Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 8,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "AI RMF Core four functions GOVERN MAP MEASURE MANAGE cross-cutting",
+       "top_k": 5,
+       "document_ids": [
+        1
+       ]
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "5 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0325,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI ris",
+        "page_no": 25,
+        "document_id": 1
+       },
+       {
+        "score": 0.0164,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 Table 2: Categories and subcategories for the MAP function. (Continued) MAP 5.2: Practices and personnel for supporting regular en- gagement with relevant ",
+        "page_no": 33,
+        "document_id": 1
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 4. Presenting AI system information to humans is complex. Humans perceive and derive meaning from AI system output and explanations in different ways, refl",
+        "page_no": 46,
+        "document_id": 1
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "\u2022 improving understanding of limitations in AI and ML processes; \u2022 identifying constraints in real-world applications that may lead to negative impacts; \u2022 identifying known and for",
+        "page_no": 30,
+        "document_id": 1
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+        "excerpt": "NIST AI 100-1 AI RMF 1.0 Table 3: Categories and subcategories for the MEASURE function. (Continued) MEASURE 2.6: The AI system is evaluated regularly for safety risks \u2013 as identif",
+        "page_no": 35,
+        "document_id": 1
+       }
+      ]
+     },
+     "created_at": "2026-10-28T19:26:04.078306Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "The NIST AI RM",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:04.628462Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "F",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:04.763314Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": " Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE ,",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:04.893100Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": " and MANAGE .\n\nGOVERN is the cross-cutting one. Governance",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:05.005825Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: N",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:05.127590Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": "IST AI 100-1 (AI RMF 1.0), page 25.",
+      "turn": 2
+     },
+     "created_at": "2026-10-28T19:26:05.214811Z"
+    },
+    {
+     "seq": 10,
+     "type": "model_call",
+     "data": {
+      "ms": 1125,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000686,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 205,
+      "cache_read_tokens": 2684,
+      "cache_creation_tokens": 4450
+     },
+     "created_at": "2026-10-28T19:26:05.221385Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer",
+     "data": {
+      "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .\n\nGOVERN is the cross-cutting one. Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+      "segments": [
+       {
+        "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. ",
+        "citations": []
+       },
+       {
+        "text": "As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": "\n\nGOVERN is the cross-cutting one. ",
+        "citations": []
+       },
+       {
+        "text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": "\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 2697,
+      "citations": [
+       {
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+        "number": 1,
+        "source": "doc-1/p25",
+        "page_no": 25,
+        "cited_text": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems. As illus- trated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+        "provenance": "verified",
+        "document_id": 1
+       },
+       {
+        "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+        "number": 2,
+        "source": "doc-1/p25",
+        "page_no": 25,
+        "cited_text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions. Risk management should be continuous, timely, and performed throughout the AI system lifecycle dimensions.",
+        "provenance": "verified",
+        "document_id": 1
+       }
+      ],
+      "citations_verified": 2
+     },
+     "created_at": "2026-10-28T19:26:05.230133Z"
+    },
+    {
+     "seq": 12,
+     "type": "support",
+     "data": {
+      "ms": 1640,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states the Core is composed of four functions GOVERN, MAP, MEASURE, and MANAGE, as illustrated in Figure 5.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Passage states governance is designed as a cross-cutting function to inform and be infused throughout the other three functions.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 2,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-28T19:26:06.873582Z"
+    },
+    {
+     "seq": 13,
+     "type": "run_finished",
+     "data": {
+      "ms": 4345,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.00108,
+      "tool_calls": 1,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 1340,
+      "output_tokens": 470,
+      "cache_read_tokens": 4571,
+      "cache_creation_tokens": 5318
+     },
+     "created_at": "2026-10-28T19:26:06.879142Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "c25fb80f-9867-4933-a804-5d0375b7b56e",
+  "session_id": "0dc59e8a-c399-468f-b1aa-e14ed237f499",
+  "mode": "agent",
+  "question": "Which four functions make up the NIST AI RMF Core, and which one is described as cross-cutting?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .\n\nGOVERN is the cross-cutting one. Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states the Core is composed of four functions GOVERN, MAP, MEASURE, and MANAGE, as illustrated in Figure 5.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Passage states governance is designed as a cross-cutting function to inform and be infused throughout the other three functions.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. ",
+     "citations": []
+    },
+    {
+     "text": "As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": "\n\nGOVERN is the cross-cutting one. ",
+     "citations": []
+    },
+    {
+     "text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": "\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 2697,
+   "citations": [
+    {
+     "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+     "number": 1,
+     "source": "doc-1/p25",
+     "page_no": 25,
+     "cited_text": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems. As illus- trated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+     "provenance": "verified",
+     "document_id": 1
+    },
+    {
+     "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+     "number": 2,
+     "source": "doc-1/p25",
+     "page_no": 25,
+     "cited_text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions. Risk management should be continuous, timely, and performed throughout the AI system lifecycle dimensions.",
+     "provenance": "verified",
+     "document_id": 1
+    }
+   ],
+   "citations_verified": 2
+  },
+  "model_turns": 2,
+  "tool_calls": 1,
+  "exec_ms": 4345,
+  "created_at": "2026-10-28T19:26:02.364575Z",
+  "finished_at": "2026-10-28T19:26:06.883026Z",
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {},
+     "question": "Which four functions make up the NIST AI RMF Core, and which one is described as cross-cutting?"
+    },
+    "created_at": "2026-10-28T19:26:02.532104Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 1508,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000193,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 130,
+     "cache_read_tokens": 1887,
+     "cache_creation_tokens": 868
+    },
+    "created_at": "2026-10-28T19:26:04.067204Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 8,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "AI RMF Core four functions GOVERN MAP MEASURE MANAGE cross-cutting",
+      "top_k": 5,
+      "document_ids": [
+       1
+      ]
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "5 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0325,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI ris",
+       "page_no": 25,
+       "document_id": 1
+      },
+      {
+       "score": 0.0164,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 Table 2: Categories and subcategories for the MAP function. (Continued) MAP 5.2: Practices and personnel for supporting regular en- gagement with relevant ",
+       "page_no": 33,
+       "document_id": 1
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 4. Presenting AI system information to humans is complex. Humans perceive and derive meaning from AI system output and explanations in different ways, refl",
+       "page_no": 46,
+       "document_id": 1
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "\u2022 improving understanding of limitations in AI and ML processes; \u2022 identifying constraints in real-world applications that may lead to negative impacts; \u2022 identifying known and for",
+       "page_no": 30,
+       "document_id": 1
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023",
+       "excerpt": "NIST AI 100-1 AI RMF 1.0 Table 3: Categories and subcategories for the MEASURE function. (Continued) MEASURE 2.6: The AI system is evaluated regularly for safety risks \u2013 as identif",
+       "page_no": 35,
+       "document_id": 1
+      }
+     ]
+    },
+    "created_at": "2026-10-28T19:26:04.078306Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "The NIST AI RM",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:04.628462Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "F",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:04.763314Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": " Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE ,",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:04.893100Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": " and MANAGE .\n\nGOVERN is the cross-cutting one. Governance",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:05.005825Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: N",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:05.127590Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": "IST AI 100-1 (AI RMF 1.0), page 25.",
+     "turn": 2
+    },
+    "created_at": "2026-10-28T19:26:05.214811Z"
+   },
+   {
+    "seq": 10,
+    "type": "model_call",
+    "data": {
+     "ms": 1125,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000686,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 205,
+     "cache_read_tokens": 2684,
+     "cache_creation_tokens": 4450
+    },
+    "created_at": "2026-10-28T19:26:05.221385Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer",
+    "data": {
+     "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .\n\nGOVERN is the cross-cutting one. Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+     "segments": [
+      {
+       "text": "The NIST AI RMF Core is composed of four functions: GOVERN, MAP, MEASURE, and MANAGE. ",
+       "citations": []
+      },
+      {
+       "text": "As illustrated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": "\n\nGOVERN is the cross-cutting one. ",
+       "citations": []
+      },
+      {
+       "text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": "\n\nSource: NIST AI 100-1 (AI RMF 1.0), page 25.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 2697,
+     "citations": [
+      {
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+       "number": 1,
+       "source": "doc-1/p25",
+       "page_no": 25,
+       "cited_text": "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core The AI RMF Core provides outcomes and actions that enable dialogue, understanding, and activities to manage AI risks and responsibly develop trustworthy AI systems. As illus- trated in Figure 5, the Core is composed of four functions: GOVERN , MAP, MEASURE , and MANAGE .",
+       "provenance": "verified",
+       "document_id": 1
+      },
+      {
+       "title": "NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25",
+       "number": 2,
+       "source": "doc-1/p25",
+       "page_no": 25,
+       "cited_text": "Governance is designed to be a cross-cutting function to inform and be infused throughout the other three functions. Risk management should be continuous, timely, and performed throughout the AI system lifecycle dimensions.",
+       "provenance": "verified",
+       "document_id": 1
+      }
+     ],
+     "citations_verified": 2
+    },
+    "created_at": "2026-10-28T19:26:05.230133Z"
+   },
+   {
+    "seq": 12,
+    "type": "support",
+    "data": {
+     "ms": 1640,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states the Core is composed of four functions GOVERN, MAP, MEASURE, and MANAGE, as illustrated in Figure 5.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Passage states governance is designed as a cross-cutting function to inform and be infused throughout the other three functions.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 2,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-28T19:26:06.873582Z"
+   },
+   {
+    "seq": 13,
+    "type": "run_finished",
+    "data": {
+     "ms": 4345,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.00108,
+     "tool_calls": 1,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 1340,
+     "output_tokens": 470,
+     "cache_read_tokens": 4571,
+     "cache_creation_tokens": 5318
+    },
+    "created_at": "2026-10-28T19:26:06.879142Z"
+   }
+  ]
+ }
+}
