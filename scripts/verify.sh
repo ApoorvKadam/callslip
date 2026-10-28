@@ -22,5 +22,7 @@ if [[ -n "$unhealthy" ]]; then
   echo "not healthy: $(echo $unhealthy)" >&2
   exit 1
 fi
-python3 scripts/smoke_test.py --base "$base"
+# The smoke test's own account; its password comes from .env when set there.
+smoke_password="$(sed -n 's/^SMOKE_PASSWORD=//p' .env 2>/dev/null | tail -1)"
+SMOKE_PASSWORD="${SMOKE_PASSWORD:-$smoke_password}" python3 scripts/smoke_test.py --base "$base"
 echo "verify: ok"

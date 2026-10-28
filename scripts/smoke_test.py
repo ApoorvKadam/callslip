@@ -2,24 +2,42 @@
 
     python scripts/smoke_test.py [--base http://localhost:8080] [--pdf path/to/file.pdf]
 
-Checks liveness and readiness, uploads a PDF (a tiny generated one if --pdf is not given),
-waits until the worker has parsed, chunked and embedded it, and prints what it found.
+Checks liveness and readiness, signs in to a smoke-test account, uploads a PDF (a tiny
+generated one if --pdf is not given), waits until the worker has parsed, chunked and embedded
+it, and prints what it found. The upload belongs to that account, so it never appears in the
+shared collection that users and the agent see.
 Exits non-zero on any failure, so CI and the runbook can rely on it.
 """
 
 import argparse
+import http.cookiejar
 import json
+import os
+import secrets
 import sys
 import time
 import urllib.error
 import urllib.request
 import uuid
 
+# Keeps the sign-in cookie between calls.
+OPENER = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+# The account owns nothing but the smoke test's own document. With SMOKE_PASSWORD set (as
+# scripts/verify.sh does from .env), every run reuses one account and one document. Without
+# it, each run makes a throwaway account with a random password.
+PASSWORD = os.environ.get("SMOKE_PASSWORD")
+ACCOUNT = {
+    "email": "smoke-test@callslip.invalid"
+    if PASSWORD
+    else f"smoke-test-{secrets.token_hex(6)}@callslip.invalid",
+    "password": PASSWORD or secrets.token_urlsafe(24),
+}
+
 
 def call(method: str, url: str, body: bytes | None = None, headers: dict | None = None):
     req = urllib.request.Request(url, data=body, method=method, headers=headers or {})
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with OPENER.open(req, timeout=30) as resp:
             return resp.status, json.loads(resp.read() or b"null")
     except urllib.error.HTTPError as err:
         return err.code, json.loads(err.read() or b"null")
@@ -83,13 +101,22 @@ def main() -> int:
     if status != 200:
         return 1
 
+    credentials = json.dumps(ACCOUNT).encode()
+    headers = {"Content-Type": "application/json"}
+    status, body = call("POST", f"{args.base}/api/auth/login", credentials, headers)
+    if status == 401:  # first run on this database
+        status, body = call("POST", f"{args.base}/api/auth/register", credentials, headers)
+    print("sign in:", status, body)
+    if status not in (200, 201):
+        return 1
+
     if args.pdf:
         with open(args.pdf, "rb") as f:
             content = f.read()
         filename = args.pdf.rsplit("/", 1)[-1]
     else:
         # Same bytes every time: a second run finds it already uploaded (409), so checking a
-        # deployment leaves one small test document, not one per run.
+        # deployment leaves one small private test document, not one per run.
         content = tiny_pdf("Smoke test document, uploaded by scripts/smoke_test.py.")
         filename = "smoke-test.pdf"
     title = args.title or ("Smoke test document" if not args.pdf else filename)

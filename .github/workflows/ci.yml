@@ -99,10 +99,18 @@ jobs:
       - name: Start the stack and wait for health checks
         run: docker compose up -d --wait --wait-timeout 240
       - name: Smoke test (health, readiness, upload, ingestion, search)
+        env:
+          SMOKE_PASSWORD: ci-smoke-${{ github.run_id }}
         run: python3 scripts/smoke_test.py
+      - name: Sign in as the smoke-test account, which owns the test document
+        env:
+          SMOKE_PASSWORD: ci-smoke-${{ github.run_id }}
+        run: |
+          curl -sf -c jar.txt -H 'Content-Type: application/json' localhost:8080/api/auth/login \
+            -d "{\"email\": \"smoke-test@callslip.invalid\", \"password\": \"$SMOKE_PASSWORD\"}"
       - name: Data survives a full restart
         run: |
-          count() { curl -sf localhost:8080/api/documents | python3 -c "import json,sys; print(len(json.load(sys.stdin)))"; }
+          count() { curl -sf -b jar.txt localhost:8080/api/documents | python3 -c "import json,sys; print(len(json.load(sys.stdin)))"; }
           before=$(count)
           docker compose down
           docker compose up -d --wait --wait-timeout 240
@@ -114,7 +122,7 @@ jobs:
           docker compose stop redis
           curl -s localhost:8080/api/ready | tee ready.json
           grep -q '"status":"degraded"' ready.json
-          curl -sf -X POST localhost:8080/api/search -H 'Content-Type: application/json' \
+          curl -sf -b jar.txt -X POST localhost:8080/api/search -H 'Content-Type: application/json' \
             -d '{"query": "smoke test document"}' | python3 -c \
             "import json,sys; r=json.load(sys.stdin); print('hits', len(r['hits']), 'cache', r['cache']); assert r['hits'] and r['cache']=='unavailable'"
           docker compose start redis
