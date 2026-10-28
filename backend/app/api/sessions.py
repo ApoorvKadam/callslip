@@ -164,7 +164,7 @@ async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, 
     if body.mode == "agent":
         work = start_agent(ctx, question, history, dict(body.faults or {}))
     else:
-        work = run_baseline(ctx, question, history)
+        work = run_baseline(ctx, question, history, dict(body.faults or {}))
     state.runs.start(run_id, work)
     return run
 
