@@ -57,14 +57,14 @@ Migrations are numbered SQL files in `backend/app/migrations/`, applied once eac
 
 ```bash
 scripts/rollback.sh               # back to the previous tag, no rebuild, then verify
-scripts/rollback.sh 1a2b3c4       # or any tag still present locally (docker images agentic-rag-*)
+scripts/rollback.sh 1a2b3c4       # or any tag still present locally (docker images 'callslip-*')
 ```
 
 Data is not rolled back: documents, runs and the ledger stay. Because migrations are additive, an older release ignores tables and columns it does not know.
 
 ## Persistence
 
-- All state is in PostgreSQL on the named volume `agentic-rag_pgdata`: documents and their raw PDF bytes, pages, passages with vectors, sessions, runs, the exact model conversations, trace events and the model-call ledger.
+- All state is in PostgreSQL on the named volume `callslip_pgdata`: documents and their raw PDF bytes, pages, passages with vectors, sessions, runs, the exact model conversations, trace events and the model-call ledger.
 - `docker compose down` and `up` (or `restart`) keep it; only `docker compose down -v` deletes it. After `deploy.sh`, start with the deployed tag: `IMAGE_TAG=$(cat .deploy/current) docker compose up -d --wait`; a plain `docker compose up` uses the `dev` tag.
 - Redis holds only cache entries, with no persistence (`--save "" --appendonly no`); losing it costs only cache misses.
 - Backup: `docker compose exec -T postgres pg_dump -U rag rag | gzip > backup.sql.gz`. Restore into an empty database: `gunzip -c backup.sql.gz | docker compose exec -T postgres psql -U rag rag`. Then give the restored database a new cache epoch, so nothing cached before the restore can be read again: `docker compose exec -T postgres psql -U rag rag -c "UPDATE corpus_state SET epoch = gen_random_uuid()"`. (A restore brings back the old epoch and version, and versions published after the backup would otherwise be reused.)
