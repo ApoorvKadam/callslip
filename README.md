@@ -2,14 +2,14 @@
 
 A full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
 
-Status: in progress. The stack runs end to end: uploaded PDFs become page-tagged passages, and hybrid search (meaning plus keywords) finds them. Question answering, the agent loop, evaluation and full documentation follow in later changes.
+Status: in progress. The stack runs end to end: uploaded PDFs become page-tagged passages, hybrid search finds them, and questions get answers whose citations are checked against the source pages. This first answering mode is the single-pass baseline (retrieve once, answer once); the agent loop, evaluation and full documentation follow in later changes.
 
 ## Stack
 
 | Service | What it does |
 |---|---|
 | `frontend` | React + TypeScript (Vite) app served by nginx on port 8080; nginx also proxies `/api` to the API |
-| `api` | FastAPI: document upload and listing, hybrid search (`POST /api/search`), health and readiness |
+| `api` | FastAPI: documents, hybrid search, sessions and question runs (executed in the background, streamed to the UI as server-sent events), health and readiness |
 | `worker` | Ingestion: parse each PDF page (pypdf), split pages into passages, embed them locally (fastembed, `BAAI/bge-small-en-v1.5`) |
 | `postgres` | PostgreSQL 17 with pgvector: documents, raw files, pages, passages with vectors and full-text indexes |
 | `redis` | Cache (search results and query embeddings); the app keeps working if it is down |
@@ -24,7 +24,13 @@ docker compose up -d --build --wait
 python3 scripts/smoke_test.py # health, readiness, upload, ingestion, search
 ```
 
-Open http://localhost:8080 and upload PDFs. Each document moves from queued to processing to ready; failures show their reason.
+Open http://localhost:8080, upload PDFs and ask questions. Each document moves from queued to processing to ready; failures show their reason. From a terminal: `python3 scripts/ask.py "your question"` prints the answer, each citation with its page and check result, and the run's steps, time, tokens and cost.
+
+## Answers and citations
+
+Passages go to Claude (`claude-sonnet-5-5`) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. The UI shows each citation as a numbered chip; selecting it shows the quote, the check result and a link that opens the PDF at that page.
+
+Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the trace, and every model call with tokens and estimated cost. A browser gets a random token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to it, so another browser cannot read them. One question at a time per session.
 
 ## Develop
 
