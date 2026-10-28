@@ -1,9 +1,10 @@
 """Calls to Claude, each recorded in the `llm_calls` ledger with tokens and estimated cost.
 
-The SDK retries transient failures (connection errors, 429, 5xx) on its own; callers pass a
-timeout that fits their remaining time budget, so retries can never run past a deadline.
+The SDK retries transient failures (connection errors, 429, 5xx) on its own. The whole call,
+retries included, is bounded by the caller's timeout, so it can never run past a deadline.
 """
 
+import asyncio
 import time
 from dataclasses import dataclass
 from decimal import Decimal
@@ -76,7 +77,9 @@ class LLM:
             kwargs["tool_choice"] = tool_choice
 
         started = time.monotonic()
-        message = await self.client.with_options(timeout=timeout_s).messages.create(**kwargs)
+        message = await asyncio.wait_for(
+            self.client.with_options(timeout=timeout_s).messages.create(**kwargs), timeout_s
+        )
         ms = int((time.monotonic() - started) * 1000)
 
         u = message.usage

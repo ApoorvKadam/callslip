@@ -60,15 +60,9 @@ class RunContext:
             messages = await self.store.messages(self.run_id)
             page_texts = await self.store.page_texts(cited_pages(final_content))
             answer = build_answer(final_content, collect_evidence(messages), page_texts)
-        await self.store.update(
-            self.run_id,
-            status=status,
-            status_reason=reason,
-            answer=answer,
-            model_turns=self.model_turns,
-            tool_calls=self.tool_calls,
-            exec_ms=int(self.elapsed_s() * 1000),
-        )
+        exec_ms = int(self.elapsed_s() * 1000)
+        # Events first, status last: the event stream ends once the status is terminal, so
+        # every event must already be stored by then.
         if answer is not None:
             await self.emit("answer", answer)
         totals = await self.store.usage_totals(self.run_id)
@@ -79,9 +73,18 @@ class RunContext:
                 "reason": reason,
                 "model_turns": self.model_turns,
                 "tool_calls": self.tool_calls,
-                "ms": int(self.elapsed_s() * 1000),
+                "ms": exec_ms,
                 **totals,
             },
+        )
+        await self.store.update(
+            self.run_id,
+            status=status,
+            status_reason=reason,
+            answer=answer,
+            model_turns=self.model_turns,
+            tool_calls=self.tool_calls,
+            exec_ms=exec_ms,
         )
 
 

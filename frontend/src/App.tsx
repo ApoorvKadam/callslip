@@ -98,16 +98,18 @@ export default function App() {
     })();
   }, [follow, refreshRun, startSession]);
 
-  async function onAsk(question: string) {
-    if (!sessionId) return;
+  async function onAsk(question: string): Promise<boolean> {
+    if (!sessionId) return false;
     setError(null);
     try {
       const run = await ask(sessionId, question, "baseline");
       setRuns((all) => [...all, run]);
       setSelectedId(run.id);
       follow(run.id);
+      return true;
     } catch (e) {
       setError(errorText(e));
+      return false;
     }
   }
 

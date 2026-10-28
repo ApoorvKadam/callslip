@@ -15,7 +15,7 @@ interface Props {
   runs: Run[];
   selectedId: string | null;
   onSelect: (id: string) => void;
-  onAsk: (question: string) => Promise<void>;
+  onAsk: (question: string) => Promise<boolean>;
   onNewSession: () => void;
   error: string | null;
 }
@@ -31,8 +31,8 @@ export function Conversation({ runs, selectedId, onSelect, onAsk, onNewSession, 
     if (!q || busy) return;
     setSending(true);
     try {
-      await onAsk(q);
-      setQuestion("");
+      // Keep the text when asking failed, so nothing typed is lost.
+      if (await onAsk(q)) setQuestion("");
     } finally {
       setSending(false);
     }
