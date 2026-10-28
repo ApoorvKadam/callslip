@@ -7,7 +7,9 @@ port="$(docker compose port frontend 8080 2>/dev/null | sed 's/.*://')"
 base="${BASE_URL:-http://localhost:${port:-8080}}"
 
 docker compose ps --format 'table {{.Service}}\t{{.Status}}'
-unhealthy="$(docker compose ps --all --format '{{.Service}} {{.Health}}' | awk '$2 != "healthy" {print $1}')"
+# Every service must be running, and healthy when it has a health check.
+unhealthy="$(docker compose ps --all --format '{{.Service}} {{.State}} {{.Health}}' |
+  awk '$2 != "running" || ($3 != "" && $3 != "healthy") {print $1}')"
 if [[ -n "$unhealthy" ]]; then
   echo "not healthy: $(echo $unhealthy)" >&2
   exit 1
