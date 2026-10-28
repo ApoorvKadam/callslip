@@ -2,7 +2,15 @@
 
 A full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
 
-Status: in progress. The stack runs end to end: uploaded PDFs become page-tagged passages, hybrid search finds them, and an agent answers questions with citations checked against the source pages. A single-pass baseline (retrieve once, answer once) runs through the same stack for comparison. The evaluation and full documentation follow in later changes.
+Start with [SUMMARY.md](SUMMARY.md): what was built, the results in one paragraph, and what is unfinished.
+
+| Document | What it covers |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | services, data flow, the agent's tools, state and stopping conditions, trade-offs, scaling |
+| [docs/demo.md](docs/demo.md) | a reproducible walkthrough: multi-document question, re-retrieval, clarification, tool failure, limits, Redis outage |
+| [docs/evaluation.md](docs/evaluation.md) | ten cases, the agent against a single-pass baseline, failure analysis |
+| [docs/runbook.md](docs/runbook.md) | deploy, verify, update, roll back, persistence, logging, with captured output |
+| [docs/reproducibility.md](docs/reproducibility.md) | corpus sources and checksums, models, prompts, tool schemas, evaluation command, costs |
 
 ## Stack
 
@@ -22,7 +30,10 @@ Requirements: Docker with Compose v2.
 cp .env.example .env          # then set POSTGRES_PASSWORD (and ANTHROPIC_API_KEY for answers)
 docker compose up -d --build --wait
 python3 scripts/smoke_test.py # health, readiness, upload, ingestion, search
+python3 scripts/load_corpus.py # optional: the 14 PDFs used in the evaluation
 ```
+
+`scripts/deploy.sh` does the same with images tagged by commit, and `scripts/rollback.sh` goes back to the previous tag ([runbook](docs/runbook.md)).
 
 Open http://localhost:8080, upload PDFs and ask questions. Each document moves from queued to processing to ready; failures show their reason. From a terminal: `python3 scripts/ask.py "your question"` prints the answer, each citation with its page and check result, and the run's steps, time, tokens and cost.
 
@@ -82,4 +93,4 @@ Redis caches search results and query embeddings:
 
 If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working.
 
-CI runs on every pull request: backend lint and tests against real PostgreSQL, Redis and the embedding model, frontend typecheck and build, then a Compose build and smoke test.
+CI runs on every pull request: backend and script lint, tests against real PostgreSQL, Redis and the embedding model, frontend typecheck and build, then a Compose build, smoke test, full restart (data must survive) and a Redis outage (search must keep working).
