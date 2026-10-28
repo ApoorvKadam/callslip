@@ -6,6 +6,7 @@ They are skipped when it is not set. Each test module starts from an empty schem
 """
 
 import os
+from datetime import UTC, datetime
 from pathlib import Path
 
 import psycopg
@@ -42,8 +43,10 @@ def reset_schema() -> None:
 
 
 def make_pdf(pages: list[str]) -> bytes:
-    """A real text-layer PDF with one string per page."""
+    """A real text-layer PDF with one string per page. The creation date is fixed, so the same
+    pages always give the same bytes, as duplicate detection expects."""
     pdf = FPDF()
+    pdf.set_creation_date(datetime(2026, 1, 1, tzinfo=UTC))
     pdf.set_font("Helvetica", size=11)
     for text in pages:
         pdf.add_page()
