@@ -111,15 +111,15 @@ On Kubernetes or OpenShift the same images become four Deployments (frontend, ap
 
 ## Evidence
 
-Captured on 2026-10-28 (ET) on the development machine (WSL 2, Docker 29.9, Compose 5.6), on the stack that also served the evaluation: 14 corpus documents plus three private test uploads, and 963 runs. CI runs the same smoke, restart and Redis checks on every pull request.
+Captured on 2026-10-28 between 19:43 and 19:46 ET on the development machine (WSL 2, Docker 29.9, Compose 5.6), on the final build and the stack that served the evaluation: 14 corpus documents plus three private test uploads, 1,563 runs and 8 accounts. CI runs the same smoke, restart and Redis checks on every pull request.
 
-### Update: from `09d1b08` to `1839f1e`, 13:28, 139 s
+### Update: from `8872484` to `bf84ae2`, 57 s
 
 The images are built and tagged with the commit. PostgreSQL and Redis are left running; Compose recreates only the containers whose image changed (api, runner, worker, frontend).
 
 ```text
 $ git pull && scripts/deploy.sh
-building images callslip-*:1839f1e
+building images callslip-*:bf84ae2
 ...
  Container callslip-postgres-1 Running
  Container callslip-redis-1 Running
@@ -131,33 +131,8 @@ building images callslip-*:1839f1e
 SERVICE    STATUS
 api        Up 23 seconds (healthy)
 frontend   Up 11 seconds (healthy)
-postgres   Up 11 hours (healthy)
-redis      Up 11 hours (healthy)
-runner     Up 24 seconds (healthy)
-worker     Up 22 seconds (healthy)
-health: 200 {'status': 'ok'}
-ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
-sign in: 200 {'email': 'smoke-test@callslip.invalid'}
-upload: already present as document 61
-ingest: ready after 0.0s, pages=1, passages=1, error=None
-search: 200, 1 hits, cache=miss, ms=41
-  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
-verify: ok
-deployed 1839f1e (previous: 09d1b08)
-```
-
-The smoke test signs in to its own account (`smoke-test@callslip.invalid`), so its document is private: users and the agent never see it. It finds that document already present (409) and reuses it, so verifying never adds documents. A first deploy runs the same steps on an empty database and uploads the document once.
-
-### Roll back: 13:31:00 to 13:31:31, no rebuild
-
-```text
-$ scripts/rollback.sh
-rolling back to 09d1b08
-SERVICE    STATUS
-api        Up 23 seconds (healthy)
-frontend   Up 11 seconds (healthy)
-postgres   Up 11 hours (healthy)
-redis      Up 11 hours (healthy)
+postgres   Up 6 hours (healthy)
+redis      Up 6 hours (healthy)
 runner     Up 23 seconds (healthy)
 worker     Up 22 seconds (healthy)
 health: 200 {'status': 'ok'}
@@ -165,10 +140,36 @@ ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
 sign in: 200 {'email': 'smoke-test@callslip.invalid'}
 upload: already present as document 61
 ingest: ready after 0.0s, pages=1, passages=1, error=None
-search: 200, 1 hits, cache=hit, ms=6
+search: 200, 1 hits, cache=miss, ms=92
   page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
 verify: ok
-running 09d1b08
+deployed bf84ae2 (previous: 8872484)
+```
+
+The smoke test signs in to its own account (`smoke-test@callslip.invalid`), so its document is private: users and the agent never see it. It finds that document already present (409) and reuses it, so verifying never adds documents. A first deploy runs the same steps on an empty database and uploads the document once.
+
+### Roll back: 29 s, no rebuild
+
+```text
+$ scripts/rollback.sh
+rolling back to 8872484
+...
+health: 200 {'status': 'ok'}
+ready: 200 {'status': 'ok', 'checks': {'database': 'up', 'redis': 'up'}}
+sign in: 200 {'email': 'smoke-test@callslip.invalid'}
+upload: already present as document 61
+ingest: ready after 0.0s, pages=1, passages=1, error=None
+search: 200, 1 hits, cache=hit, ms=2
+  page 1  score 0.0328  Smoke test document, uploaded by scripts/smoke_test.py.
+verify: ok
+running 8872484
+```
+
+A release older than private documents and run workers is refused before anything changes:
+
+```text
+$ scripts/rollback.sh b12c0be
+rollback refused: b12c0be predates private documents and run workers
 ```
 
 ### A deploy that fails verification
@@ -178,28 +179,26 @@ Simulated by pointing the check at a closed port; the recorded tags stay as they
 ```text
 $ BASE_URL=http://localhost:1 scripts/deploy.sh
 ...
-urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
-verify failed for 1839f1e; last verified: 09d1b08 (scripts/rollback.sh 09d1b08)
+verify failed for bf84ae2; last verified: 8872484 (scripts/rollback.sh 8872484)
 $ cat .deploy/current .deploy/previous
-09d1b08
-1839f1e
+8872484
+bf84ae2
 ```
 
 Then forward to the newest tag, verified this time:
 
 ```text
-$ scripts/rollback.sh 1839f1e
-rolling back to 1839f1e
+$ scripts/rollback.sh bf84ae2
 ...
 verify: ok
-running 1839f1e
+running bf84ae2
 ```
 
 ### Full restart keeps all data
 
 ```text
 $ docker compose down && IMAGE_TAG=$(cat .deploy/current) docker compose up -d --wait
-documents, runs, users before: 17, 963, 3; after: 17, 963, 3
+documents, runs, users before: 17, 1563, 8; after: 17, 1563, 8
 ```
 
 ### Redis outage
@@ -210,9 +209,9 @@ $ curl -s localhost:8080/api/ready
 {"status":"degraded","checks":{"database":"up","redis":"down"}}
 $ python3 scripts/ask.py "What are the four functions of the NIST AI RMF Core?"
 status: complete
-  tool search_documents {"query": "four functions of the AI RMF Core: GOVERN, MAP, MEASURE, MANAGE", "top_k": 5, "document_ids": [1]} -> ok, 5 passages, cache unavailable, 338 ms
-[1] NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25 (doc 1, page 25) verified: "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Core T ...
-totals: 5671 ms, 3 model calls, 1 tool calls, $0.0017
+  tool search_documents {"query": "four functions of the AI RMF Core: GOVERN, MAP, MEASURE, MANAGE", "top_k": 5, "document_ids": [1]} -> ok, 5 passages, cache unavailable, 340 ms
+[1] NIST AI 100-1: Artificial Intelligence Risk Management Framework (AI RMF 1.0), January 2023, page 25 (doc 1, page 25) verified: "NIST AI 100-1 AI RMF 1.0 Part 2: Core and Profiles 5. AI RMF Co ...
+totals: 4755 ms, 3 model calls, 1 tool calls, $0.0017
 $ docker compose start redis && curl -s localhost:8080/api/ready
 {"status":"ok","checks":{"database":"up","redis":"up"}}
 ```
@@ -220,7 +219,7 @@ $ docker compose start redis && curl -s localhost:8080/api/ready
 The only warning or error logged during the outage came from the run worker, which runs the searches:
 
 ```text
-{"ts": "2026-10-28T17:33:38.260+00:00", "level": "WARNING", "logger": "app.cache", "msg": "redis unavailable; continuing without cache", "error": "network:TimeoutError", "retry_after_s": 30.0}
+{"ts": "2026-10-28T23:45:42.430+00:00", "level": "WARNING", "logger": "app.cache", "msg": "redis unavailable; continuing without cache", "error": "network:TimeoutError", "retry_after_s": 30.0}
 ```
 
 An earlier run of the same check also logged `Future exception was never retrieved` at ERROR. It came from uvloop (issue 437 in its tracker), so the API now runs on the standard asyncio loop.
