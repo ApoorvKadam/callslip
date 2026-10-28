@@ -163,7 +163,12 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
   let title = tool;
   let request: string | null = null;
   if (tool === "search_documents") {
-    title = "Searched";
+    // Name the documents a filtered search was limited to, when its results show them all.
+    const ids = (input.document_ids as number[] | undefined) ?? [];
+    const docs = [...new Set(evidence.map((e) => shortCode(e.title)))];
+    if (ids.length === 0) title = "Searched all documents";
+    else if (docs.length === ids.length) title = `Searched ${docs.join(", ")}`;
+    else title = `Searched ${count(ids.length, "document")}`;
     request = String(input.query ?? "");
   } else if (tool === "read_document_section") {
     const doc = evidence[0] ? shortCode(evidence[0].title) : `document ${input.document_id}`;
