@@ -134,7 +134,9 @@ def build_answer(
 ) -> dict:
     """Turn the model's text blocks into numbered, checked citations for the UI and storage."""
     segments: list[dict] = []
-    numbered: dict[tuple[str, str], Citation] = {}
+    # Every occurrence is checked; only occurrences with the same quote, source and result share
+    # a number, so a repeated quote that fails its check never borrows an earlier pass.
+    numbered: dict[tuple[str, str, str], Citation] = {}
     for block in content:
         if block.get("type") != "text":
             continue
@@ -142,7 +144,8 @@ def build_answer(
         for c in block.get("citations") or []:
             if c.get("type") != "search_result_location":
                 continue
-            key = (c.get("source", ""), c.get("cited_text", ""))
+            provenance = check_citation(c, evidence, page_texts)
+            key = (c.get("source", ""), c.get("cited_text", ""), provenance)
             if key not in numbered:
                 location = parse_source(key[0])
                 numbered[key] = Citation(
@@ -152,7 +155,7 @@ def build_answer(
                     document_id=location[0] if location else None,
                     page_no=location[1] if location else None,
                     cited_text=key[1],
-                    provenance=check_citation(c, evidence, page_texts),
+                    provenance=provenance,
                 )
             if numbered[key].number not in refs:
                 refs.append(numbered[key].number)

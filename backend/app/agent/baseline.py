@@ -7,7 +7,7 @@ difference that matters: the agent decides what to do next, the baseline cannot.
 
 import time
 
-from app.agent.loop import execute_tool
+from app.agent.loop import TRANSIENT_MODEL_ERRORS, execute_tool, stop_without_model
 from app.agent.prompts import BASELINE_SYSTEM
 from app.agent.tools import Tools, elapsed_ms
 from app.runs.context import RunContext, content_dicts, question_text
@@ -54,13 +54,19 @@ async def run_baseline(
     content = [*passages, {"type": "text", "text": text}]
     await ctx.store.append_message(ctx.run_id, "user", content)
 
-    message, usage = await ctx.llm.create(
-        run_id=ctx.run_id,
-        purpose="baseline_answer",
-        system=[{"type": "text", "text": BASELINE_SYSTEM}],
-        messages=[{"role": "user", "content": content}],
-        timeout_s=max(5.0, min(ctx.settings.llm_timeout_s, ctx.remaining_s())),
-    )
+    messages = [{"role": "user", "content": content}]
+    try:
+        message, usage = await ctx.llm.create(
+            run_id=ctx.run_id,
+            purpose="baseline_answer",
+            system=[{"type": "text", "text": BASELINE_SYSTEM}],
+            messages=messages,
+            timeout_s=max(5.0, min(ctx.settings.llm_timeout_s, ctx.remaining_s())),
+        )
+    except TRANSIENT_MODEL_ERRORS as exc:
+        reason = f"the model could not be reached ({type(exc).__name__})"
+        await stop_without_model(ctx, messages, reason)
+        return
     assistant = content_dicts(message.content)
     await ctx.store.append_message(ctx.run_id, "assistant", assistant)
     await ctx.model_event("answer", message.stop_reason, usage)

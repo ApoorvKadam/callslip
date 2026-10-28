@@ -14,7 +14,9 @@ from pathlib import Path
 import pytest
 from anthropic.types import Message
 
+from app.agent.baseline import run_baseline
 from app.agent.loop import FINAL, resume_agent, start_agent
+from app.agent.tools import Tools
 from app.config import get_settings
 from app.llm import Usage
 from app.runs.context import RunContext
@@ -155,3 +157,53 @@ async def test_no_time_left_stops_without_another_model_call(tools):  # noqa: F8
     assert run["status"] == "incomplete"
     assert llm.tool_choices == []  # never called the model
     assert "stopped before finishing" in run["answer"]["text"]
+
+
+async def test_a_clarification_needs_a_turn_left_to_use_the_reply(tools):  # noqa: F811
+    llm = ReplayLLM(RUNS[AMBIGUOUS])  # recorded: list_documents, then ask_clarification
+    ctx = await new_run(tools, llm, max_model_turns=3)
+    await start_agent(ctx, AMBIGUOUS, [], {})
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "incomplete"  # answered within the limit instead of pausing
+    assert llm.tool_choices[-1] == FINAL
+    assert "limit" in [t for t, _ in await events(ctx)]
+
+
+class TimeoutLLM:
+    """A model call whose total time budget runs out (the wait_for in llm.py)."""
+
+    async def create(self, **_):
+        raise TimeoutError
+
+
+async def test_model_timeout_ends_incomplete_with_what_was_found(tools):  # noqa: F811
+    ctx = await new_run(tools, TimeoutLLM())
+    await start_agent(ctx, FAILED_SEARCH, [], {})
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "incomplete"
+    assert "TimeoutError" in run["status_reason"]
+    assert "stopped before finishing" in run["answer"]["text"]
+
+
+async def test_baseline_model_timeout_ends_incomplete(tools):  # noqa: F811
+    ctx = await new_run(tools, TimeoutLLM())
+    await run_baseline(ctx, FAILED_SEARCH, [])
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "incomplete"
+    assert "TimeoutError" in run["status_reason"]
+
+
+async def test_unexpected_tool_exception_goes_back_as_a_typed_error(tools, monkeypatch):  # noqa: F811
+    async def broken(self, args):
+        raise RuntimeError("connection to the database was lost")
+
+    monkeypatch.setattr(Tools, "search_documents", broken)
+    ctx = await new_run(tools, ReplayLLM(RUNS[FAILED_SEARCH]))
+    await start_agent(ctx, FAILED_SEARCH, [], {})
+    searches = [
+        d for t, d in await events(ctx) if t == "tool_call" and d["tool"] == "search_documents"
+    ]
+    assert searches and all(d["status"] == "error" for d in searches)
+    assert all(d["attempts"] == 2 and "RuntimeError" in d["summary"] for d in searches)
+    run = await ctx.store.get_run(ctx.run_id)
+    assert run["status"] == "complete"  # the model moved on to reading pages, as recorded

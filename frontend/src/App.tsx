@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ApiError,
   type Mode,
   type Run,
   type RunEvent,
@@ -37,6 +38,7 @@ export default function App() {
   const [events, setEvents] = useState<Record<string, RunEvent[]>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const lastReply = useRef<{ toolUseId: string; text: string; key: string } | null>(null);
   const [mode, setMode] = useState<Mode>("agent");
   const streams = useRef<Record<string, EventSource>>({});
 
@@ -131,7 +133,15 @@ export default function App() {
     setError(null);
     try {
       if (pending) {
-        const run = await resume(sessionId, pending.runId, pending.toolUseId, text);
+        // Sending the same reply again (after a lost response) reuses its key, so the server
+        // recognises the retry instead of reporting that the question is no longer waiting.
+        const last = lastReply.current;
+        const key =
+          last && last.toolUseId === pending.toolUseId && last.text === text
+            ? last.key
+            : crypto.randomUUID();
+        lastReply.current = { toolUseId: pending.toolUseId, text, key };
+        const run = await resume(sessionId, pending.runId, pending.toolUseId, text, key);
         replaceRun(run);
         follow(run.id);
       } else {
@@ -143,6 +153,12 @@ export default function App() {
       return true;
     } catch (e) {
       setError(errorText(e));
+      // 409 on a reply: the run has moved on (an earlier reply may have been accepted while its
+      // response was lost), so show the run as it is instead of the stale question.
+      if (pending && e instanceof ApiError && e.status === 409) {
+        await refreshRun(pending.runId).catch(() => undefined);
+        follow(pending.runId);
+      }
       return false;
     }
   }

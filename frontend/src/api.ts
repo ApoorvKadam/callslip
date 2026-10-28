@@ -143,16 +143,12 @@ export function resume(
   runId: string,
   toolUseId: string,
   reply: string,
+  idempotencyKey: string,
 ): Promise<Run> {
   return request(`/api/sessions/${sessionId}/runs/${runId}/resume`, {
     method: "POST",
     headers: json,
-    // A fresh key per reply: a retried request with the same key is accepted only once.
-    body: JSON.stringify({
-      tool_use_id: toolUseId,
-      idempotency_key: crypto.randomUUID(),
-      reply,
-    }),
+    body: JSON.stringify({ tool_use_id: toolUseId, idempotency_key: idempotencyKey, reply }),
   });
 }
 
