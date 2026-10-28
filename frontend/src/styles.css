@@ -73,6 +73,21 @@ a:hover {
   outline-offset: 2px;
 }
 
+/* Hidden until focused: the first Tab stop, for keyboard users. */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 20;
+  padding: 8px 12px;
+  background: var(--canvas);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+.skip-link:focus {
+  top: 12px;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

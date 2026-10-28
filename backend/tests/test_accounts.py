@@ -239,6 +239,14 @@ def test_your_own_upload_can_be_deleted_and_nothing_else(client):
         )
 
 
+def test_a_short_wrong_password_gets_the_usual_answer(client):
+    sign_up(client, "ada@nyu.edu")
+    client.cookies.clear()
+    response = sign_in(client, "ada@nyu.edu", "short")
+    assert response.status_code == 401
+    assert response.json()["detail"] == "The email or the password is not right."
+
+
 @needs_redis
 def test_repeated_failed_sign_ins_lock_that_email_for_a_while(client):
     sign_up(client, "ada@nyu.edu")

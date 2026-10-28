@@ -41,6 +41,12 @@ class Credentials(BaseModel):
     password: Password
 
 
+class SignIn(BaseModel):
+    # No minimum here: a short wrong password gets the same answer, and counts, like any other.
+    email: Email
+    password: Annotated[str, StringConstraints(min_length=1, max_length=200)]
+
+
 def hash_password(password: str) -> str:
     salt = secrets.token_bytes(16)
     digest = hashlib.scrypt(password.encode(), salt=salt, dklen=32, **SCRYPT)
@@ -162,7 +168,7 @@ async def _clear_attempts(redis, key: str) -> None:
 
 
 @router.post("/login")
-async def login(body: Credentials, request: Request, response: Response, pool: Pool) -> dict:
+async def login(body: SignIn, request: Request, response: Response, pool: Pool) -> dict:
     address = request.client.host if request.client else "unknown"
     redis, key = request.app.state.redis, _failures_key(body.email, address)
     wait = await _take_attempt(redis, key)

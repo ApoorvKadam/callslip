@@ -335,6 +335,9 @@ export default function App() {
 
   return (
     <div className="app">
+      <a className="skip-link" href="#question">
+        Skip to the question box
+      </a>
       <header className="bar">
         <span className="wordmark">Callslip</span>
         <div className="bar-actions">
