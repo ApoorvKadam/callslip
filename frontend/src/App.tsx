@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ApiError,
   type Mode,
   type Run,
   type RunEvent,
@@ -152,6 +153,12 @@ export default function App() {
       return true;
     } catch (e) {
       setError(errorText(e));
+      // 409 on a reply: the run has moved on (an earlier reply may have been accepted while its
+      // response was lost), so show the run as it is instead of the stale question.
+      if (pending && e instanceof ApiError && e.status === 409) {
+        await refreshRun(pending.runId).catch(() => undefined);
+        follow(pending.runId);
+      }
       return false;
     }
   }
