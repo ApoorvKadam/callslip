@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="Agentic RAG", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="Callslip", version="0.1.0", lifespan=lifespan)
     app.include_router(health.router)
     app.include_router(documents.router)
     app.include_router(search.router)

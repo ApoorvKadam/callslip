@@ -10,7 +10,7 @@ tag="$(git rev-parse --short HEAD)"
 mkdir -p .deploy
 current="$(cat .deploy/current 2>/dev/null || true)"
 
-echo "building images agentic-rag-*:${tag}"
+echo "building images callslip-*:${tag}"
 IMAGE_TAG="$tag" docker compose build
 echo "starting ${tag}"
 IMAGE_TAG="$tag" docker compose up -d --wait --wait-timeout 240

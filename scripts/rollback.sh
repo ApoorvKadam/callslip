@@ -9,7 +9,7 @@ cd "$(dirname "$0")/.."
 
 tag="${1:-$(cat .deploy/previous 2>/dev/null || true)}"
 if [[ -z "$tag" ]]; then echo "no previous deployment recorded; pass a tag" >&2; exit 1; fi
-for image in agentic-rag-backend agentic-rag-frontend; do
+for image in callslip-backend callslip-frontend; do
   docker image inspect "${image}:${tag}" > /dev/null || { echo "missing ${image}:${tag}" >&2; exit 1; }
 done
 
