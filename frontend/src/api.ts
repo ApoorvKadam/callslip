@@ -54,3 +54,86 @@ export function uploadDocument(file: File): Promise<DocumentInfo> {
 export function documentFileUrl(id: number, page?: number): string {
   return `/api/documents/${id}/file${page ? `#page=${page}` : ""}`;
 }
+
+// Sessions and runs ----------------------------------------------------------------------
+
+export type RunStatus =
+  | "running"
+  | "needs_clarification"
+  | "complete"
+  | "incomplete"
+  | "failed"
+  | "abandoned";
+
+export type Mode = "agent" | "baseline";
+
+export interface Citation {
+  number: number;
+  source: string;
+  title: string;
+  document_id: number | null;
+  page_no: number | null;
+  cited_text: string;
+  provenance: string;
+}
+
+export interface Answer {
+  text: string;
+  segments: { text: string; citations: number[] }[];
+  citations: Citation[];
+  citations_verified: number;
+}
+
+export interface RunEvent {
+  seq: number;
+  type: string;
+  data: Record<string, unknown>;
+}
+
+export interface Run {
+  id: string;
+  session_id: string;
+  mode: Mode;
+  question: string;
+  status: RunStatus;
+  status_reason: string | null;
+  answer: Answer | null;
+  model_turns: number;
+  tool_calls: number;
+  exec_ms: number;
+  created_at: string;
+  finished_at: string | null;
+  events?: RunEvent[];
+}
+
+export interface Session {
+  id: string;
+  created_at: string;
+  runs: Run[];
+}
+
+const json = { "Content-Type": "application/json" };
+
+export function createSession(): Promise<{ id: string }> {
+  return request("/api/sessions", { method: "POST" });
+}
+
+export function getSession(id: string): Promise<Session> {
+  return request(`/api/sessions/${id}`);
+}
+
+export function ask(sessionId: string, question: string, mode: Mode): Promise<Run> {
+  return request(`/api/sessions/${sessionId}/runs`, {
+    method: "POST",
+    headers: json,
+    body: JSON.stringify({ question, mode }),
+  });
+}
+
+export function getRun(id: string): Promise<Run> {
+  return request(`/api/runs/${id}`);
+}
+
+export function runEventsUrl(id: string): string {
+  return `/api/runs/${id}/events`;
+}
