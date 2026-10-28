@@ -14,6 +14,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import uuid
 
 
 class Client:
@@ -37,16 +38,22 @@ class Client:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("question")
-    parser.add_argument("--mode", default="baseline")
+    parser.add_argument("--mode", default="agent", choices=["agent", "baseline"])
+    parser.add_argument("--reply", help="answer to send if the agent asks a clarifying question")
+    parser.add_argument(
+        "--fault", action="append", default=[], metavar="TOOL=MODE",
+        help="inject a tool failure (needs ALLOW_FAULT_INJECTION=true), e.g. search_documents=timeout",
+    )
     parser.add_argument("--base", default="http://localhost:8080")
     parser.add_argument("--timeout", type=int, default=180)
     args = parser.parse_args()
 
     client = Client(args.base)
     _, session = client.call("POST", "/api/sessions")
-    status, run = client.call(
-        "POST", f"/api/sessions/{session['id']}/runs", {"question": args.question, "mode": args.mode}
-    )
+    payload = {"question": args.question, "mode": args.mode}
+    if args.fault:
+        payload["faults"] = dict(f.split("=", 1) for f in args.fault)
+    status, run = client.call("POST", f"/api/sessions/{session['id']}/runs", payload)
     if status != 202:
         print("ask failed:", status, run)
         return 1
@@ -55,13 +62,32 @@ def main() -> int:
     while run["status"] == "running" and time.monotonic() - started < args.timeout:
         time.sleep(1)
         _, run = client.call("GET", f"/api/runs/{run['id']}")
+        if run["status"] == "needs_clarification":
+            asked = [e["data"] for e in run["events"] if e["type"] == "clarification"][-1]
+            print(f"agent asks: {asked['question']}  options: {asked['options']}")
+            if not args.reply:
+                break
+            print(f"replying: {args.reply}")
+            body = {"tool_use_id": asked["tool_use_id"], "idempotency_key": uuid.uuid4().hex,
+                    "reply": args.reply}
+            status, run = client.call(
+                "POST", f"/api/sessions/{session['id']}/runs/{run['id']}/resume", body
+            )
+            if status != 202:
+                print("resume failed:", status, run)
+                return 1
+            args.reply = None  # answer one clarification
 
     print(f"status: {run['status']}  {run.get('status_reason') or ''}")
     for event in run.get("events", []):
         data = event["data"]
-        if event["type"] == "tool_call":
+        if event["type"] in ("clarification", "clarification_answered", "limit"):
+            print(f"  {event['type']}: {json.dumps(data)}")
+        elif event["type"] == "tool_call":
+            retried = f", retried after {data['retries']}" if data.get("retries") else ""
             print(f"  tool {data['tool']} {json.dumps(data['input'])} -> {data['status']}, "
-                  f"{data.get('summary', '')}, cache {data.get('cache')}, {data.get('ms')} ms")
+                  f"{data.get('summary', '')}, cache {data.get('cache')}, {data.get('ms')} ms"
+                  f"{retried}")
         elif event["type"] == "model_call":
             print(f"  model turn {data['turn']} ({data['purpose']}): {data['ms']} ms, "
                   f"in {data['input_tokens']} out {data['output_tokens']} tokens, "
