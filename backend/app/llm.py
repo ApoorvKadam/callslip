@@ -6,6 +6,7 @@ retries included, is bounded by the caller's timeout, so it can never run past a
 
 import asyncio
 import time
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
@@ -64,7 +65,10 @@ class LLM:
         max_tokens: int = 4000,
         tools: list[dict] | None = None,
         tool_choice: dict | None = None,
+        on_text: Callable[[str], Awaitable[None]] | None = None,
     ) -> tuple[Message, Usage]:
+        """One model call. With `on_text`, the response is streamed and each piece of text is
+        passed on as it arrives; the returned message is the same finished message either way."""
         kwargs: dict[str, Any] = {
             "model": self.model,
             "max_tokens": max_tokens,
@@ -77,10 +81,20 @@ class LLM:
         if tool_choice:
             kwargs["tool_choice"] = tool_choice
 
+        client = self.client.with_options(timeout=timeout_s)
+
+        async def streamed() -> Message:
+            async with client.messages.stream(**kwargs) as stream:
+                async for event in stream:
+                    if event.type == "text":
+                        await on_text(event.text)
+                message = await stream.get_final_message()
+                message._request_id = stream.request_id
+                return message
+
         started = time.monotonic()
-        message = await asyncio.wait_for(
-            self.client.with_options(timeout=timeout_s).messages.create(**kwargs), timeout_s
-        )
+        call = streamed() if on_text else client.messages.create(**kwargs)
+        message = await asyncio.wait_for(call, timeout_s)
         ms = int((time.monotonic() - started) * 1000)
 
         u = message.usage

@@ -3,6 +3,7 @@ import {
   ApiError,
   type Mode,
   type Run,
+  type Answer,
   type RunEvent,
   type RunStatus,
   abandon,
@@ -13,7 +14,7 @@ import {
   resume,
   runEventsUrl,
 } from "./api";
-import { Conversation, type PendingClarification } from "./components/Conversation";
+import { Conversation, type LiveAnswer, type PendingClarification } from "./components/Conversation";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { RunRail, type RailTab } from "./components/RunRail";
 
@@ -25,6 +26,7 @@ const EVENT_TYPES = [
   "limit",
   "clarification",
   "clarification_answered",
+  "answer_delta",
   "answer",
   "run_finished",
 ];
@@ -142,6 +144,33 @@ export default function App() {
       }
     })();
   }, [follow, refreshRun, startSession]);
+
+  // What each question's events already show: its answer as soon as the answer event arrives,
+  // or, while the model is still writing it, the text so far. A turn that ended in a tool call
+  // was the model working, not answering, so its text is not shown.
+  const live: Record<string, LiveAnswer> = {};
+  for (const run of runs) {
+    const list = events[run.id] ?? [];
+    const answerEvent = list.find((e) => e.type === "answer");
+    if (answerEvent) {
+      live[run.id] = { answer: answerEvent.data as unknown as Answer };
+      continue;
+    }
+    if (run.answer || list.some((e) => e.type === "run_finished")) continue;
+    const deltas = list.filter((e) => e.type === "answer_delta");
+    if (deltas.length === 0) continue;
+    const turn = Math.max(...deltas.map((e) => Number(e.data.turn)));
+    const ended = list.some(
+      (e) =>
+        e.type === "model_call" && Number(e.data.turn) === turn && e.data.stop_reason === "tool_use",
+    );
+    if (ended) continue;
+    const draft = deltas
+      .filter((e) => Number(e.data.turn) === turn)
+      .map((e) => String(e.data.text))
+      .join("");
+    live[run.id] = { draft };
+  }
 
   // A run waiting for the user's reply, and the question it asked (from its last event).
   const waiting = runs.find((r) => r.status === "needs_clarification");
@@ -268,6 +297,7 @@ export default function App() {
         <main className="talk">
           <Conversation
             runs={runs}
+            live={live}
             selectedId={selectedId}
             onSelect={(id) => void onSelect(id)}
             onAsk={onAsk}

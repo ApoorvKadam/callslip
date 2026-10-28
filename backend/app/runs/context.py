@@ -1,5 +1,6 @@
 """What a running question needs, and the steps every run shares: events, history, finishing."""
 
+import logging
 import time
 from dataclasses import dataclass, field
 from uuid import UUID
@@ -11,6 +12,8 @@ from app.retrieval.search import SearchHit, SearchService
 from app.runs.store import RunStore
 
 EXCERPT_CHARS = 180
+
+log = logging.getLogger(__name__)
 
 
 @dataclass
@@ -33,6 +36,10 @@ class RunContext:
 
     async def emit(self, type_: str, data: dict) -> None:
         await self.store.event(self.run_id, type_, data)
+
+    def answer_stream(self) -> "AnswerStream":
+        """For the next model call: its text as it is written, for the browser to show."""
+        return AnswerStream(self, self.model_turns + 1)
 
     async def model_event(self, purpose: str, stop_reason: str | None, usage: Usage) -> None:
         self.model_turns += 1
@@ -101,6 +108,35 @@ def evidence_summary(hits: list[SearchHit]) -> list[dict]:
         }
         for h in hits
     ]
+
+
+class AnswerStream:
+    """A model call's text as it arrives, sent as `answer_delta` events about four times a
+    second. They only show progress: the answer itself is still built from the finished message,
+    and its citations are checked as before. A failed write stops the progress events, not the run.
+    """
+
+    INTERVAL_S = 0.25
+
+    def __init__(self, ctx: RunContext, turn: int) -> None:
+        self.ctx, self.turn = ctx, turn
+        self.pending, self.sent_at, self.broken = "", time.monotonic(), False
+
+    async def add(self, text: str) -> None:
+        self.pending += text
+        if time.monotonic() - self.sent_at >= self.INTERVAL_S:
+            await self.flush()
+
+    async def flush(self) -> None:
+        if not self.pending or self.broken:
+            return
+        try:
+            await self.ctx.emit("answer_delta", {"turn": self.turn, "text": self.pending})
+        except Exception:
+            self.broken = True
+            fields = {"run_id": str(self.ctx.run_id)}
+            log.warning("answer progress stopped", extra={"fields": fields})
+        self.pending, self.sent_at = "", time.monotonic()
 
 
 def content_dicts(blocks: list) -> list[dict]:

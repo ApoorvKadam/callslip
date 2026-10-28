@@ -436,6 +436,35 @@ a:hover {
   margin: 8px 0 16px;
 }
 
+/* Text still being written, in a lighter ink because it is provisional: the turn may still end
+   in a tool call, and citations arrive with the checked answer that replaces it. */
+.answer.streaming {
+  color: var(--ink-2);
+}
+
+.answer.streaming > :last-child::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: caret 1s steps(1) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .answer.streaming > :last-child::after {
+    animation: none;
+  }
+}
+
 .answer {
   font-family: var(--serif);
   font-size: 17px;

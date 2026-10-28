@@ -55,6 +55,7 @@ async def run_baseline(
     await ctx.store.append_message(ctx.run_id, "user", content)
 
     messages = [{"role": "user", "content": content}]
+    progress = ctx.answer_stream()
     try:
         message, usage = await ctx.llm.create(
             run_id=ctx.run_id,
@@ -62,7 +63,9 @@ async def run_baseline(
             system=[{"type": "text", "text": BASELINE_SYSTEM}],
             messages=messages,
             timeout_s=max(5.0, min(ctx.settings.llm_timeout_s, ctx.remaining_s())),
+            on_text=progress.add,
         )
+        await progress.flush()
     except TRANSIENT_MODEL_ERRORS as exc:
         reason = f"the model could not be reached ({type(exc).__name__})"
         await stop_without_model(ctx, messages, reason)

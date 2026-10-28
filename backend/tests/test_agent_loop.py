@@ -43,9 +43,15 @@ class ReplayLLM:
         self.final = turns[-1]
         self.tool_choices: list[dict | None] = []
 
-    async def create(self, *, tool_choice=None, **_):
+    async def create(self, *, tool_choice=None, on_text=None, **_):
         self.tool_choices.append(tool_choice)
         turn = self.final if tool_choice == FINAL else self.turns.pop(0)
+        if on_text:  # stream each text block in two pieces, as the real client would
+            for block in turn["content"]:
+                if block["type"] == "text":
+                    half = len(block["text"]) // 2
+                    await on_text(block["text"][:half])
+                    await on_text(block["text"][half:])
         message = Message.model_validate(
             {
                 "id": "msg_replay",
@@ -232,3 +238,19 @@ async def test_a_resumed_run_respects_the_turn_budget(tools, used, calls):  # no
     run = await ctx.store.get_run(ctx.run_id)
     assert run["status"] == "incomplete"
     assert llm.tool_choices == [FINAL] * calls  # only the final answer, or nothing at all
+
+
+async def test_streamed_text_adds_up_to_the_final_answer(tools):  # noqa: F811
+    llm = ReplayLLM(RUNS[FAILED_SEARCH])
+    ctx = await new_run(tools, llm)
+    await start_agent(ctx, FAILED_SEARCH, [], {})
+
+    recorded = await events(ctx)
+    final_turn = max(d["turn"] for t, d in recorded if t == "model_call")
+    pieces = [d for t, d in recorded if t == "answer_delta" and d["turn"] == final_turn]
+    streamed = "".join(d["text"] for d in pieces)
+    answer = next(d for t, d in recorded if t == "answer")
+    assert streamed and streamed == answer["text"]
+    # Progress comes before the answer, which is still built from the finished message.
+    kinds = [t for t, _ in recorded]
+    assert max(i for i, k in enumerate(kinds) if k == "answer_delta") < kinds.index("answer")
