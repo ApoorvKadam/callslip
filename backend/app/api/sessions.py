@@ -10,6 +10,7 @@ import hashlib
 import json
 import secrets
 import time
+from collections.abc import Coroutine
 from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
@@ -139,6 +140,17 @@ async def recent_history(pool: AsyncConnectionPool, session_id: UUID, limit: int
     return [(q, a[:1500]) for q, a in reversed(rows)]
 
 
+async def first_event_then(ctx: RunContext, type_: str, data: dict, work: Coroutine) -> None:
+    """Write a run's first event inside its task. A failed write then closes the run as failed,
+    instead of leaving it marked running with no task and its session refusing new questions."""
+    try:
+        await ctx.emit(type_, data)
+    except BaseException:
+        work.close()
+        raise
+    await work
+
+
 @router.post("/sessions/{session_id}/runs", status_code=202)
 async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, owner: Owner):
     await owned_session(pool, session_id, owner)
@@ -165,14 +177,12 @@ async def ask(session_id: UUID, body: AskRequest, request: Request, pool: Pool, 
         ) from None
 
     ctx = RunContext(run_id, session_id, state.store, state.llm, state.search, state.settings)
-    await ctx.emit(
-        "run_started", {"mode": body.mode, "question": question, "faults": body.faults or {}}
-    )
     if body.mode == "agent":
         work = start_agent(ctx, question, history, dict(body.faults or {}))
     else:
         work = run_baseline(ctx, question, history, dict(body.faults or {}))
-    state.runs.start(run_id, work)
+    started = {"mode": body.mode, "question": question, "faults": body.faults or {}}
+    state.runs.start(run_id, first_event_then(ctx, "run_started", started, work))
     return run
 
 
@@ -237,8 +247,10 @@ async def resume(
     # Waiting for the user does not count against the run's time budget.
     ctx.started = time.monotonic() - run["exec_ms"] / 1000
     ctx.model_turns, ctx.tool_calls = run["model_turns"], run["tool_calls"]
-    await ctx.emit("clarification_answered", {"reply": body.reply})
-    state.runs.start(run_id, resume_agent(ctx))
+    answered = {"reply": body.reply}
+    state.runs.start(
+        run_id, first_event_then(ctx, "clarification_answered", answered, resume_agent(ctx))
+    )
     return updated
 
 

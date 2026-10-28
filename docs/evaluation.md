@@ -26,7 +26,7 @@ Each folder holds `results.json` (every measurement), `report.md` (the generated
 |---|---|---|---|---|---|---|---|---|
 | Haiku, agent | **30 of 30** | 167 of 167 | 6.9 s | 2.7 | 3.8 | 556,135 / 37,459 (235,855) | $0.077 | $0.0026 |
 | Haiku, baseline | **11 of 30** | 85 of 85 | 6.1 s | 1.1 | 1.1 | 194,105 / 41,783 (0) | $0.040 | $0.0013 |
-| Sonnet, agent | **27 of 30** | 174 of 174 | 7.6 s | 2.5 | 3.6 | 266,804 / 23,322 (213,582) | $0.820 | $0.0273 |
+| Sonnet, agent | **27 of 30** | 174 of 174 | 7.6 s | 2.5 | 3.6 | 266,804 / 23,322 (213,582) | $0.799 | $0.0266 |
 | Sonnet, baseline | **12 of 30** | 109 of 109 | 4.0 s | 1.1 | 1.1 | 193,954 / 15,261 (0) | $0.541 | $0.0180 |
 
 Every case gave the same result in all three repeats, except the Haiku baseline on case 6 (2 of 3).
@@ -44,11 +44,11 @@ Every case gave the same result in all three repeats, except the Haiku baseline 
 | 8b Tool failing every time | recover with another tool, or stop and report | 3/3 | 3/3 | 3/3 | 3/3 | 12.7 s | $0.0043 |
 | 9 Supersession | 365 days (M-24-10) vs 180 days (M-25-21); cite M-25-21 p. 1, which rescinds M-24-10 | 3/3 | 0/3 | 0/3 | 0/3 | 8.3 s | $0.0039 |
 
-Latency is execution time; for case 4 it excludes the time waiting for the user's reply. Agent cost includes prompt caching: the tools and system prompt, resent every turn, are mostly served from the cache at a tenth of the input price.
+Latency is execution time; for case 4 it excludes the time waiting for the user's reply. Agent cost includes prompt caching: the tools and system prompt, resent every turn, are mostly served from the cache, at a tenth of the input price on Haiku and a twentieth on Sonnet. Sonnet costs use its current cache-read price of $0.10 per million tokens; its run report was written with the earlier $0.20 ([reproducibility notes](reproducibility.md#expected-api-costs)).
 
 ## Which model, and why Haiku is the default
 
-- The Haiku agent passed 30 of 30 runs at $0.0026 per question; the Sonnet agent passed 27 of 30 at $0.0273, about ten times as much. Median latency is about the same (6.9 s against 7.6 s).
+- The Haiku agent passed 30 of 30 runs at $0.0026 per question; the Sonnet agent passed 27 of 30 at $0.0266, about ten times as much. Median latency is about the same (6.9 s against 7.6 s).
 - The three runs Sonnet failed are all case 9. There the Haiku agent searched for "M-25-21 rescinds M-24-10", found page 1 and cited it, in every repeat. The Sonnet agent found both deadlines and stopped, in every repeat ([Failure analysis](#failure-analysis)).
 - Sonnet writes cleaner prose. Haiku sometimes repeats a sentence and then the quoted source text beside it, or a fact once per source ("September 1, 2026 and September 1, 2026"), and once (baseline, case 6) it answered correctly without a single citation, which failed the check. Sonnet's slip is different: on case 6 it leads with its own reading of which policy wins.
 - Both stay available: set `ANSWER_MODEL=claude-sonnet-5-5` in `.env` to use Sonnet. Ten cases on one corpus are evidence for this workload, not a general ranking of the two models.

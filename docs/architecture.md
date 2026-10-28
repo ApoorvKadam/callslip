@@ -168,11 +168,10 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 
 ## Known limits
 
-Edge cases found in a full read of the code and left for after the submission. None occurred in the evaluation or the walkthrough.
+Edge cases found in a full read of the code and left for after the submission, each rare. None occurred in the evaluation or the walkthrough.
 
 | Where | What can happen | Fix |
 |---|---|---|
-| Resuming after a clarification | The run is marked running, then its first event is written. If that write fails, the run stays "running" with no task, and the session refuses new questions. | Write the event inside the run's task, so a failure closes the run like any other. |
 | Two questions sent at once in one session | The second can read the conversation history before the first finishes, and miss the first answer. The interface sends one question at a time. | Insert the run before reading the history. |
 | A run that fails unexpectedly | Its final event carries no token or cost totals, though the model-call ledger has them. | Close every run through one finalizer that reads the ledger. |
 | Fault injection with a clarification | A resumed run does not keep the faults it started with. No evaluation case combines the two. | Store the faults with the run. |
