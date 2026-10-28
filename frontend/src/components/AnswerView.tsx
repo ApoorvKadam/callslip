@@ -25,8 +25,9 @@ function bold(text: string, key: string): ReactNode[] {
   return out;
 }
 
-// Letters and digits only, so the line-break hyphens and spacing of PDF text do not matter.
-const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+// Letters and digits only (in any script), so the line-break hyphens and spacing of PDF text
+// do not matter.
+const squash = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
 
 // The model often copies a sentence from a source into its answer. Such text is shown in
 // quotation marks, so the reader can tell the document's words from the answer's. Text the
@@ -35,7 +36,7 @@ function copied(text: string, before: string, after: string, sources: Citation[]
   if (/["“]\s*$/.test(before) || /^\s*["”]/.test(after) || /^["“]/.test(text)) return false;
   if (text.split(/\s+/).length < 8) return false;
   const t = squash(text);
-  return sources.some((c) => squash(c.cited_text).includes(t));
+  return t.length > 0 && sources.some((c) => squash(c.cited_text).includes(t));
 }
 
 // Split the segments into lines of fragments, keeping each fragment's citations.
