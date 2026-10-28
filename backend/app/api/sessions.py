@@ -10,8 +10,6 @@ import hashlib
 import json
 import re
 import secrets
-import time
-from collections.abc import Coroutine
 from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
@@ -22,11 +20,9 @@ from psycopg.types.json import Jsonb
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel, StringConstraints
 
-from app.agent.baseline import run_baseline
-from app.agent.loop import resume_agent, start_agent
 from app.api.auth import Viewer
 from app.api.deps import get_pool
-from app.runs.context import RunContext
+from app.runs import queue
 
 router = APIRouter(prefix="/api", tags=["sessions"])
 
@@ -159,17 +155,6 @@ async def recent_history(pool: AsyncConnectionPool, session_id: UUID, limit: int
     return [(q, a[:1500]) for q, a in reversed(rows)]
 
 
-async def first_event_then(ctx: RunContext, type_: str, data: dict, work: Coroutine) -> None:
-    """Write a run's first event inside its task. A failed write then closes the run as failed,
-    instead of leaving it marked running with no task and its session refusing new questions."""
-    try:
-        await ctx.emit(type_, data)
-    except BaseException:
-        work.close()
-        raise
-    await work
-
-
 @router.post("/sessions/{session_id}/runs", status_code=202)
 async def ask(
     session_id: UUID, body: AskRequest, request: Request, pool: Pool, owner: Owner, user: Viewer
@@ -185,26 +170,25 @@ async def ask(
     run_id = uuid4()
     try:
         async with pool.connection() as conn:
-            cur = conn.cursor(row_factory=dict_row)
-            await cur.execute(
-                "INSERT INTO runs (id, session_id, mode, question, user_id)"
-                f" VALUES (%s, %s, %s, %s, %s) RETURNING {RUN_FIELDS}",
-                (run_id, session_id, body.mode, question, user),
+            faults = dict(body.faults or {})
+            event = {"mode": body.mode, "question": question, "faults": faults}
+            row = await queue.enqueue_start(
+                conn,
+                run_id,
+                session_id,
+                body.mode,
+                question,
+                user,
+                faults,
+                {"event": event, "history": history},
             )
-            run = await cur.fetchone()
+            run = {k: row[k] for k in RUN_COLUMNS}
     except errors.UniqueViolation:
         raise HTTPException(
             409, "This session already has a question in progress. Wait for it, or answer it."
         ) from None
 
-    ctx = RunContext(run_id, session_id, state.store, state.llm, state.search, state.settings)
-    ctx.viewer = user
-    if body.mode == "agent":
-        work = start_agent(ctx, question, history, dict(body.faults or {}))
-    else:
-        work = run_baseline(ctx, question, history, dict(body.faults or {}))
-    started = {"mode": body.mode, "question": question, "faults": body.faults or {}}
-    state.runs.start(run_id, first_event_then(ctx, "run_started", started, work))
+    # A run worker claims the run and executes it (app/runner.py).
     return run
 
 
@@ -263,24 +247,15 @@ async def resume(
             " SELECT %s, coalesce(max(seq), 0) + 1, 'user', %s FROM run_messages WHERE run_id = %s",
             (run_id, Jsonb([result]), run_id),
         )
+        # Queued for a run worker, which writes the reply's event and resumes the agent.
         cur = conn.cursor(row_factory=dict_row)
         await cur.execute(
             "UPDATE runs SET status = 'running', pending_tool_use_id = NULL, resume_key = %s,"
-            f" updated_at = now() WHERE id = %s RETURNING {RUN_FIELDS}",
-            (resume_key, run_id),
+            " work = 'resume', work_data = %s, updated_at = now()"
+            f" WHERE id = %s RETURNING {RUN_FIELDS}",
+            (resume_key, Jsonb({"event": {"reply": body.reply}}), run_id),
         )
-        updated = await cur.fetchone()
-
-    ctx = RunContext(run_id, session_id, state.store, state.llm, state.search, state.settings)
-    # Waiting for the user does not count against the run's time budget.
-    ctx.started = time.monotonic() - run["exec_ms"] / 1000
-    ctx.model_turns, ctx.tool_calls = run["model_turns"], run["tool_calls"]
-    ctx.viewer = user  # the conversation's owner key ties it to the account that started it
-    answered = {"reply": body.reply}
-    state.runs.start(
-        run_id, first_event_then(ctx, "clarification_answered", answered, resume_agent(ctx))
-    )
-    return updated
+        return await cur.fetchone()
 
 
 @router.post("/sessions/{session_id}/runs/{run_id}/abandon")

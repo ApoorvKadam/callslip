@@ -15,7 +15,6 @@ from app.embeddings import Embedder
 from app.llm import LLM
 from app.logs import setup_logging
 from app.retrieval.search import SearchService
-from app.runs.manager import RunManager, close_interrupted_runs
 from app.runs.store import RunStore
 
 
@@ -40,8 +39,9 @@ async def lifespan(app: FastAPI):
     app.state.search = SearchService(app.state.pool, embedder, Cache(app.state.redis))
     app.state.settings = settings
     app.state.store = RunStore(app.state.pool)
-    app.state.runs = RunManager(app.state.store)
-    # Without a key the app still serves documents and search; asking returns 503.
+    # Runs execute in run workers (app/runner.py). The API keeps a model client only to know
+    # whether answering is configured: without a key it still serves documents and search, and
+    # asking returns 503.
     app.state.llm = (
         LLM(
             AsyncAnthropic(api_key=settings.anthropic_api_key, max_retries=2),
@@ -52,11 +52,9 @@ async def lifespan(app: FastAPI):
         if settings.anthropic_api_key
         else None
     )
-    await close_interrupted_runs(app.state.pool)
     try:
         yield
     finally:
-        await app.state.runs.shutdown()
         await app.state.redis.aclose()
         await app.state.pool.close()
 

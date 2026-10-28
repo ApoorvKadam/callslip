@@ -76,6 +76,18 @@ services:
       start_period: 30s
     mem_limit: 1g
 
+  runner:
+    <<: *backend
+    command: ["python", "-m", "app.runner"]
+    healthcheck:
+      # Touched every 10 s while the run worker loops; stale for 60 s means it is stuck.
+      test: ["CMD-SHELL", "test $$(( $$(date +%s) - $$(stat -c %Y /tmp/runner-heartbeat) )) -lt 60"]
+      interval: 15s
+      timeout: 3s
+      retries: 4
+      start_period: 30s
+    mem_limit: 1g
+
   frontend:
     build: ./frontend
     image: callslip-frontend:${IMAGE_TAG:-dev}

@@ -1,5 +1,6 @@
-# Only the API and the worker reach PostgreSQL, and only the API reaches Redis (the worker
-# never uses the cache). Redis has no password, so this is its access control.
+# Only the API and the two kinds of worker reach PostgreSQL; only the API and the run workers
+# reach Redis (ingestion never uses the cache). Redis has no password, so this is its access
+# control.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -17,6 +18,9 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: worker
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: runner
       ports:
         - port: 5432
 ---
@@ -34,5 +38,8 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: api
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: runner
       ports:
         - port: 6379

@@ -3,7 +3,6 @@
 No model is called here: runs are written straight to the database where a test needs one.
 """
 
-import time
 import uuid
 
 import psycopg
@@ -149,34 +148,3 @@ def test_a_reply_cannot_borrow_another_replys_key(client):
     # Joined with a newline, these two would read the same; they must not.
     other = {**first, "tool_use_id": "toolu_1\nalpha", "reply": "beta"}
     assert client.post(url, json=other).status_code == 409
-
-
-def test_a_failed_first_event_closes_the_run_and_frees_the_session(client):
-    session = new_browser(client)
-    client.app.state.llm = NoModel()
-    run = insert_run(session, "needs_clarification")
-    with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
-        conn.execute(
-            "UPDATE runs SET mode = 'agent', pending_tool_use_id = 'toolu_1' WHERE id = %s", (run,)
-        )
-    store = client.app.state.store
-    write = store.event
-
-    async def first_write_fails(run_id, type_, data):
-        if type_ == "clarification_answered":
-            raise psycopg.OperationalError("connection lost")
-        return await write(run_id, type_, data)
-
-    store.event = first_write_fails
-    url = f"/api/sessions/{session}/runs/{run}/resume"
-    body = {"tool_use_id": "toolu_1", "idempotency_key": "key-0004", "reply": "OMB M-25-21"}
-    assert client.post(url, json=body).status_code == 202
-
-    for _ in range(50):  # the run's task closes it in the background
-        status = client.get(f"/api/runs/{run}").json()["status"]
-        if status != "running":
-            break
-        time.sleep(0.1)
-    assert status == "failed"
-    r = client.post(f"/api/sessions/{session}/runs", json={"question": "Next question?"})
-    assert r.status_code == 202

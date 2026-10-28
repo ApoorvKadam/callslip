@@ -4,7 +4,7 @@ Callslip answers simple and multi-part questions over a set of PDFs. An agent pi
 
 ## What was built
 
-- Five services in Docker Compose: a React frontend behind nginx, a FastAPI API, an ingestion worker, PostgreSQL 17 with pgvector, and Redis. Each has a health check and a memory limit, and secrets come only from `.env`.
+- Six services in Docker Compose: a React frontend behind nginx, a FastAPI API, run workers that execute questions, an ingestion worker, PostgreSQL 17 with pgvector, and Redis. Each has a health check and a memory limit, and secrets come only from `.env`.
 - Ingestion keeps page numbers exact. The worker parses each upload page by page in a child process with time and memory limits, splits pages into passages measured in model tokens, embeds them locally, and publishes the document atomically while it holds a lease.
 - Retrieval is hybrid: pgvector similarity and PostgreSQL full-text search, fused by reciprocal rank, with document and page filters. Redis caches results under the corpus version, so an older cached result never hides a newly published document.
 - The agent is a plain tool-use loop on the Claude Messages API, with three read-only tools and a clarification tool. After each result it decides what to do next: narrow a search to one document, rewrite a weak query, read whole pages, ask which document the user means, or switch tools when one keeps failing.
@@ -23,8 +23,8 @@ On 10 cases with 3 repeats each, the agent on Claude Haiku 5.5 passed every chec
 - Claim-level support. Code verifies where each quote comes from; whether a cited passage supports its sentence was reviewed by hand. Next: an LLM judge checked against hand labels, reported separately.
 - Retrieval quality. Titles in passage headers help a query find the right document, but can also pull in front matter. Next: contextual chunk headers written at ingestion, and BM25 in place of `ts_rank_cd`, each kept only if the evaluation improves. A small cross-encoder reranker was measured and not kept (see the evaluation).
 - Streaming the answer text token by token. Steps stream today; the answer arrives whole.
-- Scaling the API out. Runs execute as background tasks in the API process. Next: a run queue with its own workers, and Redis pub/sub for live events.
+- Waking event streams by notification. Each open stream polls the run's events; at many open streams, PostgreSQL `LISTEN` or Redis pub/sub would wake them instead.
 - Authentication (NYU SSO) and per-user collections. In this single-tenant demo, everyone shares the documents.
-- Running on a cluster. The Kubernetes and OpenShift manifests are schema-checked in CI ([docs/kubernetes.md](docs/kubernetes.md)) but have not run on a cluster. The API needs the run queue before it can run more than one replica.
+- Running on a cluster. The Kubernetes and OpenShift manifests are schema-checked in CI ([docs/kubernetes.md](docs/kubernetes.md)) but have not run on a cluster.
 - Edge cases in run handling and ingestion, each with its fix: [docs/architecture.md](docs/architecture.md#known-limits).
 - A recorded video. The walkthrough in [docs/demo.md](docs/demo.md) can be reproduced from saved traces and commands.

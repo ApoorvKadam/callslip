@@ -100,7 +100,8 @@ A failed run shows the user a plain cause and a short reference; the full except
 |---|---|---|
 | Frontend | one nginx | any number of replicas behind a load balancer |
 | Worker | one process, one job at a time | `docker compose up -d --scale worker=3`: jobs are claimed with `FOR UPDATE SKIP LOCKED` and leases, so workers never take the same document |
-| API | one instance; runs execute as background tasks in it | move runs to a queue consumed by run workers and live events to Redis pub/sub; then scale replicas (startup's cleanup of interrupted runs assumes one instance today) |
+| API | stateless: it queues runs and streams their events | any number of replicas behind the load balancer |
+| Run workers | `runner`, up to 4 runs at a time each | `docker compose up -d --scale runner=3`: runs are claimed with `FOR UPDATE SKIP LOCKED` and leases, and a run whose worker died is closed by the others |
 | PostgreSQL | exact vector search | HNSW index past about 100k passages (and check filtered recall); read replicas; raw PDFs to object storage |
 | Model API | SDK retries inside each call's time budget | a per-tenant concurrency limit and a shared rate limiter in Redis |
 

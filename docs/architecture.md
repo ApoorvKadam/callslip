@@ -9,7 +9,8 @@ flowchart LR
     user([Browser])
     subgraph compose[Docker Compose]
         web["frontend<br/>nginx + React/TypeScript<br/>serves the app, proxies /api"]
-        api["api<br/>FastAPI<br/>documents, search, sessions, runs<br/>agent loop runs here"]
+        api["api<br/>FastAPI<br/>documents, search, sessions,<br/>queues runs, streams their events"]
+        runner["runner<br/>run workers: the agent loop<br/>and the single-pass baseline"]
         worker["worker<br/>ingestion: parse, chunk, embed"]
         pg[("PostgreSQL 17 + pgvector<br/>documents, pages, chunks + vectors,<br/>sessions, runs, messages, events,<br/>model-call ledger")]
         redis[("Redis 8<br/>cache only: search results,<br/>query embeddings")]
@@ -20,14 +21,17 @@ flowchart LR
     web -- "/api" --> api
     api -- "SQL (async pool)" --> pg
     api -- "get/set with short timeouts" --> redis
-    api -- "Messages API" --> claude
+    runner -- "claim run with a lease,<br/>write messages and events" --> pg
+    runner -- "search cache" --> redis
+    runner -- "Messages API" --> claude
     worker -- "claim job with a lease,<br/>publish in one transaction" --> pg
 ```
 
 | Service | Job | Scales by |
 |---|---|---|
 | `frontend` | Static React app; nginx proxies `/api` to the API (same origin, no CORS) with buffering off for event streams | Any number of replicas |
-| `api` | REST endpoints; runs each question as a background task; embeds queries with the local model | More replicas once live events move to Redis pub/sub and runs to a queue (see Scaling) |
+| `api` | REST endpoints; queues each question for the run workers and streams its events; embeds queries for the search endpoint | Any number of replicas: it keeps no run state |
+| `runner` | Run workers: claim queued runs and execute them (agent loop or single pass, up to 4 at a time each), renewing a lease while each runs | More replicas: runs are claimed with `FOR UPDATE SKIP LOCKED` and a lease; a run whose worker died is closed by the others |
 | `worker` | Ingestion jobs: parse each page with pypdf (in a child process with time and memory caps), split pages into passages of about 350 model tokens, embed with fastembed `BAAI/bge-small-en-v1.5` | More replicas: jobs are claimed with `FOR UPDATE SKIP LOCKED` and a lease |
 | `postgres` | System of record for everything, including raw PDFs and the exact model conversation of every run | Vertical, then read replicas and an ANN index |
 | `redis` | Cache. The app works without it | Vertical; it holds nothing that cannot be rebuilt |
@@ -39,19 +43,21 @@ sequenceDiagram
     participant UI as Browser
     participant API as API
     participant DB as PostgreSQL
+    participant R as Run worker
     participant M as Claude
     UI->>API: POST /api/sessions/{id}/runs {question, mode}
-    API->>DB: insert run (one unresolved run per session)
+    API->>DB: insert run, queued (one unresolved run per session)
     API-->>UI: 202 run
     UI->>API: GET /api/runs/{id}/events (SSE)
+    R->>DB: claim the run with a lease
     loop until answered, paused or limited
-        API->>M: conversation + tools (one tool call per turn)
-        M-->>API: tool_use, or the answer
-        API->>DB: append the exact messages, add a trace event
-        API-->>UI: event (tool, input, result summary, status, ms, tokens, citations)
+        R->>M: conversation + tools (one tool call per turn), streamed
+        M-->>R: text as it is written, then tool_use or the answer
+        R->>DB: append the exact messages, add trace and progress events
+        API-->>UI: each new event, read from the database
     end
-    API->>DB: check every citation against the stored page, save the answer
-    API-->>UI: answer, run_finished, end
+    R->>DB: check every citation against the stored page, judge support, save the answer
+    API-->>UI: answer, support, run_finished, end
 ```
 
 ## The agent loop and its decision points
@@ -163,7 +169,7 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 | PostgreSQL owns ingestion jobs | Durable, transactional, one less moving part | A real queue (or Redis streams) for many workers or priorities |
 | Redis as a cache only | It can fail without losing anything | Shared rate limits and live events across API replicas would move to Redis |
 | SSE by polling `run_events` | Works across refresh and reconnect; survives a page reload with `Last-Event-ID` | Polls every 0.4 s per open stream; Redis pub/sub at higher concurrency |
-| Runs as background tasks in the API process | Simple; state is in PostgreSQL | Assumes one API instance (startup closes interrupted runs); a worker queue for runs when scaling out |
+| Runs in run workers, queued in PostgreSQL | The same claim-and-lease pattern as ingestion; the API holds no run state and scales out | A run whose worker dies is closed as interrupted, not retried, because part of it may have executed; claiming adds up to 0.25 s |
 | Local embeddings (bge-small, 384-d) | Free, private, reproducible, no extra key | Smaller model; a hosted embedding model for harder retrieval (a small reranker was measured and did not help) |
 
 ## Known limits
@@ -181,7 +187,7 @@ Edge cases found in a full read of the code and left for after the submission, e
 
 ## Scaling path
 
-1. Several API replicas: move live events to Redis pub/sub, and runs to a queue consumed by run workers, so no run depends on the process that accepted it.
+1. More users at once: add API and run worker replicas (both done in the Kubernetes manifests); at many open streams, wake event streams by notification (PostgreSQL `LISTEN` or Redis pub/sub) instead of polling.
 2. More documents: add an HNSW index and measure filtered recall; partition chunks by collection; move raw PDFs to object storage.
 3. Better retrieval: contextual chunk headers generated at ingestion, a larger cross-encoder reranker than the one measured, BM25 (for example ParadeDB) in place of `ts_rank_cd`, each kept only if the evaluation shows a gain.
 4. Multi-tenant: authentication (NYU SSO), tenant id on documents and sessions, row-level security.

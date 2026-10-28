@@ -1,8 +1,8 @@
-"""Runs execute as background tasks in the API process; this keeps track of them.
+"""A run worker's executing runs, as asyncio tasks (see app/runner.py).
 
 A run that raises is marked `failed` with the reason; a run cancelled at shutdown is marked
-`incomplete`. On startup, runs still marked `running` were interrupted by a restart and are
-closed as `incomplete` (this assumes one API instance; see the scaling notes in the docs).
+`incomplete`. A run whose worker died without either is closed by the lease check in
+runs/queue.py.
 """
 
 import asyncio
@@ -12,7 +12,6 @@ from collections.abc import Coroutine
 from uuid import UUID
 
 import anthropic
-from psycopg_pool import AsyncConnectionPool
 
 from app.runs.store import RunStore
 
@@ -31,7 +30,7 @@ class RunManager:
         try:
             await work
         except asyncio.CancelledError:
-            await self._close(run_id, "incomplete", "stopped: the server shut down")
+            await self._close(run_id, "incomplete", "stopped: the run worker shut down")
             raise
         except Exception as exc:  # the run fails; the server keeps going
             ref = uuid.uuid4().hex[:8]
@@ -65,13 +64,3 @@ def public_reason(exc: Exception, ref: str) -> str:
     else:
         cause = "an internal error occurred"
     return f"The run failed: {cause}. Reference {ref} in the server log."
-
-
-async def close_interrupted_runs(pool: AsyncConnectionPool) -> int:
-    async with pool.connection() as conn:
-        cur = await conn.execute(
-            "UPDATE runs SET status = 'incomplete',"
-            " status_reason = 'interrupted: the server restarted while it ran',"
-            " updated_at = now(), finished_at = now() WHERE status = 'running'"
-        )
-        return cur.rowcount
