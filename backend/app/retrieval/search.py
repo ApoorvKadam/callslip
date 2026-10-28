@@ -122,10 +122,12 @@ class SearchService:
         self._embedder = embedder
         self._cache = cache
 
-    async def corpus_version(self) -> int:
+    async def corpus_key(self) -> str:
+        """Identity of the current corpus: database epoch plus version, bumped on publish."""
         async with self._pool.connection() as conn:
-            cur = await conn.execute("SELECT version FROM corpus_state WHERE id = 1")
-            return (await cur.fetchone())[0]
+            cur = await conn.execute("SELECT epoch, version FROM corpus_state WHERE id = 1")
+            epoch, version = await cur.fetchone()
+        return f"{epoch}:{version}"
 
     async def query_vector(self, query: str) -> np.ndarray:
         key = f"qemb:v1:{self._embedder.model_name}:{_digest(query)}"
@@ -138,9 +140,9 @@ class SearchService:
 
     async def search(self, query: str, filters: SearchFilters, top_k: int) -> SearchResult:
         started = time.monotonic()
-        version = await self.corpus_version()
+        corpus = await self.corpus_key()
         key = (
-            f"search:v1:{version}:{self._embedder.model_name}:"
+            f"search:v1:{corpus}:{self._embedder.model_name}:"
             f"{_digest(json.dumps([query, asdict(filters), top_k], sort_keys=True))}"
         )
         cached, status = await self._cache.get_json(key)

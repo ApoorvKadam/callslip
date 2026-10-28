@@ -56,7 +56,7 @@ Redis caches search results and query embeddings:
 
 | Key | Holds | TTL and invalidation |
 |---|---|---|
-| `search:v1:{corpus_version}:{model}:{hash}` | results for a query, filters and top_k | 10 minutes; `corpus_version` increases in the same transaction that publishes a document, so stale results are never read |
+| `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and top_k | 10 minutes; `corpus_version` increases in the same transaction that publishes a document, and `corpus_epoch` is a random id per database, so stale results are never read, even after the database is recreated or restored |
 | `qemb:v1:{model}:{hash}` | a query's embedding | 24 hours; keyed by model |
 
 If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working.
