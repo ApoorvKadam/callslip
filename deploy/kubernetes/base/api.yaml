@@ -1,6 +1,5 @@
-# The API runs questions as background tasks and, at startup, closes runs a previous instance
-# left unfinished. That assumes one instance, so it runs one replica and replaces it with
-# Recreate rather than overlapping two (docs/architecture.md, scaling path).
+# The API queues questions for the run workers and keeps no run state of its own, so it runs as
+# several replicas and rolls out one pod at a time.
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,9 +16,7 @@ kind: Deployment
 metadata:
   name: api
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: api

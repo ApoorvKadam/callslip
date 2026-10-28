@@ -162,7 +162,7 @@ async def test_clarification_pauses_then_resumes_the_same_run(tools):  # noqa: F
     }
     await ctx.store.append_message(ctx.run_id, "user", [reply])
     await ctx.store.update(ctx.run_id, status="running", pending_tool_use_id=None)
-    await resume_agent(ctx)
+    await resume_agent(ctx, {})
 
     run = await ctx.store.get_run(ctx.run_id)
     assert run["status"] == "complete"
@@ -257,7 +257,7 @@ async def test_a_resumed_run_respects_the_turn_budget(tools, used, calls):  # no
     llm = ReplayLLM(RUNS[FAILED_SEARCH])
     ctx = await new_run(tools, llm, max_model_turns=2)
     ctx.model_turns = used  # as restored from the database on resume
-    await resume_agent(ctx)
+    await resume_agent(ctx, {})
     run = await ctx.store.get_run(ctx.run_id)
     assert run["status"] == "incomplete"
     assert llm.tool_choices == [FINAL] * calls  # only the final answer, or nothing at all

@@ -154,8 +154,8 @@ async def start_agent(
     await agent_loop(ctx, Tools(ctx.search, ctx.store, ctx.viewer), faults)
 
 
-async def resume_agent(ctx: RunContext) -> None:
-    await agent_loop(ctx, Tools(ctx.search, ctx.store, ctx.viewer), {})
+async def resume_agent(ctx: RunContext, faults: dict[str, str]) -> None:
+    await agent_loop(ctx, Tools(ctx.search, ctx.store, ctx.viewer), faults)
 
 
 async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> None:

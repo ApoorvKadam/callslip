@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     max_model_turns: int = 10
     max_tool_calls: int = 9
     tool_timeout_s: float = 8.0
+    # Run workers: how many runs one worker executes at once, its lease, and its poll interval.
+    run_concurrency: int = 4
+    run_lease_seconds: int = 60
+    run_poll_seconds: float = 0.25
     # After each answer, one model call judges whether every quote supports its sentence.
     support_check: bool = True
     support_timeout_s: float = 15.0

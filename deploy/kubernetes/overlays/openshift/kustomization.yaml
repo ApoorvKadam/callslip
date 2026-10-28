@@ -12,7 +12,7 @@ patches:
         path: /spec/template/spec/securityContext/runAsUser
       - op: remove
         path: /spec/template/spec/securityContext/fsGroup
-  - target: {kind: Deployment, name: "redis|api|worker"}
+  - target: {kind: Deployment, name: "redis|api|worker|runner"}
     patch: |-
       - op: remove
         path: /spec/template/spec/securityContext/runAsUser

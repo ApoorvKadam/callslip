@@ -20,7 +20,8 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results in one paragrap
 | Service | What it does |
 |---|---|
 | `frontend` | React + TypeScript (Vite) app served by nginx on port 8080; nginx also proxies `/api` to the API |
-| `api` | FastAPI: documents, hybrid search, sessions and question runs (executed in the background, streamed to the UI as server-sent events), health and readiness |
+| `api` | FastAPI: documents, hybrid search, accounts, sessions; queues each question and streams its steps to the UI as server-sent events; health and readiness |
+| `runner` | Run workers: claim queued questions and run the agent or the single-pass baseline, streaming each step to the database |
 | `worker` | Ingestion: parse each PDF page (pypdf), split pages into passages, embed them locally (fastembed, `BAAI/bge-small-en-v1.5`) |
 | `postgres` | PostgreSQL 17 with pgvector: documents, raw files, pages, passages with vectors and full-text indexes |
 | `redis` | Cache (search results and query embeddings); the app keeps working if it is down |
