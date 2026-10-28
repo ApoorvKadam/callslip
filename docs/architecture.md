@@ -164,12 +164,12 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 | Redis as a cache only | It can fail without losing anything | Shared rate limits and live events across API replicas would move to Redis |
 | SSE by polling `run_events` | Works across refresh and reconnect; survives a page reload with `Last-Event-ID` | Polls every 0.4 s per open stream; Redis pub/sub at higher concurrency |
 | Runs as background tasks in the API process | Simple; state is in PostgreSQL | Assumes one API instance (startup closes interrupted runs); a worker queue for runs when scaling out |
-| Local embeddings (bge-small, 384-d) | Free, private, reproducible, no extra key | Smaller model; a hosted embedding model or a reranker for harder retrieval |
+| Local embeddings (bge-small, 384-d) | Free, private, reproducible, no extra key | Smaller model; a hosted embedding model for harder retrieval (a small reranker was measured and did not help) |
 
 ## Scaling path
 
 1. Several API replicas: move live events to Redis pub/sub, and runs to a queue consumed by run workers, so no run depends on the process that accepted it.
 2. More documents: add an HNSW index and measure filtered recall; partition chunks by collection; move raw PDFs to object storage.
-3. Better retrieval: contextual chunk headers generated at ingestion, a cross-encoder reranker, BM25 (for example ParadeDB) in place of `ts_rank_cd`, each kept only if the evaluation shows a gain.
+3. Better retrieval: contextual chunk headers generated at ingestion, a larger cross-encoder reranker than the one measured, BM25 (for example ParadeDB) in place of `ts_rank_cd`, each kept only if the evaluation shows a gain.
 4. Multi-tenant: authentication (NYU SSO), tenant id on documents and sessions, row-level security.
 5. Kubernetes or OpenShift: manifests for both are in `deploy/kubernetes` ([kubernetes.md](kubernetes.md)); in production, PostgreSQL and Redis would be managed services.

@@ -53,13 +53,13 @@ A plain tool-use loop over the Claude Messages API (no agent framework), in `bac
 
 Every tool input is validated (Pydantic); a bad call comes back as an error the model can fix. One tool call per turn keeps the order simple and a clarification never mixed with other calls. Limits, all configurable: model turns (10), tool calls (9), per-tool timeout (8 s) with one retry, and a run deadline (90 s) with a reserve for the final answer. At a limit, the model must answer from what it has, marked incomplete; with no time left at all, the run stops with a summary of what it found and no further model call. Clarification pauses the run (`needs_clarification`); the reply resumes the same run, exactly once (idempotency key), and the time spent waiting does not count.
 
-In the UI, choose Agent or Single pass under the question box. From a terminal: `python3 scripts/ask.py "question" [--mode baseline] [--reply "answer to a clarifying question"]`.
+In the UI, choose Agent or Single pass at the top of the page. From a terminal: `python3 scripts/ask.py "question" [--mode baseline] [--reply "answer to a clarifying question"]`.
 
 ## Answers and citations
 
-Passages go to Claude (`claude-haiku-5-5` by default, `claude-sonnet-5-5` as an option; see [the comparison](docs/evaluation.md#which-model-and-why-haiku-is-the-default)) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. The UI shows each citation as a numbered chip; selecting it shows the quote, the check result and a link that opens the PDF at that page.
+Passages go to Claude (`claude-haiku-5-5` by default, `claude-sonnet-5-5` as an option; see [the comparison](docs/evaluation.md#which-model-and-why-haiku-is-the-default)) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. In the UI, each citation is a number after the text it supports. Selecting it opens that source in the side panel: the quote, the check result and a link that opens the PDF at that page. Text an answer copies word for word from a source is shown in quotation marks.
 
-Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the trace, and every model call with tokens and estimated cost. A browser gets a random token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to it, so another browser cannot read them. One question at a time per session.
+Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the interface, and every model call with tokens and estimated cost. A browser gets a random token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to it, so another browser cannot read them. One question at a time per session.
 
 ## Develop
 
@@ -96,4 +96,4 @@ Redis caches search results and query embeddings:
 
 If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working.
 
-CI runs on every pull request: backend and script lint, tests against real PostgreSQL, Redis and the embedding model, frontend typecheck and build, then a Compose build, smoke test, full restart (data must survive) and a Redis outage (search must keep working).
+CI runs on every pull request: backend and script lint, tests against real PostgreSQL, Redis and the embedding model, frontend typecheck and build, a render and schema check of the Kubernetes manifests, then a Compose build, smoke test, full restart (data must survive) and a Redis outage (search must keep working).

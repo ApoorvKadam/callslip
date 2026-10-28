@@ -106,7 +106,7 @@ No answer in any column was wrong. For the Haiku agent, every sentence without a
 | 2, 3 multi-document | one query's top 8 passages come from one document | query decomposition before retrieval, or per-document quotas |
 | 4 ambiguous | cannot pause to ask; the follow-up's single search missed p. 5 | a clarification step before retrieval |
 | 5 insufficient evidence | a search for a fine finds the compliance-plan deadline, not the strategy section | one search per fact the answer gives |
-| 8a timeout | the raw question ("How does the NIST Generative AI Profile describe ...") matches the Profile's title and front matter better than its body | down-weight front matter, rerank, or contextual chunk headers |
+| 8a timeout | the raw question ("How does the NIST Generative AI Profile describe ...") matches the Profile's title and front matter better than its body | down-weight front matter, or contextual chunk headers (a reranker did not help, below) |
 | 9 supersession | nothing in the question asks about replacement | record at ingestion which documents say they replace others |
 | 6 (Haiku, once) | a correct answer with no citations | a check that rejects an uncited answer and asks again |
 
@@ -120,6 +120,10 @@ No failure invented a figure or a quote.
 - Case 5 first accepted any "180" in the answer, so a table row or the compliance-plan deadline passed; it now requires the strategy page. Cross-document cases now need a gold page in each document, not any page of it.
 - An earlier Haiku run passed 29 of 30 but its answers had three small errors in uncited sentences: an added "signed by both parties" in case 7, and a misread risk taxonomy in cases 8a and 8b. The answer rules now ask for a citation on every factual sentence, including connecting ones, and for no detail beyond the passages; the agent is also told to answer every part of a clarified question. Both models were then run again on that prompt (the runs above), and the hand review found none of those errors.
 - Before that prompt change, the Sonnet agent also missed the strategy deadline in two of three case 5 runs (25 of 30 overall). With it, case 5 passes on both models.
+
+**Tried and not kept**:
+- About half of the cited text in answers is copied word for word from the sources. A rule asking the model to use its own words, and to quote only when the wording matters, was run on both models. Haiku fell from 30 to 24 of 30, and Sonnet from 27 to 25. In Haiku's answers, paraphrase lost terms that some checks look for ("confident" in case 3, a word for the conflict in case 6). Both models also missed the strategy page in case 5 twice, and Haiku missed a key page in case 9 twice. The prompt stayed as it was; instead, the interface shows copied text in quotation marks. Those two runs are not committed.
+- A cross-encoder reranker (`Xenova/ms-marco-MiniLM-L-6-v2` through fastembed) over the hybrid top 30, measured offline on the ten questions with no model calls. Cases with a gold page from every gold document in the top 8 stayed at 5 of 10, one case lost a gold page, and reranking took about 1.8 s per search on the API's CPU. It was not kept. Most baseline misses need a second search, in another document or with a narrower query, and better ranking of one result list cannot supply that.
 
 ## Representative traces
 
