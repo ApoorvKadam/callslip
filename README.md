@@ -2,17 +2,30 @@
 
 Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, a document's outline, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
 
-![A question that spans two documents: each search listed as it happens, the answer as it is written, then its sources](docs/media/callslip-hero.gif)
+VIDEO_ATTACHMENT_URL
 
-**[Watch the walkthrough (MP4, under three minutes)](docs/media/callslip-walkthrough.mp4)**: signing in and uploading a private PDF, a question across two documents in each answering mode, a second search driven by what the first found, a clarification, a failed tool call, a question about the private PDF and its deletion, and the saved conversations.
+The walkthrough above (1920 by 1080, three minutes; [download the MP4](docs/media/callslip-walkthrough.mp4)): signing in and uploading a private PDF, a question across two documents in each answering mode, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, and the saved conversations.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
 Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is unfinished.
 
+## Status
+
+| Part | Status | Where to check |
+|---|---|---|
+| Expected components A to J of the brief: frontend and API, ingestion and retrieval, agent loop, tools, state and traces, limits and safety, PostgreSQL and Redis, Docker and CI, evaluation, engineering | Done | [docs/requirements.md](docs/requirements.md): each item with its code and its proof |
+| The eight required behaviours | Done: each is an evaluation case; the agent passes 43 of 45 runs, the single pass 21 | [evaluation](docs/evaluation.md#results) |
+| What to submit: repository, reproducibility notes, architecture diagram, evaluation with a baseline, walkthrough, summary, deployment runbook | Done | [reproducibility](docs/reproducibility.md), [architecture](docs/architecture.md), [evaluation](docs/evaluation.md), [walkthrough](docs/demo.md), [summary](SUMMARY.md), [runbook](docs/runbook.md) |
+| Optional: authentication and personalisation | Done: local accounts, private uploads and their deletion, history per account, a limit on failed sign-ins | [accounts](#accounts-and-conversations) |
+| Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
+| Optional: Kubernetes and OpenShift | Manifests written and checked in CI; not run on a cluster | [docs/kubernetes.md](docs/kubernetes.md) |
+| Added beyond the brief | Answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; latency measured in a real browser | [summary](SUMMARY.md) |
+| Not done | NYU single sign-on, sharing with groups, running on a real cluster, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
+
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). After one more prompt change, the agent passed 42 of 45 ([run](eval/results/2026-10-28T192415Z/)). Scores use the checks after three [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 43 of 45 again ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after three [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|
