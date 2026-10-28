@@ -114,6 +114,7 @@ export interface Answer {
   citations: Citation[];
   citations_verified: number;
   support?: SupportCheck[];
+  answer_ms?: number; // time to answer, before the quotes are checked
 }
 
 export interface RunEvent {

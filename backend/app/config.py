@@ -33,7 +33,8 @@ class Settings(BaseSettings):
     # Haiku 5.5 passed more evaluation runs than Sonnet 5.5 at about a tenth of the cost
     # (docs/evaluation.md); set ANSWER_MODEL=claude-sonnet-5-5 to use Sonnet instead.
     answer_model: str = "claude-haiku-5-5"
-    answer_effort: str = "medium"
+    # Low effort passed as many evaluation runs as medium, and answered sooner.
+    answer_effort: str = "low"
     top_k: int = 8
     history_turns: int = 3
 
@@ -48,8 +49,10 @@ class Settings(BaseSettings):
     run_concurrency: int = 4
     run_lease_seconds: int = 60
     run_poll_seconds: float = 0.25
-    # After each answer, one model call judges whether every quote supports its sentence.
+    # After each answer, one model call judges whether every quote supports its sentence. It
+    # stays at medium effort: at low it accepted more mismatched quotes against the hand labels.
     support_check: bool = True
+    support_effort: str = "medium"
     support_timeout_s: float = 15.0
     # Lets the evaluation inject tool failures. Off unless explicitly enabled.
     allow_fault_injection: bool = False

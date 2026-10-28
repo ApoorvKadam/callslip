@@ -43,7 +43,7 @@ Open http://localhost:8080, upload PDFs and ask questions. Each document moves f
 
 ## The agent
 
-A plain tool-use loop over the Claude Messages API (no agent framework), in `backend/app/agent/loop.py`. Each turn the model sees the whole conversation and picks one action:
+A plain tool-use loop over the Claude Messages API (no agent framework), in `backend/app/agent/loop.py`. The first message lists the documents the user can search. Each turn the model sees the whole conversation and calls one or more tools, asks a clarifying question, or answers:
 
 | Tool | Read-only? | What it returns |
 |---|---|---|
@@ -52,7 +52,7 @@ A plain tool-use loop over the Claude Messages API (no agent framework), in `bac
 | `read_document_section(document_id, page_start, page_end)` | yes | up to 3 full pages as citable passages |
 | `ask_clarification(question, options?)` | control | pauses the run until the user replies |
 
-Every tool input is validated (Pydantic); a bad call comes back as an error the model can fix. One tool call per turn keeps the order simple and a clarification never mixed with other calls. Limits, all configurable: model turns (10), tool calls (9), per-tool timeout (8 s) with one retry, and a run deadline (90 s) with a reserve for the final answer. At a limit, the model must answer from what it has, marked incomplete; with no time left at all, the run stops with a summary of what it found and no further model call. Clarification pauses the run (`needs_clarification`); the reply resumes the same run, exactly once (idempotency key), and the time spent waiting does not count.
+Every tool input is validated (Pydantic); a bad call comes back as an error the model can fix. The read tools of one turn run at the same time, so a question with independent parts costs one turn, not one per part; a clarification is only asked on its own. Limits, all configurable: model turns (10), tool calls (9), per-tool timeout (8 s) with one retry, and a run deadline (90 s) with a reserve for the final answer. At a limit, the model must answer from what it has, marked incomplete; with no time left at all, the run stops with a summary of what it found and no further model call. Clarification pauses the run (`needs_clarification`); the reply resumes the same run, exactly once (idempotency key), and the time spent waiting does not count.
 
 In the UI, choose Agent or Single pass at the top of the page. From a terminal: `python3 scripts/ask.py "question" [--mode baseline] [--reply "answer to a clarifying question"]`.
 

@@ -59,6 +59,7 @@ class RunContext:
                     timeout_s=budget,
                     max_tokens=2000,
                     json_schema=support.SCHEMA,
+                    effort=self.settings.support_effort,
                 )
                 reply = next((b.text for b in message.content if b.type == "text"), None)
             except Exception:
@@ -100,6 +101,8 @@ class RunContext:
         # Events first, status last: the event stream ends once the status is terminal, so
         # every event must already be stored by then.
         if answer is not None:
+            # Time to answer, apart from the support check that follows.
+            answer["answer_ms"] = int(self.elapsed_s() * 1000)
             await self.emit("answer", answer)
             checks = await self.check_support(answer)
             if checks:

@@ -19,7 +19,7 @@ Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI)
 | `ALLOW_FAULT_INJECTION` | shell or `.env` | `false` | evaluation only: lets a request make a tool fail |
 | `LOG_LEVEL` | `.env` | `INFO` | |
 
-Application settings with their defaults are in `backend/app/config.py` (model `claude-haiku-5-5`, effort `medium`, `top_k` 8, run deadline 90 s, 10 model turns, 9 tool calls, 8 s tool timeout). Any of them can be set in `.env` under the same name in capitals, for example `RUN_DEADLINE_S=60`; Compose passes `.env` to the api and worker. Recreate the service to apply it: `docker compose up -d --wait api`.
+Application settings with their defaults are in `backend/app/config.py` (model `claude-haiku-5-5`, effort `low`, `top_k` 8, run deadline 90 s, 10 model turns, 9 tool calls, 8 s tool timeout). Any of them can be set in `.env` under the same name in capitals, for example `RUN_DEADLINE_S=60`; Compose passes `.env` to the api and worker. Recreate the service to apply it: `docker compose up -d --wait api`.
 
 `.env` is git-ignored; `.env.example` is the template. Secrets reach containers only as environment variables from `.env`; PostgreSQL and Redis are not published to the host.
 

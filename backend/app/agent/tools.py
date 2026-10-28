@@ -52,7 +52,7 @@ TOOL_DEFINITIONS: list[dict] = [
                 "document_ids": {
                     "type": "array",
                     "items": {"type": "integer"},
-                    "description": "Only search these documents (from list_documents).",
+                    "description": "Only search these documents (ids from the document list).",
                 },
                 "page_from": {"type": "integer", "description": "First page to include."},
                 "page_to": {"type": "integer", "description": "Last page to include."},

@@ -286,6 +286,7 @@ function Step({ e }: { e: RunEvent }) {
         <li className="step">
           <div className="step-head">
             <span className="step-title">Answered</span>
+            {d.answer_ms !== undefined && <span className="meta">{seconds(num(d.answer_ms))}</span>}
           </div>
           <p className="step-detail">
             {count((d.citations as unknown[] | undefined)?.length ?? 0, "citation")},{" "}
