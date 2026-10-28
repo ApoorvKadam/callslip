@@ -171,6 +171,8 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
   const evidence = (d.evidence as Evidence[] | undefined) ?? [];
   const status = String(d.status);
   const retries = (d.retries as string[] | undefined) ?? [];
+  // Reasons for a failed call that its summary does not already give.
+  const reasons = [...new Set(retries)].filter((r) => !String(d.summary ?? "").includes(r));
 
   let title = tool;
   let request: string | null = null;
@@ -220,8 +222,8 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
           {d.cache ? <span className="meta">cache {String(d.cache)}</span> : null}
         </div>
       )}
-      {status !== "ok" && retries.length > 0 && (
-        <p className="meta step-detail">{retries.join("; ")}</p>
+      {status !== "ok" && reasons.length > 0 && (
+        <p className="meta step-detail">{reasons.join("; ")}</p>
       )}
     </li>
   );
