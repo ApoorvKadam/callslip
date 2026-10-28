@@ -1,16 +1,35 @@
 # Callslip
 
-Callslip is a full-stack application for asking simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read a section, list documents, ask for clarification), inspects what it finds, and answers with document and page citations that are checked against the source pages.
+Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
+
+![A question that spans two documents: one search in each document in the same turn, the answer as it is written, then its sources](docs/media/callslip-hero.gif)
+
+**[Watch the two-minute walkthrough (MP4)](docs/media/callslip-walkthrough.mp4)**: signing in and uploading a private PDF, a question across two documents, a second search driven by what the first found, a clarification, a failed tool call, and the saved conversations.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
-Start with [SUMMARY.md](SUMMARY.md): what was built, the results in one paragraph, and what is unfinished.
+Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is unfinished.
+
+## Results at a glance
+
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever ([details](docs/evaluation.md)):
+
+| Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
+|---|---|---|
+| Runs passing every check | **40 of 45** | 21 of 45 |
+| Citations found on the page they cite | 206 of 206 | 121 of 121 |
+| Time to the full answer, median | 5.5 s | 5.2 s |
+| Cost per question | $0.0020 | $0.0014 |
+
+The difference is in the cases that need more than one step: two documents, a clarification, a second search for which memo governs, a tool that times out. The baseline fails all of them; both pass the single lookups. Because the agent searches independent parts in the same turn, its median time to answer is within half a second of the single pass.
+
+## Documentation
 
 | Document | What it covers |
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | services, data flow, the agent's tools, state and stopping conditions, trade-offs, scaling |
-| [docs/demo.md](docs/demo.md) | a reproducible walkthrough: multi-document question, re-retrieval, clarification, tool failure, limits, Redis outage |
-| [docs/evaluation.md](docs/evaluation.md) | ten cases, the agent against a single-pass baseline, failure analysis |
+| [docs/demo.md](docs/demo.md) | the recorded walkthrough, and how to reproduce each step: multi-document question, re-retrieval, clarification, tool failure, limits, Redis outage |
+| [docs/evaluation.md](docs/evaluation.md) | fifteen cases, the agent against a single-pass baseline, latency, the support check, failure analysis |
 | [docs/runbook.md](docs/runbook.md) | deploy, verify, update, roll back, persistence, logging, with captured output |
 | [docs/kubernetes.md](docs/kubernetes.md) | the same images on Kubernetes or OpenShift: manifests, how to deploy, what is checked |
 | [docs/reproducibility.md](docs/reproducibility.md) | corpus sources and checksums, models, prompts, tool schemas, evaluation command, costs |
@@ -60,7 +79,17 @@ In the UI, choose Agent or Single pass at the top of the page. From a terminal: 
 
 Passages go to Claude (`claude-haiku-5-5` by default, `claude-sonnet-5-5` as an option; see [the comparison](docs/evaluation.md#which-model-and-why-haiku-is-the-default)) as `search_result` blocks with citations enabled, split into groups of a few sentences so a citation quotes only what it needs. Every citation in the answer is checked in code: it must point at a passage that was actually sent (same index, source and quoted blocks) and the quoted text must appear on the stored page. In the UI, each citation is a number after the text it supports. Selecting it opens that source in the side panel: the quote, the check result and a link that opens the PDF at that page. A cited piece of eight or more words that matches its source word for word, apart from spacing and line-break hyphens, is shown in quotation marks.
 
-Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the interface, and every model call with tokens and estimated cost. A browser gets a random token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to it, so another browser cannot read them. One question at a time per session.
+The answer is shown as the model writes it, then replaced by the checked answer with its citations. After that, one more model call (the support check) judges whether each quote supports the sentence it is cited for: supported, partly, or not supported. Its verdicts appear next to each source as advice; against 84 hand-labelled pieces it caught every altered claim and 9 of 10 mismatched quotes ([evaluation](docs/evaluation.md)).
+
+Each question is a run with its own state, stored in PostgreSQL: the exact model conversation (append-only), the steps shown in the interface, and every model call with tokens and estimated cost. A run worker executes it; the API only queues it and streams its events, so the API can run as several replicas. The interface shows the time to the answer, and the full time with the support check in the steps.
+
+## Accounts and conversations
+
+Without signing in, a browser gets a random token in an HttpOnly, SameSite=Strict cookie; its conversations belong to that token, so another browser cannot read them. Signing in (a local account, standing in for NYU single sign-on) adds two things:
+- **Private documents.** Uploads belong to the account. Search, the agent's tools and citations see the shared collection plus the account's own documents, and nobody else's.
+- **History that follows the account.** The Conversations tab lists earlier conversations, newest first; selecting one opens it with its answers, sources and steps, in any browser signed in to the account.
+
+One question at a time per conversation.
 
 ## Develop
 
