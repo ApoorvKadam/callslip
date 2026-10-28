@@ -1,5 +1,5 @@
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import type { Answer, Run } from "../api";
+import type { Answer, Run, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
 import { count, seconds } from "../format";
 import { AnswerView } from "./AnswerView";
@@ -57,11 +57,23 @@ function RunMeta({ run, onShowSteps }: { run: Run; onShowSteps: () => void }) {
             : `, ${answer.citations.length - answer.citations_verified} not found on the page`}
         </span>
       )}
+      {answer?.support && answer.support.length > 0 && <SupportSummary checks={answer.support} />}
       <button type="button" className="text-button" onClick={onShowSteps}>
         {run.tool_calls > 0 ? `Steps (${run.tool_calls})` : "Steps"}
       </button>
     </div>
   );
+}
+
+// "4 of 5 cited sentences supported, 1 not checked", from the support check.
+function SupportSummary({ checks }: { checks: SupportCheck[] }) {
+  const unchecked = checks.filter((c) => c.verdict === "not_checked").length;
+  if (unchecked === checks.length) return <span>support not checked</span>;
+  const supported = checks.filter((c) => c.verdict === "supported").length;
+  const label =
+    `${supported} of ${count(checks.length, "cited sentence")} supported` +
+    (unchecked ? `, ${unchecked} not checked` : "");
+  return <span className={supported === checks.length ? undefined : "check-warn"}>{label}</span>;
 }
 
 export function Conversation(props: Props) {

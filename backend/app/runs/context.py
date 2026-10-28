@@ -5,6 +5,7 @@ import time
 from dataclasses import dataclass, field
 from uuid import UUID
 
+from app.agent import support
 from app.agent.evidence import build_answer, cited_pages, collect_evidence
 from app.config import Settings
 from app.llm import LLM, Usage
@@ -12,6 +13,7 @@ from app.retrieval.search import SearchHit, SearchService
 from app.runs.store import RunStore
 
 EXCERPT_CHARS = 180
+MIN_SUPPORT_CHECK_S = 3.0
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +38,32 @@ class RunContext:
 
     async def emit(self, type_: str, data: dict) -> None:
         await self.store.event(self.run_id, type_, data)
+
+    async def check_support(self, answer: dict) -> list[dict]:
+        """Judge whether each quote supports its piece of the answer (see agent/support.py). This
+        is advice for the reader: it never raises, and a failure or a spent deadline leaves the
+        pieces marked not checked."""
+        items = support.claims(answer)
+        if not items or not self.settings.support_check:
+            return []
+        budget = min(self.settings.support_timeout_s, self.remaining_s())
+        reply = None
+        if budget >= MIN_SUPPORT_CHECK_S:
+            try:
+                message, _ = await self.llm.create(
+                    run_id=self.run_id,
+                    purpose="support_check",
+                    system=[{"type": "text", "text": support.SUPPORT_SYSTEM}],
+                    messages=support.request(items),
+                    timeout_s=budget,
+                    max_tokens=2000,
+                    json_schema=support.SCHEMA,
+                )
+                reply = next((b.text for b in message.content if b.type == "text"), None)
+            except Exception:
+                fields = {"run_id": str(self.run_id)}
+                log.warning("support check failed", exc_info=True, extra={"fields": fields})
+        return support.verdicts(items, reply)
 
     def answer_stream(self) -> "AnswerStream":
         """For the next model call: its text as it is written, for the browser to show."""
@@ -68,11 +96,15 @@ class RunContext:
             messages = await self.store.messages(self.run_id)
             page_texts = await self.store.page_texts(cited_pages(final_content))
             answer = build_answer(final_content, collect_evidence(messages), page_texts)
-        exec_ms = int(self.elapsed_s() * 1000)
         # Events first, status last: the event stream ends once the status is terminal, so
         # every event must already be stored by then.
         if answer is not None:
             await self.emit("answer", answer)
+            checks = await self.check_support(answer)
+            if checks:
+                answer["support"] = checks
+                await self.emit("support", {"checks": checks, "counts": support.summary(checks)})
+        exec_ms = int(self.elapsed_s() * 1000)
         totals = await self.store.usage_totals(self.run_id)
         await self.emit(
             "run_finished",

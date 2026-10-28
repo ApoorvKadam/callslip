@@ -707,9 +707,21 @@ a:hover {
 .source-foot {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
   margin-left: 26px;
+}
+
+/* The page check, then the support check: one line when there is room, two when there is not. */
+.source-checks {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+}
+
+.source-checks > *,
+.source-foot > a {
+  white-space: nowrap;
 }
 
 .check-ok {
@@ -718,6 +730,10 @@ a:hover {
 
 .check-bad {
   color: var(--bad-ink);
+}
+
+.check-warn {
+  color: var(--warn-ink);
 }
 
 .steps {
