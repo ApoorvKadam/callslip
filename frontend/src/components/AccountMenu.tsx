@@ -1,3 +1,4 @@
+import { LogIn, LogOut, UserRound } from "lucide-react";
 import { type FormEvent, type KeyboardEvent, useState } from "react";
 import { signIn, signOut } from "../api";
 
@@ -54,8 +55,12 @@ export function AccountMenu({
   if (email) {
     return (
       <div className="account">
-        <span className="meta account-email">{email}</span>
+        <span className="meta account-email">
+          <UserRound size={14} aria-hidden="true" />
+          {email}
+        </span>
         <button type="button" className="text-button" onClick={() => void leave()}>
+          <LogOut size={14} aria-hidden="true" />
           Sign out
         </button>
         {error && (
@@ -76,6 +81,7 @@ export function AccountMenu({
         aria-controls="sign-in"
         onClick={() => setOpen(!open)}
       >
+        <LogIn size={15} aria-hidden="true" />
         Sign in
       </button>
       {open && (

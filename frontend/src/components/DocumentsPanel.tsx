@@ -1,3 +1,4 @@
+import { Upload } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   type DocumentInfo,
@@ -98,6 +99,7 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
           onChange={(e) => void upload(e.target.files)}
         />
         <span>
+          <Upload size={15} aria-hidden="true" />
           {uploading ? "Uploading" : signedIn ? "Upload privately" : "Upload to shared collection"}
         </span>
       </label>
