@@ -223,6 +223,7 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
                 timeout_s=max(MIN_MODEL_CALL_S, min(ctx.settings.llm_timeout_s, timeout)),
                 on_text=progress.add,
                 cache_conversation=not final,
+                thinking=ctx.settings.answer_thinking,
             )
             await progress.flush()
         except TRANSIENT_MODEL_ERRORS as exc:

@@ -258,15 +258,22 @@ function RunAnswer({ run, live, ...props }: RunAnswerProps) {
     );
   }
   if (!live?.draft) return null;
+  return <DraftAnswer runId={run.id} text={live.draft} />;
+}
+
+// The answer as the model writes it, drawn like the final answer so nothing shifts when that
+// arrives; it only lacks the citations, which come with the checked answer.
+function DraftAnswer({ runId, text }: { runId: string; text: string }) {
+  const shown = useSteadyText(text);
   const draft: Answer = {
-    text: live.draft,
-    segments: [{ text: live.draft, citations: [] }],
+    text: shown,
+    segments: [{ text: shown, citations: [] }],
     citations: [],
     citations_verified: 0,
   };
   return (
     <AnswerView
-      runId={run.id}
+      runId={runId}
       answer={draft}
       active={null}
       onHover={() => undefined}
@@ -274,5 +281,32 @@ function RunAnswer({ run, live, ...props }: RunAnswerProps) {
       streaming
     />
   );
+}
+
+// Streamed text arrives in bursts. Reveal it at a steady pace so it reads as it is written: the
+// first piece shows at once, and a large backlog is caught up in a few frames, never trickled.
+function useSteadyText(target: string): string {
+  const [shown, setShown] = useState(target);
+  const current = useRef(target);
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || current.current === "" || !target.startsWith(current.current)) {
+      current.current = target;
+      setShown(target);
+      return;
+    }
+    let frame = 0;
+    const step = () => {
+      const backlog = target.length - current.current.length;
+      if (backlog <= 0) return;
+      const next = current.current.length + Math.max(2, Math.ceil(backlog / 8));
+      current.current = target.slice(0, next);
+      setShown(current.current);
+      frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [target]);
+  return shown;
 }
 

@@ -169,7 +169,7 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 | Exact vector search, no HNSW | Correct and fast at this size; filters never under-fill | Add HNSW (and test filtered recall) past roughly 100k passages |
 | PostgreSQL owns ingestion jobs | Durable, transactional, one less moving part | A real queue (or Redis streams) for many workers or priorities |
 | Redis as a cache only | It can fail without losing anything | Shared rate limits and live events across API replicas would move to Redis |
-| SSE by polling `run_events` | Works across refresh and reconnect; survives a page reload with `Last-Event-ID` | Polls every 0.4 s per open stream; Redis pub/sub at higher concurrency |
+| SSE by polling `run_events` | Works across refresh and reconnect; survives a page reload with `Last-Event-ID` | Polls every 0.1 s per open stream while its run is active, so streamed text arrives within about 0.2 s; PostgreSQL `LISTEN`/`NOTIFY` or Redis pub/sub at higher concurrency |
 | Runs in run workers, queued in PostgreSQL | The same claim-and-lease pattern as ingestion; the API holds no run state and scales out | A run whose worker dies is closed as interrupted, not retried, because part of it may have executed. A question no worker starts within 120 s (`MAX_QUEUE_WAIT_S`) is closed with a message, never run late; with every worker down, nothing closes it until one returns. Claiming adds up to 0.25 s |
 | Local embeddings (bge-small, 384-d) | Free, private, reproducible, no extra key | Smaller model; a hosted embedding model for harder retrieval (a small reranker was measured and did not help) |
 

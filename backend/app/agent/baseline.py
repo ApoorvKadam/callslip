@@ -64,6 +64,7 @@ async def run_baseline(
             messages=messages,
             timeout_s=max(5.0, min(ctx.settings.llm_timeout_s, ctx.remaining_s())),
             on_text=progress.add,
+            thinking=ctx.settings.answer_thinking,
         )
         await progress.flush()
     except TRANSIENT_MODEL_ERRORS as exc:

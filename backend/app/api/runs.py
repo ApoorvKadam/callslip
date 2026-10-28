@@ -18,7 +18,7 @@ from app.api.sessions import RUN_COLUMNS, Owner, Pool
 
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 
-POLL_S = 0.4
+POLL_S = 0.1
 HEARTBEAT_S = 15.0
 
 
@@ -76,7 +76,8 @@ async def run_events(run_id: UUID, request: Request, pool: Pool, owner: Owner):
             for seq, type_, data in rows:
                 last_seen = seq
                 yield f"id: {seq}\nevent: {type_}\ndata: {json.dumps(data, default=str)}\n\n"
-            if status != "running" and not rows:
+            # The status was read before the events, so a finished run has none left to send.
+            if status != "running":
                 yield f"event: end\ndata: {json.dumps({'status': status})}\n\n"
                 return
             if time.monotonic() - last_beat > HEARTBEAT_S:
