@@ -31,7 +31,7 @@ scripts/deploy.sh                 # build images tagged with the commit SHA, sta
 python3 scripts/load_corpus.py    # load the 14 corpus PDFs (safe to run again)
 ```
 
-`deploy.sh` runs `docker compose build` and `docker compose up -d --wait` with `IMAGE_TAG=<short SHA>`, waits for every health check, then runs `scripts/verify.sh`. The deployed tag is recorded in `.deploy/current` and the one before it in `.deploy/previous`.
+`deploy.sh` runs `docker compose build` and `docker compose up -d --wait` with `IMAGE_TAG=<short SHA>`, waits for every health check, then runs `scripts/verify.sh`. Only after verification passes is the tag recorded in `.deploy/current`, and the one it replaces in `.deploy/previous`. A failed verification leaves both unchanged and prints the last verified tag to roll back to.
 
 Plain Compose works too: `docker compose up -d --build --wait`.
 
@@ -186,6 +186,20 @@ $ scripts/rollback.sh fd1da89
 rolling back to fd1da89
 verify: ok
 running fd1da89
+```
+
+### A deploy that fails verification
+
+Simulated by pointing the check at a closed port; the recorded tags stay as they were:
+
+```text
+$ BASE_URL=http://localhost:1 scripts/deploy.sh
+...
+urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
+verify failed for 4058c15; last verified: fd1da89 (scripts/rollback.sh fd1da89)
+$ cat .deploy/current .deploy/previous
+fd1da89
+c1e797b
 ```
 
 ### Full restart keeps all data
