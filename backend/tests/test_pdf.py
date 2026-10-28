@@ -30,3 +30,14 @@ def test_page_limit():
 def test_garbage_is_rejected():
     with pytest.raises(PdfRejected, match="not a readable PDF"):
         extract_pages(b"%PDF-1.7 this is not really a pdf", max_pages=10)
+
+
+def test_parsing_that_runs_too_long_is_stopped_and_rejected():
+    # A timeout shorter than starting the child process: the parser is killed and rejected.
+    with pytest.raises(PdfRejected, match="took longer than"):
+        extract_pages(make_pdf(["Text."]), max_pages=10, timeout_s=0.001)
+
+
+def test_text_cap_rejects_huge_extractions():
+    with pytest.raises(PdfRejected, match="more than 10 characters"):
+        extract_pages(make_pdf(["This page has far more than ten characters."]), 10, max_chars=10)

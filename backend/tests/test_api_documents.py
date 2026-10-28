@@ -1,5 +1,7 @@
 """Document endpoints through the real app and a real PostgreSQL."""
 
+import re
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -67,3 +69,20 @@ def test_ready_reports_database_and_redis(client):
     assert r.json()["checks"]["database"] == "up"
     # Redis may or may not run where the tests run; either way the app stays ready.
     assert r.json()["status"] in {"ok", "degraded"}
+
+
+def test_unsafe_file_names_are_cleaned_and_served_with_safe_headers(client):
+    r = client.post(
+        "/api/documents",
+        files={"file": ('Smith’s "report"\r\n.pdf', make_pdf(["x"]), "application/pdf")},
+    )
+    assert r.status_code == 202
+    body = r.json()
+    # Only a safe ASCII set survives, whatever the client sent (quotes, CR/LF, curly quotes).
+    assert re.fullmatch(r"[A-Za-z0-9._ -]+\.pdf", body["filename"])
+    assert body["filename"].startswith("Smith_s ")
+    assert body["title"].startswith("Smith\u2019s")
+    file = client.get(f"/api/documents/{body['id']}/file")
+    assert file.status_code == 200
+    assert file.headers["content-disposition"] == f'inline; filename="{body["filename"]}"'
+    assert file.headers["x-content-type-options"] == "nosniff"

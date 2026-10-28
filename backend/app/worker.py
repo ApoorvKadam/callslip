@@ -27,6 +27,15 @@ log = logging.getLogger("worker")
 HEARTBEAT = Path("/tmp/worker-heartbeat")
 
 
+async def heartbeat(stop: asyncio.Event, every_s: float = 10.0) -> None:
+    """Touch the health-check file while the event loop is alive, including during long jobs
+    (parsing runs in a child process and embedding in a thread, so the loop stays free)."""
+    while not stop.is_set():
+        HEARTBEAT.touch()
+        with contextlib.suppress(TimeoutError):
+            await asyncio.wait_for(stop.wait(), timeout=every_s)
+
+
 def build_chunks(pages: list[Page], title: str, embedder: Embedder, settings: Settings):
     """Chunk every page and embed the chunks. CPU-bound: called through asyncio.to_thread."""
     rows: list[tuple[int, int, str, str, int]] = []
@@ -116,9 +125,9 @@ async def run() -> None:
     for sig in (signal.SIGTERM, signal.SIGINT):
         loop.add_signal_handler(sig, stop.set)
     log.info("worker started", extra={"fields": {"owner": owner, "model": settings.embed_model}})
+    beat = asyncio.create_task(heartbeat(stop))
 
     while not stop.is_set():
-        HEARTBEAT.touch()
         async with pool.connection() as conn:
             await jobs.fail_exhausted(conn, settings.max_attempts)
             job = await jobs.claim_next(conn, owner, settings.lease_seconds, settings.max_attempts)
@@ -129,6 +138,7 @@ async def run() -> None:
             continue
         await process(pool, embedder, settings, job, owner)
 
+    await beat
     await pool.close()
     log.info("worker stopped", extra={"fields": {"owner": owner}})
 
