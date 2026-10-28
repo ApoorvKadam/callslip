@@ -97,6 +97,7 @@ def test_repeat_search_is_cached_until_the_corpus_changes(client):
 
 def test_search_validates_its_input(client):
     assert client.post("/api/search", json={"query": ""}).status_code == 422
+    assert client.post("/api/search", json={"query": "   "}).status_code == 422
     assert client.post("/api/search", json={"query": "x", "top_k": 50}).status_code == 422
     bad_range = {"query": "x", "page_from": 5, "page_to": 2}
     assert client.post("/api/search", json=bad_range).status_code == 422

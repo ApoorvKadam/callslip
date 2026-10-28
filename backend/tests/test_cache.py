@@ -34,3 +34,12 @@ async def test_unreachable_redis_is_a_miss_and_is_skipped_for_a_while():
     await cache.set_json("k", {"x": 1}, ttl_s=5)
     assert time.monotonic() - started < 0.05
     await client.aclose()
+
+
+@pytest.mark.skipif(not TEST_REDIS_URL, reason="TEST_REDIS_URL is not set")
+async def test_undecodable_value_is_a_miss():
+    client = Redis.from_url(TEST_REDIS_URL)
+    key = f"test:{time.time_ns()}"
+    await client.set(key, b"not json", ex=30)
+    assert await Cache(client).get_json(key) == (None, "miss")
+    await client.aclose()

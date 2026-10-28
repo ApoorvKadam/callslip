@@ -41,7 +41,13 @@ class Cache:
         except (RedisError, OSError) as exc:
             self._mark_down(exc)
             return None, "unavailable"
-        return (json.loads(raw), "hit") if raw is not None else (None, "miss")
+        if raw is None:
+            return None, "miss"
+        try:
+            return json.loads(raw), "hit"
+        except ValueError:  # a corrupt or foreign value is a miss, never an error
+            log.warning("discarding undecodable cache value", extra={"fields": {"key": key}})
+            return None, "miss"
 
     async def set_json(self, key: str, value: Any, ttl_s: int) -> None:
         if not self._available():

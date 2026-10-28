@@ -7,7 +7,7 @@ run the same query here and compare the passages and ranks.
 from typing import Annotated
 
 from fastapi import APIRouter, Request
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, StringConstraints, model_validator
 
 from app.retrieval.search import SearchFilters, SearchService
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api", tags=["search"])
 
 
 class SearchRequest(BaseModel):
-    query: Annotated[str, Field(min_length=1, max_length=500)]
+    query: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=500)]
     document_ids: Annotated[list[int] | None, Field(max_length=50)] = None
     page_from: Annotated[int | None, Field(ge=1)] = None
     page_to: Annotated[int | None, Field(ge=1)] = None
@@ -51,7 +51,7 @@ async def search(body: SearchRequest, request: Request) -> SearchResponse:
     filters = SearchFilters(
         tuple(body.document_ids) if body.document_ids else None, body.page_from, body.page_to
     )
-    result = await service.search(body.query.strip(), filters, body.top_k)
+    result = await service.search(body.query, filters, body.top_k)
     return SearchResponse(
         hits=[HitOut(**{k: getattr(h, k) for k in HitOut.model_fields}) for h in result.hits],
         cache=result.cache,
