@@ -12,7 +12,7 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever ([details](docs/evaluation.md)):
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). After one more prompt change, the agent passed 40 of 45 again ([run](eval/results/2026-10-28T192415Z/)).
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|
@@ -87,8 +87,8 @@ Each question is a run with its own state, stored in PostgreSQL: the exact model
 ## Accounts and conversations
 
 Without signing in, a browser gets a random token in an HttpOnly, SameSite=Strict cookie; its conversations belong to that token, so another browser cannot read them. Signing in (a local account, standing in for NYU single sign-on) adds two things:
-- **Private documents.** Uploads belong to the account. Search, the agent's tools and citations see the shared collection plus the account's own documents, and nobody else's. The owner can delete them; their passages go too, and no cached search that included them is read again.
-- **Sign-in limits.** After five failed sign-ins for an email from one address within 15 minutes, that address is refused for that email until the window ends. A password cannot be guessed by trying many, and nobody can lock an account by failing on purpose from elsewhere.
+- **Private documents.** Uploads belong to the account. Search, the agent's tools and citations see the shared collection plus the account's own documents, and nobody else's. The owner can delete them; their file and passages go too, and no cached search that included them is read again. Saved answers that quoted a deleted document keep those quotes.
+- **Sign-in limits.** After five failed sign-ins for an email from one address within 15 minutes, that address is refused for that email until the window ends. This slows guessing from one address, not guessing spread over many addresses, and there is no limit while Redis is down. Nobody can lock an account by failing on purpose from elsewhere.
 - **History that follows the account.** The Conversations tab lists earlier conversations, newest first; selecting one opens it with its answers, sources and steps, in any browser signed in to the account.
 
 One question at a time per conversation.

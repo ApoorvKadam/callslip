@@ -19,7 +19,7 @@ Callslip answers simple and multi-part questions over a set of PDFs. An agent pi
 
 ## Results
 
-On fifteen cases with three repeats each, the agent on Claude Haiku 5.5 passed every check in 40 of 45 runs, against 21 of 45 for a single-pass baseline on the same retriever and model. Every citation was found on the page it cites. The baseline fails every case that needs a second step: two documents, a clarification, a tool that times out, which memo governs. The agent's median time to answer is 5.5 s, within half a second of the baseline, at $0.0020 per question. Claude Sonnet 5.5 also passed 40 of 45, at about twelve times the cost, so Haiku is the default and Sonnet a setting. Details: [docs/evaluation.md](docs/evaluation.md).
+On fifteen cases with three repeats each, the agent on Claude Haiku 5.5 passed every check in 40 of 45 runs, against 21 of 45 for a single-pass baseline on the same retriever and model. After a last prompt change, the agent alone passed 40 of 45 again. Every citation was found on the page it cites. The baseline fails every case that needs a second step: two documents, a clarification, a tool that times out, which memo governs. The agent's median time to answer is 5.5 s, within half a second of the baseline, at $0.0020 per question. Claude Sonnet 5.5 also passed 40 of 45, at about twelve times the cost, so Haiku is the default and Sonnet a setting. Details: [docs/evaluation.md](docs/evaluation.md).
 
 ## Unfinished, and what I would do with more time
 
