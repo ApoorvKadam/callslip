@@ -98,8 +98,26 @@ jobs:
         run: docker compose build
       - name: Start the stack and wait for health checks
         run: docker compose up -d --wait --wait-timeout 240
-      - name: Smoke test (health, readiness, upload, ingestion)
+      - name: Smoke test (health, readiness, upload, ingestion, search)
         run: python3 scripts/smoke_test.py
+      - name: Data survives a full restart
+        run: |
+          count() { curl -sf localhost:8080/api/documents | python3 -c "import json,sys; print(len(json.load(sys.stdin)))"; }
+          before=$(count)
+          docker compose down
+          docker compose up -d --wait --wait-timeout 240
+          after=$(count)
+          echo "documents before: $before, after: $after"
+          test "$before" -gt 0 && test "$before" = "$after"
+      - name: Redis outage degrades but search keeps working
+        run: |
+          docker compose stop redis
+          curl -s localhost:8080/api/ready | tee ready.json
+          grep -q '"status":"degraded"' ready.json
+          curl -sf -X POST localhost:8080/api/search -H 'Content-Type: application/json' \
+            -d '{"query": "smoke test document"}' | python3 -c \
+            "import json,sys; r=json.load(sys.stdin); print('hits', len(r['hits']), 'cache', r['cache']); assert r['hits'] and r['cache']=='unavailable'"
+          docker compose start redis
       - name: Container logs
         if: failure()
         run: docker compose logs --no-color --tail 200
