@@ -7,6 +7,14 @@ port="$(docker compose port frontend 8080 2>/dev/null | sed 's/.*://' || true)"
 base="${BASE_URL:-http://localhost:${port:-8080}}"
 
 docker compose ps --format 'table {{.Service}}\t{{.Status}}'
+# Every service in the Compose file must have a container.
+expected="$(docker compose config --services | LC_ALL=C sort -u)"
+present="$(docker compose ps --all --format '{{.Service}}' | LC_ALL=C sort -u)"
+missing="$(comm -23 <(echo "$expected") <(echo "$present"))"
+if [[ -n "$missing" ]]; then
+  echo "missing: $(echo $missing)" >&2
+  exit 1
+fi
 # Every service must be running, and healthy when it has a health check.
 unhealthy="$(docker compose ps --all --format '{{.Service}} {{.State}} {{.Health}}' |
   awk '$2 != "running" || ($3 != "" && $3 != "healthy") {print $1}')"

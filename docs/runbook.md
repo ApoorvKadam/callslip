@@ -42,7 +42,7 @@ scripts/verify.sh                 # every service healthy, /api/health, /api/rea
 python3 scripts/ask.py "What are the four functions of the NIST AI RMF Core?"   # needs the key
 ```
 
-`verify.sh` fails if any service is not healthy, and it tests the port that Compose publishes (`WEB_PORT`) unless `BASE_URL` is set.
+`verify.sh` fails if any service is missing, stopped or not healthy, and it tests the port that Compose publishes (`WEB_PORT`) unless `BASE_URL` is set.
 
 Health checks: `api` calls `/api/health`; `worker` checks that its heartbeat file is fresh (it is touched every 10 s, also during long documents); `postgres` runs `pg_isready`; `redis` runs `redis-cli ping`; `frontend` fetches `/healthz`. `/api/ready` reports each dependency: PostgreSQL down gives 503; Redis down gives 200 with `"status": "degraded"`.
 
