@@ -1,6 +1,6 @@
 """The evaluation's scoring rules (scripts/eval.py), on hand-made runs: no stack, no model.
 
-Each test is a way an answer could pass without earning it, found in review.
+Each test is a way an answer could pass without earning it.
 """
 
 import json
