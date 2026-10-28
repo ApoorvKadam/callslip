@@ -77,6 +77,17 @@ def test_source_that_disagrees_with_the_evidence_is_caught(recorded):
     assert check_citation(citation, collect_evidence(messages), pages) == "source_mismatch"
 
 
+def test_a_repeated_quote_is_checked_again(recorded):
+    messages, answer, pages = recorded
+    repeat = copy.deepcopy(first_citation(answer))
+    repeat["search_result_index"] = 999
+    answer.append({"type": "text", "text": " Said again.", "citations": [repeat]})
+    result = build_answer(answer, collect_evidence(messages), pages)
+    last = result["citations"][result["segments"][-1]["citations"][0] - 1]
+    assert last["provenance"] == "unknown_index"
+    assert result["citations_verified"] == len(result["citations"]) - 1
+
+
 def test_quote_missing_from_the_stored_page_is_caught(recorded):
     messages, answer, _ = recorded
     citation = first_citation(answer)
