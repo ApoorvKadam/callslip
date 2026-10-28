@@ -60,6 +60,7 @@ class RunContext:
                     max_tokens=2000,
                     json_schema=support.SCHEMA,
                     effort=self.settings.support_effort,
+                    thinking="adaptive",
                 )
                 reply = next((b.text for b in message.content if b.type == "text"), None)
             except Exception:
@@ -104,10 +105,13 @@ class RunContext:
             # Time to answer, apart from the support check that follows.
             answer["answer_ms"] = int(self.elapsed_s() * 1000)
             await self.emit("answer", answer)
+            started = time.monotonic()
             checks = await self.check_support(answer)
             if checks:
                 answer["support"] = checks
-                await self.emit("support", {"checks": checks, "counts": support.summary(checks)})
+                ms = int((time.monotonic() - started) * 1000)
+                counts = support.summary(checks)
+                await self.emit("support", {"checks": checks, "counts": counts, "ms": ms})
         exec_ms = int(self.elapsed_s() * 1000)
         totals = await self.store.usage_totals(self.run_id)
         await self.emit(
@@ -147,12 +151,12 @@ def evidence_summary(hits: list[SearchHit]) -> list[dict]:
 
 
 class AnswerStream:
-    """A model call's text as it arrives, sent as `answer_delta` events about four times a
+    """A model call's text as it arrives, sent as `answer_delta` events about ten times a
     second. They only show progress: the answer itself is still built from the finished message,
     and its citations are checked as before. A failed write stops the progress events, not the run.
     """
 
-    INTERVAL_S = 0.25
+    INTERVAL_S = 0.1
 
     def __init__(self, ctx: RunContext, turn: int) -> None:
         self.ctx, self.turn = ctx, turn

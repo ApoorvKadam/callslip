@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     answer_model: str = "claude-haiku-5-5"
     # Low effort passed as many evaluation runs as medium, and answered sooner.
     answer_effort: str = "low"
+    # "adaptive" lets the model think before it writes; "disabled" answers sooner.
+    answer_thinking: str = "adaptive"
     top_k: int = 8
     history_turns: int = 3
 

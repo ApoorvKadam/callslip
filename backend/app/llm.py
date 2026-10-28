@@ -69,12 +69,14 @@ class LLM:
         json_schema: dict | None = None,
         cache_conversation: bool = False,
         effort: str | None = None,
+        thinking: str | None = None,
     ) -> tuple[Message, Usage]:
         """One model call. With `on_text`, the response is streamed and each piece of text is
         passed on as it arrives; the returned message is the same finished message either way.
         With `json_schema`, the reply is one text block of JSON that matches it. With
         `cache_conversation`, the messages so far are cached too, so the next turn of the same
-        run reads them back instead of processing them again. `effort` overrides the default."""
+        run reads them back instead of processing them again. `effort` overrides the default, and
+        `thinking` ("adaptive" or "disabled") sets whether the model thinks before it writes."""
         kwargs: dict[str, Any] = {
             "model": self.model,
             "max_tokens": max_tokens,
@@ -90,6 +92,8 @@ class LLM:
             kwargs["output_config"]["format"] = {"type": "json_schema", "schema": json_schema}
         if cache_conversation:
             kwargs["cache_control"] = {"type": "ephemeral"}
+        if thinking:
+            kwargs["thinking"] = {"type": thinking}
 
         client = self.client.with_options(timeout=timeout_s)
 
