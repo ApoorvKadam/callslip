@@ -1,40 +1,55 @@
 """The single-pass baseline: retrieve once with the question, generate once.
 
-Same retriever, top_k, model, settings, citation format and answer rules as the agent, so the
-evaluation compares only the difference that matters: the agent decides what to do next.
+Same retriever and search executor (timeout, one retry, fault injection), top_k, model,
+settings, citation format and answer rules as the agent, so the evaluation compares only the
+difference that matters: the agent decides what to do next, the baseline cannot.
 """
 
-from app.agent.evidence import search_result_block
+import time
+
+from app.agent.loop import execute_tool
 from app.agent.prompts import BASELINE_SYSTEM
-from app.retrieval.search import SearchFilters
-from app.runs.context import RunContext, content_dicts, evidence_summary, question_text
+from app.agent.tools import Tools, elapsed_ms
+from app.runs.context import RunContext, content_dicts, question_text
 
 
-async def run_baseline(ctx: RunContext, question: str, history: list[tuple[str, str]]) -> None:
-    k = ctx.settings.top_k
-    result = await ctx.search.search(question, SearchFilters(), k)
+async def run_baseline(
+    ctx: RunContext,
+    question: str,
+    history: list[tuple[str, str]],
+    faults: dict[str, str] | None = None,
+) -> None:
+    started = time.monotonic()
+    query = {"query": question[:500], "top_k": ctx.settings.top_k}
+    outcome, attempts, retries = await execute_tool(
+        ctx, Tools(ctx.search, ctx.store), "search_documents", query, faults or {}
+    )
     ctx.tool_calls += 1
     await ctx.emit(
         "tool_call",
         {
             "step": 1,
             "tool": "search_documents",
-            "input": {"query": question, "top_k": k},
-            "status": "ok" if result.hits else "no_results",
-            "summary": f"{len(result.hits)} passages",
-            "cache": result.cache,
-            "ms": result.ms,
-            "evidence": evidence_summary(result.hits),
+            "input": query,
+            "status": outcome.status,
+            "summary": outcome.summary,
+            "ms": elapsed_ms(started),
+            "attempts": attempts,
+            "retries": retries,
+            **outcome.trace,
         },
     )
 
+    passages = outcome.content if outcome.status == "ok" else []
     text = question_text(question, history)
-    if not result.hits:
-        text = f"No passages were retrieved for this question.\n\n{text}"
-    content = [
-        *(search_result_block(h.document_id, h.title, h.page_no, h.text) for h in result.hits),
-        {"type": "text", "text": text},
-    ]
+    if not passages:
+        why = (
+            "No passages were retrieved for this question."
+            if outcome.status == "no_results"
+            else f"The search failed ({outcome.summary}), so no passages are available."
+        )
+        text = f"{why}\n\n{text}"
+    content = [*passages, {"type": "text", "text": text}]
     await ctx.store.append_message(ctx.run_id, "user", content)
 
     message, usage = await ctx.llm.create(
@@ -52,5 +67,7 @@ async def run_baseline(ctx: RunContext, question: str, history: list[tuple[str, 
         await ctx.finish("failed", "the model declined to answer", None)
     elif message.stop_reason == "max_tokens":
         await ctx.finish("incomplete", "the answer hit the output length limit", assistant)
+    elif outcome.is_error:
+        await ctx.finish("incomplete", f"retrieval failed: {outcome.summary}", assistant)
     else:
         await ctx.finish("complete", None, assistant)
