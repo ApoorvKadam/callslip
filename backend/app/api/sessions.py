@@ -82,7 +82,13 @@ async def create_session(request: Request, response: Response, pool: Pool) -> di
     if not token or len(token) < 32:
         token = secrets.token_urlsafe(32)
         response.set_cookie(
-            COOKIE, token, max_age=COOKIE_MAX_AGE, httponly=True, samesite="strict", path="/api"
+            COOKIE,
+            token,
+            max_age=COOKIE_MAX_AGE,
+            httponly=True,
+            samesite="strict",
+            path="/api",
+            secure=request.app.state.settings.cookie_secure,
         )
     session_id = uuid4()
     async with pool.connection() as conn:

@@ -147,7 +147,7 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 
 - **Untrusted text**: passages are evidence, never instructions (stated in the system prompt, tested with a planted instruction). Tools are read-only and corpus-only, so even a followed instruction could not act.
 - **Limits**: listed above; all configurable through environment variables.
-- **Session isolation**: a random capability token in an HttpOnly, SameSite=Strict cookie; sessions and runs belong to its hash, other browsers get 404, and a run must belong to the session in the URL. Documents are shared on purpose (single-tenant demo).
+- **Session isolation**: a random capability token in an HttpOnly, SameSite=Strict cookie (also `Secure` when `COOKIE_SECURE=true`, as in the Kubernetes manifests, which serve over TLS); sessions and runs belong to its hash, other browsers get 404, and a run must belong to the session in the URL. Documents are shared on purpose (single-tenant demo).
 - **Uploads**: PDF magic bytes, 25 MB, 600 pages, duplicate detection by SHA-256, file names reduced to safe ASCII before reaching a header, parsing in a child process with time and memory caps.
 - **Secrets**: only in `.env` (git-ignored); CI uses no API key.
 - **Failure messages**: users see a plain cause and a reference; exception text stays in the server log.
