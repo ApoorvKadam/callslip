@@ -122,9 +122,9 @@ stateDiagram-v2
 |---|---|---|
 | Model answers | | `complete` |
 | Tool calls | 9 | after the 9th call, one final call with `tool_choice: none` answers from the evidence so far; `incomplete` |
-| Model turns | 10 | the 10th turn is that final call |
+| Model turns | 10 | the 10th turn is that final call; a clarification is asked only while a turn is left to use the reply, and resume keeps the counts |
 | Run deadline | 90 s, of which 20 s reserved for the final answer | with 20 s or less left, a requested tool is answered "not run" and the final call follows; with under 5 s left, stop with a summary and no model call |
-| Tool timeout | 8 s, one retry | the failure goes back to the model as a typed error; it can rewrite the call or use another tool |
+| Tool timeout or error | 8 s, one retry | the failure (including an unexpected exception, which is logged) goes back to the model as a typed error; it can rewrite the call or use another tool |
 | Model API unreachable | SDK retries within the call's time budget | `incomplete` with the reason |
 | Model refusal | | `failed` |
 
@@ -138,7 +138,7 @@ stateDiagram-v2
 
 | Key | Holds | TTL and invalidation |
 |---|---|---|
-| `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and `top_k` | 10 min. `corpus_version` increases in the transaction that publishes a document; `corpus_epoch` is a random id per database, so a recreated or restored database never reads old entries |
+| `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and `top_k` | 10 min. `corpus_version` increases in the transaction that publishes a document; `corpus_epoch` is a random id per database, so a recreated database never reads old entries; restoring a backup sets a new epoch (runbook) |
 | `qemb:v1:{model}:{hash}` | a query's embedding | 24 h; keyed by model |
 
 When Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, the trace shows `cache unavailable`, and `/api/ready` reports `degraded`. Answers keep working. Sessions, jobs and locks are deliberately not in Redis: PostgreSQL already has them durably, and a cache must be safe to lose.

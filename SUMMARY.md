@@ -3,8 +3,8 @@
 ## What was built
 
 - **A working, containerized application**: five services in Docker Compose (React frontend behind nginx, FastAPI API, ingestion worker, PostgreSQL 17 with pgvector, Redis), each with a health check, a memory limit and secrets only from `.env`.
-- **Ingestion that keeps page numbers exact**: uploads are parsed page by page in a sandboxed child process, split into page-bounded passages measured in model tokens, embedded locally, and published atomically by a worker holding a lease.
-- **Hybrid retrieval**: exact pgvector similarity plus PostgreSQL full-text, fused by reciprocal rank, with document and page filters; a Redis cache keyed so it can never serve stale results.
+- **Ingestion that keeps page numbers exact**: uploads are parsed page by page in a child process with time and memory limits, split into page-bounded passages measured in model tokens, embedded locally, and published atomically by a worker holding a lease.
+- **Hybrid retrieval**: exact pgvector similarity plus PostgreSQL full-text, fused by reciprocal rank, with document and page filters; a Redis cache keyed by corpus version, so a newly published document is never hidden by an older cached result.
 - **An agent, not a pipeline**: a plain tool-use loop over the Claude Messages API with three read-only tools and a clarification tool. It decides after every result: it narrows searches to the right document, rewrites weak queries, reads whole pages, asks which document the user means, and switches tools when one keeps failing.
 - **Citations that are checked, not trusted**: passages go to Claude as `search_result` blocks; every returned citation is verified against the evidence actually sent and the stored page text, and the UI shows the quote, the check result and a link to the page.
 - **Bounded execution**: caps on model turns, tool calls and wall-clock time, per-tool timeouts with one retry, an honest incomplete answer at a limit, and no model call at all when time is up.
@@ -14,7 +14,7 @@
 
 ## Results in one line
 
-On 10 cases with 3 repeats each, the agent passed 27 of 30 runs and the single-pass baseline 15 of 30, with every one of 290 citations verified on its page. Both fail the same case: neither searched for the page saying a newer memo replaces an older one. The agent took 1.9 times the median latency (7.1 s vs 3.7 s) and 1.5 times the cost ($0.026 vs $0.018 per question). Details: [docs/evaluation.md](docs/evaluation.md).
+On 10 cases with 3 repeats each, the agent passed 25 of 30 runs and the single-pass baseline 12 of 30, with every one of 290 citations verified on its page. The agent's 5 failures: asked about a fine, it gave the wrong deadline or none in two of three runs; and it never searched for the page saying a newer memo replaces an older one, yet said without a citation that the newer one governs. The agent took 1.9 times the median latency (7.1 s vs 3.7 s) and 1.5 times the cost ($0.026 vs $0.018 per question). Details: [docs/evaluation.md](docs/evaluation.md).
 
 ## Unfinished, and what I would do with more time
 

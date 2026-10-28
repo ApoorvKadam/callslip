@@ -69,7 +69,7 @@ uv run ruff check . && uv run ruff format --check .
 TEST_DATABASE_URL=postgresql://postgres:test@localhost:55432/ragtest uv run pytest
 ```
 
-Tests use real services, never mocks, and skip what is not available:
+Tests use real PostgreSQL, Redis and the embedding model, and skip what is not available. They never call the model: agent and citation tests replay recorded real model output.
 - `TEST_DATABASE_URL`: PostgreSQL with pgvector, e.g. `docker run -d --rm -p 55432:5432 -e POSTGRES_PASSWORD=test -e POSTGRES_DB=ragtest pgvector/pgvector:0.8.7-pg17`
 - `TEST_REDIS_URL`: e.g. `docker run -d --rm -p 56379:6379 redis:8.2-alpine` and `redis://localhost:56379/0`
 - `FASTEMBED_CACHE_PATH`: a folder holding the embedding model, downloaded once with
@@ -88,7 +88,7 @@ Redis caches search results and query embeddings:
 
 | Key | Holds | TTL and invalidation |
 |---|---|---|
-| `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and top_k | 10 minutes; `corpus_version` increases in the same transaction that publishes a document, and `corpus_epoch` is a random id per database, so stale results are never read, even after the database is recreated or restored |
+| `search:v1:{corpus_epoch}:{corpus_version}:{model}:{hash}` | results for a query, filters and top_k | 10 minutes; `corpus_version` increases in the same transaction that publishes a document, and `corpus_epoch` is a random id per database, so stale results are never read, even after the database is recreated (a restore from backup sets a new epoch, see the runbook) |
 | `qemb:v1:{model}:{hash}` | a query's embedding | 24 hours; keyed by model |
 
 If Redis is down, reads count as misses, writes are skipped, Redis is not retried for 30 seconds, and `/api/ready` reports `degraded`. Search keeps working.
