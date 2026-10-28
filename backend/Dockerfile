@@ -27,4 +27,6 @@ RUN useradd --create-home --uid 10001 app && chown -R app:app /opt/models
 USER app
 
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
+# The standard asyncio loop: with uvloop, a Redis connect that times out during a DNS lookup
+# leaves an unretrieved future and an ERROR log line (MagicStack/uvloop issue 437).
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--loop", "asyncio"]

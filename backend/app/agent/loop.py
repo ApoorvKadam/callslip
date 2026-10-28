@@ -7,10 +7,11 @@ keeps the order of events simple and means a clarification is never mixed with o
 Run states: running -> needs_clarification -> running -> complete | incomplete | failed.
 
 Limits, all configurable: model turns, tool calls, a per-tool timeout with one retry, and a
-wall-clock deadline with a reserve for the final answer. When a limit is reached, pending tool
-calls are answered "not run", and one last call with tool_choice "none" asks for the best answer
-from the evidence so far, marked incomplete. With no time left for even that, the run stops
-with a deterministic summary of what it found, without another model call.
+wall-clock deadline with a reserve for the final answer. When a limit is reached, the last tool
+result says so (a tool requested past a limit is answered "not run"), and one last call with
+tool_choice "none" asks for the best answer from the evidence so far, marked incomplete. With
+no time left for even that, the run stops with a deterministic summary of what it found,
+without another model call.
 
 Every message is stored append-only before the next call, so a paused run (and its citations)
 can be rebuilt from the database exactly as the model saw it.

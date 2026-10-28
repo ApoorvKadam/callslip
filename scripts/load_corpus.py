@@ -73,8 +73,10 @@ def main() -> int:
             break
         time.sleep(3)
     failed = [i for i, s in states.items() if s != "ready"]
-    print(f"{len(ids) - len(failed)} of {len(ids)} documents ready"
-          + (f"; not ready: {failed}" if failed else ""))
+    print(
+        f"{len(ids) - len(failed)} of {len(ids)} documents ready"
+        + (f"; not ready: {failed}" if failed else "")
+    )
     return 1 if failed else 0
 
 
