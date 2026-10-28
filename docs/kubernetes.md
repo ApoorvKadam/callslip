@@ -4,8 +4,8 @@ The same images that Docker Compose runs, as Kubernetes resources: `deploy/kuber
 
 | Path | What it is |
 |---|---|
-| `base/` | PostgreSQL (StatefulSet with a 10 GiB volume), Redis, the API, the ingestion worker and the frontend, with their Services, probes, resource limits and a settings ConfigMap |
-| `overlays/ingress/` | the base plus an Ingress: `/api` to the API, everything else to the frontend |
+| `base/` | PostgreSQL (StatefulSet with a 10 GiB volume), Redis, the API, the ingestion worker and the frontend, with their Services, probes, resource limits, network policies and a settings ConfigMap |
+| `overlays/ingress/` | the base plus an Ingress over TLS: `/api` to the API, everything else to the frontend |
 | `overlays/openshift/` | the base plus two Routes on one host, and no fixed user ids (OpenShift assigns them) |
 
 ## Deploy
@@ -34,7 +34,7 @@ kubectl apply -k .
 python3 scripts/load_corpus.py --base https://callslip.apps.example.edu
 ```
 
-On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the cluster's application domain.
+On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the cluster's application domain; the router terminates TLS. With the ingress overlay, replace `callslip.example.edu` in `ingress.yaml` and create the `callslip-tls` certificate Secret, or let cert-manager issue it.
 
 ## How it maps from Compose
 
@@ -48,7 +48,7 @@ On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the clus
 | `.env` | ConfigMap `callslip-settings` (non-secret settings) and Secret `callslip-secrets` |
 | `mem_limit` | the same limits as `resources.limits.memory` |
 
-Every container runs as a non-root user with no added capabilities, no privilege escalation and the default seccomp profile. The frontend image is the unprivileged nginx build on port 8080, so it runs under OpenShift's restricted security context unchanged.
+Every container runs as a non-root user with no added capabilities, no privilege escalation and the default seccomp profile. Network policies let only the API and the worker reach PostgreSQL, and only the API reach Redis, which has no password of its own. The frontend image is the unprivileged nginx build on port 8080, so it runs under OpenShift's restricted security context unchanged.
 
 ## What is checked, and what is not
 
