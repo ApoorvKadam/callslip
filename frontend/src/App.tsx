@@ -1,3 +1,4 @@
+import { ArrowRight, Files, MessagesSquare, Route, SquarePen } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ApiError,
@@ -23,6 +24,7 @@ import { Conversation, type LiveAnswer, type PendingClarification } from "./comp
 import { ConversationList } from "./components/ConversationList";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { RunRail, type RailTab } from "./components/RunRail";
+import { MODE_HELP } from "./modes";
 
 const SESSION_KEY = "callslip.session";
 const EVENT_TYPES = [
@@ -324,26 +326,29 @@ export default function App() {
         <div className="bar-actions">
           <fieldset className="segmented" disabled={!!pending}>
             <legend className="visually-hidden">Answering mode</legend>
-            <label>
+            <label title={MODE_HELP.agent}>
               <input
                 type="radio"
                 name="mode"
                 checked={mode === "agent"}
                 onChange={() => setMode("agent")}
               />
+              <Route size={15} aria-hidden="true" />
               Agent
             </label>
-            <label>
+            <label title={MODE_HELP.baseline}>
               <input
                 type="radio"
                 name="mode"
                 checked={mode === "baseline"}
                 onChange={() => setMode("baseline")}
               />
+              <ArrowRight size={15} aria-hidden="true" />
               Single pass
             </label>
           </fieldset>
           <button type="button" className="btn" onClick={() => void onNewSession()}>
+            <SquarePen size={15} aria-hidden="true" />
             New conversation
           </button>
           <AccountMenu
@@ -377,6 +382,7 @@ export default function App() {
               className="tab"
               onClick={() => setSide("documents")}
             >
+              <Files size={15} aria-hidden="true" />
               Documents
             </button>
             <button
@@ -388,6 +394,7 @@ export default function App() {
               className="tab"
               onClick={() => setSide("conversations")}
             >
+              <MessagesSquare size={15} aria-hidden="true" />
               Conversations <span className="meta">{history.length || ""}</span>
             </button>
           </div>
@@ -420,6 +427,7 @@ export default function App() {
         </aside>
         <main className="talk">
           <Conversation
+            mode={mode}
             runs={shown}
             live={live}
             selectedId={selectedId}

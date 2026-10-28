@@ -1,7 +1,9 @@
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import type { Answer, Run, SupportCheck } from "../api";
+import { ArrowRight, CornerDownLeft, Route } from "lucide-react";
+import type { Answer, Mode, Run, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
 import { count, seconds } from "../format";
+import { MODE_HELP } from "../modes";
 import { AnswerView } from "./AnswerView";
 
 // Status words for runs that need attention; a plain answered run shows none.
@@ -27,6 +29,7 @@ export interface PendingClarification {
 }
 
 interface Props {
+  mode: Mode;
   runs: Run[];
   live: Record<string, LiveAnswer>;
   selectedId: string | null;
@@ -141,6 +144,16 @@ export function Conversation(props: Props) {
               Answers cite their sources by document and page, and each cited quote is checked
               against its page.
             </p>
+            <ul className="modes">
+              <li>
+                <Route size={16} aria-hidden="true" />
+                <span>{MODE_HELP.agent}</span>
+              </li>
+              <li>
+                <ArrowRight size={16} aria-hidden="true" />
+                <span>{MODE_HELP.baseline}</span>
+              </li>
+            </ul>
           </>
         )}
 
@@ -226,9 +239,20 @@ export function Conversation(props: Props) {
           />
           <button type="submit" className="btn btn-primary" disabled={busy || !text.trim()}>
             {busy ? "Working" : pending ? "Reply" : "Ask"}
+            {!busy && <CornerDownLeft size={15} aria-hidden="true" />}
           </button>
         </div>
-        <p className="composer-hint meta">Enter to send, Shift and Enter for a new line.</p>
+        <p className="composer-hint meta">
+          <span className="mode-help">
+            {props.mode === "agent" ? (
+              <Route size={14} aria-hidden="true" />
+            ) : (
+              <ArrowRight size={14} aria-hidden="true" />
+            )}
+            {MODE_HELP[props.mode]}
+          </span>
+          <span>Enter to send, Shift and Enter for a new line.</span>
+        </p>
       </form>
     </>
   );

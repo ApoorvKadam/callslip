@@ -1,3 +1,4 @@
+import { ListChecks, Quote } from "lucide-react";
 import { useEffect } from "react";
 import { type Citation, type Run, type RunEvent, type SupportCheck, documentFileUrl } from "../api";
 import type { CiteRef } from "../App";
@@ -40,6 +41,7 @@ export function RunRail(props: Props) {
           className="tab"
           onClick={() => onTab("sources")}
         >
+          <Quote size={15} aria-hidden="true" />
           Sources <span className="meta">{citations.length || ""}</span>
         </button>
         <button
@@ -51,6 +53,7 @@ export function RunRail(props: Props) {
           className="tab"
           onClick={() => onTab("steps")}
         >
+          <ListChecks size={15} aria-hidden="true" />
           Steps{" "}
           <span className="meta">
             {toolCalls || ""}
