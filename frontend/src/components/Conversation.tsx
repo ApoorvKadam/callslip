@@ -1,5 +1,12 @@
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import { ArrowRight, CornerDownLeft, Route } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CircleAlert,
+  CornerDownLeft,
+  LoaderCircle,
+  Route,
+} from "lucide-react";
 import type { Answer, Mode, Run, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
 import { count, seconds } from "../format";
@@ -19,6 +26,13 @@ const STATUS: Partial<Record<Run["status"], [string, string]>> = {
 export interface LiveAnswer {
   answer?: Answer;
   draft?: string;
+  activity?: Activity[];
+}
+
+// One finished step of a running question, shown until its answer starts to appear.
+export interface Activity {
+  title: string;
+  failed: boolean;
 }
 
 export interface PendingClarification {
@@ -281,8 +295,33 @@ function RunAnswer({ run, live, ...props }: RunAnswerProps) {
       />
     );
   }
+  if (live?.activity) return <Progress steps={live.activity} />;
   if (!live?.draft) return null;
   return <DraftAnswer runId={run.id} text={live.draft} />;
+}
+
+// What a running question has done so far, then what it is doing now. It starts at once, so
+// there is something to read before the answer begins.
+function Progress({ steps }: { steps: Activity[] }) {
+  return (
+    <ol className="progress" aria-live="polite">
+      {steps.map((step, i) => (
+        <li key={i} className={step.failed ? "failed" : undefined}>
+          {step.failed ? (
+            <CircleAlert size={14} aria-hidden="true" />
+          ) : (
+            <Check size={14} aria-hidden="true" />
+          )}
+          {step.title}
+          {step.failed && ", failed"}
+        </li>
+      ))}
+      <li className="now">
+        <LoaderCircle size={14} aria-hidden="true" />
+        {steps.length === 0 ? "Choosing where to look" : "Reading what it found"}
+      </li>
+    </ol>
+  );
 }
 
 // The answer as the model writes it, drawn like the final answer so nothing shifts when that

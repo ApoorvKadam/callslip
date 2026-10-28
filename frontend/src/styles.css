@@ -560,6 +560,48 @@ a:hover {
   margin: 8px 0 16px;
 }
 
+/* A running question's steps, until its answer starts. */
+.progress {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.progress li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.progress .failed svg {
+  color: var(--bad-ink);
+}
+
+.progress .now svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress .now svg {
+    animation: none;
+  }
+}
+
 /* Text still being written: the same type as the final answer, with a caret at the end. */
 .answer.streaming > :last-child::after {
   content: "";
