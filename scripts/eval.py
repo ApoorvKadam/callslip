@@ -4,15 +4,17 @@ retriever and answer rules. Drives the running stack over HTTP, exactly like a u
     ALLOW_FAULT_INJECTION=true docker compose up -d --wait   # the tool-failure cases need it
     python3 scripts/load_corpus.py
     python3 scripts/eval.py [--systems agent,baseline] [--repeat 1] [--cases ID,...] [--budget 5]
+    python3 scripts/eval.py --rescore eval/results/<run>   # grade saved answers again, no calls
 
 Writes eval/results/<UTC timestamp>/: results.json (every measurement), report.md (tables and
 failure notes) and traces/ (each run as the API returns it: steps, answer, citations).
 
 Checks are deterministic and listed per case in eval/cases.json: required facts (patterns),
-forbidden content, citation provenance (each quote found on its page), gold pages cited,
-documents covered, and the expected behaviour (answer, ask for clarification, say evidence is
-missing, surface a conflict, recover from or stop on a tool failure). Whether a quote supports
-its claim is reviewed by hand; the report leaves room for that note.
+forbidden content, citation provenance (each quote found on its page), gold pages cited, key
+pages cited (the page that settles the question), documents covered, and the expected
+behaviour (answer, ask for clarification, say evidence is missing, surface a conflict, recover
+from or stop on a tool failure). Whether a quote supports its claim is reviewed by hand; the
+report leaves room for that note.
 """
 
 import argparse
@@ -28,7 +30,9 @@ from ask import Client  # noqa: E402 - shared HTTP client next to this script
 
 ROOT = Path(__file__).resolve().parent.parent
 CASES = ROOT / "eval" / "cases.json"
-ASKED_IN_TEXT = re.compile(r"(which (one|memo|document|of these)|do you mean|could you clarify)", re.I)
+ASKED_IN_TEXT = re.compile(
+    r"(which (one|memo|document|of these)|do you mean|could you clarify)", re.I
+)
 
 
 def wait(client: Client, run: dict, timeout: int) -> dict:
@@ -127,6 +131,9 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
     if expect in ("answer", "clarify", "conflict"):
         checks["completed"] = run["status"] == "complete"
         checks["gold_page_cited"] = bool(cited & gold)
+    if case.get("must_cite"):
+        key = {(i, p) for g in case["must_cite"] for i in ids(g["doc"]) for p in g["pages"]}
+        checks["key_pages_cited"] = bool(key) and key <= cited
     if case.get("min_documents"):
         checks["documents_covered"] = len(docs_cited) >= case["min_documents"]
     if expect == "clarify":
@@ -152,7 +159,8 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
         notes.append(f"missing: {', '.join(missing)}")
     if forbidden:
         notes.append(f"forbidden content: {', '.join(forbidden)}")
-    notes += [f"failed check: {name}" for name in failed if name not in ("required_facts", "no_forbidden_content")]
+    shown = ("required_facts", "no_forbidden_content")  # already named in the notes above
+    notes += [f"failed check: {name}" for name in failed if name not in shown]
     if run.get("status_reason"):
         notes.append(f"status reason: {run['status_reason']}")
     return {
@@ -208,6 +216,33 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
     return "\n".join(lines) + "\n"
 
 
+def write(out_dir: Path, meta: dict, results: list[dict]) -> None:
+    (out_dir / "results.json").write_text(json.dumps({**meta, "results": results}, indent=1))
+    (out_dir / "report.md").write_text(report(results, meta["systems"], meta["started"]))
+
+
+def rescore(out_dir: Path, titles: dict[int, str]) -> int:
+    """Grade a saved run again with the current cases.json, e.g. after a check is corrected."""
+    meta = json.loads((out_dir / "results.json").read_text())
+    cases = {c["id"]: c for c in json.loads(CASES.read_text())["cases"]}
+    results = []
+    for old in meta.pop("results"):
+        name = f"{old['case']}.{old['system']}.{old['repeat']}.json"
+        record = json.loads((out_dir / "traces" / name).read_text())
+        scored = score(cases[old["case"]], record, titles)
+        scored.update({k: old[k] for k in ("case", "category", "system", "repeat")})
+        results.append(scored)
+        if scored["passed"] != old["passed"]:
+            print(f"{name}: {'PASS' if old['passed'] else 'FAIL'} -> "
+                  f"{'PASS' if scored['passed'] else 'FAIL'} {'; '.join(scored['notes'])}")
+    meta["rescored"] = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
+    write(out_dir, meta, results)
+    for system in meta["systems"]:
+        rows = [r for r in results if r["system"] == system]
+        print(f"{system}: {sum(r['passed'] for r in rows)} of {len(rows)} passed")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base", default="http://localhost:8080")
@@ -216,6 +251,7 @@ def main() -> int:
     parser.add_argument("--repeat", type=int, default=1)
     parser.add_argument("--budget", type=float, default=5.0, help="stop above this cost (USD)")
     parser.add_argument("--timeout", type=int, default=240)
+    parser.add_argument("--rescore", type=Path, help="saved run folder to grade again")
     args = parser.parse_args()
 
     cases = json.loads(CASES.read_text())["cases"]
@@ -226,10 +262,13 @@ def main() -> int:
     client = Client(args.base)
     _, docs = client.call("GET", "/api/documents")
     titles = {d["id"]: d["title"] for d in docs if d["status"] == "ready"}
+    if args.rescore:
+        return rescore(args.rescore, titles)
 
-    started = datetime.now(UTC).strftime("%Y-%m-%dT%H%MZ")
+    started = datetime.now(UTC).strftime("%Y-%m-%dT%H%M%SZ")
     out_dir = ROOT / "eval" / "results" / started
-    (out_dir / "traces").mkdir(parents=True, exist_ok=True)
+    out_dir.mkdir(parents=True)  # fails rather than mixing two runs in one folder
+    (out_dir / "traces").mkdir()
     results: list[dict] = []
     spent = 0.0
     for repeat in range(1, args.repeat + 1):
@@ -251,11 +290,7 @@ def main() -> int:
                       f"tools {scored['tool_calls']} ${scored['cost_usd']:.4f} "
                       f"{'; '.join(scored['notes'])}")
 
-    (out_dir / "results.json").write_text(json.dumps(
-        {"started": started, "systems": systems, "repeat": args.repeat, "results": results},
-        indent=1,
-    ))
-    (out_dir / "report.md").write_text(report(results, systems, started))
+    write(out_dir, {"started": started, "systems": systems, "repeat": args.repeat}, results)
     print(f"\nspent ${spent:.4f}; wrote {out_dir.relative_to(ROOT)}")
     return 0
 

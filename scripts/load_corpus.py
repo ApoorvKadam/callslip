@@ -67,8 +67,9 @@ def main() -> int:
     states: dict[int, str] = {}
     while time.monotonic() - started < args.timeout:
         _, docs = call("GET", f"{args.base}/api/documents")
-        states = {d["id"]: d["status"] for d in docs if d["id"] in ids}
-        if all(s in ("ready", "failed") for s in states.values()):
+        listed = {d["id"]: d["status"] for d in docs}
+        states = {i: listed.get(i, "missing") for i in ids}
+        if all(s in ("ready", "failed", "missing") for s in states.values()):
             break
         time.sleep(3)
     failed = [i for i, s in states.items() if s != "ready"]

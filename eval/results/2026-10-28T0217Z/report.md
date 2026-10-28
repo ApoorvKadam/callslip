@@ -2,8 +2,8 @@
 
 | System | Cases passed | Mean latency (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
 |---|---|---|---|---|---|---|---|
-| agent | 30 of 30 | 8.6 | 2.5 | 3.6 | 172 of 172 | 279876 | 0.7895 |
-| baseline | 18 of 30 | 4.8 | 1.1 | 1.1 | 118 of 118 | 208438 | 0.5406 |
+| agent | 27 of 30 | 8.6 | 2.5 | 3.6 | 172 of 172 | 279876 | 0.7895 |
+| baseline | 15 of 30 | 4.8 | 1.1 | 1.1 | 118 of 118 | 208438 | 0.5406 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -25,8 +25,8 @@
 | 8a-tool-timeout-recovers | baseline | no | complete | 5/5 |  | 1 | 1 | 11.5 | 5843/495 | 0.0166 | missing: (personal|PII), (memoriz|leak); failed check: gold_page_cited |
 | 8b-tool-keeps-failing | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p11 | 6 | 7 | 18.4 | 25146/1476 | 0.0678 | recovered. |
 | 8b-tool-keeps-failing | baseline | yes | incomplete | 0/0 |  | 1 | 1 | 1.6 | 347/130 | 0.0020 | stopped within limits. status reason: retrieval failed: failed: the search backend is unavailable (injected fault) |
-| 9-supersession | agent | yes | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.0 | 8001/622 | 0.0234 |  |
-| 9-supersession | baseline | yes | complete | 6/6 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.2 | 6519/595 | 0.0190 |  |
+| 9-supersession | agent | no | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.0 | 8001/622 | 0.0234 | failed check: key_pages_cited |
+| 9-supersession | baseline | no | complete | 6/6 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.2 | 6519/595 | 0.0190 | failed check: key_pages_cited |
 | 1-simple-lookup | agent | yes | complete | 6/6 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 2 | 4.1 | 6054/557 | 0.0185 |  |
 | 1-simple-lookup | baseline | yes | complete | 6/6 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p26, NIST AI 100-1: Artificia p8 | 1 | 1 | 3.4 | 6842/476 | 0.0184 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 4 | 6.1 | 10580/631 | 0.0291 |  |
@@ -45,8 +45,8 @@
 | 8a-tool-timeout-recovers | baseline | no | complete | 4/4 |  | 1 | 1 | 11.6 | 5843/472 | 0.0164 | missing: (personal|PII), (memoriz|leak); failed check: gold_page_cited |
 | 8b-tool-keeps-failing | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p11 | 5 | 6 | 14.9 | 16906/1332 | 0.0494 | recovered. |
 | 8b-tool-keeps-failing | baseline | yes | incomplete | 0/0 |  | 1 | 1 | 1.6 | 347/133 | 0.0020 | stopped within limits. status reason: retrieval failed: failed: the search backend is unavailable (injected fault) |
-| 9-supersession | agent | yes | complete | 4/4 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.6 | 8001/645 | 0.0236 |  |
-| 9-supersession | baseline | yes | complete | 6/6 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.2 | 6519/620 | 0.0192 |  |
+| 9-supersession | agent | no | complete | 4/4 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.6 | 8001/645 | 0.0236 | failed check: key_pages_cited |
+| 9-supersession | baseline | no | complete | 6/6 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.2 | 6519/620 | 0.0192 | failed check: key_pages_cited |
 | 1-simple-lookup | agent | yes | complete | 7/7 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 2 | 4.5 | 6061/643 | 0.0194 |  |
 | 1-simple-lookup | baseline | yes | complete | 6/6 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p26, NIST AI 100-1: Artificia p8 | 1 | 1 | 2.6 | 6842/410 | 0.0178 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 4 | 6.1 | 10582/704 | 0.0298 |  |
@@ -65,5 +65,5 @@
 | 8a-tool-timeout-recovers | baseline | no | complete | 4/4 |  | 1 | 1 | 11.3 | 5843/465 | 0.0163 | missing: (personal|PII), (memoriz|leak); failed check: gold_page_cited |
 | 8b-tool-keeps-failing | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p11 | 5 | 6 | 13.7 | 16888/1328 | 0.0493 | recovered. |
 | 8b-tool-keeps-failing | baseline | yes | incomplete | 0/0 |  | 1 | 1 | 1.6 | 347/133 | 0.0020 | stopped within limits. status reason: retrieval failed: failed: the search backend is unavailable (injected fault) |
-| 9-supersession | agent | yes | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 4.8 | 8001/515 | 0.0223 |  |
-| 9-supersession | baseline | yes | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.0 | 6519/569 | 0.0187 |  |
+| 9-supersession | agent | no | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 2 | 3 | 4.8 | 8001/515 | 0.0223 | failed check: key_pages_cited |
+| 9-supersession | baseline | no | complete | 5/5 | OMB M-24-10: Advancing G p9, OMB M-25-21: Acceleratin p5 | 1 | 1 | 4.0 | 6519/569 | 0.0187 | failed check: key_pages_cited |

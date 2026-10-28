@@ -20,6 +20,8 @@ async def run_baseline(
     faults: dict[str, str] | None = None,
 ) -> None:
     started = time.monotonic()
+    # The search tool takes queries of up to 500 characters (the agent writes its own, shorter
+    # ones). A longer question is searched by its first 500; the model still reads all of it.
     query = {"query": question[:500], "top_k": ctx.settings.top_k}
     outcome, attempts, retries = await execute_tool(
         ctx, Tools(ctx.search, ctx.store), "search_documents", query, faults or {}
