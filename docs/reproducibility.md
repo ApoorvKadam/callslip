@@ -35,7 +35,7 @@ cd backend && uv run python ../scripts/build_fixtures.py   # rebuild the synthet
 
 | Part | Identifier | Settings |
 |---|---|---|
-| Answers (agent and baseline) | `claude-haiku-5-5` by default, `claude-sonnet-5-5` with `ANSWER_MODEL` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `medium`, adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto with `disable_parallel_tool_use`, prompt caching on tools and system prompt |
+| Answers (agent and baseline) | `claude-haiku-5-5` by default, `claude-sonnet-5-5` with `ANSWER_MODEL` (Anthropic Messages API, Python SDK `anthropic` 2.3.0) | effort `medium`, adaptive thinking (default), max 4,000 output tokens per call; agent: `tool_choice` auto (several tool calls per turn allowed), prompt caching on the tools and system prompt and, from turn to turn, on the conversation |
 | Embeddings | `BAAI/bge-small-en-v1.5` via fastembed 0.9.1 (ONNX, CPU, 384 dimensions) | model files baked into the image; queries use `query_embed`, passages `passage_embed` |
 | Chunking tokenizer | the embedding model's own `tokenizer.json` | about 350 tokens per passage, about 50 overlap, page-bounded |
 | Database | `pgvector/pgvector:0.8.7-pg17` | exact cosine search, GIN full-text index |
@@ -49,11 +49,11 @@ Verbatim from `backend/app/agent/prompts.py`. The two systems share the same ans
 Agent:
 
 ```text
-You answer questions about a collection of PDF documents. You have tools to list the documents, search them, read whole pages, and ask the user a clarifying question.
+You answer questions about a collection of PDF documents. You have tools to list the documents, search them, read whole pages, and ask the user a clarifying question. The first message lists the documents the user can search.
 
 How to work:
-- First decide what the question needs. If it asks about one specific thing ("the memo", "the framework", "the deadline") and several documents could be that thing, check with list_documents, then call ask_clarification naming the candidates as options. Do not guess, and do not answer for every candidate instead of asking.
-- For a multi-part question, search for each part separately. For a question that spans documents, make sure you have evidence from each document involved.
+- First decide what the question needs. If it asks about one specific thing ("the memo", "the framework", "the deadline") and several listed documents could be that thing, call ask_clarification naming the candidates as options (use list_documents if the list is missing or cut short). Do not guess, and do not answer for every candidate instead of asking.
+- For a multi-part question, search for each part separately; when the parts do not depend on each other, make those searches in the same turn. For a question that spans documents, make sure you have evidence from each document involved.
 - After every search, check whether the passages actually answer the question. If they do not, rewrite the query (other terms, the document's own vocabulary, a document filter) or read the surrounding pages with read_document_section, then decide again.
 - When a list or table is cut off at the end of a passage, read the page to get all of it.
 - If a tool fails, retry once with a changed call or use another tool. If the evidence still cannot be obtained, answer with what you have and say what is missing.
@@ -123,7 +123,7 @@ Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the 
           "items": {
             "type": "integer"
           },
-          "description": "Only search these documents (from list_documents)."
+          "description": "Only search these documents (ids from the document list)."
         },
         "page_from": {
           "type": "integer",

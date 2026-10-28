@@ -51,8 +51,8 @@ sequenceDiagram
     UI->>API: GET /api/runs/{id}/events (SSE)
     R->>DB: claim the run with a lease
     loop until answered, paused or limited
-        R->>M: conversation + tools (one tool call per turn), streamed
-        M-->>R: text as it is written, then tool_use or the answer
+        R->>M: conversation + tools, streamed (the tail cached for the next turn)
+        M-->>R: text as it is written, then tool calls (run together) or the answer
         R->>DB: append the exact messages, add trace and progress events
         API-->>UI: each new event, read from the database
     end
@@ -164,7 +164,8 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 |---|---|---|
 | Plain tool-use loop, no agent framework | One agent, four tools: the loop is under 300 lines with every step visible; nothing hidden to debug live | LangGraph would add checkpointing and graph tooling; worth it with several cooperating agents or long-lived workflows |
 | Claude's native `search_result` citations | Quotes can only come from evidence sent; no extra output format to parse | Provenance is guaranteed, support is not: checked by evaluation |
-| One tool call per turn | Simple ordering; a clarification is never mixed with other calls | More turns and latency on multi-part questions; enabling parallel calls needs batch handling and new tests |
+| Several read tools per turn, run together; a clarification only on its own | A question with independent parts costs one model turn, not one per part; results and trace keep the model's order | A batch takes its tool-call slots before it starts, so a large batch can use the budget at once; the run can only pause with nothing else in flight |
+| The user's document list in the first message | The model can name the candidates of an ambiguous question, or filter a search, without a turn spent on `list_documents` | About 25 tokens per document, cached after the first turn; capped at 50, the rest through `list_documents` |
 | Exact vector search, no HNSW | Correct and fast at this size; filters never under-fill | Add HNSW (and test filtered recall) past roughly 100k passages |
 | PostgreSQL owns ingestion jobs | Durable, transactional, one less moving part | A real queue (or Redis streams) for many workers or priorities |
 | Redis as a cache only | It can fail without losing anything | Shared rate limits and live events across API replicas would move to Redis |

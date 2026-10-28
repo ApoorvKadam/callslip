@@ -7,7 +7,9 @@ own deterministic logic runs for real: tools against PostgreSQL, limits, pause a
 message storage and events.
 """
 
+import asyncio
 import json
+import time
 import uuid
 from pathlib import Path
 
@@ -16,8 +18,8 @@ import pytest
 from anthropic.types import Message
 
 from app.agent.baseline import run_baseline
-from app.agent.loop import FINAL, resume_agent, start_agent
-from app.agent.tools import Tools
+from app.agent.loop import AUTO, FINAL, catalog, resume_agent, start_agent
+from app.agent.tools import ToolOutcome, Tools
 from app.config import get_settings
 from app.llm import Usage
 from app.runs.context import RunContext
@@ -42,11 +44,22 @@ class ReplayLLM:
         self.turns = list(turns)
         self.final = turns[-1]
         self.tool_choices: list[dict | None] = []
+        self.cached: list[bool] = []
 
-    async def create(self, *, tool_choice=None, on_text=None, purpose=None, messages=(), **_):
+    async def create(
+        self,
+        *,
+        tool_choice=None,
+        on_text=None,
+        purpose=None,
+        messages=(),
+        cache_conversation=False,
+        **_,
+    ):
         if purpose == "support_check":
             return self.judge(messages)
         self.tool_choices.append(tool_choice)
+        self.cached.append(cache_conversation)
         turn = self.final if tool_choice == FINAL else self.turns.pop(0)
         if on_text:  # stream each text block in two pieces, as the real client would
             for block in turn["content"]:
@@ -124,7 +137,7 @@ async def test_tool_call_limit_forces_a_final_answer_marked_incomplete(tools):  
     assert run["tool_calls"] == 2
     # The last call was forced to answer: tool_choice "none".
     assert llm.tool_choices[-1] == FINAL
-    assert llm.tool_choices[:-1] == [{"type": "auto", "disable_parallel_tool_use": True}] * 2
+    assert llm.tool_choices[:-1] == [AUTO] * 2
     kinds = [t for t, _ in await events(ctx)]
     assert kinds.index("limit") < kinds.index("run_finished")
     # The note telling the model to stop is in the last stored user message.
@@ -309,3 +322,125 @@ async def test_a_failed_support_check_leaves_the_answer_and_marks_pieces_uncheck
     run = await ctx.store.get_run(ctx.run_id)
     assert run["status"] == "complete" and run["answer"]["text"]
     assert {c["verdict"] for c in run["answer"]["support"]} == {"not_checked"}
+
+
+def tool_turn(*calls: tuple[str, dict]) -> dict:
+    """A model turn that asks for these tool calls, in this order."""
+    content = [
+        {"type": "tool_use", "id": f"toolu_{n}", "name": name, "input": args}
+        for n, (name, args) in enumerate(calls)
+    ]
+    return {"stop_reason": "tool_use", "content": content}
+
+
+DONE = {"stop_reason": "end_turn", "content": [{"type": "text", "text": "That is all I found."}]}
+
+
+async def test_one_turns_tool_calls_run_together_and_report_in_order(
+    tools,  # noqa: F811
+    monkeypatch,
+):
+    spans: dict[str, tuple[float, float]] = {}
+
+    async def search(self, args):
+        started = time.monotonic()
+        if args.query == "boom":
+            raise RuntimeError("a bug")
+        await asyncio.sleep(0.3)
+        spans[args.query] = (started, time.monotonic())
+        return ToolOutcome(json.dumps({"status": "no_results"}), False, "no_results", "none")
+
+    monkeypatch.setattr(Tools, "search_documents", search)
+    turn = tool_turn(*[("search_documents", {"query": q}) for q in ("first", "second", "boom")])
+    ctx = await new_run(tools, ReplayLLM([turn, DONE]))
+    await start_agent(ctx, "q", [], {})
+
+    # The second search started before the first one ended: they ran at the same time.
+    assert spans["second"][0] < spans["first"][1]
+    calls = [d for t, d in await events(ctx) if t == "tool_call"]
+    assert [(c["step"], c["input"]["query"]) for c in calls] == [
+        (1, "first"),
+        (2, "second"),
+        (3, "boom"),
+    ]
+    assert calls[0]["ms"] >= 300 and calls[1]["ms"] >= 300
+    assert (calls[2]["status"], calls[2]["attempts"]) == ("error", 1)
+    # One result per call, in the order asked, all in one message; the failure alone is an error.
+    results = (await ctx.store.messages(ctx.run_id))[2]["content"]
+    assert [r["tool_use_id"] for r in results] == ["toolu_0", "toolu_1", "toolu_2"]
+    assert [r.get("is_error", False) for r in results] == [False, False, True]
+    run = await ctx.store.get_run(ctx.run_id)
+    assert (run["status"], run["tool_calls"]) == ("complete", 3)
+
+
+async def test_a_clarification_asked_alongside_searches_is_not_run(tools):  # noqa: F811
+    turn = tool_turn(
+        ("ask_clarification", {"question": "Which memo?", "options": ["A", "B"]}),
+        ("search_documents", {"query": "functions of the core"}),
+    )
+    ctx = await new_run(tools, ReplayLLM([turn, DONE]))
+    await start_agent(ctx, "q", [], {})
+
+    run = await ctx.store.get_run(ctx.run_id)
+    assert (run["status"], run["tool_calls"]) == ("complete", 1)
+    kinds = [t for t, _ in await events(ctx)]
+    assert "clarification" not in kinds
+    calls = [d for t, d in await events(ctx) if t == "tool_call"]
+    assert calls[0]["tool"] == "ask_clarification" and calls[0]["status"] == "not_run"
+    assert calls[1]["tool"] == "search_documents" and calls[1]["status"] != "not_run"
+    results = (await ctx.store.messages(ctx.run_id))[2]["content"]
+    assert "only call in its turn" in results[0]["content"]
+
+
+async def test_calls_past_the_tool_budget_are_answered_not_run(tools):  # noqa: F811
+    turn = tool_turn(*[("search_documents", {"query": q}) for q in ("one", "two", "three")])
+    llm = ReplayLLM([turn, DONE])
+    ctx = await new_run(tools, llm, max_tool_calls=1)
+    await start_agent(ctx, "q", [], {})
+
+    calls = [d for t, d in await events(ctx) if t == "tool_call"]
+    assert [c["status"] == "not_run" for c in calls] == [False, True, True]
+    content = (await ctx.store.messages(ctx.run_id))[2]["content"]
+    assert [b["type"] for b in content] == ["tool_result"] * 3 + ["text"]
+    assert content[-1]["text"].startswith("Limit reached:")
+    run = await ctx.store.get_run(ctx.run_id)
+    assert (run["status"], run["tool_calls"]) == ("incomplete", 1)
+    # The forced final answer is not cached: a different tool_choice cannot reuse the cache.
+    assert llm.tool_choices == [AUTO, FINAL]
+    assert llm.cached == [True, False]
+
+
+async def test_the_first_message_lists_what_this_user_can_search(tools):  # noqa: F811
+    async with tools.store.pool.connection() as conn:
+        cur = await conn.execute(
+            "INSERT INTO users (email, password_hash) VALUES ('a@x.edu', 'x') RETURNING id"
+        )
+        other = (await cur.fetchone())[0]
+        await conn.execute(
+            "INSERT INTO documents (title, filename, sha256, byte_size, status, owner_user_id)"
+            " VALUES ('Private notes', 'p.pdf', 'p', 1, 'ready', %s)",
+            (other,),
+        )
+    ctx = await new_run(tools, ReplayLLM([DONE]))
+    await start_agent(ctx, "What is in here?", [], {})
+
+    first = (await ctx.store.messages(ctx.run_id))[0]["content"]
+    listed = first[0]["text"]
+    assert "NIST AI RMF" in listed and "OMB M-25-21" in listed
+    assert "Draft" not in listed  # not ready yet
+    assert "Private notes" not in listed  # someone else's
+    assert first[1]["text"] == "What is in here?"
+    run = await ctx.store.get_run(ctx.run_id)
+    assert 0 < run["answer"]["answer_ms"] <= run["exec_ms"]
+
+
+async def test_a_document_list_that_cannot_load_is_reported_not_empty(
+    tools,  # noqa: F811
+    monkeypatch,
+):
+    async def broken(self, args):
+        raise psycopg.OperationalError("the connection to the server was lost")
+
+    monkeypatch.setattr(Tools, "list_documents", broken)
+    text = await catalog(tools)
+    assert "could not be loaded" in text and "list_documents" in text

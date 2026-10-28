@@ -67,10 +67,13 @@ class LLM:
         tool_choice: dict | None = None,
         on_text: Callable[[str], Awaitable[None]] | None = None,
         json_schema: dict | None = None,
+        cache_conversation: bool = False,
     ) -> tuple[Message, Usage]:
         """One model call. With `on_text`, the response is streamed and each piece of text is
         passed on as it arrives; the returned message is the same finished message either way.
-        With `json_schema`, the reply is one text block of JSON that matches it."""
+        With `json_schema`, the reply is one text block of JSON that matches it. With
+        `cache_conversation`, the messages so far are cached too, so the next turn of the same
+        run reads them back instead of processing them again."""
         kwargs: dict[str, Any] = {
             "model": self.model,
             "max_tokens": max_tokens,
@@ -84,6 +87,8 @@ class LLM:
             kwargs["tool_choice"] = tool_choice
         if json_schema:
             kwargs["output_config"]["format"] = {"type": "json_schema", "schema": json_schema}
+        if cache_conversation:
+            kwargs["cache_control"] = {"type": "ephemeral"}
 
         client = self.client.with_options(timeout=timeout_s)
 

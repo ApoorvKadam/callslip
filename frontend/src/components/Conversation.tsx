@@ -41,14 +41,21 @@ interface Props {
   onShowSteps: (runId: string) => void;
 }
 
-function RunMeta({ run, onShowSteps }: { run: Run; onShowSteps: () => void }) {
-  const status = STATUS[run.status];
-  const answer = run.answer;
+function RunMeta(props: { run: Run; answer: Answer | null; onShowSteps: () => void }) {
+  const { run, answer, onShowSteps } = props;
+  // The answer shows while its quotes are still being checked, so "Working" would mislead.
+  const checking =
+    run.status === "running" && answer !== null && answer.citations.length > 0 && !answer.support;
+  const status = checking ? undefined : STATUS[run.status];
   return (
     <div className="exchange-meta meta">
       <span>{run.mode === "agent" ? "Agent" : "Single pass"}</span>
       {status && <span className={status[1]}>{status[0]}</span>}
-      {run.exec_ms > 0 && <span>{seconds(run.exec_ms)}</span>}
+      {answer?.answer_ms ? (
+        <span>Answered in {seconds(answer.answer_ms)}</span>
+      ) : (
+        run.exec_ms > 0 && <span>{seconds(run.exec_ms)} in total</span>
+      )}
       {answer && answer.citations.length > 0 && (
         <span>
           {count(answer.citations.length, "source")}
@@ -57,6 +64,7 @@ function RunMeta({ run, onShowSteps }: { run: Run; onShowSteps: () => void }) {
             : `, ${answer.citations.length - answer.citations_verified} not found on the page`}
         </span>
       )}
+      {checking && <span className="mark">Checking quotes</span>}
       {answer?.support && answer.support.length > 0 && <SupportSummary checks={answer.support} />}
       <button type="button" className="text-button" onClick={onShowSteps}>
         {run.tool_calls > 0 ? `Steps (${run.tool_calls})` : "Steps"}
@@ -152,7 +160,11 @@ export function Conversation(props: Props) {
                 {run.question}
               </button>
             </h2>
-            <RunMeta run={run} onShowSteps={() => props.onShowSteps(run.id)} />
+            <RunMeta
+              run={run}
+              answer={props.live[run.id]?.answer ?? run.answer}
+              onShowSteps={() => props.onShowSteps(run.id)}
+            />
             {run.status_reason && run.status !== "complete" && (
               <p className="meta">{run.status_reason}</p>
             )}

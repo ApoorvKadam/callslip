@@ -100,6 +100,8 @@ class RunContext:
         # Events first, status last: the event stream ends once the status is terminal, so
         # every event must already be stored by then.
         if answer is not None:
+            # Time to answer, apart from the support check that follows.
+            answer["answer_ms"] = int(self.elapsed_s() * 1000)
             await self.emit("answer", answer)
             checks = await self.check_support(answer)
             if checks:

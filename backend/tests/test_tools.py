@@ -165,9 +165,13 @@ async def test_executor_gives_up_after_one_retry(tools):
 
 
 async def test_executor_does_not_retry_without_time_for_it(tools):
-    settings = get_settings()
+    # Time for one attempt; after it, only the time kept for the final answer is left.
+    reserve = get_settings().finalize_reserve_s
+    clock = iter([reserve + 1.0])
+    run = ctx()
+    run.remaining_s = lambda: next(clock, reserve)
     outcome, attempts, _ = await execute_tool(
-        ctx(remaining=settings.finalize_reserve_s),
+        run,
         tools,
         "search_documents",
         {"query": "x"},

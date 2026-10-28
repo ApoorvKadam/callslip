@@ -24,6 +24,7 @@ import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from statistics import median
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ask import Client  # noqa: E402 - shared HTTP client next to this script
@@ -87,6 +88,15 @@ def run_case(client: Client, case: dict, mode: str, timeout: int) -> dict:
     return record
 
 
+def after_answer_ms(run: dict) -> int:
+    """How long a run went on after its answer event: the support check."""
+    at = {e["type"]: e["created_at"] for e in run["events"] if "created_at" in e}
+    if "answer" not in at or "run_finished" not in at:
+        return 0
+    gap = datetime.fromisoformat(at["run_finished"]) - datetime.fromisoformat(at["answer"])
+    return int(gap.total_seconds() * 1000)
+
+
 def totals(runs: list[dict]) -> dict:
     out = {
         "ms": 0,
@@ -106,6 +116,11 @@ def totals(runs: list[dict]) -> dict:
         out["tool_calls"] += sum(1 for e in run["events"] if e["type"] == "tool_call")
         out["cost_usd"] += f.get("cost_usd", 0.0)
     out["cost_usd"] = round(out["cost_usd"], 5)
+    # Time to answer: the total less what came after each run's answer (the support check),
+    # measured from event times, so older saved runs can be measured the same way.
+    out["answer_ms"] = None
+    if runs and any(e["type"] == "answer" for e in runs[-1]["events"]):
+        out["answer_ms"] = out["ms"] - sum(after_answer_ms(run) for run in runs)
     out["models"] = sorted(
         {e["data"].get("model") for r in runs for e in r["events"] if e["type"] == "model_call"}
         - {None}
@@ -155,7 +170,9 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
             t.startswith(case["must_retrieve"]) for t in retrieved
         )
     if case.get("expect_retry"):
-        checks["retried_after_failure"] = any(t.get("retries") for t in tool_events)
+        checks["retried_after_failure"] = any(
+            t.get("retries") and t.get("tool") in case.get("faults", {}) for t in tool_events
+        )
     outcome = None
     if expect == "recover_or_incomplete":
         recovered = run["status"] == "complete" and verified > 0 and bool(cited & gold)
@@ -197,18 +214,21 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
 def report(results: list[dict], systems: list[str], started: str) -> str:
     lines = [f"# Evaluation results, {started}", ""]
     lines += [
-        "| System | Cases passed | Mean latency (s) | Mean tool calls | Mean model calls "
-        "| Citations verified | Total tokens | Total cost (USD) |",
-        "|---|---|---|---|---|---|---|---|",
+        "| System | Cases passed | Mean latency (s) | Median time to answer (s) "
+        "| Mean tool calls | Mean model calls | Citations verified | Total tokens "
+        "| Total cost (USD) |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for system in systems:
         rows = [r for r in results if r["system"] == system]
         if not rows:
             continue
         cites = sum(r["citations"] for r in rows)
+        answered = [r["answer_ms"] for r in rows if r.get("answer_ms") is not None]
         lines.append(
             f"| {system} | {sum(r['passed'] for r in rows)} of {len(rows)} "
             f"| {sum(r['ms'] for r in rows) / len(rows) / 1000:.1f} "
+            f"| {median(answered) / 1000 if answered else 0:.1f} "
             f"| {sum(r['tool_calls'] for r in rows) / len(rows):.1f} "
             f"| {sum(r['model_calls'] for r in rows) / len(rows):.1f} "
             f"| {sum(r['citations_verified'] for r in rows)} of {cites} "
@@ -218,8 +238,9 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
     lines += [
         "",
         "| Case | System | Pass | Status | Citations (verified/total) | Gold pages cited "
-        "| Tools | Model calls | Latency (s) | Tokens in/out | Cost (USD) | Notes |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Tools | Model calls | Latency (s) | To answer (s) | Tokens in/out | Cost (USD) "
+        "| Notes |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in results:
         notes = "; ".join(r["notes"]) or ""
@@ -227,10 +248,12 @@ def report(results: list[dict], systems: list[str], started: str) -> str:
             notes = f"{r['outcome']}. {notes}".strip()
         if r["clarification"]:
             notes = f"asked: {r['clarification']['question']} {notes}".strip()
+        to_answer = "-" if r.get("answer_ms") is None else f"{r['answer_ms'] / 1000:.1f}"
         lines.append(
             f"| {r['case']} | {r['system']} | {'yes' if r['passed'] else 'no'} | {r['status']} "
             f"| {r['citations_verified']}/{r['citations']} | {', '.join(r['gold_pages_cited'])} "
             f"| {r['tool_calls']} | {r['model_calls']} | {r['ms'] / 1000:.1f} "
+            f"| {to_answer} "
             f"| {r['input_tokens']}/{r['output_tokens']} | {r['cost_usd']:.4f} | {notes} |"
         )
     return "\n".join(lines) + "\n"
