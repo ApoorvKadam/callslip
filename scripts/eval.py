@@ -162,6 +162,11 @@ def score(case: dict, record: dict, titles: dict[int, str]) -> dict:
         stopped = run["status"] == "incomplete" and bool(run.get("status_reason"))
         outcome = "recovered" if recovered else "stopped within limits" if stopped else "neither"
         checks["recovered_or_reported_incomplete"] = outcome != "neither"
+        # Recovering or stopping only counts if the injected fault was actually hit.
+        checks["fault_exercised"] = any(
+            t.get("tool") in case.get("faults", {}) and t.get("status") in ("error", "timeout")
+            for t in tool_events
+        )
 
     failed = [name for name, ok in checks.items() if not ok]
     notes = []

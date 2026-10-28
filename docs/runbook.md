@@ -31,16 +31,18 @@ scripts/deploy.sh                 # build images tagged with the commit SHA, sta
 python3 scripts/load_corpus.py    # load the 14 corpus PDFs (safe to run again)
 ```
 
-`deploy.sh` runs `docker compose build` and `docker compose up -d --wait` with `IMAGE_TAG=<short SHA>`, waits for every health check, then runs `scripts/verify.sh`. Only after verification passes is the tag recorded in `.deploy/current`, and the one it replaces in `.deploy/previous`. A failed verification leaves both unchanged and prints the last verified tag to roll back to.
+`deploy.sh` refuses to build when `backend/`, `frontend/` or `docker-compose.yml` has uncommitted changes, because the image tag must name the code inside it. It then runs `docker compose build` and `docker compose up -d --wait` with `IMAGE_TAG=<short SHA>`, waits for every health check, and runs `scripts/verify.sh`. Only after verification passes is the tag recorded in `.deploy/current`, and the one it replaces in `.deploy/previous`. A failed verification leaves both unchanged and prints the last verified tag to roll back to.
 
 Plain Compose works too: `docker compose up -d --build --wait`.
 
 ## Verify
 
 ```bash
-scripts/verify.sh                 # container health, /api/health, /api/ready, upload, ingest, search
+scripts/verify.sh                 # every service healthy, /api/health, /api/ready, upload, ingest, search
 python3 scripts/ask.py "What are the four functions of the NIST AI RMF Core?"   # needs the key
 ```
+
+`verify.sh` fails if any service is not healthy, and it tests the port that Compose publishes (`WEB_PORT`) unless `BASE_URL` is set.
 
 Health checks: `api` calls `/api/health`; `worker` checks that its heartbeat file is fresh (it is touched every 10 s, also during long documents); `postgres` runs `pg_isready`; `redis` runs `redis-cli ping`; `frontend` fetches `/healthz`. `/api/ready` reports each dependency: PostgreSQL down gives 503; Redis down gives 200 with `"status": "degraded"`.
 

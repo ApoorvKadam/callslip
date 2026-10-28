@@ -7,6 +7,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 tag="$(git rev-parse --short HEAD)"
+# The tag names a commit, so the images must be built from exactly that commit.
+if [[ -n "$(git status --porcelain -- backend frontend docker-compose.yml)" ]]; then
+  echo "uncommitted changes in backend, frontend or docker-compose.yml; commit them first" >&2
+  exit 1
+fi
 mkdir -p .deploy
 current="$(cat .deploy/current 2>/dev/null || true)"
 

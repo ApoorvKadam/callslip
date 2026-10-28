@@ -46,6 +46,8 @@ class Settings(BaseSettings):
     tool_timeout_s: float = 8.0
     # Lets the evaluation inject tool failures. Off unless explicitly enabled.
     allow_fault_injection: bool = False
+    # Send the session cookie only over HTTPS. Off for the local stack on plain HTTP; on behind TLS.
+    cookie_secure: bool = False
 
 
 @lru_cache
