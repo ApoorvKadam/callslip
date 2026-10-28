@@ -65,9 +65,10 @@ interface Props {
   active: CiteRef | null;
   onHover: (ref: CiteRef | null) => void;
   onChoose: (ref: CiteRef) => void;
+  streaming?: boolean; // text still being written: no citations yet
 }
 
-export function AnswerView({ runId, answer, active, onHover, onChoose }: Props) {
+export function AnswerView({ runId, answer, active, onHover, onChoose, streaming }: Props) {
   const activeN = active?.runId === runId ? active.n : null;
   const byNumber = new Map(answer.citations.map((c) => [c.number, c]));
 
@@ -147,5 +148,9 @@ export function AnswerView({ runId, answer, active, onHover, onChoose }: Props) 
   });
   flush();
 
-  return <div className="answer">{blocks}</div>;
+  return (
+    <div className={`answer${streaming ? " streaming" : ""}`} aria-busy={streaming || undefined}>
+      {blocks}
+    </div>
+  );
 }

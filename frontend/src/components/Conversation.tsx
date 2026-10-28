@@ -1,5 +1,5 @@
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
-import type { Run } from "../api";
+import type { Answer, Run } from "../api";
 import type { CiteRef } from "../App";
 import { count, seconds } from "../format";
 import { AnswerView } from "./AnswerView";
@@ -13,6 +13,12 @@ const STATUS: Partial<Record<Run["status"], [string, string]>> = {
   abandoned: ["Skipped", "mark"],
 };
 
+// From a running question's events: the checked answer once it exists, or the text so far.
+export interface LiveAnswer {
+  answer?: Answer;
+  draft?: string;
+}
+
 export interface PendingClarification {
   runId: string;
   toolUseId: string;
@@ -22,6 +28,7 @@ export interface PendingClarification {
 
 interface Props {
   runs: Run[];
+  live: Record<string, LiveAnswer>;
   selectedId: string | null;
   pending: PendingClarification | null;
   onSelect: (id: string) => void;
@@ -63,11 +70,22 @@ export function Conversation(props: Props) {
   const [sending, setSending] = useState(false);
   const busy = sending || runs.some((r) => r.status === "running");
   const end = useRef<HTMLDivElement>(null);
+  const transcript = useRef<HTMLDivElement>(null);
 
   // Keep the newest exchange in view as questions are added.
   useEffect(() => {
     end.current?.scrollIntoView({ block: "end" });
   }, [runs.length, pending?.runId]);
+
+  // Follow an answer as it is written, unless the reader has scrolled up to read something else.
+  const writing = Object.values(props.live).reduce((n, l) => n + (l.draft?.length ?? 0), 0);
+  useEffect(() => {
+    const box = transcript.current;
+    if (!box || writing === 0) return;
+    if (box.scrollHeight - box.scrollTop - box.clientHeight < 160) {
+      end.current?.scrollIntoView({ block: "end" });
+    }
+  }, [writing]);
 
   async function send(value: string) {
     const q = value.trim();
@@ -95,7 +113,7 @@ export function Conversation(props: Props) {
 
   return (
     <>
-      <div className="transcript">
+      <div className="transcript" ref={transcript}>
         {runs.length === 0 && (
           <>
             <p className="intro">Ask a question about the documents on the left.</p>
@@ -126,15 +144,13 @@ export function Conversation(props: Props) {
             {run.status_reason && run.status !== "complete" && (
               <p className="meta">{run.status_reason}</p>
             )}
-            {run.answer && (
-              <AnswerView
-                runId={run.id}
-                answer={run.answer}
-                active={props.active}
-                onHover={props.onHover}
-                onChoose={props.onChoose}
-              />
-            )}
+            <RunAnswer
+              run={run}
+              live={props.live[run.id]}
+              active={props.active}
+              onHover={props.onHover}
+              onChoose={props.onChoose}
+            />
             {pending?.runId === run.id && (
               <div className="clarify" role="group" aria-labelledby="clarify-question">
                 <p id="clarify-question" className="clarify-question">
@@ -193,3 +209,46 @@ export function Conversation(props: Props) {
     </>
   );
 }
+
+// The checked answer when there is one; while the model is still writing, its text so far,
+// without citations (they are checked once the answer is complete).
+interface RunAnswerProps {
+  run: Run;
+  live?: LiveAnswer;
+  active: CiteRef | null;
+  onHover: (ref: CiteRef | null) => void;
+  onChoose: (ref: CiteRef) => void;
+}
+
+function RunAnswer({ run, live, ...props }: RunAnswerProps) {
+  const answer = run.answer ?? live?.answer;
+  if (answer) {
+    return (
+      <AnswerView
+        runId={run.id}
+        answer={answer}
+        active={props.active}
+        onHover={props.onHover}
+        onChoose={props.onChoose}
+      />
+    );
+  }
+  if (!live?.draft) return null;
+  const draft: Answer = {
+    text: live.draft,
+    segments: [{ text: live.draft, citations: [] }],
+    citations: [],
+    citations_verified: 0,
+  };
+  return (
+    <AnswerView
+      runId={run.id}
+      answer={draft}
+      active={null}
+      onHover={() => undefined}
+      onChoose={() => undefined}
+      streaming
+    />
+  );
+}
+

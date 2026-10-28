@@ -175,6 +175,7 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
         timeout = (
             ctx.remaining_s() if final else ctx.remaining_s() - ctx.settings.finalize_reserve_s
         )
+        progress = ctx.answer_stream()
         try:
             message, usage = await ctx.llm.create(
                 run_id=ctx.run_id,
@@ -184,7 +185,9 @@ async def agent_loop(ctx: RunContext, tools: Tools, faults: dict[str, str]) -> N
                 tools=TOOL_DEFINITIONS,
                 tool_choice=FINAL if final else AUTO,
                 timeout_s=max(MIN_MODEL_CALL_S, min(ctx.settings.llm_timeout_s, timeout)),
+                on_text=progress.add,
             )
+            await progress.flush()
         except TRANSIENT_MODEL_ERRORS as exc:
             await stop_without_model(
                 ctx, messages, f"the model could not be reached ({type(exc).__name__})"
