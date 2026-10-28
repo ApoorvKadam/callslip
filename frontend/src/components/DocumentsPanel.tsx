@@ -80,7 +80,7 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
   return (
     <section aria-labelledby="documents-heading">
       <div className="docs-head">
-        <h2 id="documents-heading" className="label">
+        <h2 id="documents-heading" className="visually-hidden">
           Documents
         </h2>
         <span className="meta">

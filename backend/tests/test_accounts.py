@@ -141,3 +141,45 @@ def test_a_malformed_browser_token_is_replaced(client):
     r = client.post("/api/sessions")
     assert r.status_code == 201
     assert "rag_client=" in r.headers["set-cookie"]  # a fresh token was issued
+
+
+def add_run(session_id: str, question: str) -> None:
+    with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
+        conn.execute(
+            "INSERT INTO runs (id, session_id, mode, question, status)"
+            " VALUES (gen_random_uuid(), %s, 'agent', %s, 'complete')",
+            (session_id, question),
+        )
+
+
+def test_past_conversations_are_listed_newest_first(client):
+    client.cookies.clear()
+    assert client.get("/api/sessions").json() == []  # a new browser has none
+    first = client.post("/api/sessions").json()["id"]
+    add_run(first, "What does the memo require?")
+    add_run(first, "And the deadline?")
+    empty = client.post("/api/sessions").json()["id"]  # no question yet: not listed
+    second = client.post("/api/sessions").json()["id"]
+    add_run(second, "Which functions make up the Core?")
+
+    listed = client.get("/api/sessions").json()
+    assert [c["id"] for c in listed] == [second, first]
+    assert listed[1]["title"] == "What does the memo require?" and listed[1]["questions"] == 2
+    assert empty not in {c["id"] for c in listed}
+
+    client.cookies.clear()  # another browser sees none of them
+    assert client.get("/api/sessions").json() == []
+
+
+def test_a_signed_in_history_follows_the_account_to_another_browser(client):
+    client.cookies.clear()
+    r = client.post("/api/auth/register", json={"email": "ada@nyu.edu", "password": PASSWORD})
+    assert r.status_code == 201
+    ada = client.post("/api/sessions").json()["id"]
+    add_run(ada, "When does the review board meet?")
+
+    client.cookies.clear()  # a different browser, signed in to the same account
+    r = client.post("/api/auth/login", json={"email": "ada@nyu.edu", "password": PASSWORD})
+    assert r.status_code == 200
+    assert [c["id"] for c in client.get("/api/sessions").json()] == [ada]
+    assert client.get(f"/api/sessions/{ada}").status_code == 200
