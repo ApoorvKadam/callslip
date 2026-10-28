@@ -1,6 +1,6 @@
 # Evaluation: agent vs single-pass baseline
 
-The comparison below was recorded at commit `09d1b08`, once per answering model, on 2026-10-28. The agent's prompt changed once after that ([kept after the latency runs](#what-a-user-waits-for-measured-in-the-browser)). On the same fifteen cases with three repeats, the Haiku agent on the submitted prompt passed 40 of 45 again, with 199 of 199 citations verified and a median time to answer of 5.4 s (third row). Each table keeps the numbers of the run it comes from.
+The comparison below was recorded at commit `09d1b08`, once per answering model, on 2026-10-28. The agent's prompt changed once after that ([kept after the latency runs](#what-a-user-waits-for-measured-in-the-browser)). On the same fifteen cases with three repeats, the Haiku agent on the submitted prompt passed 42 of 45, with 199 of 199 citations verified and a median time to answer of 5.4 s (third row). Each table keeps the numbers of the run it comes from. Scores on this page use the checks after three [grader corrections](#grader-corrections); that section gives every run's score as first graded.
 
 | Model | Run | Command |
 |---|---|---|
@@ -26,7 +26,7 @@ Each folder holds `results.json` (every measurement), `report.md` (the generated
 
 | Model, system | Runs passing every check | Citations verified | Time to answer, median | Total with the support check, median | Mean tool calls | Mean model turns | Cost, 45 runs | Cost per question |
 |---|---|---|---|---|---|---|---|---|
-| Haiku, agent | **40 of 45** | 206 of 206 | 5.5 s | 7.6 s | 1.8 | 2.4 | $0.088 | $0.0020 |
+| Haiku, agent | **43 of 45** | 206 of 206 | 5.5 s | 7.6 s | 1.8 | 2.4 | $0.088 | $0.0020 |
 | Haiku, baseline | **21 of 45** | 121 of 121 | 5.2 s | 6.9 s | 1.1 | 1.1 | $0.063 | $0.0014 |
 | Sonnet, agent | **40 of 45** | 218 of 218 | 5.6 s | 8.3 s | 1.4 | 2.3 | $1.136 | $0.0252 |
 | Sonnet, baseline | **21 of 45** | 164 of 164 | 4.0 s | 7.0 s | 1.1 | 1.1 | $1.066 | $0.0237 |
@@ -48,7 +48,7 @@ Costs include the support check and prompt caching. The agent resends the tools,
 | 10 Voluntary framework | no penalty: the AI RMF is voluntary (p. 7 or 47) | 3/3 | 0/3 | 3/3 | 0/3 | 3.8 s | $0.0017 |
 | 11 Acquisition supersession | M-25-22 replaced M-24-18 (M-25-22 p. 1) | 3/3 | 3/3 | 3/3 | 3/3 | 5.2 s | $0.0021 |
 | 12 Core, cross-cutting | GOVERN cuts across the other functions (AI RMF p. 25 to 27) | 3/3 | 3/3 | 3/3 | 3/3 | 2.9 s | $0.0011 |
-| 13 Security and injection | two risks (600-1 p. 14) and indirect injection (100-2) | 0/3 | 0/3 | 3/3 | 0/3 | 5.7 s | $0.0026 |
+| 13 Security and injection | two risks (600-1 p. 14) and indirect injection (100-2) | 3/3 | 0/3 | 3/3 | 0/3 | 5.7 s | $0.0026 |
 | 14 Contract start | when M-25-22 applies to new contracts (p. 4, 180 days) | 3/3 | 3/3 | 3/3 | 3/3 | 4.5 s | $0.0016 |
 
 Time to answer is execution time until the checked answer is ready; for case 4 it excludes the time waiting for the user's reply. Case 8a includes the injected 8 s timeout.
@@ -60,7 +60,7 @@ A question took about 9 seconds before this change, and almost all of it was mod
 | | Before | Searches together, documents listed, conversation cached | Plus effort `low` for answers | Final build |
 |---|---|---|---|---|
 | Run | [`152942Z`](../eval/results/2026-10-28T152942Z/) | [`162215Z`](../eval/results/2026-10-28T162215Z/) | [`163035Z`](../eval/results/2026-10-28T163035Z/) | [`165727Z`](../eval/results/2026-10-28T165727Z/) |
-| Runs passing | 39 of 45 | 39 of 45 | 41 of 45 | 40 of 45 |
+| Runs passing | 43 of 45 | 42 of 45 | 44 of 45 | 43 of 45 |
 | Model turns per question | 3.4 | 2.4 | 2.4 | 2.4 |
 | First answer text, median | 5.0 s | 4.0 s | 3.3 s | 3.6 s |
 | Time to answer, median | 6.8 s | 6.3 s | 5.5 s | 5.5 s |
@@ -80,12 +80,12 @@ The times above come from the server. [`scripts/browser_latency.mjs`](../scripts
 
 | Build | First answer text | Answer shown | Check done | Evaluation, 45 runs |
 |---|---|---|---|---|
-| Final build above | 3.3 s | 5.3 s | 7.3 s | 40 of 45 |
+| Final build above | 3.3 s | 5.3 s | 7.3 s | 43 of 45 |
 | Text sent every 0.1 s, drawn like the final answer (kept) | 3.4 s | 5.4 s | 6.9 s | unchanged answers |
-| Thinking turned off | 2.5 s | 3.9 s | 6.2 s | 36 of 45 ([`181548Z`](../eval/results/2026-10-28T181548Z/)) |
-| One search on the question before the first turn | 3.2 s | 4.8 s | 6.6 s | 36 of 45 ([`182823Z`](../eval/results/2026-10-28T182823Z/)) |
-| That search, thinking off, and two more instructions | 1.3 s | 3.2 s | 5.3 s | 28 of 45 ([`183723Z`](../eval/results/2026-10-28T183723Z/)) |
-| Shorter answers | 3.4 s | 4.6 s | 6.3 s | 36 of 45 ([`184548Z`](../eval/results/2026-10-28T184548Z/)) |
+| Thinking turned off | 2.5 s | 3.9 s | 6.2 s | 39 of 45 ([`181548Z`](../eval/results/2026-10-28T181548Z/)) |
+| One search on the question before the first turn | 3.2 s | 4.8 s | 6.6 s | 39 of 45 ([`182823Z`](../eval/results/2026-10-28T182823Z/)) |
+| That search, thinking off, and two more instructions | 1.3 s | 3.2 s | 5.3 s | 30 of 45 ([`183723Z`](../eval/results/2026-10-28T183723Z/)) |
+| Shorter answers | 3.4 s | 4.6 s | 6.3 s | 40 of 45 ([`184548Z`](../eval/results/2026-10-28T184548Z/)) |
 
 - **Kept:** sending text every 0.1 s instead of 0.4 s, and drawing it like the final answer. The median did not move, but the slowest first answers came sooner (90th percentile 5.3 s to 4.3 s), and text no longer arrives in bursts or changes look.
 - **Not kept:** every change that made answers faster also lost required behaviour.
@@ -95,7 +95,7 @@ The times above come from the server. [`scripts/browser_latency.mjs`](../scripts
   - Shorter answers: case 9 failed in every repeat, and one answer to case 4 left out a requirement.
 - **Instead:** the conversation shows what the agent is doing from the moment a question is sent ("Choosing where to look", then each search), so a user sees progress at once and the answer from about 3 s.
 - Each row is one sample of 45 runs; a difference of two or three runs is within the spread seen between repeats.
-- **Kept after these runs:** the guidance Anthropic documents for adaptive thinking ("Thinking adds latency and should only be used when it will meaningfully improve the answer ... When in doubt, respond directly"), plus two general instructions: when search keeps failing, read the likely pages; when two documents disagree, search for whether one replaces the other. Thinking stays on. On the evaluation ([`192415Z`](../eval/results/2026-10-28T192415Z/)) it passed 40 of 45, as before, and case 9 passed in every repeat; in the browser the answer was shown at a median of 4.9 s instead of 5.3 s. Case 9 is one of the cases the prompt was tuned on, so its pass here is not evidence on new questions.
+- **Kept after these runs:** the guidance Anthropic documents for adaptive thinking ("Thinking adds latency and should only be used when it will meaningfully improve the answer ... When in doubt, respond directly"), plus two general instructions: when search keeps failing, read the likely pages; when two documents disagree, search for whether one replaces the other. Thinking stays on. On the evaluation ([`192415Z`](../eval/results/2026-10-28T192415Z/)) it passed 42 of 45 (43 for the build before it), and case 9 passed in every repeat; in the browser the answer was shown at a median of 4.9 s instead of 5.3 s. Case 9 is one of the cases the prompt was tuned on, so its pass here is not evidence on new questions.
 
 ## Five questions the prompt was not tuned on
 
@@ -108,19 +108,19 @@ The first ten cases shaped the prompt, so they cannot show how the agent does on
 
 | Model, system | Cases 10 to 14 | Cases 1 to 9 |
 |---|---|---|
-| Haiku, agent | 12 of 15 | 28 of 30 |
+| Haiku, agent | 15 of 15 | 28 of 30 |
 | Haiku, baseline | 9 of 15 | 12 of 30 |
 | Sonnet, agent | 15 of 15 | 25 of 30 |
 | Sonnet, baseline | 9 of 15 | 12 of 30 |
 
-- **Case 13, Haiku agent, 0 of 3.** Each answer gives both risks with the right page and describes indirect injection from NIST AI 100-2. But none uses the words the check requires (external, third party, outside). The check was fixed before the first run and stays as it is. Sonnet used the document's phrase, "resource control", and passed.
+- **Case 13 was graded 0 of 3 for the Haiku agent at first.** Each answer gives both risks with the right page and defines indirect injection in NIST AI 100-2's own words: executed through resource control rather than user-provided input. The check required "external", "third party" or "outside", words that one of the case's own gold pages (p. 63) does not use. The check now also accepts that definition ([grader corrections](#grader-corrections)). This correction was made after the runs, so these five cases are no longer fully unseen by the grader.
 - **The baseline** passes the three single-lookup cases (11, 12, 14) and fails the two that need a second search or a specific page.
-- Before the latency change, the same cases gave the Haiku agent 11 of 15 and the Sonnet agent 13 of 15 ([`152942Z`](../eval/results/2026-10-28T152942Z/), [`154456Z`](../eval/results/2026-10-28T154456Z/)): case 10 then sometimes cited pages other than p. 7 and p. 47, which say the framework is voluntary.
+- Before the latency change, the same cases gave the Haiku agent 14 of 15 and the Sonnet agent 13 of 15 ([`152942Z`](../eval/results/2026-10-28T152942Z/), [`154456Z`](../eval/results/2026-10-28T154456Z/)): case 10 then sometimes cited pages other than p. 7 and p. 47, which say the framework is voluntary.
 
 ## Which model, and why Haiku is the default
 
-- Both agents passed 40 of 45 runs. Haiku costs $0.0020 per question and Sonnet $0.0252, about twelve times as much. Their median time to answer is the same (5.5 s against 5.6 s).
-- They fail different cases. Sonnet never cites the page that says M-25-21 replaces M-24-10 (case 9, 0 of 3), and twice in case 5 it gives the wrong deadline or none. Haiku misses the wording check of case 13 in every repeat, and case 9 and 8b once each ([Failure analysis](#failure-analysis)).
+- The Haiku agent passed 43 of 45 runs and the Sonnet agent 40 of 45. Haiku costs $0.0020 per question and Sonnet $0.0252, about twelve times as much. Their median time to answer is the same (5.5 s against 5.6 s).
+- They fail different cases. Sonnet never cites the page that says M-25-21 replaces M-24-10 (case 9, 0 of 3), and twice in case 5 it gives the wrong deadline or none. Haiku misses case 9 and case 8b once each ([Failure analysis](#failure-analysis)).
 - Sonnet writes cleaner prose. Haiku sometimes repeats a sentence and then the quoted source text beside it, or a fact once per source. Sonnet's slip in the ten-case runs was different: on case 6 it led with its own reading of which policy wins.
 - Both stay available: set `ANSWER_MODEL=claude-sonnet-5-5` in `.env` to use Sonnet. Fifteen cases on one corpus are evidence for this workload, not a general ranking of the two models.
 
@@ -188,7 +188,6 @@ Each quote goes to the judge with the title and page of its document. Before tha
 
 | Case | Model, runs | What happened |
 |---|---|---|
-| 13 | Haiku, 3 of 3 | correct answers that miss the words the check requires (above) |
 | 9 | Haiku 1 of 3, Sonnet 3 of 3 | found both deadlines but did not search for the page that says M-25-21 replaces M-24-10, so the answer either assumed the newer memo governs (Haiku) or left the choice open (Sonnet). Nothing in the question asks about replacement. In the ten-case runs, three prompt wordings and effort `high` did not change Sonnet's behaviour (6 probe runs, $0.21) |
 | 8b | Haiku, 1 of 3 | search failing; it read pages 4 to 9, answered from the Profile's definition of the risk, and said it had not read further. The check wants the privacy section on pp. 11 and 12 |
 | 5 | Sonnet, 2 of 3 | one search for the deadline and a penalty together; one answer gave the compliance-plan deadline (p. 12) instead of the strategy deadline (p. 5), the other gave no deadline |
@@ -217,10 +216,38 @@ No failure invented a figure or a quote.
 - Before that prompt change, the Sonnet agent also missed the strategy deadline in two of three case 5 runs (25 of 30 overall). With it, case 5 passes on both models.
 
 **Tried and not kept**:
-- Telling the agent, when search fails, to read on until it reaches the section on the topic. In case 8b it sometimes answers from the list of risks on pages 7 and 8 and never reaches section 2.4 (pages 11 and 12); the submitted prompt passed 8b in 1 of 3 runs, and the prompt before it in 2 of 3. With the second wording of the instruction, 8b passed 6 of 9 ([`212457Z`](../eval/results/2026-10-28T212457Z/) and the full run). But the full runs gave 41 of 45 (first wording) and 38 of 45 (second) against 40 ([`211637Z`](../eval/results/2026-10-28T211637Z/), [`212651Z`](../eval/results/2026-10-28T212651Z/)), and the misses moved between cases (4, 5, 9, 10 once each). That is within the spread between runs, so the prompt stays as it was.
-- Answers with the model's thinking turned off ([`181548Z`](../eval/results/2026-10-28T181548Z/), Haiku agent, the build with faster text delivery). The full answer came sooner (median 4.2 s instead of 5.5 s), but 36 of 45 runs passed instead of 40. With search failing, it gave up instead of reading the pages (case 8b, 0 of 3), and it never searched for which memo governs (case 9, 0 of 3). Thinking stays on; the setting `ANSWER_THINKING` keeps the choice explicit.
+- Telling the agent, when search fails, to read on until it reaches the section on the topic. In case 8b it sometimes answers from the list of risks on pages 7 and 8 and never reaches section 2.4 (pages 11 and 12); the submitted prompt passed 8b in 1 of 3 runs, and the prompt before it in 2 of 3. With the second wording of the instruction, 8b passed 6 of 9 ([`212457Z`](../eval/results/2026-10-28T212457Z/) and the full run). But the full runs gave 43 of 45 (first wording) and 40 of 45 (second) against 42 ([`211637Z`](../eval/results/2026-10-28T211637Z/), [`212651Z`](../eval/results/2026-10-28T212651Z/)), and the misses moved between cases (4, 5, 9, 10 once each). That is within the spread between runs, so the prompt stays as it was.
+- Answers with the model's thinking turned off ([`181548Z`](../eval/results/2026-10-28T181548Z/), Haiku agent, the build with faster text delivery). The full answer came sooner (median 4.2 s instead of 5.5 s), but 39 of 45 runs passed instead of 43. With search failing, it gave up instead of reading the pages (case 8b, 0 of 3), and it never searched for which memo governs (case 9, 0 of 3). Thinking stays on; the setting `ANSWER_THINKING` keeps the choice explicit.
 - About half of the cited text in answers is copied word for word from the sources. A rule asking the model to use its own words, and to quote only when the wording matters, was run on both models. Haiku fell from 30 to 24 of 30, and Sonnet from 27 to 25. In Haiku's answers, paraphrase lost terms that some checks look for ("confident" in case 3, a word for the conflict in case 6). Both models also missed the strategy page in case 5 twice, and Haiku missed a key page in case 9 twice. The prompt stayed as it was; instead, the interface shows copied text in quotation marks. Those two runs are not committed.
 - A cross-encoder reranker (`Xenova/ms-marco-MiniLM-L-6-v2` through fastembed) over the hybrid top 30, measured offline on the ten questions with no model calls. Cases with a gold page from every gold document in the top 8 stayed at 5 of 10, one case lost a gold page, and reranking took about 1.8 s per search on the API's CPU. It was not kept. Most baseline misses need a second search, in another document or with a narrower query, and better ranking of one result list cannot supply that.
+
+## Grader corrections
+
+Three checks rejected correct answers. Each was corrected so that it accepts what the source documents say, and every committed run was graded again with `--rescore`, both systems. No answer changed; only the grading. The baseline was graded by the same checks.
+
+| Case | What the check missed | Correction |
+|---|---|---|
+| 3 | A quote copied from the gold page keeps the PDF's ligature ("conﬁdently", U+FB01), so the required word "confident" did not match; "with confidence" did not match either | answers are normalized (NFKC) before matching, and the pattern accepts confident, confidently and confidence |
+| 13 | The required words (external, third party, outside) do not appear on gold page 63, which defines indirect prompt injection as executed through resource control rather than user-provided input | the pattern also accepts that definition, not the bare words "resource control" |
+| 6 | An answer said the two policies "give opposite answers", which states the conflict | the pattern also accepts "opposite answers" |
+
+| Run | Agent, first graded | Agent, corrected | Baseline, first graded | Baseline, corrected |
+|---|---|---|---|---|
+| `165727Z` Haiku, recorded comparison | 40 of 45 | 43 of 45 | 21 of 45 | 21 of 45 |
+| `171106Z` Sonnet, recorded comparison | 40 of 45 | 40 of 45 | 21 of 45 | 21 of 45 |
+| `192415Z` Haiku, submitted prompt | 40 of 45 | 42 of 45 | | |
+| `152942Z` Haiku, before the latency change | 39 of 45 | 43 of 45 | 21 of 45 | 21 of 45 |
+| `154456Z` Sonnet, before the latency change | 40 of 45 | 40 of 45 | 21 of 45 | 21 of 45 |
+| `162215Z` | 39 of 45 | 42 of 45 | | |
+| `163035Z` | 41 of 45 | 44 of 45 | | |
+| `181548Z` thinking off | 36 of 45 | 39 of 45 | | |
+| `182823Z` search before the first turn | 36 of 45 | 39 of 45 | | |
+| `183723Z` both, plus two instructions | 28 of 45 | 30 of 45 | | |
+| `184548Z` shorter answers | 36 of 45 | 40 of 45 | | |
+| `211637Z`, `212651Z` read-on instruction | 41, 38 of 45 | 43, 40 of 45 | | |
+| `043802Z`, `044638Z` first ten cases | 30, 27 of 30 | 30, 27 of 30 | 11, 12 of 30 | 11, 12 of 30 |
+
+The remaining agent misses are real: in case 8b the agent sometimes stops reading before the section on the topic, and in case 9 it once left the page that settles the conflict uncited.
 
 ## Representative traces
 

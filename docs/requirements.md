@@ -19,7 +19,7 @@ Each requirement of the take-home brief, where it is built, and what shows that 
 
 ## The eight required behaviours
 
-The Haiku agent in the recorded comparison at commit `09d1b08`, three repeats each ([run](../eval/results/2026-10-28T165727Z/)). On the submitted prompt it passed 40 of 45 again ([run](../eval/results/2026-10-28T192415Z/)).
+The Haiku agent in the recorded comparison at commit `09d1b08`, three repeats each ([run](../eval/results/2026-10-28T165727Z/)). On the submitted prompt it passed 42 of 45 ([run](../eval/results/2026-10-28T192415Z/)).
 
 | | Behaviour | What must happen | Agent | Single pass |
 |---|---|---|---|---|

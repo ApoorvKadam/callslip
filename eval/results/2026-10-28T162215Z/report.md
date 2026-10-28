@@ -2,13 +2,13 @@
 
 | System | Cases passed | Mean latency (s) | Median time to answer (s) | Mean tool calls | Mean model calls | Citations verified | Total tokens | Total cost (USD) |
 |---|---|---|---|---|---|---|---|---|
-| agent | 39 of 45 | 8.9 | 6.3 | 2.0 | 3.4 | 215 of 215 | 158236 | 0.0984 |
+| agent | 42 of 45 | 8.9 | 6.3 | 2.0 | 3.4 | 215 of 215 | 158236 | 0.0984 |
 
 | Case | System | Pass | Status | Citations (verified/total) | Gold pages cited | Tools | Model calls | Latency (s) | To answer (s) | Tokens in/out | Cost (USD) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 5.0 | 3.3 | 1665/835 | 0.0013 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.5 | 5.6 | 1709/1289 | 0.0024 |  |
-| 3-multi-doc-b | agent | no | complete | 9/9 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 9.1 | 6.5 | 2745/1896 | 0.0023 | missing: confident |
+| 3-multi-doc-b | agent | no | complete | 9/9 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 9.1 | 6.5 | 2745/1896 | 0.0023 | missing: \bconfiden(?:t(?:ly)?|ce)\b |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 1 | 4 | 9.2 | 7.7 | 1511/1627 | 0.0019 | asked: Several documents in the collection are OMB memoranda. Which one do you mean by "the memo"? |
 | 5-insufficient-evidence | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.4 | 4.8 | 1545/1157 | 0.0024 |  |
 | 6-conflicting-sources | agent | yes | complete | 4/4 | Northbridge University O p1, Northbridge University O p1 | 1 | 3 | 8.9 | 7.3 | 1687/1396 | 0.0014 |  |
@@ -19,7 +19,7 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 4.8 | 3.7 | 1155/837 | 0.0021 |  |
 | 11-acquisition-supersession | agent | yes | complete | 5/5 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 12.2 | 9.9 | 2032/2220 | 0.0030 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 5.8 | 4.1 | 1445/646 | 0.0015 |  |
-| 13-security-and-injection | agent | no | complete | 11/11 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.9 | 7.0 | 3426/2188 | 0.0030 | missing: attack surface, (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | no | complete | 11/11 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.9 | 7.0 | 3426/2188 | 0.0030 | missing: attack surface |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.4 | 3.6 | 1366/741 | 0.0014 |  |
 | 1-simple-lookup | agent | yes | complete | 4/4 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 6.0 | 4.4 | 1693/938 | 0.0013 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.1 | 5.5 | 1663/1314 | 0.0024 |  |
@@ -34,11 +34,11 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 6.3 | 3.6 | 1114/759 | 0.0020 |  |
 | 11-acquisition-supersession | agent | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 8.1 | 6.3 | 1675/1398 | 0.0024 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.5 | 3.2 | 1430/669 | 0.0006 |  |
-| 13-security-and-injection | agent | no | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.6 | 2680/1811 | 0.0026 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.6 | 2680/1811 | 0.0026 |  |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 7.4 | 5.2 | 1357/993 | 0.0021 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 4.1 | 2.4 | 1742/696 | 0.0006 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 8.6 | 6.8 | 1739/1620 | 0.0025 |  |
-| 3-multi-doc-b | agent | no | complete | 6/6 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 8.7 | 6.8 | 2155/1812 | 0.0022 | missing: confident |
+| 3-multi-doc-b | agent | yes | complete | 6/6 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 8.7 | 6.8 | 2155/1812 | 0.0022 |  |
 | 4-ambiguous | agent | no | complete | 1/1 | OMB M-25-21: Acceleratin p12 | 1 | 4 | 6.9 | 5.7 | 1350/1043 | 0.0016 | asked: Several documents are OMB memoranda. Which one do you mean by "the memo" for the 180-day requirement? missing: AI Strateg |
 | 5-insufficient-evidence | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p5 | 2 | 3 | 6.7 | 5.4 | 1505/1027 | 0.0022 |  |
 | 6-conflicting-sources | agent | yes | complete | 3/3 | Northbridge University O p1, Northbridge University O p1 | 2 | 3 | 10.3 | 7.4 | 1674/1375 | 0.0015 |  |
@@ -49,5 +49,5 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.4 | 4.1 | 1108/793 | 0.0020 |  |
 | 11-acquisition-supersession | agent | yes | complete | 5/5 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 8.8 | 6.9 | 2087/1519 | 0.0026 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.4 | 2.7 | 1390/606 | 0.0006 |  |
-| 13-security-and-injection | agent | no | complete | 7/7 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.2 | 2472/1632 | 0.0025 | missing: (external|third[- ]party|outside) |
+| 13-security-and-injection | agent | yes | complete | 7/7 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.2 | 2472/1632 | 0.0025 |  |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 9.6 | 7.6 | 1776/1490 | 0.0025 |  |
