@@ -349,7 +349,16 @@ export default function App() {
           <AccountMenu
             email={account}
             onChange={(email) => {
-              // A conversation belongs to the account that started it, so start a new one.
+              // A conversation belongs to the account that started it. Clear the previous
+              // account's answers at once, before any request, so none stay on screen even if
+              // starting the new conversation is slow or fails.
+              Object.values(streams.current).forEach((source) => source.close());
+              streams.current = {};
+              setRuns([]);
+              setEvents({});
+              setSelectedId(null);
+              setChosen(null);
+              setHovered(null);
               setAccount(email);
               void startSession().catch((e) => setError(`Could not start a session: ${errorText(e)}`));
             }}
@@ -389,7 +398,8 @@ export default function App() {
             aria-labelledby="tab-documents"
             hidden={side !== "documents"}
           >
-            <DocumentsPanel signedIn={account !== null} />
+            {/* A new account gets a fresh panel: no titles from the previous one. */}
+            <DocumentsPanel key={account ?? "guest"} signedIn={account !== null} />
           </div>
           <div
             role="tabpanel"
