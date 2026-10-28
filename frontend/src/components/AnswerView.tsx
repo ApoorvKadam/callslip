@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Answer } from "../api";
+import type { Answer, Citation } from "../api";
 import type { CiteRef } from "../App";
 import { shortCode } from "../format";
 
@@ -23,6 +23,20 @@ function bold(text: string, key: string): ReactNode[] {
   }
   if (last < text.length) out.push(text.slice(last));
   return out;
+}
+
+// Letters and digits only (in any script), so the line-break hyphens and spacing of PDF text
+// do not matter.
+const squash = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+
+// The model often copies a sentence from a source into its answer. Such text is shown in
+// quotation marks, so the reader can tell the document's words from the answer's. Text the
+// model already put in quotation marks, or shorter than eight words, is left as it is.
+function copied(text: string, before: string, after: string, sources: Citation[]): boolean {
+  if (/["“]\s*$/.test(before) || /^\s*["”]/.test(after) || /^["“]/.test(text)) return false;
+  if (text.split(/\s+/).length < 8) return false;
+  const t = squash(text);
+  return t.length > 0 && sources.some((c) => squash(c.cited_text).includes(t));
 }
 
 // Split the segments into lines of fragments, keeping each fragment's citations.
@@ -50,9 +64,12 @@ export function AnswerView({ runId, answer, active, onHover, onChoose }: Props) 
   const activeN = active?.runId === runId ? active.n : null;
   const byNumber = new Map(answer.citations.map((c) => [c.number, c]));
 
-  function renderFragment(f: Fragment, key: string): ReactNode {
-    const text = bold(f.text, key);
-    if (f.cites.length === 0) return <span key={key}>{text}</span>;
+  function renderFragment(f: Fragment, key: string, before: string, after: string): ReactNode {
+    if (f.cites.length === 0) return <span key={key}>{bold(f.text, key)}</span>;
+    const sources = f.cites.flatMap((n) => byNumber.get(n) ?? []);
+    const [, lead, core, trail] = /^(\s*)([\s\S]*?)(\s*)$/.exec(f.text) ?? ["", "", f.text, ""];
+    const quoted = copied(core, before, after, sources);
+    const text = bold(quoted ? `${lead}“${core}”${trail}` : f.text, key);
     const isActive = activeN !== null && f.cites.includes(activeN);
     return (
       <span key={key}>
@@ -111,7 +128,9 @@ export function AnswerView({ runId, answer, active, onHover, onChoose }: Props) 
       left -= cut;
       return { ...f, text: f.text.slice(cut) };
     });
-    const content = shown.map((f, j) => renderFragment(f, `${i}-${j}`));
+    const content = shown.map((f, j) =>
+      renderFragment(f, `${i}-${j}`, shown[j - 1]?.text ?? "", shown[j + 1]?.text ?? ""),
+    );
     if (bullet) {
       items.push(<li key={`li-${i}`}>{content}</li>);
     } else {
