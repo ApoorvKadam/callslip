@@ -172,4 +172,4 @@ When Redis is down, reads count as misses, writes are skipped, Redis is not retr
 2. More documents: add an HNSW index and measure filtered recall; partition chunks by collection; move raw PDFs to object storage.
 3. Better retrieval: contextual chunk headers generated at ingestion, a cross-encoder reranker, BM25 (for example ParadeDB) in place of `ts_rank_cd`, each kept only if the evaluation shows a gain.
 4. Multi-tenant: authentication (NYU SSO), tenant id on documents and sessions, row-level security.
-5. Kubernetes or OpenShift: the five services map directly to Deployments (frontend, api, worker), a managed PostgreSQL and Redis; the health and readiness endpoints already exist.
+5. Kubernetes or OpenShift: manifests for both are in `deploy/kubernetes` ([kubernetes.md](kubernetes.md)); in production, PostgreSQL and Redis would be managed services.

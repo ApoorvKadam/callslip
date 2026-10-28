@@ -10,6 +10,7 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results in one paragrap
 | [docs/demo.md](docs/demo.md) | a reproducible walkthrough: multi-document question, re-retrieval, clarification, tool failure, limits, Redis outage |
 | [docs/evaluation.md](docs/evaluation.md) | ten cases, the agent against a single-pass baseline, failure analysis |
 | [docs/runbook.md](docs/runbook.md) | deploy, verify, update, roll back, persistence, logging, with captured output |
+| [docs/kubernetes.md](docs/kubernetes.md) | the same images on Kubernetes or OpenShift: manifests, how to deploy, what is checked |
 | [docs/reproducibility.md](docs/reproducibility.md) | corpus sources and checksums, models, prompts, tool schemas, evaluation command, costs |
 
 ## Stack

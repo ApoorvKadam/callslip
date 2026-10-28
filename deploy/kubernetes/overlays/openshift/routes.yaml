@@ -1,0 +1,35 @@
+# Two Routes on one host: /api to the API, the rest to the frontend. Replace the host with
+# the cluster's application domain. The timeout covers event streams.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: callslip-api
+  annotations:
+    haproxy.router.openshift.io/timeout: 300s
+spec:
+  host: callslip.apps.example.edu
+  path: /api
+  to:
+    kind: Service
+    name: api
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: callslip
+spec:
+  host: callslip.apps.example.edu
+  path: /
+  to:
+    kind: Service
+    name: frontend
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
