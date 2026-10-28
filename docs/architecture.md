@@ -1,6 +1,6 @@
 # Architecture
 
-An agentic RAG application over a small set of text-based PDFs (8 to 15) from one domain. Users upload documents and ask simple or multi-part questions; an agent chooses tools, looks at what they return, and decides whether to search again, read more, ask the user to clarify, or answer with document and page citations that are checked in code.
+Callslip is an agentic RAG application over a small set of text-based PDFs (8 to 15) from one domain. Users upload documents and ask simple or multi-part questions; an agent chooses tools, looks at what they return, and decides whether to search again, read more, ask the user to clarify, or answer with document and page citations that are checked in code.
 
 ## Components
 
