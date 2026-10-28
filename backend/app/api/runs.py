@@ -63,14 +63,16 @@ async def run_events(run_id: UUID, request: Request, pool: Pool, owner: Owner):
         last_beat = time.monotonic()
         while not await request.is_disconnected():
             async with pool.connection() as conn:
+                # Status first: a run's events are written before its final status, so once a
+                # finished status is seen, the events read next include every last one.
+                cur = await conn.execute("SELECT status FROM runs WHERE id = %s", (run_id,))
+                status = (await cur.fetchone())[0]
                 cur = await conn.execute(
                     "SELECT seq, type, data FROM run_events WHERE run_id = %s AND seq > %s"
                     " ORDER BY seq",
                     (run_id, last_seen),
                 )
                 rows = await cur.fetchall()
-                cur = await conn.execute("SELECT status FROM runs WHERE id = %s", (run_id,))
-                status = (await cur.fetchone())[0]
             for seq, type_, data in rows:
                 last_seen = seq
                 yield f"id: {seq}\nevent: {type_}\ndata: {json.dumps(data, default=str)}\n\n"
