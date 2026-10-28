@@ -7,6 +7,7 @@
  "models": [
   "claude-haiku-5-5"
  ],
+ "rescored": "2026-10-28T233805Z",
  "results": [
   {
    "passed": true,
@@ -25,6 +26,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. The search tool failed, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile warns that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification.\n\n**Opacity and exposure:** It notes that developers rarely reveal their training sources, so people often cannot tell whether their personal data was used. It adds that models may leak, generate, or correctly infer sensitive information about individuals.\n\n**Memorization:** The profile describes extraction attacks in which models reproduce training data. During adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It also observes that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n**Inference:** Privacy harm can also arise without any disclosure. Models may correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even inaccurate inferences can cause harm, since they can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n\n**Downstream effects:** The profile says that predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also links data privacy to output controls. It notes that many current systems restrict model outputs to limit certain content or in response to certain prompts, but this approach may still produce harmful recommendations in response to other less-explicit, novel prompts, and it cross-references Data Privacy as one of the risk areas affected by this.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -61,6 +66,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (NIST AI 600-1)**\n\nThe Profile names two primary risks. First, generative AI could lower the cost of offensive cyber activity. GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. Second, the technology itself widens the target area: it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2**\n\nThe glossary defines the term as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the model retrieves or processes, not through what the user types.\n\nThe document describes several effects of this attack:\n- **Hijacking agents:** Attackers can use it to take over a GenAI agent so that it pursues an attacker-chosen task in place of, or alongside, the user's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Integrity effects:** The injected content can make a system's answers unreliable. Researchers have demonstrated attacks through indirect prompt injection that can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Availability effects:** Injected prompts can degrade service. Examples include a prompt that makes the model run a time-consuming task before answering, and one that stops the model from using a specific API.\n- **Hidden injections:** Attackers may conceal the instructions, for example by hiding injections in non-visible portions of a resource.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -97,6 +109,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile treats data privacy as a distinct GAI risk in Section 2.4 (pages 11\u201312 of the document). I used the page text because search was unavailable.\n\n**Main concerns**\n- **Training data and consent:** The profile notes that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification.\n- **Opaque data sources:** Because most model developers do not disclose specific data sources on which models were trained, users have limited ability to tell whether personal information was included.\n- **Leakage through memorization:** The profile reports that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It adds that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference of personal data:** Models can also reconstruct personal details that were never provided to them. The profile says they may be able to correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources.\n- **Harm from inaccurate inferences:** Even wrong inferences can cause damage. The profile observes that these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and it lists extortion or dignitary harm among the effects of information exposure.\n- **Downstream decisions:** Inferences based on personal data can feed into outcomes that disadvantage people. The profile notes that predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also links privacy to other risk areas. Its discussion of content risks says that output restrictions can be bypassed and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the suggested actions in Section 3, so this answer covers only the risk description and not the recommended mitigations.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -133,6 +149,12 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (NIST AI 600-1)**\n\nThe profile says GAI-based systems present two primary information security risks:\n\n1. **Easier offensive cyber operations.** Generative AI could lower the cost of cyberattacks. It could also make automated attacks easier to run, by lowering the barriers for or easing automated exercise of offensive capabilities. Offensive capabilities of this kind may augment cybersecurity attacks such as hacking, malware, and phishing.\n2. **A larger attack surface.** The model itself becomes a target. The profile notes that GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\nThe profile also says information security for these systems covers the integrity and (when applicable) the confidentiality of the GAI code, training data, and model weights.\n\n**Indirect prompt injection in NIST AI 100-2 (Adversarial Machine Learning taxonomy)**\n\n- **Definition:** The glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the model processes, not through what the user types.\n- **Harm:** An attacker can use it to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Technique:** Attackers can reuse direct-injection methods. For example, a jailbreak can let them substitute their own malicious instructions in place of the model's SYSTEM PROMPT.\n- **Concealment:** Attackers may also hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource.\n\nThe taxonomy has a dedicated section on indirect prompt injection attacks and mitigations, but the search results did not include its text, so I cannot report the specific mitigations it recommends.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -169,6 +191,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11\u201312 directly.\n\n**Core concern:** The profile says GAI development raises privacy issues beyond those of earlier AI systems. Its main points are:\n\n- **Training data:** Training on personal data raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque sourcing:** Developers rarely reveal their data sources, which leaves users unable to tell whether personally identifiable information was used. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** LLMs have revealed sensitive information from the public domain that was included in their training data, a problem the profile calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer personal data that was never in their training set or supplied by the user by combining information from different sources. Such inferences can harm people even when they are wrong. Inferences can have negative impact on an individual even if they are inaccurate (e.g., confabulations), especially if they reveal information the individual considers sensitive or that could be used to disadvantage or harm them.\n- **Downstream harms:** Beyond exposure, predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also flags privacy as a factor in other risks, such as jailbreaking, where output restrictions may fail against novel prompts, a risk it notes is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's suggested actions for managing privacy risk (Section 3), so this answer covers only how the risk is described.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -205,6 +231,12 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the GAI Profile (NIST AI 600-1):** The profile says GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. The second risk is that GAI expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. The first risk covers offensive uses such as hacking, malware, and phishing, and the profile notes that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**Indirect prompt injection (NIST AI 100-2):** The glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the system ingests, not through what the user types. The taxonomy says attackers can use it to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Attackers can reuse methods from direct injection, for example a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. They may also hide injected content, such as hiding injections in non-visible portions of a resource.\n\nThe two sources connect: the profile names prompt injection as one way GAI systems are attacked, and the taxonomy explains how that attack works when the payload comes from external resources.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -241,6 +273,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as one of its twelve GAI-specific risks, in Section 2.4 on page 11. Its main points are:\n\n- **Training data as the source of exposure.** The profile says the risk starts with training. Model builders often don't say which data they used, so users can't tell whether personal information went into training or how it was gathered. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. Most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected.\n\n- **Leaking training data.** The profile reports that memorized training content can come out. During adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It adds that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n- **Inferring personal information.** Privacy exposure is not limited to data the model was trained on. GAI models may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. The profile notes that such inferences can cause harm even when they are wrong, since these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n\n- **Downstream harms.** The profile links privacy harms to other harms, such as adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references data privacy in its discussion of jailbreaking and information security, noting that output restrictions may not hold against new prompts and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nNote: the search tool was unavailable, so I read the section directly from the document's outline and pages 11\u201312. The Section 3 suggested actions for managing privacy risks were not reviewed, so I can't summarize the mitigations the profile recommends.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -277,6 +313,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Two information security risks in NIST AI 600-1**\n\nThe Generative AI Profile says GAI systems raise two main security concerns. First, GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities. Second, the technology widens the set of points an attacker can target, because the model is itself exposed to attacks like prompt injection or data poisoning.\n\n**How NIST AI 100-2 describes indirect prompt injection**\n\nNIST AI 100-2 defines it as an attack that runs through the resources a model consumes, not through what the user types. Its glossary describes it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. Attackers can use it to take over agents, so that the system performs a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n\nThe document groups the resulting harms into several categories:\n- **Availability:** Injected prompts can, for example, instruct the model that it is not permitted to use certain APIs (e.g., the search API for an internet-connected chatbot).\n- **Integrity:** Attackers can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Who is harmed:** The attacker is often not the model's main user. In fact, in many cases, it is the primary user of the model who is harmed by the compromise of the integrity, availability, or privacy of the GenAI system through an indirect prompt injection attack.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [
@@ -315,6 +358,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as one of its twelve GAI-specific risk areas, in Section 2.4. Its main points are below, drawn from pages 11 and 12 of the document. The search tool was unavailable, so I read those pages directly.\n\n**Privacy principles at stake.** The profile notes that training large volumes of data may include personal data, and using personal data for GAI training raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n\n**Limited visibility into training data.** Most model developers do not disclose specific data sources, which limits user awareness of whether personally identifiable information was trained on and, if so, how it was collected.\n\n**Leakage and memorization.** The profile says models may leak, generate, or correctly infer sensitive information about individuals. It gives an example in which LLMs revealed sensitive public-domain information from their training data during adversarial attacks, a problem referred to as data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n**Inference of personal data.** Models may also correctly infer PII or sensitive data that was neither in the training data nor disclosed by the user, by stitching together information from disparate sources. The profile adds that these inferences can harm an individual even when they are inaccurate (e.g., confabulations), especially when they reveal sensitive information or are used to disadvantage them.\n\n**Downstream harms.** Predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\n**Cross-references.** The profile also notes that jailbreaking-style prompts can get around output restrictions, and it links that issue to Data Privacy, among other risks (page 11).\n\nThe excerpts I read do not include the profile's suggested risk-management actions for privacy, which appear in Section 3. I did not check them, so I can't summarize them here.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -351,6 +398,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\n1. **Lower barriers to offensive cyber activity.** The profile says GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. It adds that offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.\n\n2. **A larger attack surface.** The profile says GAI expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. It also notes that information security for these systems covers the integrity and (when applicable) the confidentiality of the GAI code, training data, and model weights, along with system availability.\n\n**NIST AI 100-2 E2025: indirect prompt injection**\n\nThe glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the system ingests, not through the user's own prompt.\n\nThe document describes several effects:\n- **Hijacking agents:** Attackers can use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Integrity attacks:** Through malicious resources, attackers can get systems to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Availability attacks:** An injected prompt can, for example, instruct the model that it is not permitted to use certain APIs (e.g., the search API for an internet-connected chatbot).\n- **Retrieval-augmented generation:** Attackers can poison the knowledge base; the document notes that these execution triggers can also persist through RAG processing pipelines that include multiple phases, such as chunking and contextual filtering.\n\nI did not find a separate passage in these documents that links the Generative AI Profile's \"prompt injection\" reference to the AML taxonomy's definition, so I have treated the two as separate sources.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -387,6 +441,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Its main points, from the document's pages 11 and 12:\n\n- **Training data:** The profile notes that training on personal data can conflict with privacy principles. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.\n- **Opaque sources:** Because developers rarely reveal where training data came from, users often cannot tell whether personal information was included. Most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected.\n- **Memorization and leakage:** The profile describes models reproducing training content under adversarial prompting. During adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It adds that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can also derive personal details that were never provided. According to the profile, GAI models may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even inaccurate inferences can cause harm, since these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n- **Downstream effects:** Wrong inferences about individuals can feed into later decisions. The profile links this to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references data privacy in other risk areas, such as the jailbreaking discussion on page 11, which notes that output restrictions may fail against novel prompts and is relevant to Data Privacy among other risks.\n\nNote: my search tool was unavailable, so I relied on reading pages 11\u201312 directly. I did not review the profile's suggested actions for managing privacy risk (Section 3), so this answer covers the risk description only.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -424,6 +482,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p52",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1:** The Generative AI Profile says that information security is a mature field, but GAI-based systems raise two main concerns. The first is that GAI can make offensive cyber activity easier to carry out, since it lowers the cost of automated attacks. The second is that GAI widens the set of points an attacker can target, because the models are themselves open to prompt injection and data poisoning GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities; simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. The profile also lists the offensive uses, noting that offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.\n\n**Indirect prompt injection in NIST AI 100-2:** The glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. The section on indirect prompt injection adds that these attacks depend on the attacker's ability to change outside content that the model later reads, even when the primary user never supplies it INDIRECT PROMPT INJECTION attacks depend on the attacker's ability to modify external sources of information that will be ingested into the model context, even if not provided directly by the primary system user. The document gives examples of how this plays out. In retrieval-augmented generation, the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. For agents, attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -460,6 +525,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as one of its twelve GAI risk areas, in Section 2.4 on pages 11\u201312. I read those pages directly because the search tool was unavailable.\n\n**Privacy risks from training data.** The profile's core concern is that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. It adds that most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on.\n\n**Leakage and memorization.** The profile says models can expose what they were trained on. During adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It notes this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n**Inference of sensitive data.** Models can also reveal information they were never given. They may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. The profile notes that these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n\n**Downstream harm.** Beyond exposure, the profile warns that predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe section also cross-references privacy in its discussion of jailbreaking, noting that output restrictions may fail against novel prompts, which is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nThe profile's suggested actions for managing these risks are in Section 3 (page 16 onward), which I did not read, so I can't summarize its privacy-specific mitigations.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -496,6 +565,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1 (Generative AI Profile)**\n\nThe profile names two primary information security risks. First, generative AI can lower the cost of offensive cyber operations. It can make new cyber threats possible or easier to run at scale. Second, it widens the attack surface because the GAI system is itself open to attack. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities; simultaneously, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. The profile also notes that information security for GAI models and systems also includes maintaining availability of the GAI system and the integrity and (when applicable) the con\ufb01dentiality of the GAI code, training data, and model weights.\n\n**Indirect prompt injection in NIST AI 100-2 (Adversarial Machine Learning taxonomy)**\n\nNIST AI 100-2 treats indirect prompt injection as an attack that reaches a model through content it processes, not through the user's own prompt. Attackers can plant instructions in outside material so that a GenAI system follows them. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n\nThe taxonomy groups the effects by security goal:\n- **Availability:** The attacker can instruct the model to change its output so that the system stops working correctly. One example is having the model alter retrieved text so that later API calls break.\n- **Integrity:** Malicious resources can make the system produce misleading content. Researchers have demonstrated attacks through indirect prompt injection that can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Privacy:** Injected instructions can make a system reveal restricted data. A model integrated as part of an email client could be prompted to forward certain emails to an attacker- controlled inbox.\n\nThe taxonomy also lists mitigations, such as filtering out instructions from third-party data sources. It cautions that current mitigations do not offer full protection against all attacker techniques.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -532,6 +608,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11 and 12 directly.\n\n**Core concern:** The profile says GAI systems raise several risks to privacy. Its main worry is that training data may include personal information. Developers' training sets are where the risk starts, and the profile notes that the use of personal data in training puts at stake principles such as transparency, consent, and purpose limitation.\n\n**Transparency gap:** Because developers rarely reveal their data sources, users often cannot tell whether personally identifiable information was used or how it was gathered.\n\n**Leakage and memorization:** The profile describes models exposing data they were trained on. Adversarial prompting has caused LLMs to reproduce sensitive public-domain information from training data, a behavior it calls data memorization. It adds that this can create heightened privacy exposure even for information that appeared in only a few training samples.\n\n**Inference:** Models can also reach personal details that were never in their training data or supplied by the user. They do this by combining information from separate sources. The profile points out that such inferences can harm people even when they are wrong, which links to confabulation.\n\n**Downstream harm:** The profile says that exposing information can lead to harms like extortion or dignitary harm. Incorrect or inappropriate inferences about individuals can feed into adverse decisions, which may produce representational or allocative harms.\n\n**Cross-references:** The profile also ties data privacy to other risks. In its discussion of jailbreaking, it notes that output restrictions can fail against new prompts, a concern it links to Data Privacy, among other risks.\n\n**Gap:** The Section 3 suggested actions for managing privacy risk were not in the pages I read, so I can't summarize them here.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -568,6 +648,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1**\n\nThe Generative AI Profile identifies two primary information security risks. First, generative AI could lower the barrier to offensive cyber activity, GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. Second, it widens the attack surface, because the GAI system is itself a target. It expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2**\n\nNIST AI 100-2 treats indirect prompt injection as an attack that reaches the model through content it processes, not through the user's own input. In agent settings, an attacker can use it to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. The techniques resemble direct prompt injection. For example, an attacker may use indirect injection to substitute their own malicious instructions in place of the model's SYSTEM PROMPT.\n\nThe document groups the harms by security goal:\n\n- **Integrity:** Malicious resources can make a model produce misleading output. The document reports attacks that can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Privacy:** Injected instructions can cause data to leave the system. The document describes injection attacks that force a model to exfiltrate user-uploaded data by querying an attacker-controlled URL with the sensitive data.\n- **Availability:** Injected instructions can disrupt output. One example is an attacker who can use indirect prompt injection to instruct the model to modify its output in a way that disrupts the availability of the system.\n\nBoth documents agree that prompt injection is a security risk for generative AI systems. The Generative AI Profile mentions it briefly, while NIST AI 100-2 covers its attack techniques and effects in detail.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [
@@ -606,6 +693,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in its Section 2.4. I could not run a keyword search because the search tool failed, so I located the section through the document outline and read pages 11\u201312 directly.\n\n- **Training data as a privacy exposure:** The profile notes that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification.\n- **Opacity about sources:** It observes that most model developers do not disclose specific data sources on which models were trained, limiting user awareness of whether personally identifiable information (PII) was trained on and, if so, how it was collected.\n- **Leakage through memorization:** Models can expose training data. The profile cites cases where LLMs have revealed sensitive information (from the public domain) that was included in their training data, and notes that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference of personal information:** Models may also reconstruct details that were never supplied. They may be able to correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources.\n- **Harm from inaccurate inferences:** The profile says such inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations). It also links them to downstream effects, since predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references privacy in other sections. For example, it notes that jailbreak-style prompts that bypass output controls are relevant to Data Privacy, among other risks.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -642,6 +733,14 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (NIST AI 600-1)**\n\nThe profile names two primary risks:\n\n1. **Offensive cyber capability uplift.** The profile frames generative AI as something that could lower the barriers to, and ease the automated use of, offensive cyber tools. It notes that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n2. **A larger attack surface.** Generative AI also creates new points of attack because the models are themselves targets. The profile says the technology expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\nThe profile also says information security covers the availability of the GAI system and the integrity and (when applicable) the confidentiality of the GAI code, training data, and model weights.\n\n**Indirect prompt injection in NIST AI 100-2e2025**\n\nThe taxonomy's glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the model processes, not through the user's own prompt.\n\nThe document describes several harms that follow from it:\n\n- **Agent hijacking:** Attackers can use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Integrity attacks:** Through malicious resources, attackers can produce arbitrarily incorrect summaries of sources, \u2026 respond with attacker-specified information, or \u2026 suppress or hide certain information sources.\n- **Availability attacks:** An injected prompt can, for example, instruct the model that it is not permitted to use certain APIs.\n- **Privacy compromise:** Attackers can compel a model to leak information from restricted resources, such as a user's private data that is processed by the GenAI system.\n- **Concealment and spread:** Attackers may hide injections, for instance in non-visible portions of a resource, and the document notes that attackers may be able to use indirect prompt injection attacks to turn GenAI systems into vectors for spreading attacks.\n\nThe taxonomy also notes that current defenses are incomplete: current mitigations do not offer full protection against all attacker techniques.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -678,6 +777,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Search was unavailable, so I read pages 11 and 12 directly.\n\n- **Training data:** The profile notes that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. It adds that most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected.\n- **Memorization and leakage:** Models can expose training data. The profile describes that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It calls this data memorization and warns it may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models may also work out private details they were never given. The profile says they may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even wrong inferences can cause harm, since these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n- **Downstream effects:** The profile links these inferences to later harms. Beyond exposure, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references data privacy in its discussion of jailbreaking, noting that output restrictions can be bypassed and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nI did not read the profile's Section 3 suggested actions for privacy, so this answer covers only the risk description.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -715,6 +818,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p63",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (AI 600-1)**\n\nThe profile names two primary risks. First, generative AI can make cyberattacks easier to carry out, because it lowers the barrier to automating offensive cyber work. Reports indicate that LLMs can already find some vulnerabilities and write exploit code. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities. Reports have indicated that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\nSecond, generative AI widens the attack surface because the model itself can be attacked. The profile says it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2**\n\nThe taxonomy describes indirect prompt injection as an attack that reaches the model through outside content rather than through the attacker's own input. The core reason it works is that because GenAI models combine the data and instruction channels, attackers can leverage the data channel to affect system operations by manipulating resources with which the system interacts. The attacker can therefore act without directly interacting with the application.\n\nThe document lists three kinds of attacker goals: availability violation, integrity violation, and privacy compromise. Examples include:\n- **Privacy:** an attacker could have a model integrated into an email client forward certain emails to an attacker- controlled inbox.\n- **Integrity:** attacks can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Availability:** an injected prompt can, for instance, tell the model that it is not permitted to use certain APIs.\n\nFor mitigation, the taxonomy says that current mitigations do not offer full protection against all attacker techniques. Proposed defenses include filtering out instructions from third-party data sources and designing prompts that help the model separate trusted from untrusted data.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -751,6 +861,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. I read that section directly because the search backend was unavailable.\n\n**Training data and consent.** The profile links privacy risk to how training data is gathered. Training on personal data puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification. It also notes a transparency gap: most model developers do not disclose specific data sources, which limits user awareness of whether personally identifiable information (PII) was trained on and, if so, how it was collected.\n\n**Leakage and memorization.** Models can expose data they were trained on. During adversarial attacks, LLMs have revealed sensitive public-domain information from their training data, a problem the profile calls data memorization, which may create heightened privacy risks even for data that appears in only a few training samples.\n\n**Inference of sensitive information.** The risk goes beyond memorized text. Models may infer PII or sensitive data that was neither in the training data nor disclosed by the user, by combining information from disparate sources. The profile adds that such inferences can harm individuals even when they are inaccurate, especially when they reveal sensitive information or are used to disadvantage someone.\n\n**Downstream harms.** Predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups. The profile also cross-references data privacy from its jailbreaking discussion, noting that output restrictions can fail against novel prompts and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nThe section does not describe specific mitigations. Section 3 (\"Suggested Actions to Manage GAI Risks\") may address them, but I did not check it.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -787,6 +901,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (NIST AI 600-1)**\n\nThe Profile names two primary information security risks. First, generative AI could make offensive cyber activity easier to carry out. GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. Second, the technology widens the set of points an attacker can target, because GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2 (Adversarial Machine Learning taxonomy)**\n\nThe glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. The attacker therefore places instructions in content the system ingests, not in what the user types.\n\nThe document describes several effects:\n- **Availability:** Attackers can manipulate resources to inject prompts into GenAI models that are designed to disrupt the availability of the model for legitimate users.\n- **Integrity:** Attacks through indirect prompt injection can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Agents:** Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Harm to the user:** the document notes that it is the primary user of the model who is harmed by the compromise of the integrity, availability, or privacy of the GenAI system through an indirect prompt injection attack.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [
@@ -825,6 +946,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a risk category in its section 2.4. It says the profile's privacy concerns come mainly from training data and from what models can reveal or infer. I could not run a search because the search tool returned an error, so I read pages 11\u201312 directly.\n\n- **Training data and consent:** Training on personal data puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.\n- **Opaque data sources:** Because most model developers do not disclose specific data sources, users have limited ability to tell whether personally identifiable information (PII) was used in training and, if so, how it was collected.\n- **Leakage and memorization:** Under adversarial attacks, LLMs have revealed sensitive public-domain information from their training data, a problem the profile calls data memorization, which can create privacy risks even for data that appears in only a few training samples.\n- **Inference of personal data:** Models may also correctly infer PII or sensitive data that was neither in their training data nor disclosed by the user, by combining information from disparate sources.\n- **Harm from inferences:** Inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage the person. The profile also notes that wrong or inappropriate PII inferences can lead to secondary harms beyond information exposure, such as extortion or dignitary harm.\n- **Link to bias:** Predictive inferences based on PII or protected attributes can feed into adverse decisions that cause representational or allocative harms (see Harmful Bias and Homogenization).\n\nThe profile also cross-references data privacy in its discussion of jailbreaking, noting that output restrictions may fail against novel prompts and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content. The section's suggested actions are in the profile's Section 3, which I did not read.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -861,6 +986,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "The NIST Generative AI Profile names two primary information security risks. First, it says generative AI could discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities, which could boost attacks like hacking, malware, and phishing. Second, it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\nNIST AI 100-2 defines indirect prompt injection as a form of prompt injection carried out through the model's data sources rather than the user's input. Its glossary entry reads a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. The document also describes how attackers use it. For example, it can hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. It can also be used to make a model produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources. Attackers may also hide injections, for instance by hiding injections in non-visible portions of a resource.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -897,6 +1029,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile treats data privacy as a distinct GAI risk in Section 2.4 (pages 11\u201312). Search was unavailable, so I read those pages directly.\n\n**Training data and privacy principles:** The profile notes that the large data volumes needed for training can include personal data, and that this use raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. It adds that developers rarely reveal their sources, so users often cannot tell whether personal information was included or how it was gathered (most model developers do not disclose speci\ufb01c data sources on which models were trained).\n\n**Leakage and memorization:** The profile describes models exposing data they were trained on. Under adversarial attacks, LLMs have surfaced training content, a problem it calls data memorization, which may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n**Inference of personal data:** Models can also reach personal information they were never given. The profile says they may correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even inaccurate inferences can harm people, particularly when they expose sensitive details or feed into decisions that disadvantage someone (see These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations)). The profile also links these inferences to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references data privacy in its discussion of jailbreaking, noting that output restrictions may still fail against novel prompts, a concern it ties to Data Privacy among other risks (see this approach may still produce harmful recommendations in response to other less-explicit, novel prompts).",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -933,6 +1069,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1**\n\nThe Generative AI Profile says that GAI-based systems present two primary information security risks:\n\n1. **Lower barriers to offensive cyber activity.** GAI could find new cybersecurity risks or make automated offensive attacks easier to run. Offensive capabilities it advances may augment cybersecurity attacks such as hacking, malware, and phishing.\n2. **A larger attack surface.** The profile notes that GAI expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2**\n\nThe glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the model processes, not through the user's own prompt.\n\nThe taxonomy describes how this is used against systems. Attackers can hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Its described effects include producing arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources. It can also disrupt availability, for example by instructing the model that it is not permitted to use certain APIs.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -969,6 +1112,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. I read that section directly because the search tool was unavailable.\n\n**Privacy principles at stake:** The profile says the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification.\n\n**Opaque training data:** It notes that most model developers do not disclose specific data sources on which models were trained, limiting user awareness of whether personally identifiable information (PII) was trained on and, if so, how it was collected.\n\n**Leakage and memorization:** Models can expose data they were trained on. The profile reports that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.\n\n**Inference of sensitive data:** Privacy risk is not limited to memorized content. GAI models may be able to correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Inaccurate inferences still matter: these inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n\n**Downstream harms:** The profile links these harms to decisions about people. Predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references data privacy in its discussion of jailbreaking, noting that output restrictions can fail against novel prompts, which is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content. The Data Privacy section does not give a full list of mitigations in the pages I read. The profile's suggested actions in Section 3 may cover them, but I did not check those pages.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1005,6 +1152,14 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in the NIST Generative AI Profile (NIST AI 600-1)**\n\nThe profile names two primary risks. First, generative AI could lower the cost of offensive cyber operations, so it could find or enable new cyber threats. GAI-based systems present two primary information security risks: GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities; The profile gives examples, such as models that are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\nSecond, the technology itself becomes a target. It widens the attack surface because the models can be attacked: it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. The profile also says that protecting these systems means keeping the availability of the GAI system and the integrity and (when applicable) the con\ufb01dentiality of the GAI code, training data, and model weights.\n\n**Indirect prompt injection in NIST AI 100-2 (adversarial ML taxonomy)**\n\nNIST AI 100-2 defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the system consumes, not through the user's own prompt.\n\nThe taxonomy describes the harm this can cause. Attackers can hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. It can also be used for availability attacks, such as instructing the model that it is not permitted to use certain APIs, and for integrity attacks, such as causing a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n\nFor mitigation, the taxonomy notes that current mitigations do not offer full protection against all attacker techniques. Proposed measures include filtering out instructions from third-party data sources and designing prompts that help models separate trusted and untrusted data.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1041,6 +1196,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in section 2.4. Its main concerns are these:\n\n- **Training data and consent:** The profile notes that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. It adds that most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on.\n- **Memorization and leakage:** Adversarial prompting can draw out training data. The profile reports that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data.\n- **Inference of personal data:** Models can go beyond what they were trained on. The profile warns that GAI models may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources.\n- **Harm from inaccurate inferences:** Even wrong inferences can cause damage. These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and the profile says wrong inferences about PII can contribute to downstream or secondary harmful impacts. One example given is that predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references privacy in other sections. For example, it notes that jailbreaking-related output risks are relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nNote: the search tool was unavailable, so I read pages 11\u201312 directly from the document rather than running a search. The section's suggested actions are on later pages, which I did not review, so this answer covers only the risk description.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1077,6 +1236,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "The NIST Generative AI Profile names two information security risks. The first is that GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. The second is that GAI expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning. The profile also notes that offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.\n\nNIST AI 100-2 defines indirect prompt injection in its glossary as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. The document describes its use against agents: attackers can use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. It also describes effects on availability, where attackers can manipulate resources to inject prompts into GenAI models that are designed to disrupt the availability of the model for legitimate users. On integrity, researchers have demonstrated attacks through indirect prompt injection that can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1113,6 +1279,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a risk category in its section 2.4, and it links the risk to how training data is collected and to what models can reveal. I could not run a keyword search because the search tool was unavailable, so I read pages 11\u201312 directly.\n\n- **Training data and privacy principles:** The profile notes that using personal data for GAI training raises risks to widely accepted privacy principles, including transparency, individual participation (including consent), and purpose specification.\n- **Opacity about sources:** Most model developers do not disclose specific data sources, which limits user awareness of whether personally identifiable information was trained on.\n- **Memorization and leakage:** The profile reports that during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, a problem it calls data memorization, which may create heightened privacy risk even for data that appears in only a few training samples.\n- **Inference of personal data:** Models can also reach beyond their training data. They may infer PII or sensitive data that was neither in the training data nor disclosed by the user, by combining information from disparate sources. Even inaccurate inferences can harm people, especially if they reveal information the individual considers sensitive or that is used to disadvantage or harm them.\n- **Downstream harm:** Predictive inferences based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms.\n\nThe profile also ties data privacy to other risk areas. For example, its discussion of jailbreaking notes that output restrictions can fail, and it cross-references Data Privacy alongside Information Security. I did not review the suggested-actions section (section 3), so this answer covers only the risk description, not the mitigation guidance.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1150,6 +1320,14 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p63",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Part 1: Information security risks in the NIST Generative AI Profile**\n\nThe Profile identifies two main information security risks. First, generative AI could lower the barrier to cyberattacks, which GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities. The Profile notes that offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing. Second, generative AI makes the attack surface larger, because the model itself can be attacked. The Profile says GAI expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Part 2: How NIST AI 100-2 describes indirect prompt injection**\n\nNIST AI 100-2 treats indirect prompt injection as an attack that reaches the model through outside content rather than through the user. It explains that because GenAI models combine the data and instruction channels, attackers can leverage the data channel to affect system operations by manipulating resources with which the system interacts. The document names three goal categories for these attacks: availability violation, integrity violation, and privacy compromise.\n\nExamples in the document include:\n- **Availability:** An indirectly injected prompt can instruct the model to perform a time-consuming task prior to answering the request.\n- **Integrity:** Attacks through indirect prompt injection can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Privacy:** A model integrated as part of an email client could be prompted to forward certain emails to an attacker-controlled inbox.\n- **Agents and spreading:** Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n\nThe document also lists mitigations, such as filtering out instructions from third-party data sources. It cautions that current mitigations do not offer full protection against all attacker techniques.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1186,6 +1364,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (document 2) treats data privacy as a distinct GAI risk, section 2.4. I couldn't use search because the backend failed, so this comes from reading pages 11\u201312 directly.\n\n- **Training data:** The profile notes that the use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation. It adds that developers rarely reveal their data sources, so users often cannot tell whether personal information was included.\n- **Memorization and leakage:** Models can expose what they were trained on. Under adversarial attacks, LLMs have surfaced sensitive public-domain information from their training data, and the profile calls this data memorization, which can create heightened privacy exposure even for data that appeared in only a few training samples (data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples).\n- **Inference:** Models may also produce personal information they were never given by combining data from different sources (stitching together information from disparate sources). The profile says these inferences can harm people even when they are wrong, especially when they reveal sensitive information or are used against someone.\n- **Downstream effects:** Inferred personal data can feed into decisions that disadvantage people. The profile links this to bias, noting that such inferences can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also cross-references privacy in other risk areas, including jailbreaking (section 2.1) and information security.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1222,6 +1404,12 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**NIST AI 600-1 (Generative AI Profile): two information security risks**\n\nThe Profile says that GAI-based systems present two primary information security risks. The first is that GAI could make offensive cyber activity easier. The second is that GAI widens the attack surface, since the GAI system itself can be attacked. The Profile notes that GAI is vulnerable to attacks like prompt injection or data poisoning. It adds that offensive capabilities advanced by GAI may augment cybersecurity attacks such as hacking, malware, and phishing. It also reports that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n\n**NIST AI 100-2 E2025 (Adversarial Machine Learning): indirect prompt injection**\n\nThe glossary defines indirect prompt injection as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instruction arrives through content the model processes, not through what the user types.\n\nThe report describes the attacker's goal as taking over the model's task. Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task. Techniques can resemble direct attacks: using a JAILBREAK that allows the attacker to substitute their own malicious instructions in place of the model's SYSTEM PROMPT. In retrieval-augmented generation (RAG) systems, the report also covers knowledge base poisoning, where the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries. Attackers may also hide their injections, for example by hiding injections in non-visible portions of a resource.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1258,6 +1446,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Its main points, drawn from pages 11 and 12, are:\n\n- **Training data:** Training can draw on personal data, and that use creates tension with privacy principles. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.\n- **Opacity about sources:** Because developers rarely disclose their data sources, users often cannot tell whether PII was included or how it was gathered. Models may leak, generate, or correctly infer sensitive information about individuals.\n- **Memorization:** The profile notes that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It adds that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference:** Models can infer private details that were never in their training data by combining information from different sources. Even inaccurate inferences can cause harm, especially when they reveal sensitive information or are used to disadvantage someone. Beyond harms from information exposure (such as extortion or dignitary harm), wrong or inappropriate inferences of PII can contribute to downstream or secondary harmful impacts.\n- **Links to other risks:** Privacy is connected to bias. Inferences drawn from PII or protected attributes can feed into adverse decisions, as discussed under Harmful Bias and Homogenization (predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups).\n\nNote: The search tool was unavailable, so I located this section through the document outline and read pages 11\u201312 directly. I did not run a broader search, so this covers Section 2.4 only and not other parts of the profile that may mention privacy, such as the suggested actions in Section 3.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1294,6 +1486,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1 (Generative AI Profile)**\n\nThe Profile names two primary risks. The first is that generative AI could lower the barrier to offensive cyber activity. GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. Offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing.\n\nThe second is that these systems widen the attack surface, because the models are themselves targets. GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2 (Adversarial Machine Learning)**\n\nThe taxonomy treats indirect prompt injection as its own attack class, covered in section 3.4 with subsections on availability, integrity, and privacy compromise. Its core idea is that the attacker's instructions reach the model through content the system takes in, not through the user's own input. For example, attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n\nThe document gives examples of each effect:\n- **Availability:** an attacker can instruct the model to modify its output in a way that disrupts the availability of the system.\n- **Integrity:** researchers have demonstrated attacks through indirect prompt injection that can cause a GenAI system to produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Privacy:** Attackers can use prompt injection attacks to cause a GenAI system to leak private information from the restricted resources it can access.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [
@@ -1332,6 +1531,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (Document 2) treats data privacy as a risk section of its own, section 2.4 on page 11. I could not run a search because the search backend returned an error, so I read the section directly.\n\n- **Training data as a source of exposure:** The profile says that GAI system training requires large volumes of data, which in some cases may include personal data. It adds that using such data raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose specification.\n- **Transparency gaps:** Most model developers do not disclose specific data sources on which models were trained, limiting user awareness of whether personally identifiable information (PII) was trained on and, if so, how it was collected.\n- **Leakage and memorization:** Models can expose what they were trained on. The profile notes that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It calls this data memorization and warns it may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference of personal data:** The profile also flags that models may correctly infer PII or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even inaccurate inferences can cause harm, since they can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n- **Downstream harms:** Beyond exposure, predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nData privacy also appears as a related concern in other sections. On page 11, the profile notes that restrictions on model outputs, which can be bypassed through jailbreaking, are also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1368,6 +1571,14 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 100-2 E2025: Adv p66",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "The NIST Generative AI Profile names two primary information security risks, and NIST AI 100-2 defines indirect prompt injection and describes how it is used.\n\n**1. Two information security risks in the GenAI Profile (NIST AI 600-1)**\n\n- **Lower barriers to offensive cyber activity:** The profile warns that GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of offensive capabilities. It notes that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them.\n- **A larger attack surface:** GenAI also widens what attackers can target, because GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**2. Indirect prompt injection in NIST AI 100-2**\n\n- **Definition:** The glossary describes it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. In other words, the malicious instructions arrive through content the model reads, not through what the user types.\n- **Agent hijacking:** Attackers can use it to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Integrity effects:** The attacks can make a system produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Availability and privacy effects:** Attackers can use it to disrupt service or leak data. For example, the document describes attackers who could use indirect prompt injection attacks to compel a model to leak information from restricted resources.\n- **Mitigations:** The document says current mitigations do not offer full protection against all attacker techniques. Proposed measures include filtering out instructions from third-party data sources, and designing prompts to help aid LLMs in separating trusted and untrusted data.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1404,6 +1615,10 @@
     "NIST AI 600-1: AI Risk M p11"
    ],
    "documents_cited": 1,
+   "cited_pages": [
+    "NIST AI 600-1: AI Risk M p11"
+   ],
+   "answer": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk in Section 2.4. Its main concerns are:\n\n- **Training data and core privacy principles.** Training on personal data may strain the principles of transparency, consent, and purpose limits. The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.\n- **Limited visibility into sources.** Because developers rarely publish their data sources, users often cannot tell whether personal data was used or how it was gathered. Most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected.\n- **Memorization and leakage.** Attackers can pull back information the model stored during training. The profile notes that during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. It adds that this may pose exacerbated privacy risks even for data present only in a small number of training samples.\n- **Inference of personal data.** Models can work out personal details that were never in their training data or supplied by the user. GAI models may be able to correctly infer P II or sensitive data that was not in their training data nor disclosed by the user by stitching together information from disparate sources. Even wrong inferences can cause harm, because they can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations).\n- **Downstream harm.** Inferred personal data can feed into decisions that disadvantage people. Predictive inferences made by GAI models based on PII or protected attributes can contribute to adverse decisions, leading to representational or allocative harms to individuals or groups.\n\nThe profile also links privacy to jailbreaking. It notes that output restrictions can fail against novel prompts and that this is also relevant to CBRN Information or Capabilities, Data Privacy, Information Security, and Obscene, Degrading and/or Abusive Content.\n\nThe search tool was unavailable, so I located this content through the document outline and read pages 11\u201312 directly. I did not review the suggested actions for managing privacy risk in Section 3, which would be the next place to look if you need mitigation guidance.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
@@ -1440,6 +1655,13 @@
     "NIST AI 600-1: AI Risk M p14"
    ],
    "documents_cited": 2,
+   "cited_pages": [
+    "NIST AI 100-2 E2025: Adv p123",
+    "NIST AI 100-2 E2025: Adv p64",
+    "NIST AI 100-2 E2025: Adv p65",
+    "NIST AI 600-1: AI Risk M p14"
+   ],
+   "answer": "**Information security risks in NIST AI 600-1:** The Profile names two primary risks. First, generative AI could enable new cybersecurity threats by making offensive capabilities easier to use automatically GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of o\ufb00ensive capabilities. Second, the technology widens what can be attacked, because the models are themselves targets it expands the available attack surface, as GAI itself is vulnerable to attacks like prompt injection or data poisoning.\n\n**Indirect prompt injection in NIST AI 100-2:** The glossary defines it as a type of PROMPT INJECTION executed through RESOURCE CONTROL rather than through user-provided input as in a DIRECT PROMPT INJECTION. The report describes several ways this plays out:\n\n- **Hijacking agents:** Attackers may also use indirect prompt injection attacks to hijack a GenAI AGENT, causing it to perform a malicious, attacker-specified task instead of (or in addition to) its intended, user-provided task.\n- **Corrupted outputs:** Through malicious resources, attackers can make a system produce arbitrarily incorrect summaries of sources, to respond with attacker-specified information, or to suppress or hide certain information sources.\n- **Availability disruption:** An attacker can have the model alter its output so that it disrupts the availability of the system.\n- **Retrieval poisoning:** In retrieval-augmented generation, the knowledge database of a RAG system can be poisoned to achieved targeted LLM output to specific user queries.\n- **Concealment:** Attackers may use techniques to hide or obfuscate their injections, such as by hiding injections in non-visible portions of a resource.",
    "clarification": null,
    "asked_in_text": false,
    "notes": [],
