@@ -68,13 +68,22 @@ a {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(260px, 340px) 1fr;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) minmax(280px, 380px);
   gap: 16px;
   padding: 16px 24px;
   align-items: start;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  }
+  .trace {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
   .layout {
     grid-template-columns: 1fr;
     padding: 12px;
@@ -192,4 +201,202 @@ a {
 
 .empty {
   min-height: 240px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+button {
+  font: inherit;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Conversation */
+.runs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.run {
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+}
+
+.run.selected .run-question {
+  border-left-color: var(--accent);
+}
+
+.run-question {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--accent-soft);
+  border: none;
+  border-left: 4px solid transparent;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.badge-run-running,
+.badge-run-needs_clarification {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.badge-run-complete {
+  color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.badge-run-incomplete,
+.badge-run-failed,
+.badge-run-abandoned {
+  color: var(--bad);
+  background: var(--bad-soft);
+}
+
+.answer {
+  margin-top: 8px;
+}
+
+.answer-text p,
+.answer-text ul {
+  margin: 0 0 10px;
+}
+
+.cite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4em;
+  height: 1.4em;
+  margin: 0 2px;
+  padding: 0 4px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: super;
+  cursor: pointer;
+}
+
+.cite.static {
+  vertical-align: baseline;
+  cursor: default;
+}
+
+.source-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fbfaff;
+}
+
+.source-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.source-title {
+  font-weight: 600;
+}
+
+.source-card blockquote {
+  margin: 8px 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
+
+.composer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: 12px;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: vertical;
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.composer button {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.composer button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Trace */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  border-left: 3px solid var(--border);
+  padding: 6px 0 8px 10px;
+  margin-bottom: 6px;
+}
+
+.step.final {
+  border-left-color: var(--accent);
+}
+
+.step-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.step-input {
+  display: block;
+  font-size: 0.8rem;
+  background: #f3f1f6;
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+.evidence {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
 }
