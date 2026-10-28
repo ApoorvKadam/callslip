@@ -1,0 +1,18 @@
+# OpenShift: Routes instead of an Ingress, and no fixed user ids, because the restricted
+# security context constraint assigns each pod a UID from the project's range.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - routes.yaml
+patches:
+  - target: {kind: StatefulSet, name: postgres}
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/securityContext/runAsUser
+      - op: remove
+        path: /spec/template/spec/securityContext/fsGroup
+  - target: {kind: Deployment, name: "redis|api|worker"}
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/securityContext/runAsUser

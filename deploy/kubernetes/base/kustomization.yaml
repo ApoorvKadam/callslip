@@ -1,0 +1,34 @@
+# The whole stack as Kubernetes resources. Render with `kubectl kustomize overlays/ingress`
+# (or overlays/openshift); see docs/kubernetes.md.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: callslip
+    includeSelectors: false
+
+resources:
+  - postgres.yaml
+  - redis.yaml
+  - api.yaml
+  - worker.yaml
+  - frontend.yaml
+  - network-policy.yaml
+
+configMapGenerator:
+  - name: callslip-settings
+    literals:
+      - POSTGRES_USER=rag
+      - POSTGRES_DB=rag
+      - REDIS_URL=redis://redis:6379/0
+      - LOG_LEVEL=INFO
+      - ANSWER_MODEL=claude-haiku-5-5
+
+images:
+  - name: callslip-backend
+    newName: registry.example.edu/callslip-backend
+    newTag: dev # set per release (docs/kubernetes.md)
+  - name: callslip-frontend
+    newName: registry.example.edu/callslip-frontend
+    newTag: dev # set per release (docs/kubernetes.md)
