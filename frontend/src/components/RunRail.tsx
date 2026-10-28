@@ -168,6 +168,28 @@ function wherePassages(evidence: Evidence[]): string {
     .join("; ");
 }
 
+/** What a tool step did, in a few words: "Searched NIST AI 100-1", "Read OMB M-25-21, pages 4 to 6". */
+export function toolTitle(d: Record<string, unknown>): string {
+  const tool = String(d.tool);
+  const input = (d.input ?? {}) as Record<string, unknown>;
+  const evidence = (d.evidence as Evidence[] | undefined) ?? [];
+  if (tool === "search_documents") {
+    // Name the documents a filtered search was limited to, when its results show them all.
+    const ids = (input.document_ids as number[] | undefined) ?? [];
+    const docs = [...new Set(evidence.map((e) => shortCode(e.title)))];
+    if (ids.length === 0) return "Searched all documents";
+    if (docs.length === ids.length) return `Searched ${docs.join(", ")}`;
+    return `Searched ${count(ids.length, "document")}`;
+  }
+  if (tool === "read_document_section") {
+    const doc = evidence[0] ? shortCode(evidence[0].title) : `document ${input.document_id}`;
+    return `Read ${doc}, pages ${input.page_start} to ${input.page_end}`;
+  }
+  if (tool === "list_documents") return "Listed the documents";
+  if (tool === "ask_clarification") return "Clarifying question, not asked";
+  return tool;
+}
+
 function ToolStep({ d }: { d: Record<string, unknown> }) {
   const tool = String(d.tool);
   const input = (d.input ?? {}) as Record<string, unknown>;
@@ -177,24 +199,8 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
   // Reasons for a failed call that its summary does not already give.
   const reasons = [...new Set(retries)].filter((r) => !String(d.summary ?? "").includes(r));
 
-  let title = tool;
-  let request: string | null = null;
-  if (tool === "search_documents") {
-    // Name the documents a filtered search was limited to, when its results show them all.
-    const ids = (input.document_ids as number[] | undefined) ?? [];
-    const docs = [...new Set(evidence.map((e) => shortCode(e.title)))];
-    if (ids.length === 0) title = "Searched all documents";
-    else if (docs.length === ids.length) title = `Searched ${docs.join(", ")}`;
-    else title = `Searched ${count(ids.length, "document")}`;
-    request = String(input.query ?? "");
-  } else if (tool === "read_document_section") {
-    const doc = evidence[0] ? shortCode(evidence[0].title) : `document ${input.document_id}`;
-    title = `Read ${doc}, pages ${input.page_start} to ${input.page_end}`;
-  } else if (tool === "list_documents") {
-    title = "Listed the documents";
-  } else if (tool === "ask_clarification") {
-    title = "Clarifying question, not asked";
-  }
+  const title = toolTitle(d);
+  const request = tool === "search_documents" ? String(input.query ?? "") : null;
 
   const marks: [string, string][] = [];
   if (retries.length > 0 && status === "ok") marks.push([`Retried after: ${retries[0]}`, "mark mark-warn"]);

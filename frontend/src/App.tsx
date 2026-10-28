@@ -20,10 +20,15 @@ import {
   runEventsUrl,
 } from "./api";
 import { AccountMenu } from "./components/AccountMenu";
-import { Conversation, type LiveAnswer, type PendingClarification } from "./components/Conversation";
+import {
+  type Activity,
+  Conversation,
+  type LiveAnswer,
+  type PendingClarification,
+} from "./components/Conversation";
 import { ConversationList } from "./components/ConversationList";
 import { DocumentsPanel } from "./components/DocumentsPanel";
-import { RunRail, type RailTab } from "./components/RunRail";
+import { RunRail, type RailTab, toolTitle } from "./components/RunRail";
 import { MODE_HELP } from "./modes";
 
 const SESSION_KEY = "callslip.session";
@@ -212,14 +217,23 @@ export default function App() {
       continue;
     }
     if (run.answer || list.some((e) => e.type === "run_finished")) continue;
+    // Until the answer is being written, show what the run is doing: its tool calls so far.
+    const activity: Activity[] = list
+      .filter((e) => e.type === "tool_call")
+      .map((e) => ({
+        title: toolTitle(e.data),
+        failed: !["ok", "no_results"].includes(String(e.data.status)),
+      }));
     const deltas = list.filter((e) => e.type === "answer_delta");
-    if (deltas.length === 0) continue;
-    const turn = Math.max(...deltas.map((e) => Number(e.data.turn)));
+    const turn = deltas.length ? Math.max(...deltas.map((e) => Number(e.data.turn))) : 0;
     const ended = list.some(
       (e) =>
         e.type === "model_call" && Number(e.data.turn) === turn && e.data.stop_reason === "tool_use",
     );
-    if (ended) continue;
+    if (deltas.length === 0 || ended) {
+      if (run.status === "running") live[run.id] = { activity };
+      continue;
+    }
     const draft = deltas
       .filter((e) => Number(e.data.turn) === turn)
       .map((e) => String(e.data.text))
