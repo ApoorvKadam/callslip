@@ -14,9 +14,9 @@ import {
 } from "./api";
 import { Conversation, type PendingClarification } from "./components/Conversation";
 import { DocumentsPanel } from "./components/DocumentsPanel";
-import { TracePanel } from "./components/TracePanel";
+import { RunRail, type RailTab } from "./components/RunRail";
 
-const SESSION_KEY = "agentic-rag.session";
+const SESSION_KEY = "callslip.session";
 const EVENT_TYPES = [
   "run_started",
   "tool_call",
@@ -27,6 +27,12 @@ const EVENT_TYPES = [
   "answer",
   "run_finished",
 ];
+
+// A citation in one run's answer: hovering highlights it, selecting also opens it in Sources.
+export interface CiteRef {
+  runId: string;
+  n: number;
+}
 
 function errorText(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
@@ -40,6 +46,9 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const lastReply = useRef<{ toolUseId: string; text: string; key: string } | null>(null);
   const [mode, setMode] = useState<Mode>("agent");
+  const [tab, setTab] = useState<RailTab>("sources");
+  const [hovered, setHovered] = useState<CiteRef | null>(null);
+  const [chosen, setChosen] = useState<CiteRef | null>(null);
   const streams = useRef<Record<string, EventSource>>({});
 
   const replaceRun = useCallback((run: Run) => {
@@ -148,6 +157,7 @@ export default function App() {
         const run = await ask(sessionId, text, mode);
         setRuns((all) => [...all, run]);
         setSelectedId(run.id);
+        setTab("steps"); // a new question: watch the agent work
         follow(run.id);
       }
       return true;
@@ -178,34 +188,91 @@ export default function App() {
     if (!events[id]) await refreshRun(id);
   }
 
+  function onChoose(ref: CiteRef) {
+    setChosen(ref);
+    setTab("sources");
+    if (ref.runId !== selectedId) void onSelect(ref.runId);
+  }
+
+  async function onNewSession() {
+    setError(null);
+    try {
+      await startSession();
+      setChosen(null);
+      setHovered(null);
+    } catch (e) {
+      setError(`Could not start a new conversation: ${errorText(e)}`);
+    }
+  }
+
   const selected = runs.find((r) => r.id === selectedId) ?? null;
+
+  const active = hovered ?? chosen;
 
   return (
     <div className="app">
-      <header className="topbar">
-        <h1>Agentic RAG</h1>
-        <p className="muted">Ask questions across your PDFs. Every answer cites document and page.</p>
+      <header className="bar">
+        <span className="wordmark">Callslip</span>
+        <div className="bar-actions">
+          <fieldset className="segmented" disabled={!!pending}>
+            <legend className="visually-hidden">Answering mode</legend>
+            <label>
+              <input
+                type="radio"
+                name="mode"
+                checked={mode === "agent"}
+                onChange={() => setMode("agent")}
+              />
+              Agent
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="mode"
+                checked={mode === "baseline"}
+                onChange={() => setMode("baseline")}
+              />
+              Single pass
+            </label>
+          </fieldset>
+          <button type="button" className="btn" onClick={() => void onNewSession()}>
+            New conversation
+          </button>
+        </div>
       </header>
       <div className="layout">
-        <aside className="sidebar">
+        <aside className="docs" aria-label="Documents">
           <DocumentsPanel />
         </aside>
-        <main className="main">
+        <main className="talk">
           <Conversation
             runs={runs}
             selectedId={selectedId}
             onSelect={(id) => void onSelect(id)}
             onAsk={onAsk}
-            mode={mode}
-            onMode={setMode}
             pending={pending}
             onSkip={() => void onSkip()}
-            onNewSession={() => void startSession()}
             error={error}
+            active={active}
+            onHover={setHovered}
+            onChoose={onChoose}
+            onShowSteps={(id) => {
+              setTab("steps");
+              void onSelect(id);
+            }}
           />
         </main>
-        <aside className="trace">
-          <TracePanel run={selected} events={selected ? (events[selected.id] ?? []) : []} />
+        <aside className="rail" aria-label="Sources and steps">
+          <RunRail
+            run={selected}
+            events={selected ? (events[selected.id] ?? []) : []}
+            tab={tab}
+            onTab={setTab}
+            active={active}
+            chosen={chosen}
+            onHover={setHovered}
+            onChoose={onChoose}
+          />
         </aside>
       </div>
     </div>
