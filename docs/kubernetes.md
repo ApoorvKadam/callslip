@@ -8,6 +8,7 @@ The same images that Docker Compose runs, as Kubernetes resources: `deploy/kuber
 | `overlays/ingress/` | the base plus an Ingress over TLS: `/api` to the API, everything else to the frontend |
 | `overlays/openshift/` | the base plus two Routes on one host, and no fixed user ids (OpenShift assigns them) |
 | `overlays/kind/` | the ingress overlay on a local [kind](https://kind.sigs.k8s.io/) cluster: locally built images and one replica of each; `cluster.yaml` makes the cluster |
+| `../terraform/` | Terraform that makes the namespace and Secrets, then applies any of the overlays |
 
 ## Deploy
 
@@ -101,6 +102,23 @@ Run on 2026-10-28 with kind 0.33 (Kubernetes 1.37) and ingress-nginx 1.15.1. Eve
 | `/metrics` | answers inside the API pod; through the ingress the path returns the web page |
 
 Two fixes came from this run. The ingestion worker was killed for memory in a loop: it embedded 32 passages at a time and reached 1.36 GB, which Compose had hidden by letting it swap. It now embeds 8 at a time. The API and frontend now pause 5 s before stopping, so the ingress stops sending them requests first.
+
+## Apply with Terraform
+
+`deploy/terraform/` deploys an overlay with one command and removes it with another. Terraform adds what the overlays leave out: the namespace, a generated database password and the two Secrets. Then it applies every resource of the overlay in order. It waits for each workload to be ready, so a release that never becomes ready fails the apply.
+
+```bash
+cd deploy/terraform
+cp terraform.tfvars.example terraform.tfvars   # the cluster context, the API key, the certificate
+terraform init
+terraform apply
+terraform plan      # afterwards: "No changes"
+terraform destroy   # removes everything it made
+```
+
+It uses the [kbst/kustomization](https://registry.terraform.io/providers/kbst/kustomization) provider, which builds the overlay with kustomize, so the YAML stays the one description of the workloads. On OpenShift, set `overlay = "openshift"` and `create_namespace = false`, because the project already exists. The state file holds the generated password and the API key, so git ignores it; a team would keep it in an encrypted remote backend. The Secrets have fixed names, so after changing the key, restart the API and run workers (`kubectl rollout restart deploy/api deploy/runner`).
+
+On the kind cluster (Terraform 1.17.1): `terraform apply` made 19 resources in 34 s, with every pod ready. A second `terraform plan` found no changes. The corpus then loaded through the ingress, and the 27-step browser check passed 27 of 27. `terraform destroy` removed all 19 resources in 35 s, the namespace and its volume with them.
 
 ## What is checked, and what is not
 
