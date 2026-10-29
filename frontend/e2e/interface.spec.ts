@@ -92,6 +92,9 @@ test("a wrong password and a file that is not a PDF are explained", async ({ pag
   );
   await page.keyboard.press("Escape");
 
+  // A public deployment takes uploads only from accounts.
+  const me = await (await page.request.get("/api/auth/me")).json();
+  if (me.guest_uploads === false) await createAccount(page, `notes-${Date.now()}@callslip.test`);
   await page.locator("input[type=file]").setInputFiles({
     name: "notes.pdf",
     mimeType: "application/pdf",
