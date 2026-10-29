@@ -163,6 +163,9 @@ export interface Run {
   finished_at: string | null;
   // Both halves of a comparison share one id; any other run has none.
   compare_id: string | null;
+  // The clarifying question this run asked, and the user's reply, when it asked one.
+  asked?: string | null;
+  replied?: string | null;
   events?: RunEvent[];
 }
 

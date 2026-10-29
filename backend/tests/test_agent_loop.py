@@ -458,3 +458,13 @@ async def test_a_clarification_too_long_to_ask_shows_in_the_steps(tools):  # noq
         (1, "ask_clarification", "invalid_input")
     ]
     assert "500 characters" in calls[0]["summary"]
+
+
+def test_clarification_options_drop_document_numbers():
+    from app.agent.loop import reader_option
+
+    assert reader_option("Accountability in the OMB memos (6, 7, 8, 9)") == (
+        "Accountability in the OMB memos"
+    )
+    assert reader_option("OMB M-24-10 (document 3)") == "OMB M-24-10"
+    assert reader_option("Section 2 (Governance)") == "Section 2 (Governance)"

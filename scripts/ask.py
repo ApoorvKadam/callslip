@@ -32,7 +32,17 @@ class Client:
             with self.opener.open(req, timeout=60) as resp:
                 return resp.status, json.loads(resp.read() or b"null")
         except urllib.error.HTTPError as err:
-            return err.code, json.loads(err.read() or b"null")
+            return err.code, error_body(err)
+
+
+def error_body(err: urllib.error.HTTPError):
+    """The API's JSON error, or, from a proxy's HTML error page, its first line as the detail."""
+    raw = err.read() or b"null"
+    try:
+        return json.loads(raw)
+    except ValueError:
+        text = raw.decode(errors="replace").strip()
+        return {"detail": text.splitlines()[0][:200] if text else f"HTTP {err.code}, empty body"}
 
 
 def main() -> int:

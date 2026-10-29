@@ -39,11 +39,14 @@ ASKED_IN_TEXT = re.compile(
 
 def wait(client: Client, run: dict, timeout: int) -> dict:
     started = time.monotonic()
+    run_id = run["id"]
     while run["status"] == "running" and time.monotonic() - started < timeout:
         time.sleep(1)
-        _, run = client.call("GET", f"/api/runs/{run['id']}")
-    _, run = client.call("GET", f"/api/runs/{run['id']}")
-    return run
+        status, latest = client.call("GET", f"/api/runs/{run_id}")
+        if status == 200:  # a proxy restart answers 502 for a moment; keep waiting through it
+            run = latest
+    status, latest = client.call("GET", f"/api/runs/{run_id}")
+    return latest if status == 200 else run
 
 
 def ask(client: Client, session: str, question: str, mode: str, faults: dict | None) -> dict:

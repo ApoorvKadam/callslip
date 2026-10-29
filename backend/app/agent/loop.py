@@ -21,6 +21,7 @@ can be rebuilt from the database exactly as the model saw it.
 import asyncio
 import json
 import logging
+import re
 import time
 
 import anthropic
@@ -347,11 +348,23 @@ async def tool_event(
     )
 
 
+# Document numbers mean nothing to a reader: "Accountability in the OMB memos (6, 7, 8, 9)".
+_NUMBERS_AT_END = re.compile(
+    r"\s*\((?:documents?|docs?)?\s*#?\d+(?:\s*(?:,|and)\s*#?\d+)*\)\s*$", re.I
+)
+
+
+def reader_option(option: str) -> str:
+    """An option as a person reads it, without the document numbers the model may append."""
+    return _NUMBERS_AT_END.sub("", option).strip() or option
+
+
 async def pause_for_clarification(ctx: RunContext, tool_use_id: str, args: ClarificationArgs):
+    options = [reader_option(o) for o in args.options or []]
     # Event first, status last: the event stream stops once the run is no longer running.
     await ctx.emit(
         "clarification",
-        {"question": args.question, "options": args.options or [], "tool_use_id": tool_use_id},
+        {"question": args.question, "options": options, "tool_use_id": tool_use_id},
     )
     await ctx.store.update(
         ctx.run_id,

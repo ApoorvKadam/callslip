@@ -219,6 +219,7 @@ export function Conversation(props: Props) {
               answer={props.live[run.id]?.answer ?? run.answer}
               onShowSteps={() => props.onShowSteps(run.id)}
             />
+            <Clarified run={run} />
             {run.status_reason && run.status !== "complete" && (
               <p className="meta">{run.status_reason}</p>
             )}
@@ -270,6 +271,22 @@ export function Conversation(props: Props) {
         </p>
       </form>
     </>
+  );
+}
+
+// Once the user has answered a clarifying question, the exchange keeps both, so the answer that
+// follows reads in context.
+function Clarified({ run }: { run: Run }) {
+  if (!run.asked || !run.replied) return null;
+  return (
+    <div className="clarified">
+      <p>
+        <span className="label">Asked you</span> {run.asked}
+      </p>
+      <p>
+        <span className="label">Your reply</span> {run.replied}
+      </p>
+    </div>
   );
 }
 
@@ -338,6 +355,7 @@ function Comparison(
               answer={props.live[run.id]?.answer ?? run.answer}
               onShowSteps={() => props.onShowSteps(run.id)}
             />
+            <Clarified run={run} />
             {run.status_reason && run.status !== "complete" && (
               <p className="meta">{run.status_reason}</p>
             )}

@@ -14,7 +14,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from psycopg.rows import dict_row
 
-from app.api.sessions import RUN_COLUMNS, Owner, Pool
+from app.api.sessions import RUN_COLUMNS, Owner, Pool, clarify_fields
 
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 
@@ -26,7 +26,7 @@ async def owned_run(pool, run_id: UUID, owner: str) -> dict:
     async with pool.connection() as conn:
         cur = conn.cursor(row_factory=dict_row)
         await cur.execute(
-            f"SELECT {', '.join(f'r.{c}' for c in RUN_COLUMNS)}"
+            f"SELECT {', '.join(f'r.{c}' for c in RUN_COLUMNS)}, {clarify_fields('r')}"
             " FROM runs r JOIN sessions s ON s.id = r.session_id"
             " WHERE r.id = %s AND s.owner_hash = %s",
             (run_id, owner),
