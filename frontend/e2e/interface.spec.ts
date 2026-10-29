@@ -59,6 +59,8 @@ test("an upload stays private to its account", async ({ page }, info) => {
   const mine = page.locator(".doc-own", { hasText: TITLE });
   await expect(mine).toBeVisible();
   await expect(mine).not.toContainText(/Queued|Processing/, { timeout: 60_000 });
+  await expect(mine).not.toContainText("Failed");
+  await expect(mine).toContainText("1 page, 1 passage");
 
   // Another account, then nobody signed in: neither sees it.
   await page.getByRole("button", { name: "Sign out" }).click();

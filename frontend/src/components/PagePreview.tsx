@@ -48,7 +48,7 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
   const canvas = useRef<HTMLCanvasElement>(null);
   const textLayer = useRef<HTMLDivElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
+  const [state, setState] = useState<"loading" | "ready" | "failed" | "missing">("loading");
   const [found, setFound] = useState<Found>("pending");
 
   // A modal dialog: focus moves into it, Escape closes it, and focus returns to the button.
@@ -111,8 +111,11 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
         layer.textDivs[spot.first]?.scrollIntoView({ block: "center" });
       }
       setState("ready");
-    })().catch(() => {
-      if (!stopped) setState("failed");
+    })().catch((e: unknown) => {
+      if (stopped) return;
+      // A document deleted since the answer was written: the server answers 404.
+      const status = (e as { status?: number } | null)?.status;
+      setState(status === 404 ? "missing" : "failed");
     });
     return () => {
       stopped = true;
@@ -143,15 +146,17 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
         <h2 id="preview-title">
           {shortCode(target.title)} <span className="meta">page {target.page}</span>
         </h2>
-        <a
-          className="text-button"
-          href={documentFileUrl(target.documentId, target.page)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <ExternalLink size={14} aria-hidden="true" />
-          Open the PDF
-        </a>
+        {state !== "missing" && (
+          <a
+            className="text-button"
+            href={documentFileUrl(target.documentId, target.page)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ExternalLink size={14} aria-hidden="true" />
+            Open the PDF
+          </a>
+        )}
         <button
           type="button"
           className="icon-button"
@@ -167,6 +172,8 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
       <p className="meta preview-status" role="status">
         {state === "loading" && "Drawing the page"}
         {state === "failed" && "Could not draw this page. Open the PDF instead."}
+        {state === "missing" &&
+          "This PDF is no longer available; it may have been deleted. The saved answer keeps its quote."}
         {state === "ready" && found === "marked" && "The quote is marked on the page."}
         {state === "ready" &&
           found === "not-found" &&

@@ -5,11 +5,12 @@
 | Part | What happens |
 |---|---|
 | Sign in and upload | A PDF uploaded while signed in is parsed, chunked and embedded, and only that account can see or search it. |
-| Two ways to answer | Agent can search again, read pages or ask; Single pass searches once. The line under the question box says which is on. |
-| A question across two documents | One search in each document in the same turn, each listed as it happens, the answer as it is written, then each citation's quote on its page. |
-| The same question, Single pass | One search over everything. Its passages came from one document, so it said it could not verify the other part. |
+| A question across two documents | Agent mode: one search in each document in the same turn, each listed as it happens, the answer as it is written, then each citation's quote. |
+| The cited page | Show page draws the page from the PDF itself, with the quote marked on it. |
+| Export | The answer saved as Markdown, with its quotes, pages and checks. |
+| Compare | The same question in Agent and Single pass side by side, with what each found. The single pass searched once, so it could cite only one document. |
 | Re-retrieval | The first search finds two different deadlines in two memos, so the agent searches again for which memo replaces the other. |
-| Clarification | In a new conversation, "the memo" could be any of four memos, so the agent asks, then answers in the same run. |
+| Clarification | In a new conversation, "the memo" could be any of four memos, so the agent asks. The question and the reply stay above the answer. |
 | A failed tool call | Search is made to fail (an injected fault). It fails after one retry; the agent takes the document's outline, goes to the section on the topic and reads it. |
 | Your own document | A question answered from the private upload, then the upload deleted from the list. |
 | Saved conversations | Earlier conversations, with their steps, timing, tokens and cost. |
