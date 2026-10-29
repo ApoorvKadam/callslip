@@ -2,15 +2,15 @@
 
 Callslip answers simple and multi-part questions across a set of text-based PDFs. An agent chooses its own tools (search, read pages, a document's outline, list documents, ask for clarification), looks at what it finds, and answers with document and page citations. Code checks that every quote is on the page it cites, and a second model call judges whether each quote supports its sentence.
 
+**Try it:** https://callslip.apps.rm3.7wse.p1.openshiftapps.com
+
 https://github.com/user-attachments/assets/e6142501-9f08-4a38-8f30-992d8bc2bf2d
 
-The walkthrough above (1920 by 1080, about three minutes; [download the MP4](docs/media/callslip-walkthrough.mp4)): signing in and uploading a private PDF, a question across two documents, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, the saved conversations, and the Evaluation page.
+The walkthrough above ([download](docs/media/callslip-walkthrough.mp4)) shows signing in and uploading a private PDF, a question across two documents, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, the saved conversations, and the Evaluation page.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
 Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is unfinished.
-
-Live demo on OpenShift: **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com** (Red Hat Developer Sandbox, a free trial until about 2026-11-28; questions are limited to 60 per address per 10 minutes).
 
 ## Status
 
@@ -21,7 +21,7 @@ Live demo on OpenShift: **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.op
 | What to submit: repository, reproducibility notes, architecture diagram, evaluation with a baseline, walkthrough, summary, deployment runbook | Done | [reproducibility](docs/reproducibility.md), [architecture](docs/architecture.md), [evaluation](docs/evaluation.md), [walkthrough](docs/demo.md), [summary](SUMMARY.md), [runbook](docs/runbook.md) |
 | Optional: authentication and personalisation | Done: local accounts, private uploads and their deletion, history per account, a limit on failed sign-ins | [accounts](#accounts-and-conversations) |
 | Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
-| Optional: Kubernetes and OpenShift | Done: live on OpenShift (Red Hat Developer Sandbox), deployed with Terraform; also tested on a local kind cluster with network policies, update, rollback and pod loss | [live demo](https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com), [docs/kubernetes.md](docs/kubernetes.md#live-on-openshift) |
+| Optional: Kubernetes and OpenShift | Done: live on OpenShift, deployed with Terraform; also tested on a local kind cluster with network policies, update, rollback and pod loss | [live demo](https://callslip.apps.rm3.7wse.p1.openshiftapps.com), [docs/kubernetes.md](docs/kubernetes.md#live-on-openshift) |
 | Optional: infrastructure as code | Done: Kustomize describes the workloads; Terraform makes the namespace and Secrets and applies them, on the kind cluster and on OpenShift | [docs/kubernetes.md](docs/kubernetes.md#apply-with-terraform) |
 | Added beyond the brief | Compare mode (both answering modes side by side); export an answer with its sources; an Evaluation page in the app; answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; internal metrics; a limit on questions per address; latency measured in a real browser | [summary](SUMMARY.md) |
 | Not done | NYU single sign-on, sharing with groups, a production cluster with managed PostgreSQL, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
