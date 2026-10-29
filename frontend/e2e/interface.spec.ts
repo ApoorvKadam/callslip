@@ -92,6 +92,9 @@ test("a wrong password and a file that is not a PDF are explained", async ({ pag
   );
   await page.keyboard.press("Escape");
 
+  // A public deployment takes uploads only from accounts.
+  const me = await (await page.request.get("/api/auth/me")).json();
+  if (me.guest_uploads === false) await createAccount(page, `notes-${Date.now()}@callslip.test`);
   await page.locator("input[type=file]").setInputFiles({
     name: "notes.pdf",
     mimeType: "application/pdf",
@@ -174,4 +177,77 @@ test("a question pasted past the limit says it was cut", async ({ page }) => {
   await expect(page.locator(".limit-hint")).toHaveText("The box stops at 2,000 characters.");
   await box.press("Backspace");
   await expect(page.locator(".limit-hint")).toHaveCount(0);
+});
+
+test("a finished answer can be rated, and Insights opens and closes", async ({ page }, info) => {
+  test.skip(info.project.name === "phone", "one viewport is enough for rating");
+  // No model in CI: the saved conversation and its finished answer are served by the test.
+  const sessionId = "00000000-0000-4000-8000-0000000000a1";
+  const runId = "00000000-0000-4000-8000-0000000000b2";
+  const text = "Govern, Map, Measure and Manage.";
+  const now = new Date().toISOString();
+  const run = {
+    id: runId,
+    session_id: sessionId,
+    mode: "agent",
+    question: "What are the four functions of the AI RMF Core?",
+    status: "complete",
+    status_reason: null,
+    answer: { text, segments: [{ text, citations: [] }], citations: [], citations_verified: 0 },
+    model_turns: 1,
+    tool_calls: 1,
+    exec_ms: 3000,
+    created_at: now,
+    finished_at: now,
+    compare_id: null,
+    asked: null,
+    replied: null,
+    feedback: null as { helpful: boolean; note: string | null } | null,
+    events: [],
+  };
+  await page.route(`**/api/sessions/${sessionId}`, (route) =>
+    route.fulfill({ json: { id: sessionId, created_at: now, runs: [run] } }),
+  );
+  await page.route(`**/api/runs/${runId}`, (route) => route.fulfill({ json: run }));
+  const sent: unknown[] = [];
+  await page.route(`**/api/runs/${runId}/feedback`, async (route) => {
+    const body = route.request().postDataJSON();
+    sent.push(body);
+    run.feedback = { helpful: body.helpful, note: body.helpful ? null : body.note };
+    await route.fulfill({ json: run.feedback });
+  });
+  // Stored before the app starts, so it opens this conversation instead of a new one.
+  await page.addInitScript((id) => localStorage.setItem("callslip.session", id), sessionId);
+  await page.goto("/");
+  await expect(page.getByText(text)).toBeVisible();
+
+  const rate = page.locator(".rate");
+  await rate.getByRole("button", { name: "No" }).click();
+  await page.locator(".rate-note textarea").fill("It missed the profile.");
+  await rate.getByRole("button", { name: "Send note" }).click();
+  await expect(rate.getByRole("status")).toHaveText("Saved, with your note");
+  expect(sent.at(-1)).toEqual({ helpful: false, note: "It missed the profile." });
+
+  await page.reload();
+  await expect(page.locator(".rate").getByRole("button", { name: "No" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await page.locator(".rate").getByRole("button", { name: "Yes" }).click();
+  await expect(page.locator(".rate").getByRole("button", { name: "Yes" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  expect(sent.at(-1)).toEqual({ helpful: true, note: null });
+  // "Useful" dropped the note, so a later "No" does not send it again.
+  await page.locator(".rate").getByRole("button", { name: "No" }).click();
+  await expect(page.locator(".rate-note textarea")).toHaveValue("");
+  await expect.poll(() => sent.at(-1)).toEqual({ helpful: false, note: null });
+
+  await page.getByRole("button", { name: "Insights" }).click();
+  const dialog = page.getByRole("dialog", { name: /Your questions/ });
+  await expect(dialog).toContainText("Only your own conversations are counted.");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(page.getByRole("button", { name: "Insights" })).toBeFocused();
 });

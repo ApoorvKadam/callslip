@@ -167,7 +167,14 @@ export interface Run {
   // The clarifying question this run asked, and the user's reply, when it asked one.
   asked?: string | null;
   replied?: string | null;
+  // The user's rating of a finished answer; a note only on "not useful".
+  feedback?: Feedback | null;
   events?: RunEvent[];
+}
+
+export interface Feedback {
+  helpful: boolean;
+  note: string | null;
 }
 
 export interface Session {
@@ -241,4 +248,35 @@ export function resume(
 
 export function abandon(sessionId: string, runId: string): Promise<{ status: string }> {
   return request(`/api/sessions/${sessionId}/runs/${runId}/abandon`, { method: "POST" });
+}
+
+export function rateRun(id: string, helpful: boolean, note?: string): Promise<Feedback> {
+  return request(`/api/runs/${id}/feedback`, {
+    method: "PUT",
+    headers: json,
+    body: JSON.stringify({ helpful, note: note || null }),
+  });
+}
+
+// How the viewer's own questions went over the last 30 days. Numbers only.
+export interface Insights {
+  days: number;
+  runs: number;
+  complete: number;
+  incomplete: number;
+  failed: number;
+  open: number;
+  abandoned: number;
+  asked_to_clarify: number;
+  median_ms: number | null;
+  rateable: number;
+  useful: number;
+  not_useful: number;
+  citations: number;
+  citations_verified: number;
+  cost_usd: number;
+}
+
+export function getInsights(): Promise<Insights> {
+  return request("/api/insights");
 }

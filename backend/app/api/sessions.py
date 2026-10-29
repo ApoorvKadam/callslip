@@ -50,7 +50,8 @@ RUN_FIELDS = ", ".join(RUN_COLUMNS)
 def clarify_fields(table: str) -> str:
     """The run's latest clarifying question and the user's reply to that question, shown together
     in the conversation. Until a run worker records the reply as an event, it is in the run's
-    queued resume work; a question not answered yet has no reply."""
+    queued resume work; a question not answered yet has no reply. Also the user's rating of the
+    answer, if any."""
     latest = (
         f"(SELECT max(c.seq) FROM run_events c WHERE c.run_id = {table}.id"
         " AND c.type = 'clarification')"
@@ -61,7 +62,9 @@ def clarify_fields(table: str) -> str:
         f"coalesce((SELECT e.data->>'reply' FROM run_events e WHERE e.run_id = {table}.id"
         f" AND e.type = 'clarification_answered' AND e.seq > {latest} ORDER BY e.seq LIMIT 1),"
         f" CASE WHEN {table}.work = 'resume' THEN {table}.work_data->'event'->>'reply' END)"
-        " AS replied"
+        " AS replied, "
+        "(SELECT json_build_object('helpful', f.helpful, 'note', f.note) FROM run_feedback f"
+        f" WHERE f.run_id = {table}.id) AS feedback"
     )
 
 
@@ -256,7 +259,11 @@ async def ask(
                 faults,
                 {"event": event, "history": history},
             )
-            run = {k: row[k] for k in RUN_COLUMNS} | {"asked": None, "replied": None}
+            run = {k: row[k] for k in RUN_COLUMNS} | {
+                "asked": None,
+                "replied": None,
+                "feedback": None,
+            }
     except errors.UniqueViolation:
         raise HTTPException(
             409, "This session already has a question in progress. Wait for it, or answer it."
@@ -311,7 +318,10 @@ async def compare(
                 {"event": event, "history": []},
                 compare_id,
             )
-            runs.append({k: row[k] for k in RUN_COLUMNS} | {"asked": None, "replied": None})
+            runs.append(
+                {k: row[k] for k in RUN_COLUMNS}
+                | {"asked": None, "replied": None, "feedback": None}
+            )
     return runs
 
 

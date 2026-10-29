@@ -8,11 +8,13 @@ pauses for a clarification. Reconnecting or refreshing never re-runs anything.
 import asyncio
 import json
 import time
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from psycopg.rows import dict_row
+from pydantic import BaseModel, StringConstraints
 
 from app.api.sessions import RUN_COLUMNS, Owner, Pool, clarify_fields
 
@@ -90,3 +92,26 @@ async def run_events(run_id: UUID, request: Request, pool: Pool, owner: Owner):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+class FeedbackRequest(BaseModel):
+    helpful: bool
+    note: Annotated[str, StringConstraints(strip_whitespace=True, max_length=500)] | None = None
+
+
+@router.put("/{run_id}/feedback")
+async def rate_run(run_id: UUID, body: FeedbackRequest, pool: Pool, owner: Owner) -> dict:
+    """Mark a finished answer useful or not. Rating it again replaces the earlier rating; a note
+    is kept only on "not useful", where it says what was missing."""
+    run = await owned_run(pool, run_id, owner)
+    if run["finished_at"] is None or run["answer"] is None:
+        raise HTTPException(409, "Only a finished answer can be rated.")
+    note = None if body.helpful else (body.note or None)
+    async with pool.connection() as conn:
+        await conn.execute(
+            "INSERT INTO run_feedback (run_id, helpful, note) VALUES (%s, %s, %s)"
+            " ON CONFLICT (run_id) DO UPDATE"
+            " SET helpful = EXCLUDED.helpful, note = EXCLUDED.note, updated_at = now()",
+            (run_id, body.helpful, note),
+        )
+    return {"helpful": body.helpful, "note": note}

@@ -109,6 +109,7 @@ Everything about a run is in PostgreSQL, so a run survives a restart of the brow
 | `run_messages` | the exact model conversation, append-only (including thinking blocks, which are never shown) |
 | `run_events` | the trace the UI shows: each tool call with input, result summary, status, time, cache status, retries and retrieved pages; each model turn with tokens and cost |
 | `llm_calls` | every model call: tokens, cache reads and writes, estimated cost, stop reason, request id |
+| `run_feedback` | the user's rating of a finished answer: useful or not, and on "not useful" an optional note; rating again replaces it |
 
 ### Run states and stopping conditions
 

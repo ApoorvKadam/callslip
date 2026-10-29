@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  ChartColumn,
   Columns2,
   Files,
   MessagesSquare,
@@ -27,6 +28,7 @@ import {
   runEventsUrl,
 } from "./api";
 import { AccountMenu } from "./components/AccountMenu";
+import { InsightsDialog } from "./components/InsightsDialog";
 import {
   type Activity,
   Conversation,
@@ -67,6 +69,7 @@ export default function App() {
   const [runs, setRuns] = useState<Run[]>([]);
   const [events, setEvents] = useState<Record<string, RunEvent[]>>({});
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [insightsOpen, setInsightsOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const lastReply = useRef<{ toolUseId: string; text: string; key: string } | null>(null);
   const [mode, setMode] = useState<AskMode>("agent");
@@ -417,6 +420,10 @@ export default function App() {
             <SquarePen size={15} aria-hidden="true" />
             New conversation
           </button>
+          <button type="button" className="btn" onClick={() => setInsightsOpen(true)}>
+            <ChartColumn size={15} aria-hidden="true" />
+            Insights
+          </button>
           <AccountMenu
             email={account}
             onChange={(email) => {
@@ -436,6 +443,7 @@ export default function App() {
           />
         </div>
       </header>
+      {insightsOpen && <InsightsDialog onClose={() => setInsightsOpen(false)} />}
       <div className="layout">
         <aside className="docs" aria-label="Documents and conversations">
           <div className="tabs side-tabs" role="tablist" aria-label="Library">
