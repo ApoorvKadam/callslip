@@ -4,7 +4,7 @@ Callslip answers simple and multi-part questions across a set of text-based PDFs
 
 https://github.com/user-attachments/assets/bff6965a-f1da-4471-9c2f-91d7484c30c2
 
-The walkthrough above (1920 by 1080, three minutes; [download the MP4](docs/media/callslip-walkthrough.mp4)): signing in and uploading a private PDF, a question across two documents in each answering mode, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, and the saved conversations.
+The walkthrough above (1920 by 1080, about three minutes; [download the MP4](docs/media/callslip-walkthrough.mp4)): signing in and uploading a private PDF, a question across two documents, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, the saved conversations, and the Evaluation page.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
@@ -23,7 +23,7 @@ Live demo on OpenShift: **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.op
 | Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
 | Optional: Kubernetes and OpenShift | Done: live on OpenShift (Red Hat Developer Sandbox), deployed with Terraform; also tested on a local kind cluster with network policies, update, rollback and pod loss | [live demo](https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com), [docs/kubernetes.md](docs/kubernetes.md#live-on-openshift) |
 | Optional: infrastructure as code | Done: Kustomize describes the workloads; Terraform makes the namespace and Secrets and applies them, on the kind cluster and on OpenShift | [docs/kubernetes.md](docs/kubernetes.md#apply-with-terraform) |
-| Added beyond the brief | Answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; latency measured in a real browser | [summary](SUMMARY.md) |
+| Added beyond the brief | Compare mode (both answering modes side by side); export an answer with its sources; an Evaluation page in the app; answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; internal metrics; a limit on questions per address; latency measured in a real browser | [summary](SUMMARY.md) |
 | Not done | NYU single sign-on, sharing with groups, a production cluster with managed PostgreSQL, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
 
 ## Results at a glance
