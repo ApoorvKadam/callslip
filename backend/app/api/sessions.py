@@ -47,6 +47,24 @@ RUN_COLUMNS = (
 RUN_FIELDS = ", ".join(RUN_COLUMNS)
 
 
+def clarify_fields(table: str) -> str:
+    """The run's latest clarifying question and the user's reply to that question, shown together
+    in the conversation. Until a run worker records the reply as an event, it is in the run's
+    queued resume work; a question not answered yet has no reply."""
+    latest = (
+        f"(SELECT max(c.seq) FROM run_events c WHERE c.run_id = {table}.id"
+        " AND c.type = 'clarification')"
+    )
+    return (
+        f"(SELECT e.data->>'question' FROM run_events e WHERE e.run_id = {table}.id"
+        f" AND e.type = 'clarification' AND e.seq = {latest}) AS asked, "
+        f"coalesce((SELECT e.data->>'reply' FROM run_events e WHERE e.run_id = {table}.id"
+        f" AND e.type = 'clarification_answered' AND e.seq > {latest} ORDER BY e.seq LIMIT 1),"
+        f" CASE WHEN {table}.work = 'resume' THEN {table}.work_data->'event'->>'reply' END)"
+        " AS replied"
+    )
+
+
 def owner_hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
@@ -150,7 +168,8 @@ async def get_session(session_id: UUID, pool: Pool, owner: Owner) -> dict:
     async with pool.connection() as conn:
         cur = conn.cursor(row_factory=dict_row)
         await cur.execute(
-            f"SELECT {RUN_FIELDS} FROM runs WHERE session_id = %s ORDER BY created_at",
+            f"SELECT {RUN_FIELDS}, {clarify_fields('runs')} FROM runs"
+            " WHERE session_id = %s ORDER BY created_at",
             (session_id,),
         )
         runs = await cur.fetchall()
@@ -237,7 +256,7 @@ async def ask(
                 faults,
                 {"event": event, "history": history},
             )
-            run = {k: row[k] for k in RUN_COLUMNS}
+            run = {k: row[k] for k in RUN_COLUMNS} | {"asked": None, "replied": None}
     except errors.UniqueViolation:
         raise HTTPException(
             409, "This session already has a question in progress. Wait for it, or answer it."
@@ -292,7 +311,7 @@ async def compare(
                 {"event": event, "history": []},
                 compare_id,
             )
-            runs.append({k: row[k] for k in RUN_COLUMNS})
+            runs.append({k: row[k] for k in RUN_COLUMNS} | {"asked": None, "replied": None})
     return runs
 
 
@@ -336,7 +355,13 @@ async def resume(
         reply_hash = hashlib.sha256(payload.encode()).hexdigest()
         resume_key = f"{body.idempotency_key}:{reply_hash[:16]}"
         if run["resume_key"] == resume_key:
-            return {k: run[k] for k in RUN_COLUMNS}  # the same reply, sent again
+            # The same reply, sent again: the same answer as the first time.
+            cur = conn.cursor(row_factory=dict_row)
+            await cur.execute(
+                f"SELECT {RUN_FIELDS}, {clarify_fields('runs')} FROM runs WHERE id = %s",
+                (run_id,),
+            )
+            return await cur.fetchone()
         if (run["resume_key"] or "").rpartition(":")[0] == body.idempotency_key:
             raise HTTPException(409, "This key was already used for a different reply.")
         if run["status"] != "needs_clarification" or run["pending_tool_use_id"] != body.tool_use_id:
@@ -356,7 +381,7 @@ async def resume(
         await cur.execute(
             "UPDATE runs SET status = 'running', pending_tool_use_id = NULL, resume_key = %s,"
             " work = 'resume', work_data = %s, updated_at = now()"
-            f" WHERE id = %s RETURNING {RUN_FIELDS}",
+            f" WHERE id = %s RETURNING {RUN_FIELDS}, {clarify_fields('runs')}",
             (resume_key, Jsonb({"event": {"reply": body.reply}}), run_id),
         )
         return await cur.fetchone()

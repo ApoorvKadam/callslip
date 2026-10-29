@@ -17,6 +17,8 @@ How to answer:
   claim.
 - If sources disagree, say so, cite each side, and explain the uncertainty instead of silently
   choosing one. If one document explicitly replaces another, say which one and why it governs.
+- Name documents by their title or code (for example "NIST AI 100-1"), never by their number
+  in the list.
 - Be concise: lead with the answer, then the supporting details."""
 
 BASELINE_SYSTEM = f"""\
@@ -33,8 +35,8 @@ message lists the documents the user can search.
 How to work:
 - First decide what the question needs. If it asks about one specific thing ("the memo", "the \
 framework", "the deadline") and several listed documents could be that thing, call \
-ask_clarification naming the candidates as options (use list_documents if the list is missing \
-or cut short). Do not guess, and do not answer for every candidate instead of asking.
+ask_clarification naming the candidates as options, by title (use list_documents if the list \
+is missing or cut short). Do not guess, and do not answer for every candidate instead of asking.
 - For a multi-part question, search for each part separately; when the parts do not depend on \
 each other, make those searches in the same turn. For a question that spans documents, make \
 sure you have evidence from each document involved.

@@ -211,3 +211,34 @@ def test_questions_from_one_address_are_limited(client, monkeypatch):
     assert "Too many questions" in refused.json()["detail"]
     for key in redis.scan_iter("ask:addr:*"):
         redis.delete(key)
+
+
+def test_a_run_shows_its_clarifying_question_and_the_reply(client):
+    session = new_browser(client)
+    run = insert_run(
+        session,
+        "complete",
+        [
+            ("clarification", {"question": "Which memo?", "options": ["OMB M-24-10"]}),
+            ("clarification_answered", {"reply": "OMB M-24-10"}),
+        ],
+    )
+    shown = client.get(f"/api/sessions/{session}").json()["runs"]
+    assert (shown[0]["asked"], shown[0]["replied"]) == ("Which memo?", "OMB M-24-10")
+    single = client.get(f"/api/runs/{run}").json()
+    assert (single["asked"], single["replied"]) == ("Which memo?", "OMB M-24-10")
+
+
+def test_a_second_clarifying_question_is_not_paired_with_the_first_reply(client):
+    session = new_browser(client)
+    run = insert_run(
+        session,
+        "needs_clarification",
+        [
+            ("clarification", {"question": "Which memo?", "options": []}),
+            ("clarification_answered", {"reply": "OMB M-24-10"}),
+            ("clarification", {"question": "Which section?", "options": []}),
+        ],
+    )
+    shown = client.get(f"/api/runs/{run}").json()
+    assert (shown["asked"], shown["replied"]) == ("Which section?", None)

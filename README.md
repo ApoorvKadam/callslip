@@ -28,7 +28,7 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems. The current build passed 42 of 45, and its three misses passed 15 of 15 when repeated ([details](docs/evaluation.md#results)).
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|
@@ -128,6 +128,16 @@ Tests use real PostgreSQL, Redis and the embedding model, and skip what is not a
   `uv run python -c "from fastembed import TextEmbedding; TextEmbedding('BAAI/bge-small-en-v1.5', cache_dir='$FASTEMBED_CACHE_PATH')"`
 
 Frontend (Node 24): `cd frontend && npm ci && npm run dev` (proxies `/api` to the stack on port 8080).
+
+Browser tests (Playwright, desktop and phone sizes) run against a running stack, such as `docker compose up`:
+
+```bash
+cd frontend
+npx playwright install chromium
+npm run e2e                      # BASE_URL=... to test another deployment
+```
+
+They cover the sign-in menu, a private upload seen only by its owner, plain messages for a wrong password, a file that is not a PDF and an unreachable server, and the phone layout. They need no model; with an API key set, run them with `HAS_MODEL=1`. CI runs them on every pull request.
 
 ## Search
 
