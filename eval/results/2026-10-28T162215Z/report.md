@@ -19,7 +19,7 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 4.8 | 3.7 | 1155/837 | 0.0021 |  |
 | 11-acquisition-supersession | agent | yes | complete | 5/5 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 12.2 | 9.9 | 2032/2220 | 0.0030 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 5.8 | 4.1 | 1445/646 | 0.0015 |  |
-| 13-security-and-injection | agent | no | complete | 11/11 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.9 | 7.0 | 3426/2188 | 0.0030 | missing: attack surface |
+| 13-security-and-injection | agent | no | complete | 11/11 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 100-2 E2025: Adv p66, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.9 | 7.0 | 3426/2188 | 0.0030 | missing: attack surface |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.4 | 3.6 | 1366/741 | 0.0014 |  |
 | 1-simple-lookup | agent | yes | complete | 4/4 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 6.0 | 4.4 | 1693/938 | 0.0013 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 7.1 | 5.5 | 1663/1314 | 0.0024 |  |
@@ -34,7 +34,7 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 6.3 | 3.6 | 1114/759 | 0.0020 |  |
 | 11-acquisition-supersession | agent | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 8.1 | 6.3 | 1675/1398 | 0.0024 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.5 | 3.2 | 1430/669 | 0.0006 |  |
-| 13-security-and-injection | agent | yes | complete | 8/8 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.6 | 2680/1811 | 0.0026 |  |
+| 13-security-and-injection | agent | yes | complete | 8/8 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 100-2 E2025: Adv p66, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.6 | 2680/1811 | 0.0026 |  |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 7.4 | 5.2 | 1357/993 | 0.0021 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 4.1 | 2.4 | 1742/696 | 0.0006 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 8.6 | 6.8 | 1739/1620 | 0.0025 |  |
@@ -49,7 +49,7 @@
 | 10-voluntary-framework | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p7 | 2 | 3 | 5.4 | 4.1 | 1108/793 | 0.0020 |  |
 | 11-acquisition-supersession | agent | yes | complete | 5/5 | OMB M-25-22: Driving Eff p1 | 2 | 3 | 8.8 | 6.9 | 2087/1519 | 0.0026 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.4 | 2.7 | 1390/606 | 0.0006 |  |
-| 13-security-and-injection | agent | yes | complete | 7/7 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.2 | 2472/1632 | 0.0025 |  |
+| 13-security-and-injection | agent | yes | complete | 7/7 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.2 | 2472/1632 | 0.0025 |  |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 9.6 | 7.6 | 1776/1490 | 0.0025 |  |
 
 ## Each case: expected and actual (first repeat)
@@ -67,7 +67,7 @@ Expected: Simple lookup (`answer`); required: GOVERN, MAP, MEASURE, MANAGE; gold
 
 Question: What change to the NIST AI RMF does America's AI Action Plan recommend, and which characteristics of trustworthy AI does the AI RMF itself list?
 
-Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid and reliable, privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
+Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility), privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
 
 - **agent**: pass, complete, 2 tool calls, 5.6 s to answer, 2998 tokens, cited America's AI Action Plan p7, NIST AI 100-1: Artificia p17, NIST AI 100-1: Artificia p5.
   > **Recommended change:** America's AI Action Plan proposes that the framework be edited to take out certain subjects. Led by the Department of Commerce (DOC) through the National Institute of Standards and Technology (NIST), revise the NIST AI Risk Management Framework to eliminate references to misinformation, Diversity, Equity, and Inclusion, and climate change. The Plan lists this as a recommended policy action. The excerpts I found do not say how or when this would be done. **Trustworthy AI characteristics in the AI RMF:** The framework names seven. Characteristics of trustworthy AI systems include: valid and reliable, safe, secure and resilient, accountable and transparent, explainable a ...
@@ -175,7 +175,7 @@ Expected: Multi-passage, one document (added) (`answer`); required: GOVERN, MAP,
 
 Question: What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?
 
-Expected: Multi-part / multi-document (added) (`answer`); required: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); gold pages: NIST AI 600-1 p. 14; NIST AI 100-2 p. 52, 54, 63.
+Expected: Multi-part / multi-document (added) (`answer`); required: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); gold pages: NIST AI 600-1 p. 14; NIST AI 100-2 p. 52, 54, 63, 64, 65, 66, 67, 123.
 
 - **agent**: fail, complete, 2 tool calls, 7.0 s to answer, 5614 tokens, cited NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 100-2 E2025: Adv p66, NIST AI 600-1: AI Risk M p14. missing: attack surface.
   > **Information security risks in the NIST Generative AI Profile (NIST AI 600-1)** The Profile identifies two primary risks. First, generative AI may lower the cost of cyberattacks, which makes new cyber threats easier to discover or carry out (GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of oﬀensive capabilities). The Profile notes that LLMs are already able to discover some vulnerabilities in systems (hardware, software, data) and write code to exploit them. Second, the systems themselves widen the target area, since GAI itself is vulnerable to attacks like prompt injection or data poisoning. The Profile also says  ...

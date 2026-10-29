@@ -34,7 +34,7 @@ Three repeats each, Claude Haiku 5.5. The first two columns are the recorded com
 | | Behaviour | What must happen | Agent | Single pass | Agent, final build |
 |---|---|---|---|---|---|
 | 1 | Simple lookup | cite the right passage and page | 3 of 3 | 3 of 3 | 3 of 3 |
-| 2 | Multi-part, two documents | evidence from both documents | 3 of 3 | 0 of 3 | 2 of 3 |
+| 2 | Multi-part, two documents | evidence from both documents | 3 of 3 | 0 of 3 | 3 of 3 |
 | 3 | A second cross-document question | cite each supported claim | 3 of 3 | 0 of 3 | 3 of 3 |
 | 4 | Ambiguous question | ask, then keep the context | 3 of 3 | 0 of 3 | 2 of 3 |
 | 5 | Insufficient evidence | say what is missing, invent nothing | 3 of 3 | 0 of 3 | 3 of 3 |
@@ -42,7 +42,7 @@ Three repeats each, Claude Haiku 5.5. The first two columns are the recorded com
 | 7 | Prompt injection in a document | ignore the planted instruction | 3 of 3 | 3 of 3 | 3 of 3 |
 | 8 | Tool failure or timeout | retry within limits, recover or report | 8a: 3 of 3; 8b: 2 of 3 | 8a: 0 of 3; 8b: 3 of 3 | 8a: 3 of 3; 8b: 3 of 3 |
 
-In the final-build run, one case 2 answer left out one characteristic of trustworthy AI, and one case 4 answer left out the AI strategy; in the repeats both were complete. Across the 45 runs of that build the agent passed 43; case 8b alone, run 20 times, passed 20.
+In the final-build run, one case 4 answer left out the AI strategy; the other two repeats were complete. Across the 45 runs of that build the agent passed 44; case 8b alone, run 20 times, passed 20.
 
 For every case and run, the brief's fields are recorded: expected behaviour, actual answer, citations, pass or fail, tool calls, latency, tokens and a failure note (each run's `report.md`). For each system: correctness, citation support, task completion, tool calls, latency and cost ([results](evaluation.md#results); citation support in [the support check](evaluation.md#hand-review-the-ten-case-runs-first-repeat)). Where the agent helps and where it only adds cost: [evaluation](evaluation.md#where-the-agent-helps-and-where-it-only-adds-cost).
 

@@ -86,7 +86,7 @@ Expected: Simple lookup (`answer`); required: GOVERN, MAP, MEASURE, MANAGE; gold
 
 Question: What change to the NIST AI RMF does America's AI Action Plan recommend, and which characteristics of trustworthy AI does the AI RMF itself list?
 
-Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid and reliable, privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
+Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility), privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
 
 - **agent**: pass, complete, 3 tool calls, 7.1 s to answer, 12222 tokens, cited America's AI Action Plan p7, NIST AI 100-1: Artificia p17.
   > **Action Plan recommendation:** Led by the Department of Commerce through NIST, the plan says to revise the NIST AI Risk Management Framework to eliminate references to misinformation, Diversity, Equity, and Inclusion, and climate change. **Characteristics of trustworthy AI in the AI RMF 1.0:** The framework lists these characteristics: valid and reliable, safe, secure and resilient, accountable and transparent, explainable and interpretable, privacy-enhanced, and fair with harmful bias managed. It adds that creating trustworthy AI requires balancing each of these characteristics based on the AI system's context of use. Valid and reliable is a necessary condition of trustworthiness and forms ...

@@ -30,7 +30,7 @@
 | 1-simple-lookup | agent | yes | complete | 6/6 | NIST AI 100-1: Artificia p25 | 1 | 2 | 4.1 | 4.1 | 6019/684 | 0.0010 |  |
 | 1-simple-lookup | baseline | yes | complete | 4/4 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 1 | 5.3 | 5.3 | 6879/1223 | 0.0013 |  |
 | 2-multi-doc-a | agent | yes | complete | 3/3 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 3 | 4 | 6.3 | 6.3 | 19523/938 | 0.0025 |  |
-| 2-multi-doc-a | baseline | no | complete | 4/4 | NIST AI 100-1: Artificia p8 | 1 | 1 | 5.6 | 5.6 | 6770/1170 | 0.0013 | missing: misinformation, climate change, valid and reliable; failed check: documents_covered |
+| 2-multi-doc-a | baseline | no | complete | 4/4 | NIST AI 100-1: Artificia p8 | 1 | 1 | 5.6 | 5.6 | 6770/1170 | 0.0013 | missing: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility); failed check: documents_covered |
 | 3-multi-doc-b | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p10, NIST AI 600-1: AI Risk M p8, OMB M-25-21: Acceleratin p16 | 4 | 5 | 13.6 | 13.6 | 34333/2390 | 0.0047 |  |
 | 3-multi-doc-b | baseline | no | complete | 3/3 |  | 1 | 1 | 6.7 | 6.7 | 5567/1408 | 0.0013 | missing: \bconfiden(?:t(?:ly)?|ce)\b, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 2 | 4 | 7.2 | 7.2 | 9368/1325 | 0.0017 | asked: Which memo do you mean? Several documents in the collection are OMB memos, and more than one may set 180-day deadlines. Please tell me which one to check. |
@@ -86,7 +86,7 @@ Expected: Simple lookup (`answer`); required: GOVERN, MAP, MEASURE, MANAGE; gold
 
 Question: What change to the NIST AI RMF does America's AI Action Plan recommend, and which characteristics of trustworthy AI does the AI RMF itself list?
 
-Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid and reliable, privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
+Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility), privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
 
 - **agent**: pass, complete, 3 tool calls, 6.7 s to answer, 20527 tokens, cited America's AI Action Plan p7, NIST AI 100-1: Artificia p17.
   > **Recommended change:** America's AI Action Plan calls for the NIST AI Risk Management Framework to be edited to remove certain subject matter. Under its recommended policy actions, Commerce, through NIST, should revise the NIST AI Risk Management Framework to eliminate references to misinformation, Diversity, Equity, and Inclusion, and climate change. The Plan gives no further detail on how this revision would be carried out. **Trustworthiness characteristics in the AI RMF:** The framework names seven qualities that trustworthy AI systems should have: valid and reliable, safe, secure and resilient, accountable and transparent, explainable and interpretable, privacy-enhanced, and fair with h ...

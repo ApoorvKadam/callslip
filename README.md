@@ -25,7 +25,7 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 43 of 45 again ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after three [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|

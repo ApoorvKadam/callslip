@@ -65,7 +65,7 @@ Search fails on every call (injected below the cache; the server must run with `
 
 ![Steps of a run whose searches fail](images/5-tool-failure.png)
 
-Saved trace: [`8b-tool-keeps-failing.agent.1.json`](../eval/results/2026-10-28T165727Z/traces/8b-tool-keeps-failing.agent.1.json).
+Saved trace, using the outline: [`8b-tool-keeps-failing.agent.1.json`](../eval/results/2026-10-28T221200Z/traces/8b-tool-keeps-failing.agent.1.json). Before the outline tool, the agent read pages in order instead ([`165727Z`](../eval/results/2026-10-28T165727Z/traces/8b-tool-keeps-failing.agent.1.json)).
 
 ## 3. Clarification
 
