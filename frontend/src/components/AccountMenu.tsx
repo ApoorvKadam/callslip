@@ -51,6 +51,7 @@ export function AccountMenu({
       const account = await signIn(address.trim(), password, creating);
       setPassword("");
       setOpen(false);
+      setCreating(false); // next time, after signing out, the menu offers plain sign-in
       onChange(account.email);
     } catch (err) {
       setError(errorText(err));
