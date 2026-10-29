@@ -90,13 +90,13 @@ Run on 2026-10-28 with kind 0.33 (Kubernetes 1.37) and ingress-nginx 1.15.1. Eve
 
 | Check | Result |
 |---|---|
-| Empty cluster to every pod ready | 25 s. The apps restarted once each while PostgreSQL started, then stayed up |
+| Empty cluster to every pod ready | 25 s in this run. The apps restarted once each while PostgreSQL started, then stayed up |
 | The 14 corpus PDFs ingested | 402 s, all ready. The ingestion worker peaked at 609 MiB under its 1 GiB limit |
 | The 27-step browser check: ask, cite, compare, export, sign in, private upload and delete, another account, sign-in limit | 27 of 27 pass |
 | Network policies, from a pod with no role | API, PostgreSQL and Redis all unreachable |
 | Network policies, from a pod labelled as the API | PostgreSQL and Redis reachable; the API itself unreachable (only the ingress controller may call it) |
-| Update to a new image | done in 13 s. Without a pause before shutdown, 5 of 1,509 requests failed with 502; with it, 0 of 765 |
-| A release whose image cannot be pulled | the old pod kept serving: 0 of 1,017 requests failed. `kubectl rollout undo` took 1 s |
+| Update to a new image | done in 13 s. One rollout each way: without a pause before shutdown, 5 of 1,509 requests failed with 502; with it, 0 of 765. A sample, not a guarantee |
+| A release whose image cannot be pulled | the old pod kept serving: 0 of 1,017 requests failed. `kubectl rollout undo` finished in about 1 s |
 | PostgreSQL pod deleted | back in 3 s on the same volume: 15 documents, 1,294 passages, 3 accounts and 27 runs before and after. 5 requests failed in those 3 s |
 | Redis pod deleted | back in 2 s; 0 of 402 requests failed |
 | `/metrics` | answers inside the API pod; through the ingress the path returns the web page |
