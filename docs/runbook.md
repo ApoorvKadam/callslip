@@ -18,7 +18,7 @@ Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI)
 | `IMAGE_TAG` | shell | `dev` | image tag; `scripts/deploy.sh` sets it to the commit SHA |
 | `ALLOW_FAULT_INJECTION` | shell or `.env` | `false` | evaluation only: lets a request make a tool fail |
 | `LOG_LEVEL` | `.env` | `INFO` | |
-| `ALLOW_GUEST_UPLOADS` | `.env` | `true` | whether visitors who are not signed in may add PDFs to the shared collection; `false` in the Kubernetes settings, so on a public deployment only signed-in users upload, privately |
+| `ALLOW_GUEST_UPLOADS` | `.env` | `true` | whether visitors who are not signed in may add PDFs to the shared collection; `false` in the Kubernetes settings, so on a public deployment only signed-in users upload, privately, and the shared collection is loaded from inside the cluster (`scripts/load_corpus.py --exec`) |
 | `UPLOAD_LIMIT`, `UPLOAD_WINDOW_S` | `.env` | `0` (off), `3600` | uploads per client address per window; 20 an hour in the Kubernetes settings |
 | `ASK_LIMIT`, `ASK_WINDOW_S` | `.env` | `0` (off), `600` | questions and comparisons per client address per window; refused with 429 and `Retry-After` beyond it. Off in Compose because the evaluation asks 90 questions in a few minutes; 60 per 10 minutes in the Kubernetes settings |
 

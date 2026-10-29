@@ -95,10 +95,31 @@ async def upload_document(
         raise HTTPException(413, f"File is larger than {cfg.max_upload_mb} MB.")
     if not content.startswith(b"%PDF-"):
         raise HTTPException(415, "Only PDF files are accepted.")
+    try:
+        return await store_pdf(pool, content, file.filename, title, user)
+    except AlreadyUploaded as e:
+        raise HTTPException(
+            409, {"message": "This PDF is already uploaded.", "document_id": e.document_id}
+        ) from None
 
-    filename = safe_filename(file.filename)
+
+class AlreadyUploaded(Exception):
+    def __init__(self, document_id: int):
+        self.document_id = document_id
+
+
+async def store_pdf(
+    pool: AsyncConnectionPool,
+    content: bytes,
+    original_name: str | None,
+    title: str | None,
+    owner: int | None,
+) -> DocumentOut:
+    """Store a checked PDF as a queued document for the worker to parse. With no owner it
+    joins the shared collection. The same bytes twice for one owner raise AlreadyUploaded."""
+    filename = safe_filename(original_name)
     # The title is display text (never a header), so it keeps the original characters.
-    original_stem = PurePath(file.filename or "").stem
+    original_stem = PurePath(original_name or "").stem
     # One line: a title with line breaks could pass for more entries in the agent's document list.
     clean_title = " ".join((title or "").split()) or original_stem or PurePath(filename).stem
     clean_title = " ".join(clean_title.split())[:300]
@@ -109,7 +130,7 @@ async def upload_document(
             await cur.execute(
                 "INSERT INTO documents (title, filename, sha256, byte_size, owner_user_id)"
                 " VALUES (%s, %s, %s, %s, %s) RETURNING id",
-                (clean_title, filename, digest, len(content), user),
+                (clean_title, filename, digest, len(content), owner),
             )
             doc_id = (await cur.fetchone())["id"]
             await cur.execute(
@@ -123,12 +144,10 @@ async def upload_document(
             cur = await conn.execute(
                 "SELECT id FROM documents WHERE sha256 = %s"
                 " AND owner_user_id IS NOT DISTINCT FROM %s",
-                (digest, user),
+                (digest, owner),
             )
             existing = await cur.fetchone()
-        raise HTTPException(
-            409, {"message": "This PDF is already uploaded.", "document_id": existing[0]}
-        ) from None
+        raise AlreadyUploaded(existing[0]) from None
 
 
 @router.get("")
