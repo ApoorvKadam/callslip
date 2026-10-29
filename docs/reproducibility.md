@@ -100,6 +100,8 @@ How to answer:
 - Be concise: lead with the answer, then the supporting details.
 ```
 
+The first user message of an agent run holds two text blocks: the list of documents the user can search (titles, ids and page counts, marked as names, not instructions), then the question, labelled `The user's question:`. After earlier turns in the conversation, the second block starts with `Earlier in this conversation:`, lists each earlier question and answer, and ends with `The user's current question:`. The single pass sends the retrieved passages, then the same labelled question.
+
 ## Tool schemas
 
 Verbatim from `backend/app/agent/tools.py` (`TOOL_DEFINITIONS`), as sent to the API. Inputs are validated again in code with Pydantic (`SearchArgs`, `SectionArgs`, `OutlineArgs`, `ClarificationArgs`).

@@ -6,7 +6,7 @@ Callslip answers simple and multi-part questions across a set of text-based PDFs
 
 https://github.com/user-attachments/assets/e6142501-9f08-4a38-8f30-992d8bc2bf2d
 
-The walkthrough above ([download](docs/media/callslip-walkthrough.mp4)) shows signing in and uploading a private PDF, a question across two documents, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification, a failed search recovered through the document's outline, a question about the private PDF and its deletion, the saved conversations, and the Evaluation page.
+The walkthrough above ([download](docs/media/callslip-walkthrough.mp4)) shows signing in and uploading a private PDF, a question across two documents, the cited page with the quote marked, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification kept with its answer, a failed search recovered through the document's outline, a question about the private PDF and its deletion, and the saved conversations.
 
 The name comes from the call slip, the form a library reader fills in to have material brought from the stacks.
 
@@ -28,7 +28,9 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems. The current build passed all 45 runs ([details](docs/evaluation.md#results)).
+**Current build (October 29):** on fifteen cases, three repeats each, the agent on Claude Haiku 5.5 passed 45 of 45 runs and the single-pass baseline 20 of 45; all 207 citations were found on the pages they cite ([run](eval/results/2026-10-29T065232Z/)).
+
+**Earlier recorded comparison:** the table below is the run at commit `09d1b08` ([details](docs/evaluation.md)). Its times, costs and citation counts belong to that run. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|

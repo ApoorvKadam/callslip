@@ -122,7 +122,7 @@ On the kind cluster (Terraform 1.17.1): `terraform apply` made 19 resources in 3
 
 ## Live on OpenShift
 
-The OpenShift overlay runs on a hosted OpenShift 4.21 cluster: **https://callslip.apps.rm3.7wse.p1.openshiftapps.com**. It is the same images and manifests as above, deployed with the Terraform configuration.
+The OpenShift overlay runs on a shared OpenShift 4.21 environment for demonstration: **https://callslip.apps.rm3.7wse.p1.openshiftapps.com**. It is the same images and manifests as above, deployed with the Terraform configuration. It shows deployment and recovery, not production availability.
 
 ```bash
 oc login --server=https://api.<cluster>:6443 --token=...    # the console's "Copy login command"

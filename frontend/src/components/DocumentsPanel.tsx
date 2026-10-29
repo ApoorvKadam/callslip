@@ -8,7 +8,7 @@ import {
   listDocuments,
   uploadDocument,
 } from "../api";
-import { shortCode, titleRest } from "../format";
+import { count, shortCode, titleRest } from "../format";
 
 const STATUS_MARK: Record<DocumentStatus, string> = {
   queued: "mark",
@@ -188,8 +188,8 @@ function DocList({
               <span className="doc-title">{titleRest(d.title)}</span>
             )}
             <span className="meta">
-              {d.page_count ? `${d.page_count} pages` : d.filename}
-              {d.chunk_count ? `, ${d.chunk_count} passages` : ""}
+              {d.page_count ? count(d.page_count, "page") : d.filename}
+              {d.chunk_count ? `, ${count(d.chunk_count, "passage")}` : ""}
             </span>
           </a>
           {onDelete && d.status !== "queued" && d.status !== "processing" && (
