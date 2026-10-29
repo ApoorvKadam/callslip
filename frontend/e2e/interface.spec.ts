@@ -50,6 +50,7 @@ test("the sign-in menu closes like any menu", async ({ page }) => {
 
 test("an upload stays private to its account", async ({ page }, info) => {
   test.skip(info.project.name === "phone", "one viewport is enough for accounts");
+  test.setTimeout(150_000); // ingestion alone may take up to a minute
   const owner = `owner-${Date.now()}@callslip.invalid`;
   await open(page);
   await createAccount(page, owner);
