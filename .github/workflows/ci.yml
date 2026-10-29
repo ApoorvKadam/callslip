@@ -154,3 +154,9 @@ jobs:
           -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
           -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/openshift/v4.15-strict/{{.ResourceKind}}_{{.Group}}_{{.ResourceAPIVersion}}.json'
           ingress.yaml openshift.yaml kind.yaml
+      - name: Terraform format and validate
+        run: |
+          tf="docker run --rm -v $PWD:/w -w /w/deploy/terraform hashicorp/terraform:1.17.1"
+          $tf fmt -check -diff
+          $tf init -backend=false -input=false
+          $tf validate
