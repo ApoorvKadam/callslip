@@ -134,3 +134,12 @@ test("on a phone the question comes before the library", async ({ page }, info) 
   expect(await top(".talk")).toBeLessThan(await top(".docs"));
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);
 });
+
+test("where guests cannot upload, a signed-out visitor is told to sign in", async ({ page }) => {
+  await page.route("**/api/auth/me", (route) =>
+    route.fulfill({ json: { email: null, guest_uploads: false } }),
+  );
+  await open(page);
+  await expect(page.locator(".docs")).toContainText("Sign in to upload your own PDFs.");
+  await expect(page.locator(".docs input[type=file]")).toHaveCount(0);
+});

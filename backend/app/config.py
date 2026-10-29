@@ -63,6 +63,13 @@ class Settings(BaseSettings):
     support_check: bool = True
     support_effort: str = "medium"
     support_timeout_s: float = 15.0
+    # Whether visitors who are not signed in may add PDFs to the shared collection. On for the local
+    # stack, where loading the corpus and the evaluation rely on it; off on a public deployment,
+    # where anyone could otherwise change what everyone searches (the Kubernetes settings).
+    allow_guest_uploads: bool = True
+    # Uploads allowed per client address per window, signed in or not; 0 turns it off.
+    upload_limit: int = 0
+    upload_window_s: PositiveInt = 3600
     # Questions (and comparisons) allowed per client address per window, so a public deployment
     # cannot be flooded. 0 turns it off, as in Compose, where the evaluation asks 90 questions
     # in a few minutes; the Kubernetes settings turn it on.

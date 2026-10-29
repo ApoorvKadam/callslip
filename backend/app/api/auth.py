@@ -209,10 +209,12 @@ async def logout(request: Request, response: Response, pool: Pool) -> None:
 
 
 @router.get("/me")
-async def me(user: Viewer, pool: Pool) -> dict:
+async def me(user: Viewer, pool: Pool, request: Request) -> dict:
+    """Who is signed in, and whether this deployment lets visitors upload without an account."""
+    guest_uploads = request.app.state.settings.allow_guest_uploads
     if user is None:
-        return {"email": None}
+        return {"email": None, "guest_uploads": guest_uploads}
     async with pool.connection() as conn:
         cur = await conn.execute("SELECT email FROM users WHERE id = %s", (user,))
         row = await cur.fetchone()
-    return {"email": row[0] if row else None}
+    return {"email": row[0] if row else None, "guest_uploads": guest_uploads}

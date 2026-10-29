@@ -151,9 +151,13 @@ export default function App() {
 
   // Who is signed in, if anyone: it decides which documents are visible and searched.
   const [account, setAccount] = useState<string | null>(null);
+  const [guestUploads, setGuestUploads] = useState(true);
   useEffect(() => {
     getAccount()
-      .then((a) => setAccount(a.email))
+      .then((a) => {
+        setAccount(a.email);
+        setGuestUploads(a.guest_uploads ?? true);
+      })
       .catch(() => setAccount(null));
   }, []);
 
@@ -467,7 +471,11 @@ export default function App() {
             hidden={side !== "documents"}
           >
             {/* A new account gets a fresh panel: no titles from the previous one. */}
-            <DocumentsPanel key={account ?? "guest"} signedIn={account !== null} />
+            <DocumentsPanel
+              key={account ?? "guest"}
+              signedIn={account !== null}
+              guestUploads={guestUploads}
+            />
           </div>
           <div
             role="tabpanel"

@@ -11,13 +11,13 @@ import re
 from pathlib import PurePath
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from psycopg import errors
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel
 
-from app.api.auth import Viewer
+from app.api.auth import Viewer, take_attempt
 from app.api.deps import get_pool, settings
 from app.config import Settings
 
@@ -72,8 +72,23 @@ async def upload_document(
     cfg: Annotated[Settings, Depends(settings)],
     file: Annotated[UploadFile, File(description="A text-based PDF")],
     user: Viewer,
+    request: Request,
     title: Annotated[str | None, Form(max_length=300)] = None,
 ) -> DocumentOut:
+    if user is None and not cfg.allow_guest_uploads:
+        raise HTTPException(401, "Sign in to upload PDFs.")
+    if cfg.upload_limit > 0:
+        address = request.client.host if request.client else "unknown"
+        key = "upload:addr:" + hashlib.sha256(address.encode()).hexdigest()
+        wait = await take_attempt(
+            request.app.state.redis, key, cfg.upload_limit, cfg.upload_window_s
+        )
+        if wait:
+            raise HTTPException(
+                429,
+                f"Too many uploads from this address. Try again in {-(-wait // 60)} min.",
+                headers={"Retry-After": str(wait)},
+            )
     limit = cfg.max_upload_mb * 1024 * 1024
     content = await file.read(limit + 1)
     if len(content) > limit:

@@ -28,7 +28,13 @@ function errorText(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
 }
 
-export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
+export function DocumentsPanel({
+  signedIn,
+  guestUploads,
+}: {
+  signedIn: boolean;
+  guestUploads: boolean;
+}) {
   const [docs, setDocs] = useState<DocumentInfo[]>([]);
   // Until the first answer, say nothing about the count rather than "0 ready".
   const [loaded, setLoaded] = useState(false);
@@ -112,21 +118,25 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
         </span>
       </div>
 
-      <label className={`btn upload${uploading ? " busy" : ""}`}>
-        <input
-          ref={input}
-          type="file"
-          accept="application/pdf,.pdf"
-          multiple
-          disabled={uploading}
-          onChange={(e) => void upload(e.target.files)}
-        />
-        <span>
-          <Upload size={15} aria-hidden="true" />
-          {uploading ? "Uploading" : signedIn ? "Upload privately" : "Upload to shared collection"}
-        </span>
-      </label>
-      {!signedIn && (
+      {signedIn || guestUploads ? (
+        <label className={`btn upload${uploading ? " busy" : ""}`}>
+          <input
+            ref={input}
+            type="file"
+            accept="application/pdf,.pdf"
+            multiple
+            disabled={uploading}
+            onChange={(e) => void upload(e.target.files)}
+          />
+          <span>
+            <Upload size={15} aria-hidden="true" />
+            {uploading ? "Uploading" : signedIn ? "Upload privately" : "Upload to shared collection"}
+          </span>
+        </label>
+      ) : (
+        <p className="meta">Sign in to upload your own PDFs. They stay private to you.</p>
+      )}
+      {!signedIn && guestUploads && (
         <p className="meta">
           Without signing in, uploaded PDFs are visible to everyone using this deployment. Sign in
           to upload privately.
