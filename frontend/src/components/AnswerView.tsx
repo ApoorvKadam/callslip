@@ -39,7 +39,7 @@ const squash = (s: string) =>
 // The model often copies a sentence from a source into its answer. Such text is shown in
 // quotation marks, so the reader can tell the document's words from the answer's. Text the
 // model already put in quotation marks, or shorter than eight words, is left as it is.
-function copied(text: string, before: string, after: string, sources: Citation[]): boolean {
+export function copied(text: string, before: string, after: string, sources: Citation[]): boolean {
   if (/["“]\s*$/.test(before) || /^\s*["”]/.test(after) || /^["“]/.test(text)) return false;
   if (text.split(/\s+/).length < 8) return false;
   const t = squash(text);

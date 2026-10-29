@@ -5,11 +5,13 @@ import {
   CircleAlert,
   Columns2,
   CornerDownLeft,
+  Download,
   LoaderCircle,
   Route,
 } from "lucide-react";
 import type { Answer, Run, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
+import { answerMarkdown, download } from "../export";
 import { count, seconds, shortCode } from "../format";
 import { type AskMode, MODE_HELP } from "../modes";
 import { AnswerView } from "./AnswerView";
@@ -89,6 +91,19 @@ function RunMeta(props: { run: Run; answer: Answer | null; onShowSteps: () => vo
       <button type="button" className="text-button" onClick={onShowSteps}>
         {run.tool_calls > 0 ? `Steps (${run.tool_calls})` : "Steps"}
       </button>
+      {/* Only a finished answer: its citations and checks are then final. */}
+      {run.answer && run.finished_at && (
+        <button
+          type="button"
+          className="text-button export"
+          onClick={() =>
+            download(`callslip-answer-${run.id.slice(0, 8)}.md`, answerMarkdown(run, location.origin))
+          }
+        >
+          <Download size={13} aria-hidden="true" />
+          Export
+        </button>
+      )}
     </div>
   );
 }
