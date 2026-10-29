@@ -240,6 +240,12 @@ function ToolStep({ d }: { d: Record<string, unknown> }) {
       {status !== "ok" && reasons.length > 0 && (
         <p className="meta step-detail">{reasons.join("; ")}</p>
       )}
+      <details className="step-call">
+        <summary className="meta">Tool call</summary>
+        <pre>
+          {tool}({JSON.stringify(input, null, 2)}) → {status}
+        </pre>
+      </details>
     </li>
   );
 }
