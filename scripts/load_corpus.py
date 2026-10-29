@@ -61,7 +61,11 @@ def main() -> int:
         if args.exec_prefix:
             command = shlex.split(args.exec_prefix) + ["python", "-m", "app.add_to_library"]
             command += ["--title", doc["title"], "--file-name", doc["file"]]
-            done = subprocess.run(command, input=content, capture_output=True)
+            try:
+                done = subprocess.run(command, input=content, capture_output=True, timeout=300)
+            except subprocess.TimeoutExpired:
+                print(f"upload failed for {doc['file']}: no answer in 300 s")
+                return 1
             if done.returncode != 0:
                 print(f"upload failed for {doc['file']}: {done.stderr.decode().strip()}")
                 return 1

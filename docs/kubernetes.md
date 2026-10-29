@@ -35,6 +35,7 @@ kubectl create secret generic callslip-secrets \
 # 4. Apply, then load the corpus. The public site takes no guest uploads, so each PDF goes in
 #    through the API container; the route or ingress host is only used to wait until all are ready.
 kubectl apply -k .
+cd ../../../..                                # back to the repository root
 python3 scripts/load_corpus.py --base https://callslip.apps.example.edu \
   --exec "kubectl exec -i deploy/api --"
 ```
@@ -138,7 +139,7 @@ for img in callslip-backend callslip-frontend; do
 done
 cd deploy/terraform && cp openshift.tfvars.example openshift.tfvars   # context, project, tag, host, key
 terraform init && terraform apply -var-file=openshift.tfvars
-python3 scripts/load_corpus.py --base https://<route host> --exec "oc exec -i deploy/api --"
+cd ../.. && python3 scripts/load_corpus.py --base https://<route host> --exec "oc exec -i deploy/api --"
 ```
 
 The pods pull from the project's own registry (`image-registry.openshift-image-registry.svc:5000/<project>`), so no registry credentials or public images are needed.
