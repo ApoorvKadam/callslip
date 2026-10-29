@@ -7,7 +7,7 @@ from anthropic import AsyncAnthropic
 from fastapi import FastAPI
 from redis.asyncio import Redis
 
-from app.api import auth, documents, health, runs, search, sessions
+from app.api import auth, documents, health, metrics, runs, search, sessions
 from app.cache import Cache
 from app.config import get_settings
 from app.db import migrate, open_pool
@@ -67,6 +67,7 @@ def create_app() -> FastAPI:
     app.include_router(search.router)
     app.include_router(sessions.router)
     app.include_router(runs.router)
+    app.include_router(metrics.router)
     return app
 
 
