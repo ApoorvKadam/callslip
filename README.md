@@ -129,6 +129,16 @@ Tests use real PostgreSQL, Redis and the embedding model, and skip what is not a
 
 Frontend (Node 24): `cd frontend && npm ci && npm run dev` (proxies `/api` to the stack on port 8080).
 
+Browser tests (Playwright, desktop and phone sizes) run against a running stack, such as `docker compose up`:
+
+```bash
+cd frontend
+npx playwright install chromium
+npm run e2e                      # BASE_URL=... to test another deployment
+```
+
+They cover the sign-in menu, a private upload seen only by its owner, plain messages for a wrong password, a file that is not a PDF and an unreachable server, and the phone layout. They need no model; with an API key set, run them with `HAS_MODEL=1`. CI runs them on every pull request.
+
 ## Search
 
 Hybrid retrieval over the same filtered candidate set (ready documents, optional document ids and page range):

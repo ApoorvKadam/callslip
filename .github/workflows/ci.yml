@@ -89,7 +89,7 @@ jobs:
     name: Compose build and smoke test
     needs: [backend, frontend]
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Configure environment (no API key in CI)
@@ -126,6 +126,17 @@ jobs:
             -d '{"query": "smoke test document"}' | python3 -c \
             "import json,sys; r=json.load(sys.stdin); print('hits', len(r['hits']), 'cache', r['cache']); assert r['hits'] and r['cache']=='unavailable'"
           docker compose start redis
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Browser tests (desktop and phone, no model)
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test
       - name: Container logs
         if: failure()
         run: docker compose logs --no-color --tail 200
