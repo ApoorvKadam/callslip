@@ -266,7 +266,7 @@ export function Conversation(props: Props) {
             <ModeIcon size={14} aria-hidden="true" />
             {MODE_HELP[props.mode]}
           </span>
-          <span>Enter to send, Shift and Enter for a new line.</span>
+          <span className="keys-hint">Enter to send, Shift and Enter for a new line.</span>
         </p>
       </form>
     </>

@@ -1,5 +1,5 @@
 import { LogIn, LogOut, UserRound } from "lucide-react";
-import { type FormEvent, type KeyboardEvent, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { signIn, signOut } from "../api";
 
 function errorText(e: unknown): string {
@@ -21,6 +21,27 @@ export function AccountMenu({
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const box = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+
+  // Like any menu: a click anywhere else closes it, and Escape closes it and returns to the button.
+  useEffect(() => {
+    if (!open) return;
+    function onPointer(e: PointerEvent) {
+      if (box.current && !box.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: globalThis.KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      trigger.current?.focus();
+    }
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -48,10 +69,6 @@ export function AccountMenu({
     }
   }
 
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Escape") setOpen(false);
-  }
-
   if (email) {
     return (
       <div className="account">
@@ -73,8 +90,9 @@ export function AccountMenu({
   }
 
   return (
-    <div className="account" onKeyDown={onKeyDown}>
+    <div className="account" ref={box}>
       <button
+        ref={trigger}
         type="button"
         className="btn"
         aria-expanded={open}
@@ -96,6 +114,7 @@ export function AccountMenu({
             <input
               type="email"
               required
+              autoFocus
               autoComplete="email"
               value={address}
               onChange={(e) => setAddress(e.target.value)}

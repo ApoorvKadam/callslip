@@ -25,8 +25,24 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, init);
+// What a person sees when the server cannot be reached at all, or its proxy has no answer.
+const UNREACHABLE = "Could not reach the server. Check your connection and try again.";
+const UNAVAILABLE = "The server is not answering right now. Try again in a moment.";
+
+// Every call gives up after `timeoutMs`, so a lost connection becomes a message, never a wait
+// without end. Uploads pass a longer limit.
+async function request<T>(path: string, init?: RequestInit, timeoutMs = 20_000): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(path, { ...init, signal: init?.signal ?? AbortSignal.timeout(timeoutMs) });
+  } catch {
+    throw new ApiError(UNREACHABLE, 0);
+  }
+  if (response.status === 502 || response.status === 503 || response.status === 504) {
+    // 503 from the API itself carries its own reason (answering not configured); a proxy's does not.
+    const body = await response.json().catch(() => null);
+    throw new ApiError(typeof body?.detail === "string" ? body.detail : UNAVAILABLE, response.status);
+  }
   if (!response.ok) {
     let message = `${response.status} ${response.statusText}`;
     try {
@@ -73,7 +89,7 @@ export function listDocuments(): Promise<DocumentInfo[]> {
 export function uploadDocument(file: File): Promise<DocumentInfo> {
   const form = new FormData();
   form.append("file", file);
-  return request("/api/documents", { method: "POST", body: form });
+  return request("/api/documents", { method: "POST", body: form }, 120_000);
 }
 
 // Delete one of your own uploads.

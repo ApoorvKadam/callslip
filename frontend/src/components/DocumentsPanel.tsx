@@ -104,7 +104,9 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
         <span className="meta">
           {!loaded
             ? "Loading"
-            : ready === docs.length
+            : loadError && docs.length === 0
+              ? ""
+              : ready === docs.length
               ? `${ready} ready`
               : `${ready} of ${docs.length} ready`}
         </span>
@@ -135,7 +137,10 @@ export function DocumentsPanel({ signedIn }: { signedIn: boolean }) {
       </p>
       {loadError && (
         <p className="error" role="alert">
-          {loadError}
+          {loadError}{" "}
+          <button type="button" className="text-button" onClick={() => void refresh()}>
+            Try again
+          </button>
         </p>
       )}
 
@@ -179,7 +184,9 @@ function DocList({
                 <span className={STATUS_MARK[d.status]}>{STATUS_LABEL[d.status]}</span>
               )}
             </span>
-            <span className="doc-title">{titleRest(d.title)}</span>
+            {titleRest(d.title) !== shortCode(d.title) && (
+              <span className="doc-title">{titleRest(d.title)}</span>
+            )}
             <span className="meta">
               {d.page_count ? `${d.page_count} pages` : d.filename}
               {d.chunk_count ? `, ${d.chunk_count} passages` : ""}

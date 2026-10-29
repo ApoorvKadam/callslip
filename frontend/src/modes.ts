@@ -7,5 +7,5 @@ export type AskMode = Mode | "compare";
 export const MODE_HELP: Record<AskMode, string> = {
   agent: "Agent: can search again, read more pages, or ask you to clarify.",
   baseline: "Single pass: searches once, then answers from those results. Useful for comparing approaches.",
-  compare: "Compare: asks both ways at once and shows the two answers side by side.",
+  compare: "Compare: asks one question both ways at once, side by side. Each comparison is its own conversation.",
 };
