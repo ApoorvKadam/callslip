@@ -163,3 +163,15 @@ test("with every scrollbar showing, nothing scrolls sideways", async ({ page }, 
     expect(sideways, `at ${width || "phone"} width`).toEqual([]);
   }
 });
+
+test("a question pasted past the limit says it was cut", async ({ page }) => {
+  await open(page);
+  const box = page.locator("#question");
+  await box.focus();
+  await page.keyboard.insertText("Explain the governance function. ".repeat(80));
+  await expect(box).toHaveValue(/^Explain/);
+  expect((await box.inputValue()).length).toBe(2000);
+  await expect(page.locator(".limit-hint")).toHaveText("Up to 2,000 characters; longer text is cut off.");
+  await box.press("Backspace");
+  await expect(page.locator(".limit-hint")).toHaveCount(0);
+});

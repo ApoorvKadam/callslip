@@ -46,6 +46,8 @@ export interface PendingClarification {
 }
 
 const MODE_ICON = { agent: Route, baseline: ArrowRight, compare: Columns2 };
+// The API refuses longer questions and replies; the box stops there.
+const MAX_TEXT = 2000;
 
 interface Props {
   mode: AskMode;
@@ -255,7 +257,7 @@ export function Conversation(props: Props) {
             placeholder={pending ? "Or type your own reply" : "Ask about the documents"}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={onKey}
-            maxLength={2000}
+            maxLength={MAX_TEXT}
           />
           <button type="submit" className="btn btn-primary" disabled={busy || !text.trim()}>
             {busy ? "Working" : pending ? "Reply" : "Ask"}
@@ -267,7 +269,13 @@ export function Conversation(props: Props) {
             <ModeIcon size={14} aria-hidden="true" />
             {MODE_HELP[props.mode]}
           </span>
-          <span className="keys-hint">Enter to send, Shift and Enter for a new line.</span>
+          {text.length >= MAX_TEXT ? (
+            <span className="limit-hint" role="status">
+              Up to 2,000 characters; longer text is cut off.
+            </span>
+          ) : (
+            <span className="keys-hint">Enter to send, Shift and Enter for a new line.</span>
+          )}
         </p>
       </form>
     </>
