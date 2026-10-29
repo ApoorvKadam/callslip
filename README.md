@@ -4,7 +4,7 @@ Callslip answers simple and multi-part questions across a set of text-based PDFs
 
 **Try it:** https://callslip.apps.rm3.7wse.p1.openshiftapps.com
 
-https://github.com/user-attachments/assets/e6142501-9f08-4a38-8f30-992d8bc2bf2d
+https://github.com/user-attachments/assets/5dec2b7b-71d8-4f28-b01a-5176c6b2029f
 
 The walkthrough above ([download](docs/media/callslip-walkthrough.mp4)) shows signing in and uploading a private PDF, a question across two documents, the cited page with the quote marked, exporting the answer, both answering modes side by side, a second search driven by what the first found, a clarification kept with its answer, a failed search recovered through the document's outline, a question about the private PDF and its deletion, and the saved conversations.
 
