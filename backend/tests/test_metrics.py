@@ -76,9 +76,10 @@ def test_metrics_match_the_run_and_model_call_tables(client):
         )
 
     m = scrape(client)
-    assert m['callslip_runs_total{mode="agent",status="complete"}'] == 2
-    assert m['callslip_runs_total{mode="baseline",status="failed"}'] == 1
-    assert m['callslip_runs_total{mode="agent",status="running"}'] == 1
+    assert m['callslip_runs_finished_total{mode="agent",status="complete"}'] == 2
+    assert m['callslip_runs_finished_total{mode="baseline",status="failed"}'] == 1
+    assert m['callslip_runs_open{mode="agent",status="running"}'] == 1
+    assert 'callslip_runs_finished_total{mode="agent",status="running"}' not in m
 
     # Agent runs took 3 s and 12 s on the workers; the running one is not finished.
     assert m['callslip_run_seconds_bucket{mode="agent",le="2"}'] == 0

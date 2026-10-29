@@ -98,7 +98,7 @@ A failed run shows the user a plain cause and a short reference; the full except
 
 ## Metrics
 
-The API serves Prometheus metrics at `/metrics`, read from PostgreSQL on each scrape: questions by mode and status, worker time per run as a histogram, questions waiting for a run worker and the oldest wait, model calls, tokens and estimated cost by model and purpose, and documents by status. It holds no questions, answers or titles. The path is outside `/api`, so nginx, the Ingress and the OpenShift Route never forward it; only something on the internal network can read it.
+The API serves Prometheus metrics at `/metrics`, read from PostgreSQL on each scrape: finished runs by mode and outcome, open runs, worker time per run as a histogram, questions waiting for a run worker and the oldest wait, model calls, tokens and estimated cost by model and purpose, and documents by status. It holds no questions, answers or titles. The path is outside `/api`, so nginx, the Ingress and the OpenShift Route never forward it; only something on the internal network can read it.
 
 ```bash
 docker compose exec api python -c "import urllib.request; print(urllib.request.urlopen('http://localhost:8000/metrics').read().decode())"

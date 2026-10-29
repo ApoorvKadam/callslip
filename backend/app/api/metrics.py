@@ -6,8 +6,9 @@ exec`) can read it. It reports counts, times, tokens and cost. Nothing a user wr
 answers, document titles) appears in it.
 
 The numbers come from the tables the app already keeps: `runs`, `llm_calls` and `documents`.
-Deleting a conversation removes its runs, so a run counter can go down; Prometheus treats that as
-a counter reset. Model calls keep their cost when their run is deleted.
+Runs and model calls are never deleted, and a run's status, time and counts are written once,
+together, when it finishes. So totals over finished runs and over model calls only grow and are
+counters; runs still open move between statuses and are a gauge.
 """
 
 from typing import Annotated, LiteralString
@@ -24,7 +25,10 @@ router = APIRouter(tags=["metrics"])
 RUN_BUCKETS = (2, 5, 10, 20, 30, 60, 90)
 
 QUERIES: dict[str, LiteralString] = {
-    "runs": "SELECT mode, status, count(*) FROM runs GROUP BY 1, 2 ORDER BY 1, 2",
+    "runs": """
+        SELECT mode, status, finished_at IS NOT NULL, count(*)
+          FROM runs GROUP BY 1, 2, 3 ORDER BY 1, 2
+    """,
     # Time the run workers spent executing finished runs (model calls, tools, the quote check);
     # a clarification's wait for the user is not in it.
     "run_seconds": """
@@ -72,9 +76,14 @@ def render(rows: dict[str, list[tuple]]) -> str:
         out.append(f"# HELP {name} {help_}")
         out.append(f"# TYPE {name} {kind}")
 
-    family("callslip_runs_total", "counter", "Questions asked, by mode and current status.")
-    for mode, status, n in rows["runs"]:
-        out.append(f"callslip_runs_total{_labels(mode=mode, status=status)} {n}")
+    family("callslip_runs_finished_total", "counter", "Finished runs, by mode and outcome.")
+    for mode, status, finished, n in rows["runs"]:
+        if finished:
+            out.append(f"callslip_runs_finished_total{_labels(mode=mode, status=status)} {n}")
+    family("callslip_runs_open", "gauge", "Runs running or waiting for a clarification.")
+    for mode, status, finished, n in rows["runs"]:
+        if not finished:
+            out.append(f"callslip_runs_open{_labels(mode=mode, status=status)} {n}")
 
     family("callslip_run_seconds", "histogram", "Worker time of finished runs, by mode.")
     for mode, buckets, count, total in rows["run_seconds"]:
