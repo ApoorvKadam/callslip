@@ -23,12 +23,12 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 | Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
 | Optional: Kubernetes and OpenShift | Done: live on OpenShift, deployed with Terraform; also tested on a local kind cluster with network policies, update, rollback and pod loss | [live demo](https://callslip.apps.rm3.7wse.p1.openshiftapps.com), [docs/kubernetes.md](docs/kubernetes.md#live-on-openshift) |
 | Optional: infrastructure as code | Done: Kustomize describes the workloads; Terraform makes the namespace and Secrets and applies them, on the kind cluster and on OpenShift | [docs/kubernetes.md](docs/kubernetes.md#apply-with-terraform) |
-| Added beyond the brief | Compare mode (both answering modes side by side); export an answer with its sources; an Evaluation page in the app; answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; internal metrics; a limit on questions per address; latency measured in a real browser | [summary](SUMMARY.md) |
+| Added beyond the brief | Compare mode (both answering modes side by side); export an answer with its sources; answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; internal metrics; a limit on questions per address; latency measured in a real browser | [summary](SUMMARY.md) |
 | Not done | NYU single sign-on, sharing with groups, a production cluster with managed PostgreSQL, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
 
 ## Results at a glance
 
-Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). The app's Evaluation page shows every case of these runs, with each answer. With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
+Fifteen evaluation cases, three repeats each, on the same corpus, model and retriever, recorded at commit `09d1b08` ([details](docs/evaluation.md)). With each document's outline added as a tool, the agent passed 44 of 45 ([run](eval/results/2026-10-28T221200Z/)), and the failed-search case 20 of 20. Scores use the checks after the [grader corrections](docs/evaluation.md#grader-corrections), applied to both systems.
 
 | Claude Haiku 5.5 (the default) | Agent | Single-pass baseline |
 |---|---|---|

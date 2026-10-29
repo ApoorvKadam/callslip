@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  ClipboardCheck,
   Columns2,
   Files,
   MessagesSquare,
@@ -36,7 +35,6 @@ import {
 } from "./components/Conversation";
 import { ConversationList } from "./components/ConversationList";
 import { DocumentsPanel } from "./components/DocumentsPanel";
-import { EvaluationView } from "./components/EvaluationView";
 import { RunRail, type RailTab, toolTitle } from "./components/RunRail";
 import { type AskMode, MODE_HELP } from "./modes";
 
@@ -73,8 +71,6 @@ export default function App() {
   const lastReply = useRef<{ toolUseId: string; text: string; key: string } | null>(null);
   const [mode, setMode] = useState<AskMode>("agent");
   const [tab, setTab] = useState<RailTab>("sources");
-  // The questions, or the page with the committed evaluation runs.
-  const [view, setView] = useState<"ask" | "evaluation">("ask");
   const [hovered, setHovered] = useState<CiteRef | null>(null);
   const [chosen, setChosen] = useState<CiteRef | null>(null);
   const streams = useRef<Record<string, EventSource>>({});
@@ -412,15 +408,6 @@ export default function App() {
               Compare
             </label>
           </fieldset>
-          <button
-            type="button"
-            className="btn"
-            aria-pressed={view === "evaluation"}
-            onClick={() => setView(view === "evaluation" ? "ask" : "evaluation")}
-          >
-            <ClipboardCheck size={15} aria-hidden="true" />
-            {view === "evaluation" ? "Back to questions" : "Evaluation"}
-          </button>
           <button type="button" className="btn" onClick={() => void onNewSession()}>
             <SquarePen size={15} aria-hidden="true" />
             New conversation
@@ -444,12 +431,7 @@ export default function App() {
           />
         </div>
       </header>
-      {view === "evaluation" && (
-        <main className="evaluation-page">
-          <EvaluationView />
-        </main>
-      )}
-      <div className="layout" hidden={view === "evaluation"}>
+      <div className="layout">
         <aside className="docs" aria-label="Documents and conversations">
           <div className="tabs side-tabs" role="tablist" aria-label="Library">
             <button
