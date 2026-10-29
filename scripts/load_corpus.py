@@ -2,14 +2,19 @@
 
     python3 scripts/load_corpus.py                 # upload every PDF in corpus/manifest.json
     python3 scripts/load_corpus.py --download      # first re-fetch the public PDFs and verify them
+    python3 scripts/load_corpus.py --base https://<host> --exec "kubectl exec -i deploy/api --"
 
 Uploads use the canonical titles from the manifest. Already-uploaded files (same bytes) are
 skipped, so running it twice is safe. Waits until every document is ready. Standard library only.
+A deployment that takes no guest uploads is loaded with --exec: each PDF goes through
+`python -m app.add_to_library` inside the API container, and --base is used only to wait.
 """
 
 import argparse
 import hashlib
 import json
+import shlex
+import subprocess
 import sys
 import time
 import urllib.request
@@ -42,6 +47,7 @@ def main() -> int:
     parser.add_argument("--base", default="http://localhost:8080")
     parser.add_argument("--download", action="store_true")
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--exec", dest="exec_prefix", help="prefix that runs a command in the API")
     args = parser.parse_args()
     documents = json.loads(MANIFEST.read_text())["documents"]
     if args.download:
@@ -52,7 +58,18 @@ def main() -> int:
         content = (PDFS / doc["file"]).read_bytes()
         if hashlib.sha256(content).hexdigest() != doc["sha256"]:
             raise SystemExit(f"{doc['file']}: checksum differs from the manifest")
-        status, body = upload(args.base, doc["file"], content, doc["title"])
+        if args.exec_prefix:
+            command = shlex.split(args.exec_prefix) + ["python", "-m", "app.add_to_library"]
+            command += ["--title", doc["title"], "--file-name", doc["file"]]
+            done = subprocess.run(command, input=content, capture_output=True)
+            if done.returncode != 0:
+                print(f"upload failed for {doc['file']}: {done.stderr.decode().strip()}")
+                return 1
+            added = json.loads(done.stdout.decode().splitlines()[-1])
+            status = 202 if added["new"] else 409
+            body = {"id": added["id"], "detail": {"document_id": added["id"]}}
+        else:
+            status, body = upload(args.base, doc["file"], content, doc["title"])
         if status == 202:
             ids.append(body["id"])
             print(f"uploaded {doc['file']} as document {body['id']}")

@@ -32,9 +32,11 @@ kubectl create secret generic callslip-secrets \
   --from-literal=POSTGRES_PASSWORD="$(openssl rand -hex 24)" \
   --from-literal=ANTHROPIC_API_KEY=...
 
-# 4. Apply, then load the corpus through the route or ingress host.
+# 4. Apply, then load the corpus. The public site takes no guest uploads, so each PDF goes in
+#    through the API container; the route or ingress host is only used to wait until all are ready.
 kubectl apply -k .
-python3 scripts/load_corpus.py --base https://callslip.apps.example.edu
+python3 scripts/load_corpus.py --base https://callslip.apps.example.edu \
+  --exec "kubectl exec -i deploy/api --"
 ```
 
 On OpenShift, replace `callslip.apps.example.edu` in `routes.yaml` with the cluster's application domain; the router terminates TLS. With the ingress overlay, replace `callslip.example.edu` in `ingress.yaml` and create the `callslip-tls` certificate Secret, or let cert-manager issue it.
@@ -79,7 +81,8 @@ kubectl apply -k deploy/kubernetes/overlays/kind
 kubectl -n callslip rollout status deploy/api
 
 # With "127.0.0.1 callslip.example.edu" in /etc/hosts:
-SSL_CERT_FILE=tls.crt python3 scripts/load_corpus.py --base https://callslip.example.edu:8443
+SSL_CERT_FILE=tls.crt python3 scripts/load_corpus.py --base https://callslip.example.edu:8443 \
+  --exec "kubectl -n callslip exec -i deploy/api --"
 ```
 
 Then open https://callslip.example.edu:8443 and accept the self-signed certificate. `kind delete cluster --name callslip` removes it all. The ingress-nginx project is retired upstream; it is used here because the overlay's annotations are written for it, and OpenShift uses its own router.
@@ -135,7 +138,7 @@ for img in callslip-backend callslip-frontend; do
 done
 cd deploy/terraform && cp openshift.tfvars.example openshift.tfvars   # context, project, tag, host, key
 terraform init && terraform apply -var-file=openshift.tfvars
-python3 scripts/load_corpus.py --base https://<route host>
+python3 scripts/load_corpus.py --base https://<route host> --exec "oc exec -i deploy/api --"
 ```
 
 The pods pull from the project's own registry (`image-registry.openshift-image-registry.svc:5000/<project>`), so no registry credentials or public images are needed.

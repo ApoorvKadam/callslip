@@ -94,3 +94,17 @@ def test_unsafe_file_names_are_cleaned_and_served_with_safe_headers(client):
     assert file.status_code == 200
     assert file.headers["content-disposition"] == f'inline; filename="{body["filename"]}"'
     assert file.headers["x-content-type-options"] == "nosniff"
+
+
+def test_the_operator_command_adds_to_the_shared_collection(client):
+    # A public deployment takes no guest uploads; its shared collection is loaded from inside.
+    import asyncio
+
+    from app.add_to_library import add
+
+    pdf = make_pdf(["Shared policy."])
+    first = asyncio.run(add(pdf, "policy.pdf", "Shared policy"))
+    again = asyncio.run(add(pdf, "copy.pdf", "Shared policy"))
+    assert first["new"] is True and again == {"id": first["id"], "new": False}
+    listed = [(d["id"], d["title"], d["private"]) for d in client.get("/api/documents").json()]
+    assert listed == [(first["id"], "Shared policy", False)]
