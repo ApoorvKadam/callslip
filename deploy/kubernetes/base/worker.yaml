@@ -5,6 +5,8 @@ kind: Deployment
 metadata:
   name: worker
 spec:
+  # Old ReplicaSets count against the namespace quota; three are enough to roll back.
+  revisionHistoryLimit: 3
   replicas: 1
   selector:
     matchLabels:
