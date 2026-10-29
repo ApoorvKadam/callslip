@@ -195,13 +195,17 @@ async def ask(
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
     if body.faults and not state.settings.allow_fault_injection:
         raise HTTPException(403, "Fault injection is disabled on this server.")
-    if await is_comparison(pool, session_id):
-        raise HTTPException(409, "A comparison holds one question. Start a new conversation.")
     question = body.question
     history = await recent_history(pool, session_id, state.settings.history_turns)
     run_id = uuid4()
     try:
-        async with pool.connection() as conn:
+        async with pool.connection() as conn, conn.transaction():
+            # The same lock as a comparison takes, so neither can slip in beside the other.
+            await conn.execute("SELECT 1 FROM sessions WHERE id = %s FOR UPDATE", (session_id,))
+            if await is_comparison(conn, session_id):
+                raise HTTPException(
+                    409, "A comparison holds one question. Start a new conversation."
+                )
             faults = dict(body.faults or {})
             event = {"mode": body.mode, "question": question, "faults": faults}
             row = await queue.enqueue_start(
@@ -224,13 +228,12 @@ async def ask(
     return run
 
 
-async def is_comparison(pool: AsyncConnectionPool, session_id: UUID) -> bool:
-    async with pool.connection() as conn:
-        cur = await conn.execute(
-            "SELECT 1 FROM runs WHERE session_id = %s AND compare_id IS NOT NULL LIMIT 1",
-            (session_id,),
-        )
-        return await cur.fetchone() is not None
+async def is_comparison(conn, session_id: UUID) -> bool:
+    cur = await conn.execute(
+        "SELECT 1 FROM runs WHERE session_id = %s AND compare_id IS NOT NULL LIMIT 1",
+        (session_id,),
+    )
+    return await cur.fetchone() is not None
 
 
 class CompareRequest(BaseModel):

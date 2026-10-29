@@ -108,7 +108,8 @@ export function Conversation(props: Props) {
   const { runs, selectedId, pending, onSelect, onAsk, onSkip, error } = props;
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
-  const busy = sending || runs.some((r) => r.status === "running");
+  // A reply to a clarifying question can go while the other half of a comparison still runs.
+  const busy = sending || (!pending && runs.some((r) => r.status === "running"));
   // Both halves of one comparison: shown side by side instead of one after the other.
   const comparison =
     runs.length === 2 && !!runs[0].compare_id && runs[0].compare_id === runs[1].compare_id;
@@ -346,12 +347,18 @@ function Comparison(
 function CompareSummary({ runs }: { runs: Run[] }) {
   // Only once both runs are recorded as finished, so their counts are final.
   if (runs.some((r) => !r.answer || !r.finished_at)) return null;
+  // Documents by id, named by their short title: two documents never merge into one.
   const docs = runs.map(
-    (r) => new Set(r.answer!.citations.map((c) => shortCode(c.title)).filter(Boolean)),
+    (r) =>
+      new Map(
+        r.answer!.citations
+          .filter((c) => c.document_id !== null)
+          .map((c) => [c.document_id!, shortCode(c.title)] as const),
+      ),
   );
   const [agent, single] = docs;
-  const onlyAgent = [...agent].filter((d) => !single.has(d));
-  const onlySingle = [...single].filter((d) => !agent.has(d));
+  const onlyAgent = [...agent].filter(([id]) => !single.has(id)).map(([, name]) => name);
+  const onlySingle = [...single].filter(([id]) => !agent.has(id)).map(([, name]) => name);
   return (
     <div className="compare-summary meta" aria-label="How the two answers differ">
       <table>
@@ -366,7 +373,7 @@ function CompareSummary({ runs }: { runs: Run[] }) {
           <tr>
             <th scope="row">Documents cited</th>
             {docs.map((d, i) => (
-              <td key={i}>{d.size ? [...d].join(", ") : "none"}</td>
+              <td key={i}>{d.size ? [...d.values()].join(", ") : "none"}</td>
             ))}
           </tr>
           <tr>
