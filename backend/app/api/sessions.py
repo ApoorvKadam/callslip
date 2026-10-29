@@ -42,6 +42,7 @@ RUN_COLUMNS = (
     "exec_ms",
     "created_at",
     "finished_at",
+    "compare_id",
 )
 RUN_FIELDS = ", ".join(RUN_COLUMNS)
 
@@ -133,7 +134,8 @@ async def list_sessions(request: Request, pool: Pool, user: Viewer) -> list[dict
         cur = conn.cursor(row_factory=dict_row)
         await cur.execute(
             "SELECT s.id, s.created_at, count(r.id) AS questions, max(r.created_at) AS last_at,"
-            "       (array_agg(r.question ORDER BY r.created_at))[1] AS title"
+            "       (array_agg(r.question ORDER BY r.created_at))[1] AS title,"
+            "       bool_or(r.compare_id IS NOT NULL) AS compare"
             "  FROM sessions s JOIN runs r ON r.session_id = s.id"
             " WHERE s.owner_hash = %s"
             " GROUP BY s.id ORDER BY last_at DESC LIMIT 50",
@@ -193,6 +195,8 @@ async def ask(
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
     if body.faults and not state.settings.allow_fault_injection:
         raise HTTPException(403, "Fault injection is disabled on this server.")
+    if await is_comparison(pool, session_id):
+        raise HTTPException(409, "A comparison holds one question. Start a new conversation.")
     question = body.question
     history = await recent_history(pool, session_id, state.settings.history_turns)
     run_id = uuid4()
@@ -218,6 +222,55 @@ async def ask(
 
     # A run worker claims the run and executes it (app/runner.py).
     return run
+
+
+async def is_comparison(pool: AsyncConnectionPool, session_id: UUID) -> bool:
+    async with pool.connection() as conn:
+        cur = await conn.execute(
+            "SELECT 1 FROM runs WHERE session_id = %s AND compare_id IS NOT NULL LIMIT 1",
+            (session_id,),
+        )
+        return await cur.fetchone() is not None
+
+
+class CompareRequest(BaseModel):
+    question: Annotated[
+        str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)
+    ]
+
+
+@router.post("/sessions/{session_id}/compare", status_code=202)
+async def compare(
+    session_id: UUID, body: CompareRequest, request: Request, pool: Pool, owner: Owner, user: Viewer
+) -> list[dict]:
+    """Ask one question both ways at once, in a new, empty conversation: the agent and the single
+    pass run side by side on the same documents and model, so their answers can be compared."""
+    await owned_session(pool, session_id, owner)
+    if request.app.state.llm is None:
+        raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
+    compare_id = uuid4()
+    runs = []
+    async with pool.connection() as conn, conn.transaction():
+        # Locked, so a question asked at the same moment cannot slip in beside the pair.
+        await conn.execute("SELECT 1 FROM sessions WHERE id = %s FOR UPDATE", (session_id,))
+        cur = await conn.execute("SELECT 1 FROM runs WHERE session_id = %s LIMIT 1", (session_id,))
+        if await cur.fetchone() is not None:
+            raise HTTPException(409, "Compare in a new conversation.")
+        for mode in ("agent", "baseline"):
+            event = {"mode": mode, "question": body.question, "faults": {}}
+            row = await queue.enqueue_start(
+                conn,
+                uuid4(),
+                session_id,
+                mode,
+                body.question,
+                user,
+                {},
+                {"event": event, "history": []},
+                compare_id,
+            )
+            runs.append({k: row[k] for k in RUN_COLUMNS})
+    return runs
 
 
 class ResumeRequest(BaseModel):

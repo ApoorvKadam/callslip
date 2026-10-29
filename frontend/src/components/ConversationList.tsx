@@ -34,7 +34,7 @@ export function ConversationList({
           >
             <span className="conv-title">{c.title}</span>
             <span className="meta">
-              {count(c.questions, "question")} · {when(c.last_at)}
+              {c.compare ? "Comparison" : count(c.questions, "question")} · {when(c.last_at)}
             </span>
           </button>
         </li>

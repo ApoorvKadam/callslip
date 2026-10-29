@@ -3,14 +3,15 @@ import {
   ArrowRight,
   Check,
   CircleAlert,
+  Columns2,
   CornerDownLeft,
   LoaderCircle,
   Route,
 } from "lucide-react";
-import type { Answer, Mode, Run, SupportCheck } from "../api";
+import type { Answer, Run, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
-import { count, seconds } from "../format";
-import { MODE_HELP } from "../modes";
+import { count, seconds, shortCode } from "../format";
+import { type AskMode, MODE_HELP } from "../modes";
 import { AnswerView } from "./AnswerView";
 
 // Status words for runs that need attention; a plain answered run shows none.
@@ -42,8 +43,10 @@ export interface PendingClarification {
   options: string[];
 }
 
+const MODE_ICON = { agent: Route, baseline: ArrowRight, compare: Columns2 };
+
 interface Props {
-  mode: Mode;
+  mode: AskMode;
   runs: Run[];
   live: Record<string, LiveAnswer>;
   selectedId: string | null;
@@ -106,6 +109,10 @@ export function Conversation(props: Props) {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const busy = sending || runs.some((r) => r.status === "running");
+  // Both halves of one comparison: shown side by side instead of one after the other.
+  const comparison =
+    runs.length === 2 && !!runs[0].compare_id && runs[0].compare_id === runs[1].compare_id;
+  const ModeIcon = MODE_ICON[props.mode];
   const end = useRef<HTMLDivElement>(null);
   const transcript = useRef<HTMLDivElement>(null);
 
@@ -159,19 +166,23 @@ export function Conversation(props: Props) {
               against its page.
             </p>
             <ul className="modes">
-              <li>
-                <Route size={16} aria-hidden="true" />
-                <span>{MODE_HELP.agent}</span>
-              </li>
-              <li>
-                <ArrowRight size={16} aria-hidden="true" />
-                <span>{MODE_HELP.baseline}</span>
-              </li>
+              {(["agent", "baseline", "compare"] as const).map((m) => {
+                const Icon = MODE_ICON[m];
+                return (
+                  <li key={m}>
+                    <Icon size={16} aria-hidden="true" />
+                    <span>{MODE_HELP[m]}</span>
+                  </li>
+                );
+              })}
             </ul>
           </>
         )}
 
-        {runs.map((run) => (
+        {comparison && (
+          <Comparison {...props} busy={busy} send={send} />
+        )}
+        {!comparison && runs.map((run) => (
           <article
             key={run.id}
             className={`exchange${run.id === selectedId ? " selected" : ""}`}
@@ -203,29 +214,7 @@ export function Conversation(props: Props) {
               onChoose={props.onChoose}
             />
             {pending?.runId === run.id && (
-              <div className="clarify" role="group" aria-labelledby="clarify-question">
-                <p id="clarify-question" className="clarify-question">
-                  {pending.question}
-                </p>
-                {pending.options.length > 0 && (
-                  <div className="options">
-                    {pending.options.map((o) => (
-                      <button
-                        key={o}
-                        type="button"
-                        className="btn"
-                        disabled={busy}
-                        onClick={() => void send(o)}
-                      >
-                        {o}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <button type="button" className="text-button" onClick={onSkip} disabled={busy}>
-                  Skip this question
-                </button>
-              </div>
+              <Clarify pending={pending} busy={busy} send={send} onSkip={onSkip} />
             )}
           </article>
         ))}
@@ -258,17 +247,154 @@ export function Conversation(props: Props) {
         </div>
         <p className="composer-hint meta">
           <span className="mode-help">
-            {props.mode === "agent" ? (
-              <Route size={14} aria-hidden="true" />
-            ) : (
-              <ArrowRight size={14} aria-hidden="true" />
-            )}
+            <ModeIcon size={14} aria-hidden="true" />
             {MODE_HELP[props.mode]}
           </span>
           <span>Enter to send, Shift and Enter for a new line.</span>
         </p>
       </form>
     </>
+  );
+}
+
+function Clarify(props: {
+  pending: PendingClarification;
+  busy: boolean;
+  send: (text: string) => Promise<void>;
+  onSkip: () => void;
+}) {
+  const { pending, busy, send, onSkip } = props;
+  return (
+    <div className="clarify" role="group" aria-labelledby="clarify-question">
+      <p id="clarify-question" className="clarify-question">
+        {pending.question}
+      </p>
+      {pending.options.length > 0 && (
+        <div className="options">
+          {pending.options.map((o) => (
+            <button key={o} type="button" className="btn" disabled={busy} onClick={() => void send(o)}>
+              {o}
+            </button>
+          ))}
+        </div>
+      )}
+      <button type="button" className="text-button" onClick={onSkip} disabled={busy}>
+        Skip this question
+      </button>
+    </div>
+  );
+}
+
+// One question asked both ways: the agent and the single pass side by side, then what differs.
+function Comparison(
+  props: Props & {
+    busy: boolean;
+    send: (text: string) => Promise<void>;
+  },
+) {
+  const { runs, selectedId, pending, busy, send } = props;
+  const ordered = [...runs].sort((a, b) => Number(b.mode === "agent") - Number(a.mode === "agent"));
+  return (
+    <article className="comparison" aria-labelledby="compare-question">
+      <h2 id="compare-question" className="compare-question">
+        {ordered[0].question}
+      </h2>
+      <CompareSummary
+        runs={ordered.map((r) => ({ ...r, answer: props.live[r.id]?.answer ?? r.answer }))}
+      />
+      <div className="compare-grid">
+        {ordered.map((run) => (
+          <section
+            key={run.id}
+            className={`compare-col${run.id === selectedId ? " selected" : ""}`}
+            aria-label={run.mode === "agent" ? "Agent" : "Single pass"}
+          >
+            <button type="button" className="compare-head" onClick={() => props.onSelect(run.id)}>
+              {run.mode === "agent" ? (
+                <Route size={15} aria-hidden="true" />
+              ) : (
+                <ArrowRight size={15} aria-hidden="true" />
+              )}
+              {run.mode === "agent" ? "Agent" : "Single pass"}
+            </button>
+            <RunMeta
+              run={run}
+              answer={props.live[run.id]?.answer ?? run.answer}
+              onShowSteps={() => props.onShowSteps(run.id)}
+            />
+            {run.status_reason && run.status !== "complete" && (
+              <p className="meta">{run.status_reason}</p>
+            )}
+            <RunAnswer
+              run={run}
+              live={props.live[run.id]}
+              active={props.active}
+              onHover={props.onHover}
+              onChoose={props.onChoose}
+            />
+            {pending?.runId === run.id && (
+              <Clarify pending={pending} busy={busy} send={send} onSkip={props.onSkip} />
+            )}
+          </section>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+// What differs, from what each run recorded: documents cited, sources, searches, time.
+function CompareSummary({ runs }: { runs: Run[] }) {
+  if (runs.some((r) => !r.answer)) return null;
+  const docs = runs.map(
+    (r) => new Set(r.answer!.citations.map((c) => shortCode(c.title)).filter(Boolean)),
+  );
+  const [agent, single] = docs;
+  const onlyAgent = [...agent].filter((d) => !single.has(d));
+  const onlySingle = [...single].filter((d) => !agent.has(d));
+  return (
+    <div className="compare-summary meta" aria-label="How the two answers differ">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" />
+            <th scope="col">Agent</th>
+            <th scope="col">Single pass</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Documents cited</th>
+            {docs.map((d, i) => (
+              <td key={i}>{d.size ? [...d].join(", ") : "none"}</td>
+            ))}
+          </tr>
+          <tr>
+            <th scope="row">Sources</th>
+            {runs.map((r) => (
+              <td key={r.id}>{r.answer!.citations.length}</td>
+            ))}
+          </tr>
+          <tr>
+            <th scope="row">Tool calls</th>
+            {runs.map((r) => (
+              <td key={r.id}>{r.tool_calls}</td>
+            ))}
+          </tr>
+          <tr>
+            <th scope="row">Answered in</th>
+            {runs.map((r) => (
+              <td key={r.id}>{r.answer!.answer_ms ? seconds(r.answer!.answer_ms) : "-"}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+      {(onlyAgent.length > 0 || onlySingle.length > 0) && (
+        <p>
+          {onlyAgent.length > 0 && <>Only the agent cited {onlyAgent.join(", ")}. </>}
+          {onlySingle.length > 0 && <>Only the single pass cited {onlySingle.join(", ")}.</>}
+        </p>
+      )}
+    </div>
   );
 }
 

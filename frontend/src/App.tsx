@@ -1,8 +1,7 @@
-import { ArrowRight, Files, MessagesSquare, Route, SquarePen } from "lucide-react";
+import { ArrowRight, Columns2, Files, MessagesSquare, Route, SquarePen } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ApiError,
-  type Mode,
   type Run,
   type Answer,
   type RunEvent,
@@ -11,6 +10,7 @@ import {
   type RunStatus,
   abandon,
   ask,
+  compare,
   createSession,
   getAccount,
   getRun,
@@ -29,7 +29,7 @@ import {
 import { ConversationList } from "./components/ConversationList";
 import { DocumentsPanel } from "./components/DocumentsPanel";
 import { RunRail, type RailTab, toolTitle } from "./components/RunRail";
-import { MODE_HELP } from "./modes";
+import { type AskMode, MODE_HELP } from "./modes";
 
 const SESSION_KEY = "callslip.session";
 const EVENT_TYPES = [
@@ -62,7 +62,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const lastReply = useRef<{ toolUseId: string; text: string; key: string } | null>(null);
-  const [mode, setMode] = useState<Mode>("agent");
+  const [mode, setMode] = useState<AskMode>("agent");
   const [tab, setTab] = useState<RailTab>("sources");
   const [hovered, setHovered] = useState<CiteRef | null>(null);
   const [chosen, setChosen] = useState<CiteRef | null>(null);
@@ -125,6 +125,16 @@ export default function App() {
     const ticket = ++switches.current;
     const { id } = await createSession();
     if (ticket !== switches.current) return;
+    localStorage.setItem(SESSION_KEY, id);
+    setSessionId(id);
+    setRuns([]);
+    setEvents({});
+    setSelectedId(null);
+  }, []);
+
+  // Move to a conversation just created for a question (a comparison, or a follow-up to one).
+  const enterNew = useCallback((id: string) => {
+    ++switches.current;
     localStorage.setItem(SESSION_KEY, id);
     setSessionId(id);
     setRuns([]);
@@ -275,9 +285,22 @@ export default function App() {
         if (ticket !== switches.current) return true;
         replaceRun(run);
         follow(run.id);
-      } else {
-        const run = await ask(sessionId, text, mode);
+      } else if (mode === "compare") {
+        // A comparison is its own conversation: this one if still empty, else a new one.
+        const id = runs.length === 0 ? sessionId : (await createSession()).id;
+        const pair = await compare(id, text);
         if (ticket !== switches.current) return true;
+        if (id !== sessionId) enterNew(id);
+        setRuns(pair);
+        setSelectedId((pair.find((r) => r.mode === "agent") ?? pair[0]).id);
+        setTab("steps");
+        pair.forEach((r) => follow(r.id));
+      } else {
+        // A comparison holds one question, so a follow-up starts a new conversation.
+        const id = runs.some((r) => r.compare_id) ? (await createSession()).id : sessionId;
+        const run = await ask(id, text, mode);
+        if (ticket !== switches.current) return true;
+        if (id !== sessionId) enterNew(id);
         setRuns((all) => [...all, run]);
         setSelectedId(run.id);
         setTab("steps"); // a new question: watch the agent work
@@ -366,6 +389,16 @@ export default function App() {
               />
               <ArrowRight size={15} aria-hidden="true" />
               Single pass
+            </label>
+            <label title={MODE_HELP.compare}>
+              <input
+                type="radio"
+                name="mode"
+                checked={mode === "compare"}
+                onChange={() => setMode("compare")}
+              />
+              <Columns2 size={15} aria-hidden="true" />
+              Compare
             </label>
           </fieldset>
           <button type="button" className="btn" onClick={() => void onNewSession()}>
