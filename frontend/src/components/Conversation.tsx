@@ -507,7 +507,9 @@ function RateAnswer({ run }: { run: Run }) {
         aria-pressed={rating?.helpful === true}
         disabled={state === "saving"}
         onClick={() => {
+          // "Useful" keeps no note, so an earlier note does not come back with a later "No".
           setNoteOpen(false);
+          setNote("");
           void save(true);
         }}
       >

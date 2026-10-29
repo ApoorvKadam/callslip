@@ -28,7 +28,7 @@ _RUNS = """
                                            WHERE e.run_id = r.id AND e.type = 'clarification'))
                AS asked_to_clarify,
            percentile_disc(0.5) WITHIN GROUP (ORDER BY r.exec_ms)
-               FILTER (WHERE r.finished_at IS NOT NULL) AS median_ms,
+               FILTER (WHERE r.finished_at IS NOT NULL AND r.answer IS NOT NULL) AS median_ms,
            count(*) FILTER (WHERE r.finished_at IS NOT NULL AND r.answer IS NOT NULL) AS rateable,
            count(f.run_id) FILTER (WHERE f.helpful) AS useful,
            count(f.run_id) FILTER (WHERE NOT f.helpful) AS not_useful,

@@ -31,14 +31,17 @@ def new_browser(client: TestClient) -> str:
     return client.post("/api/sessions").json()["id"]
 
 
-def insert_run(session_id: str, status: str = "complete", finished: bool = True) -> str:
+def insert_run(
+    session_id: str, status: str = "complete", finished: bool = True, exec_ms: int = 4000
+) -> str:
     run_id = str(uuid.uuid4())
+    answered = finished and status != "failed"
     with psycopg.connect(TEST_DATABASE_URL, autocommit=True) as conn:
         conn.execute(
             "INSERT INTO runs (id, session_id, mode, question, status, answer, exec_ms,"
-            " finished_at) VALUES (%s, %s, 'agent', 'q', %s, %s, 4000,"
+            " finished_at) VALUES (%s, %s, 'agent', 'q', %s, %s, %s,"
             " CASE WHEN %s THEN now() END)",
-            (run_id, session_id, status, Jsonb(ANSWER) if finished else None, finished),
+            (run_id, session_id, status, Jsonb(ANSWER) if answered else None, exec_ms, finished),
         )
         conn.execute(
             "INSERT INTO llm_calls (run_id, purpose, model, input_tokens, output_tokens,"
@@ -92,6 +95,9 @@ def test_insights_count_only_the_viewers_own_questions(client):
     rated = insert_run(mine)
     insert_run(mine, status="incomplete")
     insert_run(mine, status="running", finished=False)
+    # Failed runs have no answer, so their time stays out of the answers' median.
+    for _ in range(3):
+        insert_run(mine, status="failed", exec_ms=90000)
     client.put(f"/api/runs/{rated}/feedback", json={"helpful": False})
     own = client.get("/api/insights").json()
 
@@ -99,11 +105,11 @@ def test_insights_count_only_the_viewers_own_questions(client):
     insert_run(new_browser(client))
     other = client.get("/api/insights").json()
 
-    assert own["runs"] == 3 and own["complete"] == 1 and own["incomplete"] == 1
-    assert own["open"] == 1 and own["rateable"] == 2
+    assert own["runs"] == 6 and own["complete"] == 1 and own["incomplete"] == 1
+    assert own["failed"] == 3 and own["open"] == 1 and own["rateable"] == 2
     assert (own["useful"], own["not_useful"]) == (0, 1)
     assert (own["citations"], own["citations_verified"]) == (4, 2)
-    assert own["median_ms"] == 4000 and round(own["cost_usd"], 3) == 0.006
+    assert own["median_ms"] == 4000 and round(own["cost_usd"], 3) == 0.012
     assert other["runs"] == 1 and other["not_useful"] == 0
 
 
