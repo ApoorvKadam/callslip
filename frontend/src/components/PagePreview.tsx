@@ -66,6 +66,7 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
       const pdfjs = await import("pdfjs-dist");
       const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
       pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
+      if (stopped) return; // closed while PDF.js was loading
       // Same-origin, with the session cookie, so private documents open only for their owner.
       const task = pdfjs.getDocument({
         url: documentFileUrl(target.documentId),
@@ -75,7 +76,11 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
       const doc = await task.promise;
       const page = await doc.getPage(target.page);
       if (stopped || !canvas.current || !textLayer.current || !sheet.current) return;
-      const width = Math.min(sheet.current.clientWidth || 820, 900);
+      // The content width: the sheet's padding and the page's 1 px border do not hold the page.
+      const style = getComputedStyle(sheet.current);
+      const inner =
+        sheet.current.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const width = Math.min(inner - 2 || 820, 900);
       const viewport = page.getViewport({ scale: width / page.getViewport({ scale: 1 }).width });
       const ratio = window.devicePixelRatio || 1;
       const c = canvas.current;
@@ -122,8 +127,16 @@ export function PagePreview({ target, onClose }: { target: PreviewTarget; onClos
       aria-labelledby="preview-title"
       onClose={onClose}
       onClick={(e) => {
-        // A click on the backdrop (outside the sheet) closes it, as with any dialog.
-        if (e.target === dialog.current) dialog.current?.close();
+        // A click on the backdrop closes it, as with any dialog. The backdrop and the dialog's own
+        // margins report the same target, so only a click outside its box counts.
+        const box = dialog.current?.getBoundingClientRect();
+        const outside =
+          box &&
+          (e.clientX < box.left ||
+            e.clientX > box.right ||
+            e.clientY < box.top ||
+            e.clientY > box.bottom);
+        if (e.target === dialog.current && outside) dialog.current?.close();
       }}
     >
       <header className="preview-head">
