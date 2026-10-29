@@ -236,6 +236,10 @@ test("a finished answer can be rated, and Insights opens and closes", async ({ p
     "true",
   );
   expect(sent.at(-1)).toEqual({ helpful: true, note: null });
+  // "Useful" dropped the note, so a later "No" does not send it again.
+  await page.locator(".rate").getByRole("button", { name: "No" }).click();
+  await expect(page.locator(".rate-note textarea")).toHaveValue("");
+  await expect.poll(() => sent.at(-1)).toEqual({ helpful: false, note: null });
 
   await page.getByRole("button", { name: "Insights" }).click();
   const dialog = page.getByRole("dialog", { name: /Your questions/ });
