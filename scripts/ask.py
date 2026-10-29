@@ -41,7 +41,8 @@ def error_body(err: urllib.error.HTTPError):
     try:
         return json.loads(raw)
     except ValueError:
-        return {"detail": raw.decode(errors="replace").strip().splitlines()[0][:200]}
+        text = raw.decode(errors="replace").strip()
+        return {"detail": text.splitlines()[0][:200] if text else f"HTTP {err.code}, empty body"}
 
 
 def main() -> int:
