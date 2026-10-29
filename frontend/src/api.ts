@@ -30,7 +30,7 @@ const UNREACHABLE = "Could not reach the server. Check your connection and try a
 const UNAVAILABLE = "The server is not answering right now. Try again in a moment.";
 
 // Every call gives up after `timeoutMs`, so a lost connection becomes a message, never a wait
-// without end. Uploads pass a longer limit.
+// without end. Uploads get a limit that grows with the file.
 async function request<T>(path: string, init?: RequestInit, timeoutMs = 20_000): Promise<T> {
   let response: Response;
   try {
