@@ -62,7 +62,8 @@ async function request<T>(path: string, init?: RequestInit, timeoutMs = 20_000):
 }
 
 // The signed-in user's email, or null.
-export function getAccount(): Promise<{ email: string | null }> {
+// guest_uploads: whether this deployment lets visitors add to the shared collection unsigned.
+export function getAccount(): Promise<{ email: string | null; guest_uploads?: boolean }> {
   return request("/api/auth/me");
 }
 
