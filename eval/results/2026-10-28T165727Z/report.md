@@ -33,14 +33,14 @@
 | 11-acquisition-supersession | baseline | yes | complete | 2/2 | OMB M-25-22: Driving Eff p1 | 1 | 2 | 6.1 | 4.6 | 8487/1079 | 0.0014 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 4.7 | 2.9 | 1467/601 | 0.0014 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 6.8 | 3.6 | 7843/859 | 0.0012 |  |
-| 13-security-and-injection | agent | yes | complete | 6/6 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.5 | 2503/1571 | 0.0026 |  |
-| 13-security-and-injection | baseline | no | complete | 1/1 |  | 1 | 2 | 9.7 | 5.5 | 6519/884 | 0.0011 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
+| 13-security-and-injection | agent | yes | complete | 6/6 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p65, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 7.5 | 5.5 | 2503/1571 | 0.0026 |  |
+| 13-security-and-injection | baseline | no | complete | 1/1 |  | 1 | 2 | 9.7 | 5.5 | 6519/884 | 0.0011 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited; failed check: documents_covered |
 | 14-contract-start | agent | yes | complete | 3/3 | OMB M-25-22: Driving Eff p4 | 2 | 3 | 7.6 | 4.7 | 1368/845 | 0.0022 |  |
 | 14-contract-start | baseline | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 5.6 | 4.6 | 7376/902 | 0.0012 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 6.0 | 4.1 | 1730/686 | 0.0011 |  |
 | 1-simple-lookup | baseline | yes | complete | 2/2 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p26 | 1 | 2 | 6.3 | 4.5 | 8025/960 | 0.0013 |  |
 | 2-multi-doc-a | agent | yes | complete | 2/2 | America's AI Action Plan p7, NIST AI 100-1: Artificia p17 | 2 | 3 | 8.8 | 6.3 | 1442/1242 | 0.0023 |  |
-| 2-multi-doc-a | baseline | no | complete | 2/2 | NIST AI 100-1: Artificia p8 | 1 | 2 | 8.3 | 7.2 | 7917/1052 | 0.0013 | missing: misinformation, climate change, valid and reliable; failed check: documents_covered |
+| 2-multi-doc-a | baseline | no | complete | 2/2 | NIST AI 100-1: Artificia p8 | 1 | 2 | 8.3 | 7.2 | 7917/1052 | 0.0013 | missing: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility); failed check: documents_covered |
 | 3-multi-doc-b | agent | yes | complete | 8/8 | NIST AI 600-1: AI Risk M p10, OMB M-25-21: Acceleratin p16 | 2 | 3 | 9.2 | 7.0 | 2680/1945 | 0.0021 |  |
 | 3-multi-doc-b | baseline | no | complete | 3/3 |  | 1 | 2 | 8.4 | 6.5 | 7054/1500 | 0.0014 | missing: \bconfiden(?:t(?:ly)?|ce)\b, (false|erroneous), impact assessment; failed check: gold_page_cited; failed check: documents_covered |
 | 4-ambiguous | agent | yes | complete | 3/3 | OMB M-25-21: Acceleratin p12, OMB M-25-21: Acceleratin p5 | 1 | 4 | 7.6 | 5.5 | 1951/1241 | 0.0018 | asked: Several of the documents are OMB memos, so I need to know which one you mean by "the memo" before I look up the 180-day requirement. Which one? |
@@ -63,8 +63,8 @@
 | 11-acquisition-supersession | baseline | yes | complete | 3/3 | OMB M-25-22: Driving Eff p1 | 1 | 2 | 8.5 | 6.1 | 8945/1409 | 0.0016 |  |
 | 12-core-cross-cutting | agent | yes | complete | 2/2 | NIST AI 100-1: Artificia p25 | 1 | 3 | 3.8 | 2.7 | 1134/438 | 0.0004 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 6.5 | 4.5 | 7895/1131 | 0.0014 |  |
-| 13-security-and-injection | agent | yes | complete | 6/6 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 10.8 | 5.7 | 2599/2167 | 0.0025 |  |
-| 13-security-and-injection | baseline | no | complete | 2/2 |  | 1 | 2 | 7.6 | 6.2 | 7149/1285 | 0.0014 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
+| 13-security-and-injection | agent | yes | complete | 6/6 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 10.8 | 5.7 | 2599/2167 | 0.0025 |  |
+| 13-security-and-injection | baseline | no | complete | 2/2 |  | 1 | 2 | 7.6 | 6.2 | 7149/1285 | 0.0014 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited; failed check: documents_covered |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 5.3 | 3.7 | 1345/577 | 0.0013 |  |
 | 14-contract-start | baseline | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 4.3 | 3.1 | 7384/721 | 0.0011 |  |
 | 1-simple-lookup | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25, NIST AI 100-1: Artificia p8 | 1 | 3 | 4.5 | 3.2 | 1749/704 | 0.0006 |  |
@@ -93,8 +93,8 @@
 | 11-acquisition-supersession | baseline | yes | complete | 4/4 | OMB M-25-22: Driving Eff p1 | 1 | 2 | 7.3 | 5.6 | 9103/1260 | 0.0015 |  |
 | 12-core-cross-cutting | agent | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 3 | 5.7 | 3.5 | 1690/717 | 0.0014 |  |
 | 12-core-cross-cutting | baseline | yes | complete | 3/3 | NIST AI 100-1: Artificia p25 | 1 | 2 | 7.7 | 5.8 | 7872/915 | 0.0013 |  |
-| 13-security-and-injection | agent | yes | complete | 10/10 | NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.3 | 3410/2099 | 0.0026 |  |
-| 13-security-and-injection | baseline | no | complete | 3/3 |  | 1 | 2 | 9.6 | 6.9 | 7546/1900 | 0.0017 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited |
+| 13-security-and-injection | agent | yes | complete | 10/10 | NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p64, NIST AI 100-2 E2025: Adv p65, NIST AI 100-2 E2025: Adv p66, NIST AI 600-1: AI Risk M p14 | 2 | 3 | 9.1 | 6.3 | 3410/2099 | 0.0026 |  |
+| 13-security-and-injection | baseline | no | complete | 3/3 |  | 1 | 2 | 9.6 | 6.9 | 7546/1900 | 0.0017 | missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited; failed check: documents_covered |
 | 14-contract-start | agent | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 3 | 6.4 | 4.5 | 1362/653 | 0.0013 |  |
 | 14-contract-start | baseline | yes | complete | 2/2 | OMB M-25-22: Driving Eff p4 | 1 | 2 | 4.6 | 3.6 | 7356/747 | 0.0011 |  |
 
@@ -116,7 +116,7 @@ Expected: Simple lookup (`answer`); required: GOVERN, MAP, MEASURE, MANAGE; gold
 
 Question: What change to the NIST AI RMF does America's AI Action Plan recommend, and which characteristics of trustworthy AI does the AI RMF itself list?
 
-Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid and reliable, privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
+Expected: Multi-part / multi-document A (`answer`); required: misinformation, climate change, valid(?:ity)? and reliab(?:le|ility), privacy; gold pages: America's AI Action Plan p. 7; NIST AI 100-1 p. 8, 17.
 
 - **agent**: pass, complete, 2 tool calls, 5.8 s to answer, 2860 tokens, cited America's AI Action Plan p7, NIST AI 100-1: Artificia p17.
   > **Recommended change:** America's AI Action Plan asks NIST to edit the AI RMF to remove three topics. The plan directs the Department of Commerce, through NIST, to revise the NIST AI Risk Management Framework to eliminate references to misinformation, Diversity, Equity, and Inclusion, and climate change. The search results show only this recommendation. They do not describe how or whether NIST has made the revision. **Trustworthy AI characteristics in the AI RMF:** The framework names seven attributes. Trustworthy systems are described as valid and reliable, safe, secure and resilient, accountable and transparent, explainable and interpretable, privacy-enhanced, and fair with harmful bias ma ...
@@ -260,12 +260,12 @@ Expected: Multi-passage, one document (added) (`answer`); required: GOVERN, MAP,
 
 Question: What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?
 
-Expected: Multi-part / multi-document (added) (`answer`); required: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); gold pages: NIST AI 600-1 p. 14; NIST AI 100-2 p. 52, 54, 63.
+Expected: Multi-part / multi-document (added) (`answer`); required: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); gold pages: NIST AI 600-1 p. 14; NIST AI 100-2 p. 52, 54, 63, 64, 65, 66, 67, 123.
 
 - **agent**: pass, complete, 2 tool calls, 5.5 s to answer, 4074 tokens, cited NIST AI 100-2 E2025: Adv p123, NIST AI 100-2 E2025: Adv p65, NIST AI 600-1: AI Risk M p14.
   > The NIST Generative AI Profile names two primary information security risks. NIST AI 100-2 defines indirect prompt injection as an attack that goes through resources the model consumes, not through what the user types. **Two information security risks in the GenAI Profile (NIST AI 600-1)** 1. **Easier offensive cyber operations.** The Profile says GAI could potentially discover or enable new cybersecurity risks by lowering the barriers for or easing automated exercise of oﬀensive capabilities. It adds that offensive cyber capabilities advanced by GAI systems may augment cybersecurity attacks such as hacking, malware, and phishing. 2. **A larger attack surface.** The Profile notes that GAI ex ...
 
-- **baseline**: fail, complete, 1 tool calls, 5.5 s to answer, 7403 tokens, cited NIST AI 100-4: Reducing  p9. missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited.
+- **baseline**: fail, complete, 1 tool calls, 5.5 s to answer, 7403 tokens, cited NIST AI 100-4: Reducing  p9. missing: attack surface, (offensive|barrier), (external|third[- ]party|outside|resource\s+control\s+rather\s+than\s+(?:through\s+)?user[- ]provided\s+input); failed check: gold_page_cited; failed check: documents_covered.
   > The passages don't answer either part of your question. **The Generative AI Profile's security risks:** The retrieved text from the NIST AI 600-1 profile is only front matter, such as the title and publication details, so it doesn't list any risks. The only related statement is from a different document, NIST AI 100-4, which says the profile highlights twelve different categories of risk from generative AI in more detail. That passage doesn't name the categories, and none of them are identified as information security risks. I can't name two from these passages. **Indirect prompt injection in NIST AI 100-2:** The retrieved text only lists "Indirect Prompt Injection" as one entry in a list of ...
 
 ### 14-contract-start

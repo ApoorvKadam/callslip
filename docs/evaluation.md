@@ -1,6 +1,6 @@
 # Evaluation: agent vs single-pass baseline
 
-The comparison below was recorded at commit `09d1b08`, once per answering model, on 2026-10-28. The agent's prompt changed once after that ([kept after the latency runs](#what-a-user-waits-for-measured-in-the-browser)). On the same fifteen cases with three repeats, the Haiku agent on the submitted prompt passed 42 of 45, with 199 of 199 citations verified and a median time to answer of 5.4 s (third row). Each table keeps the numbers of the run it comes from. Scores on this page use the checks after three [grader corrections](#grader-corrections); that section gives every run's score as first graded.
+The comparison below was recorded at commit `09d1b08`, once per answering model, on 2026-10-28. The agent's prompt changed once after that ([kept after the latency runs](#what-a-user-waits-for-measured-in-the-browser)). On the same fifteen cases with three repeats, the Haiku agent on the submitted prompt passed 42 of 45, with 199 of 199 citations verified and a median time to answer of 5.4 s (third row). Each table keeps the numbers of the run it comes from. Scores on this page use the corrected checks ([grader corrections](#grader-corrections)); that section gives every run's score as first graded.
 
 | Model | Run | Command |
 |---|---|---|
@@ -144,7 +144,7 @@ From the first ten cases ([`2026-10-28T043802Z`](../eval/results/2026-10-28T0438
 - **It helps when one search cannot see everything the question needs**: questions spanning documents (2, 3), a question whose wording favours a document's front matter (8a), ambiguous questions (4), and questions with a side fact to find (5) or a conflict to settle (9). These are every baseline failure.
 - **It adds a turn when one search is enough** (cases 1 and 12, and often 6, 7 and 14): a first turn to choose the search, then the answer. Prompt caching keeps that turn cheap, and the median time to answer is within half a second of the baseline (5.5 s against 5.2 s on Haiku).
 - **It is not always cheaper**: in 8b the agent spends several reads to recover where the baseline spends almost nothing to report the failure. Whether the recovery is worth it is a product decision; the limits cap the worst case.
-- **Overall (Haiku, recorded comparison)**: 40 passing runs against 21, at about 1.4 times the cost of the baseline per question ($0.0020 against $0.0014).
+- **Overall (Haiku, recorded comparison)**: 43 passing runs against 21, at about 1.4 times the cost of the baseline per question ($0.0020 against $0.0014).
 
 ## Hand review (the ten-case runs, first repeat)
 
@@ -218,7 +218,7 @@ No failure invented a figure or a quote.
 **Kept: each document's outline.** With search failing, the agent read pages from the front of the NIST Generative AI Profile and sometimes stopped at the list of risks on pages 7 and 8, never reaching the section on data privacy (section 2.4, pages 11 and 12). Instructions to read on did not settle it (below). Many PDFs carry their own bookmarks with the physical page of each section; 7 of the 14 here do, the Profile among them. The parser now keeps them, and the tool `document_outline` returns them. A failed search names it as the next step.
 - Case 8b passed 20 of 20 runs ([`220519Z`](../eval/results/2026-10-28T220519Z/)), against 1 of 3 on the prompt before it. In every run the agent took the outline and went straight to section 2.4: it read pages 11 and 12 in 19 runs, and page 11 alone in one.
 - Case 13 passed 16 of 20 in the same run. Two answers left out "attack surface"; two left out the definition of indirect injection.
-- All fifteen cases, three repeats: 43 of 45 ([`221200Z`](../eval/results/2026-10-28T221200Z/)), against 42 on the prompt before it. Cases 8b and 13 passed every repeat; case 2 left out one characteristic once, and case 4 left out the AI strategy once.
+- All fifteen cases, three repeats: 44 of 45 ([`221200Z`](../eval/results/2026-10-28T221200Z/)), against 42 on the prompt before it. Cases 8b and 13 passed every repeat; one case 4 answer left out the AI strategy.
 
 **Tried and not kept**:
 - Telling the agent, when search fails, to read on until it reaches the section on the topic. In case 8b it sometimes answers from the list of risks on pages 7 and 8 and never reaches section 2.4 (pages 11 and 12); the submitted prompt passed 8b in 1 of 3 runs, and the prompt before it in 2 of 3. With the second wording of the instruction, 8b passed 6 of 9 ([`212457Z`](../eval/results/2026-10-28T212457Z/) and the full run). But the full runs gave 43 of 45 (first wording) and 40 of 45 (second) against 42 ([`211637Z`](../eval/results/2026-10-28T211637Z/), [`212651Z`](../eval/results/2026-10-28T212651Z/)), and the misses moved between cases (4, 5, 9, 10 once each). That is within the spread between runs, so the prompt stays as it was.
@@ -228,13 +228,15 @@ No failure invented a figure or a quote.
 
 ## Grader corrections
 
-Three checks rejected correct answers. Each was corrected so that it accepts what the source documents say, and every committed run was graded again with `--rescore`, both systems. No answer changed; only the grading. The baseline was graded by the same checks.
+Four checks rejected correct answers, and one cross-document case did not require both documents. Each was corrected so that it matches what the source documents say, and every committed run was graded again with `--rescore`, both systems. No answer changed; only the grading. The baseline was graded by the same checks.
 
 | Case | What the check missed | Correction |
 |---|---|---|
 | 3 | A quote copied from the gold page keeps the PDF's ligature ("conﬁdently", U+FB01), so the required word "confident" did not match; "with confidence" did not match either | answers are normalized (NFKC) before matching, and the pattern accepts confident, confidently and confidence |
 | 13 | The required words (external, third party, outside) do not appear on gold page 63, which defines indirect prompt injection as executed through resource control rather than user-provided input | the pattern also accepts that definition, not the bare words "resource control" |
 | 6 | An answer said the two policies "give opposite answers", which states the conflict | the pattern also accepts "opposite answers" |
+| 2 | An answer listed all seven characteristics but wrote "validity and reliability" for "valid and reliable" | the pattern accepts both forms |
+| 13 | Its gold pages in NIST AI 100-2 were 52, 54 and 63, but section 3.4 on indirect prompt injection runs from p. 63 to p. 67 and the glossary defines it on p. 123; answers citing those pages were counted as citing no gold page there. The case also did not require a gold page in each of its two documents | gold pages 52, 54, 63 to 67 and 123, and a gold page in each document is now required; every run still passes it |
 
 | Run | Agent, first graded | Agent, corrected | Baseline, first graded | Baseline, corrected |
 |---|---|---|---|---|
@@ -250,6 +252,7 @@ Three checks rejected correct answers. Each was corrected so that it accepts wha
 | `183723Z` both, plus two instructions | 28 of 45 | 30 of 45 | | |
 | `184548Z` shorter answers | 36 of 45 | 40 of 45 | | |
 | `211637Z`, `212651Z` read-on instruction | 41, 38 of 45 | 43, 40 of 45 | | |
+| `221200Z` each document's outline (final build) | 43 of 45 | 44 of 45 | | |
 | `043802Z`, `044638Z` first ten cases | 30, 27 of 30 | 30, 27 of 30 | 11, 12 of 30 | 11, 12 of 30 |
 
 The remaining agent misses were real: in case 8b the agent sometimes stopped reading before the section on the topic, and in case 9 it once left the page that settles the conflict uncited. The outline tool below addresses case 8b.
