@@ -143,6 +143,8 @@ export interface Run {
   exec_ms: number;
   created_at: string;
   finished_at: string | null;
+  // Both halves of a comparison share one id; any other run has none.
+  compare_id: string | null;
   events?: RunEvent[];
 }
 
@@ -165,6 +167,7 @@ export interface SessionSummary {
   questions: number;
   created_at: string;
   last_at: string;
+  compare: boolean;
 }
 
 export function listSessions(): Promise<SessionSummary[]> {
@@ -180,6 +183,15 @@ export function ask(sessionId: string, question: string, mode: Mode): Promise<Ru
     method: "POST",
     headers: json,
     body: JSON.stringify({ question, mode }),
+  });
+}
+
+// One question asked both ways at once, in an empty conversation: the agent and the single pass.
+export function compare(sessionId: string, question: string): Promise<Run[]> {
+  return request(`/api/sessions/${sessionId}/compare`, {
+    method: "POST",
+    headers: json,
+    body: JSON.stringify({ question }),
   });
 }
 

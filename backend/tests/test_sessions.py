@@ -148,3 +148,36 @@ def test_a_reply_cannot_borrow_another_replys_key(client):
     # Joined with a newline, these two would read the same; they must not.
     other = {**first, "tool_use_id": "toolu_1\nalpha", "reply": "beta"}
     assert client.post(url, json=other).status_code == 409
+
+
+def test_compare_asks_both_ways_in_one_new_conversation(client):
+    client.app.state.llm = NoModel()
+    session = new_browser(client)
+    r = client.post(f"/api/sessions/{session}/compare", json={"question": "What does the RMF say?"})
+    assert r.status_code == 202
+    runs = r.json()
+    assert sorted(run["mode"] for run in runs) == ["agent", "baseline"]
+    assert runs[0]["compare_id"] and runs[0]["compare_id"] == runs[1]["compare_id"]
+    # The comparison holds that one question: no follow-up, no second comparison.
+    more = client.post(f"/api/sessions/{session}/runs", json={"question": "And then?"})
+    assert more.status_code == 409
+    again = client.post(f"/api/sessions/{session}/compare", json={"question": "Again?"})
+    assert again.status_code == 409
+    listed = next(s for s in client.get("/api/sessions").json() if s["id"] == session)
+    assert (listed["compare"], listed["questions"]) == (True, 2)
+
+
+def test_compare_needs_an_empty_conversation(client):
+    client.app.state.llm = NoModel()
+    session = new_browser(client)
+    insert_run(session, "complete")
+    r = client.post(f"/api/sessions/{session}/compare", json={"question": "Q?"})
+    assert r.status_code == 409
+
+
+def test_another_browser_cannot_compare_in_a_conversation(client):
+    client.app.state.llm = NoModel()
+    session = new_browser(client)
+    new_browser(client)
+    r = client.post(f"/api/sessions/{session}/compare", json={"question": "Q?"})
+    assert r.status_code == 404

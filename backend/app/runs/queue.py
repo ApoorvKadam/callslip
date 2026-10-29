@@ -13,13 +13,21 @@ from psycopg.types.json import Jsonb
 
 
 async def enqueue_start(
-    conn: AsyncConnection, run_id, session_id, mode, question, user_id, faults, work_data
+    conn: AsyncConnection,
+    run_id,
+    session_id,
+    mode,
+    question,
+    user_id,
+    faults,
+    work_data,
+    compare_id=None,
 ) -> dict:
     cur = conn.cursor(row_factory=dict_row)
     await cur.execute(
-        "INSERT INTO runs (id, session_id, mode, question, user_id, faults, work, work_data)"
-        " VALUES (%s, %s, %s, %s, %s, %s, 'start', %s) RETURNING *",
-        (run_id, session_id, mode, question, user_id, Jsonb(faults), Jsonb(work_data)),
+        "INSERT INTO runs (id, session_id, mode, question, user_id, faults, work, work_data,"
+        " compare_id) VALUES (%s, %s, %s, %s, %s, %s, 'start', %s, %s) RETURNING *",
+        (run_id, session_id, mode, question, user_id, Jsonb(faults), Jsonb(work_data), compare_id),
     )
     return await cur.fetchone()
 
