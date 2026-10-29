@@ -26,6 +26,7 @@ configMapGenerator:
       - LOG_LEVEL=INFO
       - ANSWER_MODEL=claude-haiku-5-5
       - COOKIE_SECURE=true # both overlays serve over TLS
+      - ASK_LIMIT=60 # questions per client address per 10 minutes on a shared deployment
 
 images:
   - name: callslip-backend

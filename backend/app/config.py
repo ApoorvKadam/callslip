@@ -62,6 +62,11 @@ class Settings(BaseSettings):
     support_check: bool = True
     support_effort: str = "medium"
     support_timeout_s: float = 15.0
+    # Questions (and comparisons) allowed per client address per window, so a public deployment
+    # cannot be flooded. 0 turns it off, as in Compose, where the evaluation asks 90 questions
+    # in a few minutes; the Kubernetes settings turn it on.
+    ask_limit: int = 0
+    ask_window_s: int = 600
     # Lets the evaluation inject tool failures. Off unless explicitly enabled.
     allow_fault_injection: bool = False
     # Send the session cookie only over HTTPS. Off for the local stack on plain HTTP; on behind TLS.

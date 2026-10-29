@@ -20,7 +20,7 @@ from psycopg.types.json import Jsonb
 from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel, StringConstraints
 
-from app.api.auth import Viewer
+from app.api.auth import Viewer, take_attempt
 from app.api.deps import get_pool
 from app.runs import queue
 
@@ -185,6 +185,24 @@ async def recent_history(pool: AsyncConnectionPool, session_id: UUID, limit: int
     return [(q, a[:1500]) for q, a in reversed(rows)]
 
 
+async def limit_questions(request: Request) -> None:
+    """Refuse a question beyond `ask_limit` per `ask_window_s` from one client address."""
+    settings = request.app.state.settings
+    if settings.ask_limit <= 0:
+        return
+    address = request.client.host if request.client else "unknown"
+    key = "ask:addr:" + hashlib.sha256(address.encode()).hexdigest()
+    wait = await take_attempt(
+        request.app.state.redis, key, settings.ask_limit, settings.ask_window_s
+    )
+    if wait:
+        raise HTTPException(
+            429,
+            f"Too many questions from this address. Try again in {-(-wait // 60)} min.",
+            headers={"Retry-After": str(wait)},
+        )
+
+
 @router.post("/sessions/{session_id}/runs", status_code=202)
 async def ask(
     session_id: UUID, body: AskRequest, request: Request, pool: Pool, owner: Owner, user: Viewer
@@ -195,6 +213,7 @@ async def ask(
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
     if body.faults and not state.settings.allow_fault_injection:
         raise HTTPException(403, "Fault injection is disabled on this server.")
+    await limit_questions(request)
     question = body.question
     history = await recent_history(pool, session_id, state.settings.history_turns)
     run_id = uuid4()
@@ -251,6 +270,7 @@ async def compare(
     await owned_session(pool, session_id, owner)
     if request.app.state.llm is None:
         raise HTTPException(503, "Answering is not configured: set ANTHROPIC_API_KEY.")
+    await limit_questions(request)
     compare_id = uuid4()
     runs = []
     async with pool.connection() as conn, conn.transaction():
