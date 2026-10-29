@@ -37,6 +37,24 @@ variable "anthropic_api_key" {
   sensitive   = true
 }
 
+variable "image_registry" {
+  description = "Registry and path holding callslip-backend and callslip-frontend. Empty: keep the overlay's."
+  type        = string
+  default     = ""
+}
+
+variable "image_tag" {
+  description = "Image tag to deploy, normally the commit's short SHA."
+  type        = string
+  default     = "dev"
+}
+
+variable "route_host" {
+  description = "Public host for the OpenShift Routes, under the cluster's application domain."
+  type        = string
+  default     = ""
+}
+
 variable "tls_cert_file" {
   description = "Certificate for the ingress overlays' callslip-tls Secret. Empty: no Secret."
   type        = string
