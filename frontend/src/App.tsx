@@ -151,7 +151,8 @@ export default function App() {
 
   // Who is signed in, if anyone: it decides which documents are visible and searched.
   const [account, setAccount] = useState<string | null>(null);
-  const [guestUploads, setGuestUploads] = useState(true);
+  // Unknown until the server says: no upload control is offered on a guess.
+  const [guestUploads, setGuestUploads] = useState<boolean | null>(null);
   useEffect(() => {
     getAccount()
       .then((a) => {

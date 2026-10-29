@@ -33,7 +33,7 @@ export function DocumentsPanel({
   guestUploads,
 }: {
   signedIn: boolean;
-  guestUploads: boolean;
+  guestUploads: boolean | null; // null until the server has said
 }) {
   const [docs, setDocs] = useState<DocumentInfo[]>([]);
   // Until the first answer, say nothing about the count rather than "0 ready".
@@ -118,7 +118,7 @@ export function DocumentsPanel({
         </span>
       </div>
 
-      {signedIn || guestUploads ? (
+      {signedIn || guestUploads === true ? (
         <label className={`btn upload${uploading ? " busy" : ""}`}>
           <input
             ref={input}
@@ -133,10 +133,10 @@ export function DocumentsPanel({
             {uploading ? "Uploading" : signedIn ? "Upload privately" : "Upload to shared collection"}
           </span>
         </label>
-      ) : (
+      ) : guestUploads === false ? (
         <p className="meta">Sign in to upload your own PDFs. They stay private to you.</p>
-      )}
-      {!signedIn && guestUploads && (
+      ) : null}
+      {!signedIn && guestUploads === true && (
         <p className="meta">
           Without signing in, uploaded PDFs are visible to everyone using this deployment. Sign in
           to upload privately.
