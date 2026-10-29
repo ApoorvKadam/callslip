@@ -89,7 +89,9 @@ export function listDocuments(): Promise<DocumentInfo[]> {
 export function uploadDocument(file: File): Promise<DocumentInfo> {
   const form = new FormData();
   form.append("file", file);
-  return request("/api/documents", { method: "POST", body: form }, 120_000);
+  // A minute, plus ten seconds a megabyte: a 25 MB PDF still gets through at about 1 Mbit/s.
+  const limit = 60_000 + Math.ceil(file.size / 1_000_000) * 10_000;
+  return request("/api/documents", { method: "POST", body: form }, limit);
 }
 
 // Delete one of your own uploads.
