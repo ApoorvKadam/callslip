@@ -1,8 +1,9 @@
 """Operational metrics in the Prometheus text format, read from the database on each scrape.
 
-`/metrics` sits outside `/api`, so the web server and the public route never forward it: only
-something inside the deployment's network (a Prometheus in the cluster, or `docker compose
-exec`) can read it. It reports counts, times, tokens and cost. Nothing a user wrote (questions,
+`/metrics` sits outside `/api`, so the web server and the public route never forward it. With
+Compose, read it inside the API container. On Kubernetes, the API's network policy admits only
+the ingress controller, so a Prometheus needs its own allow rule first. It reports counts, times,
+tokens and cost. Nothing a user wrote (questions,
 answers, document titles) appears in it.
 
 The numbers come from the tables the app already keeps: `runs`, `llm_calls` and `documents`.
