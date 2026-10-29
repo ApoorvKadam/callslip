@@ -81,7 +81,7 @@ Open http://localhost:8080, upload PDFs and ask questions. Each document moves f
 
 ## The agent
 
-A plain tool-use loop over the Claude Messages API (no agent framework), in `backend/app/agent/loop.py`. The first message lists the documents the user can search. Each turn the model sees the whole conversation and calls one or more tools, asks a clarifying question, or answers:
+The agent is a tool-use loop written directly on the Claude Messages API, in `backend/app/agent/loop.py`. It uses no framework such as LangGraph, so each step is ordinary code that the tests and the Steps tab can show. The first message lists the documents the user can search. Each turn the model sees the whole conversation and decides the next step: call one or more tools, ask a clarifying question, or answer:
 
 | Tool | Read-only? | What it returns |
 |---|---|---|
