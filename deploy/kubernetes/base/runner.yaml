@@ -6,6 +6,8 @@ kind: Deployment
 metadata:
   name: runner
 spec:
+  # Old ReplicaSets count against the namespace quota; three are enough to roll back.
+  revisionHistoryLimit: 3
   replicas: 2
   selector:
     matchLabels:

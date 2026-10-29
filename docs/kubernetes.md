@@ -144,6 +144,8 @@ cd ../.. && python3 scripts/load_corpus.py --base https://<route host> --exec "o
 
 The pods pull from the project's own registry (`image-registry.openshift-image-registry.svc:5000/<project>`), so no registry credentials or public images are needed.
 
+Each Deployment keeps its last three ReplicaSets. Old ReplicaSets count against the project's object quota, and after a day of releases they filled it, so a restart could not create a new one. A rollback goes through the image tag in Terraform, so three are enough.
+
 ### What the OpenShift run showed
 
 Run on 2026-10-29 from the commit after the question limit (`2bdaed2`), with two replicas each of the API, run workers and frontend.
