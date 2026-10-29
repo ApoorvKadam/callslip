@@ -1,5 +1,7 @@
 # The whole stack: `docker compose up -d --build`, then open http://localhost:8080
 # Secrets and settings come from .env (copy .env.example); nothing secret is in this file.
+# Every service has a memory limit with no swap above it, as on Kubernetes, so a service that
+# outgrows its limit fails here too instead of quietly swapping.
 name: callslip
 
 x-backend: &backend
@@ -42,6 +44,7 @@ services:
       timeout: 3s
       retries: 20
     mem_limit: 512m
+    memswap_limit: 512m
 
   # Redis is a cache only: the app keeps working when it is down, so it needs no persistence.
   redis:
@@ -55,6 +58,7 @@ services:
       timeout: 3s
       retries: 20
     mem_limit: 128m
+    memswap_limit: 128m
 
   api:
     <<: *backend
@@ -66,6 +70,7 @@ services:
       start_period: 30s
     # Holds the query-embedding model in memory.
     mem_limit: 1g
+    memswap_limit: 1g
 
   worker:
     <<: *backend
@@ -78,6 +83,7 @@ services:
       retries: 4
       start_period: 30s
     mem_limit: 1g
+    memswap_limit: 1g
 
   runner:
     <<: *backend
@@ -90,6 +96,7 @@ services:
       retries: 4
       start_period: 30s
     mem_limit: 1g
+    memswap_limit: 1g
 
   frontend:
     build: ./frontend
@@ -106,6 +113,7 @@ services:
       timeout: 3s
       retries: 6
     mem_limit: 64m
+    memswap_limit: 64m
 
 volumes:
   pgdata:
