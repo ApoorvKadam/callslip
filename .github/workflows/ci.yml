@@ -65,6 +65,9 @@ jobs:
         run: uv run ruff format --check . ../scripts
       - name: Tests (real PostgreSQL, Redis and embedding model; no LLM calls)
         run: uv run pytest -q
+      - name: The Evaluation page shows the committed results
+        working-directory: .
+        run: python3 scripts/eval_digest.py && git diff --exit-code frontend/public/evaluation.json
 
   frontend:
     name: Frontend typecheck and build

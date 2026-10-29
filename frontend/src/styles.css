@@ -1210,4 +1210,107 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+/* The Evaluation page: the committed runs, case by case. */
+.evaluation-page {
+  overflow-y: auto;
+  height: calc(100vh - var(--header));
+}
+.evaluation-view {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 32px 48px;
+}
+.evaluation-view h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+.eval-runs {
+  margin: 16px 0 20px;
+}
+.eval-runs button {
+  font: inherit;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 2px;
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.eval-runs button.on {
+  background: var(--accent-wash);
+  color: var(--accent);
+  font-weight: 500;
+}
+.eval-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 24px;
+}
+.eval-table th,
+.eval-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+.eval-table thead th {
+  font-weight: 600;
+}
+.eval-table tbody th {
+  font-weight: 500;
+}
+.eval-case {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ink);
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.eval-marks {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.eval-marks .meta {
+  margin-left: 8px;
+}
+.eval-marks .pass {
+  color: var(--ok-ink);
+}
+.eval-marks .fail {
+  color: var(--bad-ink);
+}
+.eval-detail {
+  background: var(--rail);
+}
+.eval-answers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.eval-answers h3 {
+  margin: 8px 0 4px;
+  font-size: 15px;
+}
+.eval-answers blockquote {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--hairline-strong);
+  background: var(--canvas);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+/* The question layout sets its own display, so hidden needs saying twice. */
+.layout[hidden] {
+  display: none;
 }
