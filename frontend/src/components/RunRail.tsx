@@ -1,8 +1,9 @@
-import { ListChecks, Quote } from "lucide-react";
-import { useEffect } from "react";
-import { type Citation, type Run, type RunEvent, type SupportCheck, documentFileUrl } from "../api";
+import { FileText, ListChecks, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Citation, Run, RunEvent, SupportCheck } from "../api";
 import type { CiteRef } from "../App";
 import { count, dollars, seconds, shortCode } from "../format";
+import { PagePreview, type PreviewTarget } from "./PagePreview";
 
 // The selected question's sources and steps, side by side with the conversation.
 
@@ -82,6 +83,10 @@ function Sources({
   onHover,
   onChoose,
 }: Props & { citations: Citation[] }) {
+  const [preview, setPreview] = useState<PreviewTarget | null>(null);
+  // A preview belongs to the question it came from.
+  useEffect(() => setPreview(null), [run?.id]);
+
   // Bring the chosen source into view, inside the rail only.
   useEffect(() => {
     if (!chosen || chosen.runId !== run?.id) return;
@@ -100,6 +105,8 @@ function Sources({
   }
   const activeN = active?.runId === run.id ? active.n : null;
   return (
+    <>
+    {preview && <PagePreview target={preview} onClose={() => setPreview(null)} />}
     <ol className="sources">
       {citations.map((c) => {
         const found = c.provenance === "verified";
@@ -137,20 +144,29 @@ function Sources({
                 <SupportMark checks={run.answer?.support} n={c.number} />
               </span>
               {c.document_id !== null && c.page_no !== null && (
-                <a
-                  href={documentFileUrl(c.document_id, c.page_no)}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                <button
+                  type="button"
+                  className="text-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPreview({
+                      documentId: c.document_id as number,
+                      title: c.title,
+                      page: c.page_no as number,
+                      quote: c.cited_text,
+                    });
+                  }}
                 >
-                  Open page {c.page_no}
-                </a>
+                  <FileText size={14} aria-hidden="true" />
+                  Show page {c.page_no}
+                </button>
               )}
             </div>
           </li>
         );
       })}
     </ol>
+    </>
   );
 }
 
