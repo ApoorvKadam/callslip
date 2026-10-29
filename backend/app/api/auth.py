@@ -150,14 +150,17 @@ def _failures_key(email: str, address: str) -> str:
     return "login:fail:" + hashlib.sha256(who.encode()).hexdigest()
 
 
-async def _take_attempt(redis, key: str) -> int:
-    """Count this attempt. Returns the seconds to wait when it is over the limit, else 0."""
+async def take_attempt(
+    redis, key: str, limit: int = LOGIN_LIMIT, window_s: int = LOGIN_WINDOW_S
+) -> int:
+    """Count one attempt against `limit` per `window_s` seconds. Returns the seconds to wait when
+    it is over the limit, else 0. Questions use it too (app/api/sessions.py)."""
     try:
-        count, ttl = await redis.eval(_TAKE_ATTEMPT, 1, key, LOGIN_WINDOW_S)
+        count, ttl = await redis.eval(_TAKE_ATTEMPT, 1, key, window_s)
     except (RedisError, OSError):
-        log.warning("sign-in limit unavailable; not enforced")
+        log.warning("request limit unavailable; not enforced", extra={"limit_key": key[:10]})
         return 0
-    return max(int(ttl), 1) if int(count) > LOGIN_LIMIT else 0
+    return max(int(ttl), 1) if int(count) > limit else 0
 
 
 async def _clear_attempts(redis, key: str) -> None:
@@ -171,7 +174,7 @@ async def _clear_attempts(redis, key: str) -> None:
 async def login(body: SignIn, request: Request, response: Response, pool: Pool) -> dict:
     address = request.client.host if request.client else "unknown"
     redis, key = request.app.state.redis, _failures_key(body.email, address)
-    wait = await _take_attempt(redis, key)
+    wait = await take_attempt(redis, key)
     if wait:
         raise HTTPException(
             429,

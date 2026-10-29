@@ -286,11 +286,11 @@ async def test_attempts_sent_together_cannot_pass_the_limit_together(client):
 
     from redis.asyncio import Redis as AsyncRedis
 
-    from app.api.auth import LOGIN_LIMIT, _failures_key, _take_attempt
+    from app.api.auth import LOGIN_LIMIT, _failures_key, take_attempt
 
     redis = AsyncRedis.from_url(TEST_REDIS_URL)
     key = _failures_key("race@nyu.edu", "10.0.0.7")
-    waits = await asyncio.gather(*(_take_attempt(redis, key) for _ in range(20)))
+    waits = await asyncio.gather(*(take_attempt(redis, key) for _ in range(20)))
     assert sum(1 for w in waits if w == 0) == LOGIN_LIMIT  # only five may check a password
     await redis.delete(key)
     await redis.aclose()

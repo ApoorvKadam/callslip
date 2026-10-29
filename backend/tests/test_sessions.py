@@ -11,7 +11,14 @@ from fastapi.testclient import TestClient
 from psycopg.types.json import Jsonb
 
 from app.api.sessions import COOKIE
-from tests.conftest import TEST_DATABASE_URL, needs_db, needs_model, reset_schema
+from tests.conftest import (
+    TEST_DATABASE_URL,
+    TEST_REDIS_URL,
+    needs_db,
+    needs_model,
+    needs_redis,
+    reset_schema,
+)
 
 pytestmark = [needs_db, needs_model]
 
@@ -181,3 +188,26 @@ def test_another_browser_cannot_compare_in_a_conversation(client):
     new_browser(client)
     r = client.post(f"/api/sessions/{session}/compare", json={"question": "Q?"})
     assert r.status_code == 404
+
+
+@needs_redis
+def test_questions_from_one_address_are_limited(client, monkeypatch):
+    from redis import Redis
+
+    client.app.state.llm = NoModel()
+    monkeypatch.setattr(client.app.state.settings, "ask_limit", 2)
+    redis = Redis.from_url(TEST_REDIS_URL)
+    for key in redis.scan_iter("ask:addr:*"):
+        redis.delete(key)
+    for _ in range(2):
+        session = new_browser(client)
+        assert (
+            client.post(f"/api/sessions/{session}/runs", json={"question": "Q?"}).status_code == 202
+        )
+    session = new_browser(client)
+    refused = client.post(f"/api/sessions/{session}/compare", json={"question": "Q?"})
+    assert refused.status_code == 429
+    assert 0 < int(refused.headers["Retry-After"]) <= 600
+    assert "Too many questions" in refused.json()["detail"]
+    for key in redis.scan_iter("ask:addr:*"):
+        redis.delete(key)
