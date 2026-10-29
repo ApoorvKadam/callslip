@@ -70,13 +70,13 @@ def test_passwords_are_hashed_and_checked():
 def test_sign_up_sign_in_and_out(client):
     sign_up(client, "Ada@NYU.edu")
     cookie = client.cookies.get(AUTH_COOKIE)
-    assert cookie and client.get("/api/auth/me").json() == {"email": "Ada@NYU.edu"}
+    assert cookie and client.get("/api/auth/me").json()["email"] == "Ada@NYU.edu"
 
     again = client.post("/api/auth/register", json={"email": "ada@nyu.edu", "password": PASSWORD})
     assert again.status_code == 409  # emails are compared without case
 
     assert client.post("/api/auth/logout").status_code == 204
-    assert client.get("/api/auth/me").json() == {"email": None}
+    assert client.get("/api/auth/me").json()["email"] is None
 
     wrong = client.post("/api/auth/login", json={"email": "ada@nyu.edu", "password": "x" * 12})
     unknown = client.post("/api/auth/login", json={"email": "no@nyu.edu", "password": "x" * 12})
@@ -294,3 +294,34 @@ async def test_attempts_sent_together_cannot_pass_the_limit_together(client):
     assert sum(1 for w in waits if w == 0) == LOGIN_LIMIT  # only five may check a password
     await redis.delete(key)
     await redis.aclose()
+
+
+def test_a_public_deployment_takes_uploads_only_from_accounts(client, monkeypatch):
+    monkeypatch.setattr(client.app.state.settings, "allow_guest_uploads", False)
+    client.cookies.clear()
+    pdf = {"file": ("notes.pdf", make_pdf(["Guest notes."]), "application/pdf")}
+    assert client.get("/api/auth/me").json() == {"email": None, "guest_uploads": False}
+    refused = client.post("/api/documents", files=pdf)
+    assert (refused.status_code, refused.json()["detail"]) == (401, "Sign in to upload PDFs.")
+    sign_up(client, "uploader@nyu.edu")
+    accepted = client.post("/api/documents", files=pdf)
+    assert accepted.status_code == 202 and accepted.json()["private"] is True
+
+
+@needs_redis
+def test_uploads_from_one_address_are_limited(client, monkeypatch):
+    redis = Redis.from_url(TEST_REDIS_URL)
+    for key in redis.scan_iter("upload:addr:*"):
+        redis.delete(key)
+    monkeypatch.setattr(client.app.state.settings, "upload_limit", 2)
+    sign_up(client, "busy@nyu.edu")
+    codes = [
+        client.post(
+            "/api/documents",
+            files={"file": (f"n{i}.pdf", make_pdf([f"Note {i}."]), "application/pdf")},
+        ).status_code
+        for i in range(3)
+    ]
+    assert codes == [202, 202, 429]
+    for key in redis.scan_iter("upload:addr:*"):
+        redis.delete(key)

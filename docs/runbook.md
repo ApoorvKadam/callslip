@@ -18,6 +18,8 @@ Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI)
 | `IMAGE_TAG` | shell | `dev` | image tag; `scripts/deploy.sh` sets it to the commit SHA |
 | `ALLOW_FAULT_INJECTION` | shell or `.env` | `false` | evaluation only: lets a request make a tool fail |
 | `LOG_LEVEL` | `.env` | `INFO` | |
+| `ALLOW_GUEST_UPLOADS` | `.env` | `true` | whether visitors who are not signed in may add PDFs to the shared collection; `false` in the Kubernetes settings, so on a public deployment only signed-in users upload, privately |
+| `UPLOAD_LIMIT`, `UPLOAD_WINDOW_S` | `.env` | `0` (off), `3600` | uploads per client address per window; 20 an hour in the Kubernetes settings |
 | `ASK_LIMIT`, `ASK_WINDOW_S` | `.env` | `0` (off), `600` | questions and comparisons per client address per window; refused with 429 and `Retry-After` beyond it. Off in Compose because the evaluation asks 90 questions in a few minutes; 60 per 10 minutes in the Kubernetes settings |
 
 Application settings with their defaults are in `backend/app/config.py` (model `claude-haiku-5-5`, effort `low`, `top_k` 8, run deadline 90 s, 10 model turns, 9 tool calls, 8 s tool timeout). Any of them can be set in `.env` under the same name in capitals, for example `RUN_DEADLINE_S=60`; Compose passes `.env` to the api, runner and worker. Recreate the services that use a setting to apply it: run settings (limits, model, effort) are read by the runner, so `docker compose up -d --wait api runner`.
