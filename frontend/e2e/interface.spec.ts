@@ -171,7 +171,7 @@ test("a question pasted past the limit says it was cut", async ({ page }) => {
   await page.keyboard.insertText("Explain the governance function. ".repeat(80));
   await expect(box).toHaveValue(/^Explain/);
   expect((await box.inputValue()).length).toBe(2000);
-  await expect(page.locator(".limit-hint")).toHaveText("Up to 2,000 characters; longer text is cut off.");
+  await expect(page.locator(".limit-hint")).toHaveText("The box stops at 2,000 characters.");
   await box.press("Backspace");
   await expect(page.locator(".limit-hint")).toHaveCount(0);
 });

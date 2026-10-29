@@ -271,7 +271,7 @@ export function Conversation(props: Props) {
           </span>
           {text.length >= MAX_TEXT ? (
             <span className="limit-hint" role="status">
-              Up to 2,000 characters; longer text is cut off.
+              The box stops at 2,000 characters.
             </span>
           ) : (
             <span className="keys-hint">Enter to send, Shift and Enter for a new line.</span>
