@@ -145,3 +145,21 @@ test("where guests cannot upload, a signed-out visitor is told to sign in", asyn
   await expect(page.locator(".docs")).toContainText("Sign in to upload your own PDFs.");
   await expect(page.locator(".docs input[type=file]")).toHaveCount(0);
 });
+
+test("with every scrollbar showing, nothing scrolls sideways", async ({ page }, info) => {
+  await open(page);
+  const widths = info.project.name === "phone" ? [0] : [1440, 1100];
+  for (const width of widths) {
+    if (width) await page.setViewportSize({ width, height: 800 });
+    // A scrollbar takes width from its panel; show each one as a long list would.
+    const sideways = await page.evaluate(() => {
+      const all = [...document.querySelectorAll<HTMLElement>("*")];
+      for (const el of all) if (getComputedStyle(el).overflowY === "auto") el.style.overflowY = "scroll";
+      return all
+        .filter((el) => ["auto", "scroll"].includes(getComputedStyle(el).overflowX))
+        .filter((el) => el.scrollWidth > el.clientWidth + 1)
+        .map((el) => `${el.tagName.toLowerCase()}.${el.className}`);
+    });
+    expect(sideways, `at ${width || "phone"} width`).toEqual([]);
+  }
+});
