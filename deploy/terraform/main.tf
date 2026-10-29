@@ -71,6 +71,27 @@ resource "kustomization_resource" "tls" {
 data "kustomization_overlay" "callslip" {
   resources = ["${path.module}/../kubernetes/overlays/${var.overlay}"]
   namespace = var.namespace
+
+  # The ingress and OpenShift overlays name placeholder images; point them at a real registry.
+  dynamic "images" {
+    for_each = var.image_registry == "" ? [] : ["callslip-backend", "callslip-frontend"]
+    content {
+      name     = "registry.example.edu/${images.value}"
+      new_name = "${var.image_registry}/${images.value}"
+      new_tag  = var.image_tag
+    }
+  }
+
+  # Both OpenShift Routes share one host, so /api and the page are on the same origin.
+  dynamic "patches" {
+    for_each = var.route_host == "" ? [] : [1]
+    content {
+      target {
+        kind = "Route"
+      }
+      patch = jsonencode([{ op = "replace", path = "/spec/host", value = var.route_host }])
+    }
+  }
 }
 
 locals {

@@ -116,13 +116,52 @@ terraform plan      # afterwards: "No changes"
 terraform destroy   # removes everything it made
 ```
 
-It uses the [kbst/kustomization](https://registry.terraform.io/providers/kbst/kustomization) provider, which builds the overlay with kustomize, so the YAML stays the one description of the workloads. On OpenShift, set `overlay = "openshift"` and `create_namespace = false`, because the project already exists. The state file holds the generated password and the API key, so git ignores it; a team would keep it in an encrypted remote backend. The Secrets have fixed names, so after changing the key, restart the API and run workers (`kubectl rollout restart deploy/api deploy/runner`).
+It uses the [kbst/kustomization](https://registry.terraform.io/providers/kbst/kustomization) provider, which builds the overlay with kustomize, so the YAML stays the one description of the workloads. On OpenShift, set `overlay = "openshift"` and `create_namespace = false`, because the project already exists; `image_registry`, `image_tag` and `route_host` point the overlay at the pushed images and the cluster's domain (`openshift.tfvars.example`). The state file holds the generated password and the API key, so git ignores it; a team would keep it in an encrypted remote backend. The Secrets have fixed names, so after changing the key, restart the API and run workers (`kubectl rollout restart deploy/api deploy/runner`).
 
 On the kind cluster (Terraform 1.17.1): `terraform apply` made 19 resources in 34 s, with every pod ready. A second `terraform plan` found no changes. The corpus then loaded through the ingress, and the 27-step browser check passed 27 of 27. `terraform destroy` removed all 19 resources in 35 s, the namespace and its volume with them.
+
+## Live on OpenShift
+
+The OpenShift overlay runs on the free Red Hat OpenShift Developer Sandbox (OpenShift 4.21, Kubernetes 1.34): **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com**. It is the same images and manifests as above, deployed with the Terraform configuration.
+
+```bash
+oc login --server=https://api.<cluster>:6443 --token=...    # the console's "Copy login command"
+P=$(oc project -q); R=$(oc registry info --public); TAG=$(git rev-parse --short HEAD)
+oc whoami -t | docker login -u "$(oc whoami)" --password-stdin "$R"
+for img in callslip-backend callslip-frontend; do
+  docker tag "$img:$TAG" "$R/$P/$img:$TAG"
+  # One platform: the cluster registry refuses the multi-platform index Docker 29 pushes by default.
+  docker push --platform linux/amd64 "$R/$P/$img:$TAG"
+done
+cd deploy/terraform && cp openshift.tfvars.example openshift.tfvars   # context, project, tag, host, key
+terraform init && terraform apply -var-file=openshift.tfvars
+python3 scripts/load_corpus.py --base https://<route host>
+```
+
+The pods pull from the project's own registry (`image-registry.openshift-image-registry.svc:5000/<project>`), so no registry credentials or public images are needed.
+
+### What the OpenShift run showed
+
+Run on 2026-10-29 from the commit after the question limit (`2bdaed2`), with two replicas each of the API, run workers and frontend.
+
+| Check | Result |
+|---|---|
+| `terraform apply` | 18 resources in 55 s, every workload ready. The apps restarted twice while PostgreSQL created its volume |
+| `terraform plan` again | no changes |
+| The public route | HTTPS with the router's certificate, which validates normally; plain HTTP redirects to HTTPS; `/metrics` is not reachable from outside |
+| The 14 corpus PDFs, uploaded through the route | all ready in 455 s; the ingestion worker peaked at 608 MiB under its 1 GiB limit |
+| The 27-step browser check against the public URL | 27 of 27 pass: answers with citations, compare, export, sign-in, a private upload and its deletion, another account kept out, the sign-in limit |
+| Every pod deleted at once, as the sandbox does after 12 hours | all nine pods ready again in 38 s. The site answered 503 for about 35 s. Documents, passages, accounts and runs were the same before and after |
+
+What the sandbox changes:
+
+- It deletes pods after 12 hours of running ([FAQ](https://developers.redhat.com/developer-sandbox/FAQ)). The Deployments and the StatefulSet start new ones, and PostgreSQL keeps its volume.
+- The trial lasts 30 days, until about 2026-11-28. Its quota is 30 GiB of memory, 3 CPU cores of requests and 80 GiB of storage; this deployment uses a fraction.
+- The project comes with Red Hat's own network policies, including one that allows all traffic inside the project. Policies add up, so inside this project the isolation is wider than the overlay's policies alone, as tested on kind.
 
 ## What is checked, and what is not
 
 - CI renders every overlay and validates every resource against the Kubernetes and OpenShift schemas (kubeconform, strict mode).
-- The ingress overlay ran on a local kind cluster (above). The OpenShift overlay is schema-checked only: it has not run on OpenShift.
+- The ingress overlay ran on a local kind cluster, and the OpenShift overlay runs on the Red Hat OpenShift Developer Sandbox (both above).
 - The API runs two replicas and rolls out one pod at a time: it queues runs and keeps no run state. Two run workers (`runner`) execute the questions; more can be added the same way.
 - For production, PostgreSQL would be the platform's managed service with the `vector` extension, and Redis a managed cache; `DATABASE_URL` and `REDIS_URL` then point at them and the two in-cluster workloads are dropped.

@@ -10,6 +10,8 @@ The name comes from the call slip, the form a library reader fills in to have ma
 
 Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is unfinished.
 
+Live demo on OpenShift: **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com** (Red Hat Developer Sandbox, a free trial until about 2026-11-28; questions are limited to 60 per address per 10 minutes).
+
 ## Status
 
 | Part | Status | Where to check |
@@ -19,10 +21,10 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 | What to submit: repository, reproducibility notes, architecture diagram, evaluation with a baseline, walkthrough, summary, deployment runbook | Done | [reproducibility](docs/reproducibility.md), [architecture](docs/architecture.md), [evaluation](docs/evaluation.md), [walkthrough](docs/demo.md), [summary](SUMMARY.md), [runbook](docs/runbook.md) |
 | Optional: authentication and personalisation | Done: local accounts, private uploads and their deletion, history per account, a limit on failed sign-ins | [accounts](#accounts-and-conversations) |
 | Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
-| Optional: Kubernetes and OpenShift | Done on Kubernetes: the manifests ran on a local kind cluster, with the browser check, network policies, update, rollback and pod loss tested. OpenShift: schema-checked in CI only | [docs/kubernetes.md](docs/kubernetes.md#run-it-on-a-local-cluster) |
-| Optional: infrastructure as code | Done: Kustomize describes the workloads; Terraform makes the namespace and Secrets and applies them, tested on the kind cluster | [docs/kubernetes.md](docs/kubernetes.md#apply-with-terraform) |
+| Optional: Kubernetes and OpenShift | Done: live on OpenShift (Red Hat Developer Sandbox), deployed with Terraform; also tested on a local kind cluster with network policies, update, rollback and pod loss | [live demo](https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com), [docs/kubernetes.md](docs/kubernetes.md#live-on-openshift) |
+| Optional: infrastructure as code | Done: Kustomize describes the workloads; Terraform makes the namespace and Secrets and applies them, on the kind cluster and on OpenShift | [docs/kubernetes.md](docs/kubernetes.md#apply-with-terraform) |
 | Added beyond the brief | Answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; latency measured in a real browser | [summary](SUMMARY.md) |
-| Not done | NYU single sign-on, sharing with groups, running on OpenShift or a hosted cluster, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
+| Not done | NYU single sign-on, sharing with groups, a production cluster with managed PostgreSQL, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
 
 ## Results at a glance
 
