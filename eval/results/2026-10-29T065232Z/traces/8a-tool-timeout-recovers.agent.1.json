@@ -1,0 +1,2088 @@
+{
+ "runs": [
+  {
+   "id": "34a3aecd-41e6-41ea-8d57-bc1fe07b3f8b",
+   "session_id": "fe89914a-7a51-4b18-a784-7266d37f812d",
+   "mode": "agent",
+   "question": "How does the NIST Generative AI Profile describe data privacy risks?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data. It adds that using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. Models may leak, generate, or correctly infer sensitive information about individuals. It describes memorization: during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples. Models can also infer personal data they were never given, and these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure. It also lists leaks of personally identifiable information, including facial likenesses of individuals as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. It also suggests considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Risk categories.** Data privacy appears under several headings. It is listed among risks from misuse by humans (or malicious use), and also among ecosystem / societal risks (or systemic risks).",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states GAI systems raise several privacy risks and training may include personal data.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "Passage says personal data use for GAI training raises risks to transparency, consent, and purpose specification.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 3,
+      "reason": "Leak and inference of sensitive information is stated, but 'generate' and the source-disclosure framing are only partly matched; passage supports most of it.",
+      "verdict": "partly",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "claim": 4,
+      "reason": "Passage states LLMs revealed sensitive public-domain training data under attack and memorization risks for few samples.",
+      "verdict": "supported",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "claim": 5,
+      "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage.",
+      "verdict": "supported",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "claim": 6,
+      "reason": "MP-4.1-001 suggests periodic monitoring for privacy risks and addressing PII or sensitive data exposure.",
+      "verdict": "supported",
+      "citations": [
+       6
+      ]
+     },
+     {
+      "claim": 7,
+      "reason": "Passage lists leak of personally identifiable information including facial likenesses of individuals as a risk.",
+      "verdict": "supported",
+      "citations": [
+       7
+      ]
+     },
+     {
+      "claim": 8,
+      "reason": "MS-2.2-004 suggests anonymization, differential privacy, or PETs to minimize linking AI content to human subjects.",
+      "verdict": "supported",
+      "citations": [
+       8
+      ]
+     },
+     {
+      "claim": 9,
+      "reason": "MG-2.2-009 suggests synthetic data and privacy techniques matching real-world statistics without disclosing PII.",
+      "verdict": "supported",
+      "citations": [
+       9
+      ]
+     },
+     {
+      "claim": 10,
+      "reason": "Passage lists Data Privacy under misuse by humans (or malicious use).",
+      "verdict": "supported",
+      "citations": [
+       10
+      ]
+     },
+     {
+      "claim": 11,
+      "reason": "Passage lists Data Privacy under ecosystem / societal risks (or systemic risks).",
+      "verdict": "supported",
+      "citations": [
+       10
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that ",
+      "citations": []
+     },
+     {
+      "text": "GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data.",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": " It adds that ",
+      "citations": []
+     },
+     {
+      "text": "using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": "\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. ",
+      "citations": []
+     },
+     {
+      "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "text": " It describes memorization: ",
+      "citations": []
+     },
+     {
+      "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples.",
+      "citations": [
+       4
+      ]
+     },
+     {
+      "text": " Models can also infer personal data they were never given, and ",
+      "citations": []
+     },
+     {
+      "text": "these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.",
+      "citations": [
+       5
+      ]
+     },
+     {
+      "text": "\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests ",
+      "citations": []
+     },
+     {
+      "text": "conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+      "citations": [
+       6
+      ]
+     },
+     {
+      "text": " It also lists ",
+      "citations": []
+     },
+     {
+      "text": "leaks of personally identifiable information, including facial likenesses of individuals",
+      "citations": [
+       7
+      ]
+     },
+     {
+      "text": " as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes ",
+      "citations": []
+     },
+     {
+      "text": "anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+      "citations": [
+       8
+      ]
+     },
+     {
+      "text": " It also suggests ",
+      "citations": []
+     },
+     {
+      "text": "considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.",
+      "citations": [
+       9
+      ]
+     },
+     {
+      "text": "\n\n**Risk categories.** Data privacy appears under several headings. It is listed among ",
+      "citations": []
+     },
+     {
+      "text": "risks from misuse by humans (or malicious use)",
+      "citations": [
+       10
+      ]
+     },
+     {
+      "text": ", and also among ",
+      "citations": []
+     },
+     {
+      "text": "ecosystem / societal risks (or systemic risks)",
+      "citations": [
+       10
+      ]
+     },
+     {
+      "text": ".",
+      "citations": []
+     }
+    ],
+    "answer_ms": 13052,
+    "citations": [
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 1,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which in some cases may include personal data.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 2,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 3,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 4,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+      "number": 5,
+      "source": "doc-2/p11",
+      "page_no": 11,
+      "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+      "number": 6,
+      "source": "doc-2/p30",
+      "page_no": 30,
+      "cited_text": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as are risks of infringement of a third-party\u2019s intellectual property or other rights. Action ID Suggested Action GAI Risks MP-4.1-001 Conduct periodic monitoring of AI-generated content for privacy risks;address any possible instances of PII or sensitive data exposure. Data Privacy MP-4.1-002 Implement processes for responding to potential intellectual property infringement claims or other rights.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+      "number": 7,
+      "source": "doc-2/p30",
+      "page_no": 30,
+      "cited_text": "Leak of personally identi\ufb01able information, including facial likenesses of individuals. CBRN Information or Capabilities; Intellectual Property; Information Security; Harmful Bias and Homogenization; Dangerous, Violent, or Hateful Content; Data Privacy MP-4.1-006 Implement policies and practices de\ufb01ning how third-party intellectual property and training data will be used, stored, and protected.",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 34",
+      "number": 8,
+      "source": "doc-2/p34",
+      "page_no": 34,
+      "cited_text": "Information Integrity MS-2.2-004 Use techniques such as anonymization, di\ufb00erential privacy or other privacy- enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. Data Privacy;",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 45",
+      "number": 9,
+      "source": "doc-2/p45",
+      "page_no": 45,
+      "cited_text": "Harmful Bias and Homogenization MG-2.2-009 Consider opportunities to responsibly use synthetic data and other privacy enhancing techniques in GAI development, where appropriate and applicable, match the statistical properties of real-world data without disclosing personally identi\ufb01able information or contributing to homogenization. Data Privacy; Intellectual Property; Information Integrity;",
+      "provenance": "verified",
+      "document_id": 2
+     },
+     {
+      "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 7",
+      "number": 10,
+      "source": "doc-2/p7",
+      "page_no": 7,
+      "cited_text": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Con\ufb01guration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy;",
+      "provenance": "verified",
+      "document_id": 2
+     }
+    ],
+    "citations_verified": 10
+   },
+   "model_turns": 2,
+   "tool_calls": 1,
+   "exec_ms": 16136,
+   "created_at": "2026-10-29T06:54:32.779456Z",
+   "finished_at": "2026-10-29T06:54:49.061236Z",
+   "compare_id": null,
+   "asked": null,
+   "replied": null,
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "agent",
+      "faults": {
+       "search_documents": "timeout_once"
+      },
+      "question": "How does the NIST Generative AI Profile describe data privacy risks?"
+     },
+     "created_at": "2026-10-29T06:54:32.917294Z"
+    },
+    {
+     "seq": 2,
+     "type": "model_call",
+     "data": {
+      "ms": 801,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.000183,
+      "stop_reason": "tool_use",
+      "input_tokens": 4,
+      "output_tokens": 106,
+      "cache_read_tokens": 2121,
+      "cache_creation_tokens": 865
+     },
+     "created_at": "2026-10-29T06:54:33.748657Z"
+    },
+    {
+     "seq": 3,
+     "type": "tool_call",
+     "data": {
+      "ms": 8016,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "data privacy risks generative AI",
+       "top_k": 8,
+       "document_ids": [
+        2
+       ]
+      },
+      "status": "ok",
+      "retries": [
+       "timed out after 8 s"
+      ],
+      "summary": "8 passages",
+      "attempts": 2,
+      "evidence": [
+       {
+        "score": 0.032,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which i",
+        "page_no": 11,
+        "document_id": 2
+       },
+       {
+        "score": 0.0318,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "30 MEASURE 2.2: Evaluations involving human subjects meet applicable requirements (including human subject protection) and are representative of the relevant population. Action ID ",
+        "page_no": 34,
+        "document_id": 2
+       },
+       {
+        "score": 0.0297,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Informatio",
+        "page_no": 7,
+        "document_id": 2
+       },
+       {
+        "score": 0.0292,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "27 MP-4.1-010 Conduct appropriate diligence on training data use to assess intellectual property, and privacy, risks, including to examine whether use of proprietary or sensitive t",
+        "page_no": 31,
+        "document_id": 2
+       },
+       {
+        "score": 0.0285,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as ",
+        "page_no": 30,
+        "document_id": 2
+       },
+       {
+        "score": 0.0283,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "(2023) A Revealing Picture. Graphika. https://graphika.com/reports/a-revealing-picture Lee, H. et al. (2024) Deepfakes, Phrenology, Surveillance, and More! A Taxonomy of AI Privacy",
+        "page_no": 60,
+        "document_id": 2
+       },
+       {
+        "score": 0.0268,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "41 MG-2.2-006 Use feedback from internal and external AI Actors, users, individuals, and communities, to assess impact of AI-generated content. Human-AI Con\ufb01guration MG-2.2-007 Use",
+        "page_no": 45,
+        "document_id": 2
+       },
+       {
+        "score": 0.0259,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "31 MS-2.3-004 Utilize a purpose-built testing environment such as NIST Dioptra to empirically evaluate GAI trustworthy characteristics. CBRN Information or Capabilities; Data Priva",
+        "page_no": 35,
+        "document_id": 2
+       }
+      ]
+     },
+     "created_at": "2026-10-29T06:54:41.769196Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": "The NIST Gener",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:42.684911Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": "ative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:42.806521Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": " points are below.\n\n**Core risks.** The profile says that ",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:42.925516Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": "GAI systems raise several risks to privacy, since training requires large volumes of",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.050968Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " data that in some cases may include personal data. It adds that ",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.172991Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": "using personal data for training puts widely accepted privacy princip",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.296142Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer_delta",
+     "data": {
+      "text": "les at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Ex",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.419657Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": "posure and inference.** The profile notes that developers rarely reveal their s",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.542531Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": "ources, so users often cannot tell whether personal information was used. Models may leak, generate, or corre",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.665694Z"
+    },
+    {
+     "seq": 13,
+     "type": "answer_delta",
+     "data": {
+      "text": "ctly infer sensitive information about individuals. It describes memorization: ",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.790101Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer_delta",
+     "data": {
+      "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:43.912630Z"
+    },
+    {
+     "seq": 15,
+     "type": "answer_delta",
+     "data": {
+      "text": " pose heightened privacy risks even for data present in only a few training samples. Models can also infer person",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.061749Z"
+    },
+    {
+     "seq": 16,
+     "type": "answer_delta",
+     "data": {
+      "text": "al data they were never given, and ",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.178253Z"
+    },
+    {
+     "seq": 17,
+     "type": "answer_delta",
+     "data": {
+      "text": "these inferences can harm an individual even when they are inaccurate,",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.291494Z"
+    },
+    {
+     "seq": 18,
+     "type": "answer_delta",
+     "data": {
+      "text": " especially if they reveal sensitive information or are used to disadvantage them.\n\n**M",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.403630Z"
+    },
+    {
+     "seq": 19,
+     "type": "answer_delta",
+     "data": {
+      "text": "itigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure,",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.527505Z"
+    },
+    {
+     "seq": 20,
+     "type": "answer_delta",
+     "data": {
+      "text": " and documenting training data curation policies. For example, it suggests conducting peri",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.670802Z"
+    },
+    {
+     "seq": 21,
+     "type": "answer_delta",
+     "data": {
+      "text": "odic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.793583Z"
+    },
+    {
+     "seq": 22,
+     "type": "answer_delta",
+     "data": {
+      "text": " It also lists leaks of personally identifiable information, including facial likenesses of individuals",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:44.900434Z"
+    },
+    {
+     "seq": 23,
+     "type": "answer_delta",
+     "data": {
+      "text": " as a risk to weigh when setting data collection and",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.021207Z"
+    },
+    {
+     "seq": 24,
+     "type": "answer_delta",
+     "data": {
+      "text": " retention policies. For evaluations involving human subjects, it proposes anonymization",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.164615Z"
+    },
+    {
+     "seq": 25,
+     "type": "answer_delta",
+     "data": {
+      "text": ", differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.288159Z"
+    },
+    {
+     "seq": 26,
+     "type": "answer_delta",
+     "data": {
+      "text": " It also suggests considering synthetic data and other privacy-enhancing techniques,",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.410671Z"
+    },
+    {
+     "seq": 27,
+     "type": "answer_delta",
+     "data": {
+      "text": " where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Ris",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.534100Z"
+    },
+    {
+     "seq": 28,
+     "type": "answer_delta",
+     "data": {
+      "text": "k categories.** Data privacy appears under several headings. It",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.654969Z"
+    },
+    {
+     "seq": 29,
+     "type": "answer_delta",
+     "data": {
+      "text": " is listed among risks from misuse by humans (or malicious use)",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.783378Z"
+    },
+    {
+     "seq": 30,
+     "type": "answer_delta",
+     "data": {
+      "text": ", and also among ecosystem / societal risks (or systemic risks)",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.903106Z"
+    },
+    {
+     "seq": 31,
+     "type": "answer_delta",
+     "data": {
+      "text": ".",
+      "turn": 2
+     },
+     "created_at": "2026-10-29T06:54:45.951794Z"
+    },
+    {
+     "seq": 32,
+     "type": "model_call",
+     "data": {
+      "ms": 4166,
+      "turn": 2,
+      "model": "claude-haiku-5-5",
+      "purpose": "decide",
+      "cost_usd": 0.001291,
+      "stop_reason": "end_turn",
+      "input_tokens": 2,
+      "output_tokens": 934,
+      "cache_read_tokens": 2918,
+      "cache_creation_tokens": 6357
+     },
+     "created_at": "2026-10-29T06:54:45.959907Z"
+    },
+    {
+     "seq": 33,
+     "type": "answer",
+     "data": {
+      "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data. It adds that using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. Models may leak, generate, or correctly infer sensitive information about individuals. It describes memorization: during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples. Models can also infer personal data they were never given, and these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure. It also lists leaks of personally identifiable information, including facial likenesses of individuals as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. It also suggests considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Risk categories.** Data privacy appears under several headings. It is listed among risks from misuse by humans (or malicious use), and also among ecosystem / societal risks (or systemic risks).",
+      "segments": [
+       {
+        "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that ",
+        "citations": []
+       },
+       {
+        "text": "GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data.",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": " It adds that ",
+        "citations": []
+       },
+       {
+        "text": "using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": "\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. ",
+        "citations": []
+       },
+       {
+        "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "text": " It describes memorization: ",
+        "citations": []
+       },
+       {
+        "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples.",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "text": " Models can also infer personal data they were never given, and ",
+        "citations": []
+       },
+       {
+        "text": "these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "text": "\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests ",
+        "citations": []
+       },
+       {
+        "text": "conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+        "citations": [
+         6
+        ]
+       },
+       {
+        "text": " It also lists ",
+        "citations": []
+       },
+       {
+        "text": "leaks of personally identifiable information, including facial likenesses of individuals",
+        "citations": [
+         7
+        ]
+       },
+       {
+        "text": " as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes ",
+        "citations": []
+       },
+       {
+        "text": "anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+        "citations": [
+         8
+        ]
+       },
+       {
+        "text": " It also suggests ",
+        "citations": []
+       },
+       {
+        "text": "considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.",
+        "citations": [
+         9
+        ]
+       },
+       {
+        "text": "\n\n**Risk categories.** Data privacy appears under several headings. It is listed among ",
+        "citations": []
+       },
+       {
+        "text": "risks from misuse by humans (or malicious use)",
+        "citations": [
+         10
+        ]
+       },
+       {
+        "text": ", and also among ",
+        "citations": []
+       },
+       {
+        "text": "ecosystem / societal risks (or systemic risks)",
+        "citations": [
+         10
+        ]
+       },
+       {
+        "text": ".",
+        "citations": []
+       }
+      ],
+      "answer_ms": 13052,
+      "citations": [
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 1,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which in some cases may include personal data.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 2,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 3,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 4,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+        "number": 5,
+        "source": "doc-2/p11",
+        "page_no": 11,
+        "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+        "number": 6,
+        "source": "doc-2/p30",
+        "page_no": 30,
+        "cited_text": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as are risks of infringement of a third-party\u2019s intellectual property or other rights. Action ID Suggested Action GAI Risks MP-4.1-001 Conduct periodic monitoring of AI-generated content for privacy risks;address any possible instances of PII or sensitive data exposure. Data Privacy MP-4.1-002 Implement processes for responding to potential intellectual property infringement claims or other rights.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+        "number": 7,
+        "source": "doc-2/p30",
+        "page_no": 30,
+        "cited_text": "Leak of personally identi\ufb01able information, including facial likenesses of individuals. CBRN Information or Capabilities; Intellectual Property; Information Security; Harmful Bias and Homogenization; Dangerous, Violent, or Hateful Content; Data Privacy MP-4.1-006 Implement policies and practices de\ufb01ning how third-party intellectual property and training data will be used, stored, and protected.",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 34",
+        "number": 8,
+        "source": "doc-2/p34",
+        "page_no": 34,
+        "cited_text": "Information Integrity MS-2.2-004 Use techniques such as anonymization, di\ufb00erential privacy or other privacy- enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. Data Privacy;",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 45",
+        "number": 9,
+        "source": "doc-2/p45",
+        "page_no": 45,
+        "cited_text": "Harmful Bias and Homogenization MG-2.2-009 Consider opportunities to responsibly use synthetic data and other privacy enhancing techniques in GAI development, where appropriate and applicable, match the statistical properties of real-world data without disclosing personally identi\ufb01able information or contributing to homogenization. Data Privacy; Intellectual Property; Information Integrity;",
+        "provenance": "verified",
+        "document_id": 2
+       },
+       {
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 7",
+        "number": 10,
+        "source": "doc-2/p7",
+        "page_no": 7,
+        "cited_text": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Con\ufb01guration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy;",
+        "provenance": "verified",
+        "document_id": 2
+       }
+      ],
+      "citations_verified": 10
+     },
+     "created_at": "2026-10-29T06:54:45.969756Z"
+    },
+    {
+     "seq": 34,
+     "type": "support",
+     "data": {
+      "ms": 3076,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states GAI systems raise several privacy risks and training may include personal data.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "Passage says personal data use for GAI training raises risks to transparency, consent, and purpose specification.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 3,
+        "reason": "Leak and inference of sensitive information is stated, but 'generate' and the source-disclosure framing are only partly matched; passage supports most of it.",
+        "verdict": "partly",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "claim": 4,
+        "reason": "Passage states LLMs revealed sensitive public-domain training data under attack and memorization risks for few samples.",
+        "verdict": "supported",
+        "citations": [
+         4
+        ]
+       },
+       {
+        "claim": 5,
+        "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage.",
+        "verdict": "supported",
+        "citations": [
+         5
+        ]
+       },
+       {
+        "claim": 6,
+        "reason": "MP-4.1-001 suggests periodic monitoring for privacy risks and addressing PII or sensitive data exposure.",
+        "verdict": "supported",
+        "citations": [
+         6
+        ]
+       },
+       {
+        "claim": 7,
+        "reason": "Passage lists leak of personally identifiable information including facial likenesses of individuals as a risk.",
+        "verdict": "supported",
+        "citations": [
+         7
+        ]
+       },
+       {
+        "claim": 8,
+        "reason": "MS-2.2-004 suggests anonymization, differential privacy, or PETs to minimize linking AI content to human subjects.",
+        "verdict": "supported",
+        "citations": [
+         8
+        ]
+       },
+       {
+        "claim": 9,
+        "reason": "MG-2.2-009 suggests synthetic data and privacy techniques matching real-world statistics without disclosing PII.",
+        "verdict": "supported",
+        "citations": [
+         9
+        ]
+       },
+       {
+        "claim": 10,
+        "reason": "Passage lists Data Privacy under misuse by humans (or malicious use).",
+        "verdict": "supported",
+        "citations": [
+         10
+        ]
+       },
+       {
+        "claim": 11,
+        "reason": "Passage lists Data Privacy under ecosystem / societal risks (or systemic risks).",
+        "verdict": "supported",
+        "citations": [
+         10
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 1,
+       "supported": 10,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-29T06:54:49.049764Z"
+    },
+    {
+     "seq": 35,
+     "type": "run_finished",
+     "data": {
+      "ms": 16136,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.002205,
+      "tool_calls": 1,
+      "model_calls": 3,
+      "model_turns": 2,
+      "input_tokens": 4193,
+      "output_tokens": 1665,
+      "cache_read_tokens": 5039,
+      "cache_creation_tokens": 7222
+     },
+     "created_at": "2026-10-29T06:54:49.056921Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "34a3aecd-41e6-41ea-8d57-bc1fe07b3f8b",
+  "session_id": "fe89914a-7a51-4b18-a784-7266d37f812d",
+  "mode": "agent",
+  "question": "How does the NIST Generative AI Profile describe data privacy risks?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data. It adds that using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. Models may leak, generate, or correctly infer sensitive information about individuals. It describes memorization: during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples. Models can also infer personal data they were never given, and these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure. It also lists leaks of personally identifiable information, including facial likenesses of individuals as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. It also suggests considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Risk categories.** Data privacy appears under several headings. It is listed among risks from misuse by humans (or malicious use), and also among ecosystem / societal risks (or systemic risks).",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states GAI systems raise several privacy risks and training may include personal data.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "Passage says personal data use for GAI training raises risks to transparency, consent, and purpose specification.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 3,
+     "reason": "Leak and inference of sensitive information is stated, but 'generate' and the source-disclosure framing are only partly matched; passage supports most of it.",
+     "verdict": "partly",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "claim": 4,
+     "reason": "Passage states LLMs revealed sensitive public-domain training data under attack and memorization risks for few samples.",
+     "verdict": "supported",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "claim": 5,
+     "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage.",
+     "verdict": "supported",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "claim": 6,
+     "reason": "MP-4.1-001 suggests periodic monitoring for privacy risks and addressing PII or sensitive data exposure.",
+     "verdict": "supported",
+     "citations": [
+      6
+     ]
+    },
+    {
+     "claim": 7,
+     "reason": "Passage lists leak of personally identifiable information including facial likenesses of individuals as a risk.",
+     "verdict": "supported",
+     "citations": [
+      7
+     ]
+    },
+    {
+     "claim": 8,
+     "reason": "MS-2.2-004 suggests anonymization, differential privacy, or PETs to minimize linking AI content to human subjects.",
+     "verdict": "supported",
+     "citations": [
+      8
+     ]
+    },
+    {
+     "claim": 9,
+     "reason": "MG-2.2-009 suggests synthetic data and privacy techniques matching real-world statistics without disclosing PII.",
+     "verdict": "supported",
+     "citations": [
+      9
+     ]
+    },
+    {
+     "claim": 10,
+     "reason": "Passage lists Data Privacy under misuse by humans (or malicious use).",
+     "verdict": "supported",
+     "citations": [
+      10
+     ]
+    },
+    {
+     "claim": 11,
+     "reason": "Passage lists Data Privacy under ecosystem / societal risks (or systemic risks).",
+     "verdict": "supported",
+     "citations": [
+      10
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that ",
+     "citations": []
+    },
+    {
+     "text": "GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data.",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": " It adds that ",
+     "citations": []
+    },
+    {
+     "text": "using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": "\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. ",
+     "citations": []
+    },
+    {
+     "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "text": " It describes memorization: ",
+     "citations": []
+    },
+    {
+     "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples.",
+     "citations": [
+      4
+     ]
+    },
+    {
+     "text": " Models can also infer personal data they were never given, and ",
+     "citations": []
+    },
+    {
+     "text": "these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.",
+     "citations": [
+      5
+     ]
+    },
+    {
+     "text": "\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests ",
+     "citations": []
+    },
+    {
+     "text": "conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+     "citations": [
+      6
+     ]
+    },
+    {
+     "text": " It also lists ",
+     "citations": []
+    },
+    {
+     "text": "leaks of personally identifiable information, including facial likenesses of individuals",
+     "citations": [
+      7
+     ]
+    },
+    {
+     "text": " as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes ",
+     "citations": []
+    },
+    {
+     "text": "anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+     "citations": [
+      8
+     ]
+    },
+    {
+     "text": " It also suggests ",
+     "citations": []
+    },
+    {
+     "text": "considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.",
+     "citations": [
+      9
+     ]
+    },
+    {
+     "text": "\n\n**Risk categories.** Data privacy appears under several headings. It is listed among ",
+     "citations": []
+    },
+    {
+     "text": "risks from misuse by humans (or malicious use)",
+     "citations": [
+      10
+     ]
+    },
+    {
+     "text": ", and also among ",
+     "citations": []
+    },
+    {
+     "text": "ecosystem / societal risks (or systemic risks)",
+     "citations": [
+      10
+     ]
+    },
+    {
+     "text": ".",
+     "citations": []
+    }
+   ],
+   "answer_ms": 13052,
+   "citations": [
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 1,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which in some cases may include personal data.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 2,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 3,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 4,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+     "number": 5,
+     "source": "doc-2/p11",
+     "page_no": 11,
+     "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+     "number": 6,
+     "source": "doc-2/p30",
+     "page_no": 30,
+     "cited_text": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as are risks of infringement of a third-party\u2019s intellectual property or other rights. Action ID Suggested Action GAI Risks MP-4.1-001 Conduct periodic monitoring of AI-generated content for privacy risks;address any possible instances of PII or sensitive data exposure. Data Privacy MP-4.1-002 Implement processes for responding to potential intellectual property infringement claims or other rights.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+     "number": 7,
+     "source": "doc-2/p30",
+     "page_no": 30,
+     "cited_text": "Leak of personally identi\ufb01able information, including facial likenesses of individuals. CBRN Information or Capabilities; Intellectual Property; Information Security; Harmful Bias and Homogenization; Dangerous, Violent, or Hateful Content; Data Privacy MP-4.1-006 Implement policies and practices de\ufb01ning how third-party intellectual property and training data will be used, stored, and protected.",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 34",
+     "number": 8,
+     "source": "doc-2/p34",
+     "page_no": 34,
+     "cited_text": "Information Integrity MS-2.2-004 Use techniques such as anonymization, di\ufb00erential privacy or other privacy- enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. Data Privacy;",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 45",
+     "number": 9,
+     "source": "doc-2/p45",
+     "page_no": 45,
+     "cited_text": "Harmful Bias and Homogenization MG-2.2-009 Consider opportunities to responsibly use synthetic data and other privacy enhancing techniques in GAI development, where appropriate and applicable, match the statistical properties of real-world data without disclosing personally identi\ufb01able information or contributing to homogenization. Data Privacy; Intellectual Property; Information Integrity;",
+     "provenance": "verified",
+     "document_id": 2
+    },
+    {
+     "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 7",
+     "number": 10,
+     "source": "doc-2/p7",
+     "page_no": 7,
+     "cited_text": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Con\ufb01guration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy;",
+     "provenance": "verified",
+     "document_id": 2
+    }
+   ],
+   "citations_verified": 10
+  },
+  "model_turns": 2,
+  "tool_calls": 1,
+  "exec_ms": 16136,
+  "created_at": "2026-10-29T06:54:32.779456Z",
+  "finished_at": "2026-10-29T06:54:49.061236Z",
+  "compare_id": null,
+  "asked": null,
+  "replied": null,
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "agent",
+     "faults": {
+      "search_documents": "timeout_once"
+     },
+     "question": "How does the NIST Generative AI Profile describe data privacy risks?"
+    },
+    "created_at": "2026-10-29T06:54:32.917294Z"
+   },
+   {
+    "seq": 2,
+    "type": "model_call",
+    "data": {
+     "ms": 801,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.000183,
+     "stop_reason": "tool_use",
+     "input_tokens": 4,
+     "output_tokens": 106,
+     "cache_read_tokens": 2121,
+     "cache_creation_tokens": 865
+    },
+    "created_at": "2026-10-29T06:54:33.748657Z"
+   },
+   {
+    "seq": 3,
+    "type": "tool_call",
+    "data": {
+     "ms": 8016,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "data privacy risks generative AI",
+      "top_k": 8,
+      "document_ids": [
+       2
+      ]
+     },
+     "status": "ok",
+     "retries": [
+      "timed out after 8 s"
+     ],
+     "summary": "8 passages",
+     "attempts": 2,
+     "evidence": [
+      {
+       "score": 0.032,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which i",
+       "page_no": 11,
+       "document_id": 2
+      },
+      {
+       "score": 0.0318,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "30 MEASURE 2.2: Evaluations involving human subjects meet applicable requirements (including human subject protection) and are representative of the relevant population. Action ID ",
+       "page_no": 34,
+       "document_id": 2
+      },
+      {
+       "score": 0.0297,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Informatio",
+       "page_no": 7,
+       "document_id": 2
+      },
+      {
+       "score": 0.0292,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "27 MP-4.1-010 Conduct appropriate diligence on training data use to assess intellectual property, and privacy, risks, including to examine whether use of proprietary or sensitive t",
+       "page_no": 31,
+       "document_id": 2
+      },
+      {
+       "score": 0.0285,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as ",
+       "page_no": 30,
+       "document_id": 2
+      },
+      {
+       "score": 0.0283,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "(2023) A Revealing Picture. Graphika. https://graphika.com/reports/a-revealing-picture Lee, H. et al. (2024) Deepfakes, Phrenology, Surveillance, and More! A Taxonomy of AI Privacy",
+       "page_no": 60,
+       "document_id": 2
+      },
+      {
+       "score": 0.0268,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "41 MG-2.2-006 Use feedback from internal and external AI Actors, users, individuals, and communities, to assess impact of AI-generated content. Human-AI Con\ufb01guration MG-2.2-007 Use",
+       "page_no": 45,
+       "document_id": 2
+      },
+      {
+       "score": 0.0259,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "31 MS-2.3-004 Utilize a purpose-built testing environment such as NIST Dioptra to empirically evaluate GAI trustworthy characteristics. CBRN Information or Capabilities; Data Priva",
+       "page_no": 35,
+       "document_id": 2
+      }
+     ]
+    },
+    "created_at": "2026-10-29T06:54:41.769196Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": "The NIST Gener",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:42.684911Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": "ative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:42.806521Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": " points are below.\n\n**Core risks.** The profile says that ",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:42.925516Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": "GAI systems raise several risks to privacy, since training requires large volumes of",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.050968Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " data that in some cases may include personal data. It adds that ",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.172991Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": "using personal data for training puts widely accepted privacy princip",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.296142Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer_delta",
+    "data": {
+     "text": "les at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Ex",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.419657Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": "posure and inference.** The profile notes that developers rarely reveal their s",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.542531Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": "ources, so users often cannot tell whether personal information was used. Models may leak, generate, or corre",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.665694Z"
+   },
+   {
+    "seq": 13,
+    "type": "answer_delta",
+    "data": {
+     "text": "ctly infer sensitive information about individuals. It describes memorization: ",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.790101Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer_delta",
+    "data": {
+     "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:43.912630Z"
+   },
+   {
+    "seq": 15,
+    "type": "answer_delta",
+    "data": {
+     "text": " pose heightened privacy risks even for data present in only a few training samples. Models can also infer person",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.061749Z"
+   },
+   {
+    "seq": 16,
+    "type": "answer_delta",
+    "data": {
+     "text": "al data they were never given, and ",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.178253Z"
+   },
+   {
+    "seq": 17,
+    "type": "answer_delta",
+    "data": {
+     "text": "these inferences can harm an individual even when they are inaccurate,",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.291494Z"
+   },
+   {
+    "seq": 18,
+    "type": "answer_delta",
+    "data": {
+     "text": " especially if they reveal sensitive information or are used to disadvantage them.\n\n**M",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.403630Z"
+   },
+   {
+    "seq": 19,
+    "type": "answer_delta",
+    "data": {
+     "text": "itigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure,",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.527505Z"
+   },
+   {
+    "seq": 20,
+    "type": "answer_delta",
+    "data": {
+     "text": " and documenting training data curation policies. For example, it suggests conducting peri",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.670802Z"
+   },
+   {
+    "seq": 21,
+    "type": "answer_delta",
+    "data": {
+     "text": "odic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.793583Z"
+   },
+   {
+    "seq": 22,
+    "type": "answer_delta",
+    "data": {
+     "text": " It also lists leaks of personally identifiable information, including facial likenesses of individuals",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:44.900434Z"
+   },
+   {
+    "seq": 23,
+    "type": "answer_delta",
+    "data": {
+     "text": " as a risk to weigh when setting data collection and",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.021207Z"
+   },
+   {
+    "seq": 24,
+    "type": "answer_delta",
+    "data": {
+     "text": " retention policies. For evaluations involving human subjects, it proposes anonymization",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.164615Z"
+   },
+   {
+    "seq": 25,
+    "type": "answer_delta",
+    "data": {
+     "text": ", differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.288159Z"
+   },
+   {
+    "seq": 26,
+    "type": "answer_delta",
+    "data": {
+     "text": " It also suggests considering synthetic data and other privacy-enhancing techniques,",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.410671Z"
+   },
+   {
+    "seq": 27,
+    "type": "answer_delta",
+    "data": {
+     "text": " where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Ris",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.534100Z"
+   },
+   {
+    "seq": 28,
+    "type": "answer_delta",
+    "data": {
+     "text": "k categories.** Data privacy appears under several headings. It",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.654969Z"
+   },
+   {
+    "seq": 29,
+    "type": "answer_delta",
+    "data": {
+     "text": " is listed among risks from misuse by humans (or malicious use)",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.783378Z"
+   },
+   {
+    "seq": 30,
+    "type": "answer_delta",
+    "data": {
+     "text": ", and also among ecosystem / societal risks (or systemic risks)",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.903106Z"
+   },
+   {
+    "seq": 31,
+    "type": "answer_delta",
+    "data": {
+     "text": ".",
+     "turn": 2
+    },
+    "created_at": "2026-10-29T06:54:45.951794Z"
+   },
+   {
+    "seq": 32,
+    "type": "model_call",
+    "data": {
+     "ms": 4166,
+     "turn": 2,
+     "model": "claude-haiku-5-5",
+     "purpose": "decide",
+     "cost_usd": 0.001291,
+     "stop_reason": "end_turn",
+     "input_tokens": 2,
+     "output_tokens": 934,
+     "cache_read_tokens": 2918,
+     "cache_creation_tokens": 6357
+    },
+    "created_at": "2026-10-29T06:54:45.959907Z"
+   },
+   {
+    "seq": 33,
+    "type": "answer",
+    "data": {
+     "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data. It adds that using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. Models may leak, generate, or correctly infer sensitive information about individuals. It describes memorization: during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples. Models can also infer personal data they were never given, and these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure. It also lists leaks of personally identifiable information, including facial likenesses of individuals as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. It also suggests considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.\n\n**Risk categories.** Data privacy appears under several headings. It is listed among risks from misuse by humans (or malicious use), and also among ecosystem / societal risks (or systemic risks).",
+     "segments": [
+      {
+       "text": "The NIST Generative AI Profile (NIST AI 600-1) treats data privacy as a distinct GAI risk. Its main points are below.\n\n**Core risks.** The profile says that ",
+       "citations": []
+      },
+      {
+       "text": "GAI systems raise several risks to privacy, since training requires large volumes of data that in some cases may include personal data.",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": " It adds that ",
+       "citations": []
+      },
+      {
+       "text": "using personal data for training puts widely accepted privacy principles at risk, including transparency, individual participation (including consent), and purpose specification.",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": "\n\n**Exposure and inference.** The profile notes that developers rarely reveal their sources, so users often cannot tell whether personal information was used. ",
+       "citations": []
+      },
+      {
+       "text": "Models may leak, generate, or correctly infer sensitive information about individuals.",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "text": " It describes memorization: ",
+       "citations": []
+      },
+      {
+       "text": "during adversarial attacks, LLMs have revealed sensitive information from the public domain that was included in their training data, and this may pose heightened privacy risks even for data present in only a few training samples.",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "text": " Models can also infer personal data they were never given, and ",
+       "citations": []
+      },
+      {
+       "text": "these inferences can harm an individual even when they are inaccurate, especially if they reveal sensitive information or are used to disadvantage them.",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "text": "\n\n**Mitigation actions.** The profile's suggested actions include monitoring generated content for privacy exposure, and documenting training data curation policies. For example, it suggests ",
+       "citations": []
+      },
+      {
+       "text": "conducting periodic monitoring of AI-generated content for privacy risks and addressing any possible instances of PII or sensitive data exposure.",
+       "citations": [
+        6
+       ]
+      },
+      {
+       "text": " It also lists ",
+       "citations": []
+      },
+      {
+       "text": "leaks of personally identifiable information, including facial likenesses of individuals",
+       "citations": [
+        7
+       ]
+      },
+      {
+       "text": " as a risk to weigh when setting data collection and retention policies. For evaluations involving human subjects, it proposes ",
+       "citations": []
+      },
+      {
+       "text": "anonymization, differential privacy or other privacy-enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects.",
+       "citations": [
+        8
+       ]
+      },
+      {
+       "text": " It also suggests ",
+       "citations": []
+      },
+      {
+       "text": "considering synthetic data and other privacy-enhancing techniques, where appropriate, that match real-world statistical properties without disclosing personally identifiable information.",
+       "citations": [
+        9
+       ]
+      },
+      {
+       "text": "\n\n**Risk categories.** Data privacy appears under several headings. It is listed among ",
+       "citations": []
+      },
+      {
+       "text": "risks from misuse by humans (or malicious use)",
+       "citations": [
+        10
+       ]
+      },
+      {
+       "text": ", and also among ",
+       "citations": []
+      },
+      {
+       "text": "ecosystem / societal risks (or systemic risks)",
+       "citations": [
+        10
+       ]
+      },
+      {
+       "text": ".",
+       "citations": []
+      }
+     ],
+     "answer_ms": 13052,
+     "citations": [
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 1,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "Trustworthy AI Characteristics: Safe, Secure and Resilient 2.4. Data Privacy GAI systems raise several risks to privacy. GAI system training requires large volumes of data, which in some cases may include personal data.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 2,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "The use of personal data for GAI training raises risks to widely accepted privacy principles, including to transparency, individual participation (including consent), and purpose speci\ufb01cation.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 3,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "For example, most model developers do not disclose speci\ufb01c data sources on which models were trained, limiting user awareness of whether personally identi\ufb01ably information (PII) was trained on and, if so, how it was collected. Models may leak, generate, or correctly infer sensitive information about individuals.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 4,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "For example, during adversarial attacks, LLMs have revealed sensitive information (from the public domain) that was included in their training data. This problem has been referred to as data memorization, and may pose exacerbated privacy risks even for data present only in a small number of training samples.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 11",
+       "number": 5,
+       "source": "doc-2/p11",
+       "page_no": 11,
+       "cited_text": "These inferences can have negative impact on an individual even if the inferences are not accurate (e.g., confabulations), and especially if they reveal information that the individual considers sensitive or that is used to disadvantage or harm them.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+       "number": 6,
+       "source": "doc-2/p30",
+       "page_no": 30,
+       "cited_text": "26 MAP 4.1: Approaches for mapping AI technology and legal risks of its components \u2013 including the use of third-party data or software \u2013 are in place, followed, and documented, as are risks of infringement of a third-party\u2019s intellectual property or other rights. Action ID Suggested Action GAI Risks MP-4.1-001 Conduct periodic monitoring of AI-generated content for privacy risks;address any possible instances of PII or sensitive data exposure. Data Privacy MP-4.1-002 Implement processes for responding to potential intellectual property infringement claims or other rights.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 30",
+       "number": 7,
+       "source": "doc-2/p30",
+       "page_no": 30,
+       "cited_text": "Leak of personally identi\ufb01able information, including facial likenesses of individuals. CBRN Information or Capabilities; Intellectual Property; Information Security; Harmful Bias and Homogenization; Dangerous, Violent, or Hateful Content; Data Privacy MP-4.1-006 Implement policies and practices de\ufb01ning how third-party intellectual property and training data will be used, stored, and protected.",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 34",
+       "number": 8,
+       "source": "doc-2/p34",
+       "page_no": 34,
+       "cited_text": "Information Integrity MS-2.2-004 Use techniques such as anonymization, di\ufb00erential privacy or other privacy- enhancing technologies to minimize the risks associated with linking AI-generated content back to individual human subjects. Data Privacy;",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 45",
+       "number": 9,
+       "source": "doc-2/p45",
+       "page_no": 45,
+       "cited_text": "Harmful Bias and Homogenization MG-2.2-009 Consider opportunities to responsibly use synthetic data and other privacy enhancing techniques in GAI development, where appropriate and applicable, match the statistical properties of real-world data without disclosing personally identi\ufb01able information or contributing to homogenization. Data Privacy; Intellectual Property; Information Integrity;",
+       "provenance": "verified",
+       "document_id": 2
+      },
+      {
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024, page 7",
+       "number": 10,
+       "source": "doc-2/p7",
+       "page_no": 7,
+       "cited_text": "Dangerous or Violent Recommendations; Data Privacy; Value Chain and Component Integration; Harmful Bias, and Homogenization; 2) Misuse by humans (or malicious use): CBRN Information or Capabilities; Data Privacy; Human-AI Con\ufb01guration; Obscene, Degrading, and/or Abusive Content; Information Integrity; Information Security; 3) Ecosystem / societal risks (or systemic risks): Data Privacy;",
+       "provenance": "verified",
+       "document_id": 2
+      }
+     ],
+     "citations_verified": 10
+    },
+    "created_at": "2026-10-29T06:54:45.969756Z"
+   },
+   {
+    "seq": 34,
+    "type": "support",
+    "data": {
+     "ms": 3076,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states GAI systems raise several privacy risks and training may include personal data.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "Passage says personal data use for GAI training raises risks to transparency, consent, and purpose specification.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 3,
+       "reason": "Leak and inference of sensitive information is stated, but 'generate' and the source-disclosure framing are only partly matched; passage supports most of it.",
+       "verdict": "partly",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "claim": 4,
+       "reason": "Passage states LLMs revealed sensitive public-domain training data under attack and memorization risks for few samples.",
+       "verdict": "supported",
+       "citations": [
+        4
+       ]
+      },
+      {
+       "claim": 5,
+       "reason": "Passage says inferences can harm even if inaccurate, especially if sensitive or used to disadvantage.",
+       "verdict": "supported",
+       "citations": [
+        5
+       ]
+      },
+      {
+       "claim": 6,
+       "reason": "MP-4.1-001 suggests periodic monitoring for privacy risks and addressing PII or sensitive data exposure.",
+       "verdict": "supported",
+       "citations": [
+        6
+       ]
+      },
+      {
+       "claim": 7,
+       "reason": "Passage lists leak of personally identifiable information including facial likenesses of individuals as a risk.",
+       "verdict": "supported",
+       "citations": [
+        7
+       ]
+      },
+      {
+       "claim": 8,
+       "reason": "MS-2.2-004 suggests anonymization, differential privacy, or PETs to minimize linking AI content to human subjects.",
+       "verdict": "supported",
+       "citations": [
+        8
+       ]
+      },
+      {
+       "claim": 9,
+       "reason": "MG-2.2-009 suggests synthetic data and privacy techniques matching real-world statistics without disclosing PII.",
+       "verdict": "supported",
+       "citations": [
+        9
+       ]
+      },
+      {
+       "claim": 10,
+       "reason": "Passage lists Data Privacy under misuse by humans (or malicious use).",
+       "verdict": "supported",
+       "citations": [
+        10
+       ]
+      },
+      {
+       "claim": 11,
+       "reason": "Passage lists Data Privacy under ecosystem / societal risks (or systemic risks).",
+       "verdict": "supported",
+       "citations": [
+        10
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 1,
+      "supported": 10,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-29T06:54:49.049764Z"
+   },
+   {
+    "seq": 35,
+    "type": "run_finished",
+    "data": {
+     "ms": 16136,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.002205,
+     "tool_calls": 1,
+     "model_calls": 3,
+     "model_turns": 2,
+     "input_tokens": 4193,
+     "output_tokens": 1665,
+     "cache_read_tokens": 5039,
+     "cache_creation_tokens": 7222
+    },
+    "created_at": "2026-10-29T06:54:49.056921Z"
+   }
+  ]
+ }
+}
