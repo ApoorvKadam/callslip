@@ -1,6 +1,6 @@
 # Walkthrough
 
-**Recorded:** [the walkthrough (MP4, 1920 by 1080, three minutes)](media/callslip-walkthrough.mp4), made against the local stack on the final build. In order, it shows:
+**Recorded:** [the walkthrough](media/callslip-walkthrough.mp4), made against the local stack. In order, it shows:
 
 | Part | What happens |
 |---|---|

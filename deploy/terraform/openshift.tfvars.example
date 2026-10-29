@@ -1,10 +1,10 @@
-# The Red Hat OpenShift Developer Sandbox. Copy to openshift.tfvars (ignored by git) and fill in:
+# An OpenShift project. Copy to openshift.tfvars (ignored by git), fill in, then:
 # terraform apply -var-file=openshift.tfvars
-kube_context      = "apoorvkadam01-dev/api-rm3-7wse-p1-openshiftapps-com:6443/apoorvkadam01"
+kube_context      = "<project>/api-<cluster>:6443/<user>" # after oc login
 overlay           = "openshift"
-namespace         = "apoorvkadam01-dev"
+namespace         = "<project>"
 create_namespace  = false
-image_registry    = "image-registry.openshift-image-registry.svc:5000/apoorvkadam01-dev"
-image_tag         = "2bdaed2"
-route_host        = "callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com"
+image_registry    = "image-registry.openshift-image-registry.svc:5000/<project>"
+image_tag         = "<commit sha>"
+route_host        = "callslip.apps.<cluster domain>"
 anthropic_api_key = "sk-ant-..."

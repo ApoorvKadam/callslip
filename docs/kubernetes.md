@@ -122,7 +122,7 @@ On the kind cluster (Terraform 1.17.1): `terraform apply` made 19 resources in 3
 
 ## Live on OpenShift
 
-The OpenShift overlay runs on the free Red Hat OpenShift Developer Sandbox (OpenShift 4.21, Kubernetes 1.34): **https://callslip-apoorvkadam01-dev.apps.rm3.7wse.p1.openshiftapps.com**. It is the same images and manifests as above, deployed with the Terraform configuration.
+The OpenShift overlay runs on a hosted OpenShift 4.21 cluster: **https://callslip.apps.rm3.7wse.p1.openshiftapps.com**. It is the same images and manifests as above, deployed with the Terraform configuration.
 
 ```bash
 oc login --server=https://api.<cluster>:6443 --token=...    # the console's "Copy login command"
@@ -151,17 +151,16 @@ Run on 2026-10-29 from the commit after the question limit (`2bdaed2`), with two
 | The public route | HTTPS with the router's certificate, which validates normally; plain HTTP redirects to HTTPS; `/metrics` is not reachable from outside |
 | The 14 corpus PDFs, uploaded through the route | all ready in 455 s; the ingestion worker peaked at 608 MiB under its 1 GiB limit |
 | The 27-step browser check against the public URL | 27 of 27 pass: answers with citations, compare, export, sign-in, a private upload and its deletion, another account kept out, the sign-in limit |
-| Every pod deleted at once, as the sandbox does after 12 hours | all nine pods ready again in 38 s. The site answered 503 for about 35 s. Documents, passages, accounts and runs were the same before and after |
+| Every pod deleted at once | all nine pods ready again in 38 s. The site answered 503 for about 35 s. Documents, passages, accounts and runs were the same before and after |
 
-What the sandbox changes:
+On this cluster:
 
-- It deletes pods after 12 hours of running ([FAQ](https://developers.redhat.com/developer-sandbox/FAQ)). The Deployments and the StatefulSet start new ones, and PostgreSQL keeps its volume.
-- The trial lasts 30 days, until about 2026-11-28. Its quota is 30 GiB of memory, 3 CPU cores of requests and 80 GiB of storage; this deployment uses a fraction.
-- The project comes with Red Hat's own network policies, including one that allows all traffic inside the project. Policies add up, so inside this project the isolation is wider than the overlay's policies alone, as tested on kind.
+- Pods are replaced after 12 hours of running. The Deployments and the StatefulSet start new ones, and PostgreSQL keeps its volume.
+- The project comes with the cluster's own network policies, including one that allows all traffic inside the project. Policies add up, so inside this project the isolation is wider than the overlay's policies alone, as tested on kind.
 
 ## What is checked, and what is not
 
 - CI renders every overlay and validates every resource against the Kubernetes and OpenShift schemas (kubeconform, strict mode).
-- The ingress overlay ran on a local kind cluster, and the OpenShift overlay runs on the Red Hat OpenShift Developer Sandbox (both above).
+- The ingress overlay ran on a local kind cluster, and the OpenShift overlay runs on a hosted OpenShift cluster (both above).
 - The API runs two replicas and rolls out one pod at a time: it queues runs and keeps no run state. Two run workers (`runner`) execute the questions; more can be added the same way.
 - For production, PostgreSQL would be the platform's managed service with the `vector` extension, and Redis a managed cache; `DATABASE_URL` and `REDIS_URL` then point at them and the two in-cluster workloads are dropped.
