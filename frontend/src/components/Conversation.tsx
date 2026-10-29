@@ -8,8 +8,10 @@ import {
   Download,
   LoaderCircle,
   Route,
+  ThumbsDown,
+  ThumbsUp,
 } from "lucide-react";
-import type { Answer, Run, SupportCheck } from "../api";
+import { type Answer, type Feedback, type Run, type SupportCheck, rateRun } from "../api";
 import type { CiteRef } from "../App";
 import { answerMarkdown, download } from "../export";
 import { count, seconds, shortCode } from "../format";
@@ -461,18 +463,101 @@ function RunAnswer({ run, live, ...props }: RunAnswerProps) {
   const answer = run.answer ?? live?.answer;
   if (answer) {
     return (
-      <AnswerView
-        runId={run.id}
-        answer={answer}
-        active={props.active}
-        onHover={props.onHover}
-        onChoose={props.onChoose}
-      />
+      <>
+        <AnswerView
+          runId={run.id}
+          answer={answer}
+          active={props.active}
+          onHover={props.onHover}
+          onChoose={props.onChoose}
+        />
+        {run.answer && run.finished_at && <RateAnswer run={run} />}
+      </>
     );
   }
   if (live?.activity) return <Progress steps={live.activity} />;
   if (!live?.draft) return null;
   return <DraftAnswer runId={run.id} text={live.draft} />;
+}
+
+// Whether a finished answer helped. "No" also offers a short note on what was missing; rating
+// again replaces the earlier rating.
+function RateAnswer({ run }: { run: Run }) {
+  const [rating, setRating] = useState<Feedback | null>(run.feedback ?? null);
+  const [note, setNote] = useState(run.feedback?.note ?? "");
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [state, setState] = useState<"idle" | "saving" | "saved" | "failed">("idle");
+
+  async function save(helpful: boolean, text?: string) {
+    setState("saving");
+    try {
+      setRating(await rateRun(run.id, helpful, text));
+      setState("saved");
+    } catch {
+      setState("failed");
+    }
+  }
+
+  return (
+    <div className="rate">
+      <span className="meta">Was this answer useful?</span>
+      <button
+        type="button"
+        className="text-button"
+        aria-pressed={rating?.helpful === true}
+        disabled={state === "saving"}
+        onClick={() => {
+          setNoteOpen(false);
+          void save(true);
+        }}
+      >
+        <ThumbsUp size={14} aria-hidden="true" />
+        Yes
+      </button>
+      <button
+        type="button"
+        className="text-button"
+        aria-pressed={rating?.helpful === false}
+        disabled={state === "saving"}
+        onClick={() => {
+          setNoteOpen(true);
+          void save(false, note);
+        }}
+      >
+        <ThumbsDown size={14} aria-hidden="true" />
+        No
+      </button>
+      <span className="meta" role="status">
+        {state === "saved" && (rating?.note ? "Saved, with your note" : "Saved")}
+        {state === "failed" && "Could not save. Try again."}
+      </span>
+      {noteOpen && rating?.helpful === false && (
+        <form
+          className="rate-note"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setNoteOpen(false);
+            void save(false, note.trim());
+          }}
+        >
+          <label htmlFor={`note-${run.id}`} className="visually-hidden">
+            What was missing?
+          </label>
+          <textarea
+            id={`note-${run.id}`}
+            rows={2}
+            maxLength={500}
+            placeholder="What was missing? (optional)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+          <button type="submit" className="btn">
+            Send note
+          </button>
+        </form>
+      )}
+    </div>
+  );
 }
 
 // What a running question has done so far, then what it is doing now. It starts at once, so

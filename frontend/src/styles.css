@@ -1381,3 +1381,61 @@ a:hover {
   gap: 4px;
   white-space: nowrap;
 }
+
+/* Rating a finished answer, and the insights dialog. */
+.rate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 12px;
+}
+.rate .text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rate .text-button[aria-pressed="true"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+.rate-note {
+  display: flex;
+  flex-basis: 100%;
+  gap: 8px;
+  align-items: flex-start;
+}
+.rate-note textarea {
+  flex: 1;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  font: inherit;
+  resize: vertical;
+}
+.insights {
+  width: min(640px, calc(100vw - 16px));
+}
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px 24px;
+  margin: 16px 20px 4px;
+}
+.insight dt {
+  margin-bottom: 2px;
+}
+.insight dd {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.insight-value {
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 32px;
+}
+.insights > p:last-child {
+  margin-bottom: 16px;
+}
