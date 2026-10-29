@@ -344,7 +344,8 @@ function Comparison(
 
 // What differs, from what each run recorded: documents cited, sources, searches, time.
 function CompareSummary({ runs }: { runs: Run[] }) {
-  if (runs.some((r) => !r.answer)) return null;
+  // Only once both runs are recorded as finished, so their counts are final.
+  if (runs.some((r) => !r.answer || !r.finished_at)) return null;
   const docs = runs.map(
     (r) => new Set(r.answer!.citations.map((c) => shortCode(c.title)).filter(Boolean)),
   );
