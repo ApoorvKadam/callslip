@@ -40,7 +40,11 @@ def call(method: str, url: str, body: bytes | None = None, headers: dict | None 
         with OPENER.open(req, timeout=30) as resp:
             return resp.status, json.loads(resp.read() or b"null")
     except urllib.error.HTTPError as err:
-        return err.code, json.loads(err.read() or b"null")
+        raw = err.read() or b"null"
+        try:
+            return err.code, json.loads(raw)
+        except ValueError:  # a proxy's HTML error page, not the API's JSON
+            return err.code, {"detail": raw.decode(errors="replace").strip()[:200]}
 
 
 def tiny_pdf(text: str) -> bytes:

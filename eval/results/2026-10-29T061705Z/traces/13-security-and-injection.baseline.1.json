@@ -1,0 +1,1104 @@
+{
+ "runs": [
+  {
+   "id": "88b8b761-bc3f-41fa-9e72-c2929679926d",
+   "session_id": "c7dd90ea-0780-4492-90da-8c81e631f4f6",
+   "mode": "baseline",
+   "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+   "status": "complete",
+   "status_reason": null,
+   "answer": {
+    "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile highlights twelve different categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes Data Poisoning (ID: NISTAML.013) and Prompt Injection (ID: NISTAML.018), which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks. This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+    "support": [
+     {
+      "claim": 1,
+      "reason": "Passage states the document highlights twelve different categories of risk from generative AI in more detail.",
+      "verdict": "supported",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "claim": 2,
+      "reason": "The list in the passage includes 'Data Poisoning (ID: NISTAML.013)' verbatim.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 3,
+      "reason": "The list in the passage includes 'Prompt Injection (ID: NISTAML.018)' verbatim.",
+      "verdict": "supported",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "claim": 4,
+      "reason": "The NIST SP 800-218A passage states both sentences of the claim nearly verbatim.",
+      "verdict": "supported",
+      "citations": [
+       3
+      ]
+     }
+    ],
+    "segments": [
+     {
+      "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile ",
+      "citations": []
+     },
+     {
+      "text": "highlights twelve different categories of risk from generative AI in more detail",
+      "citations": [
+       1
+      ]
+     },
+     {
+      "text": ", but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes ",
+      "citations": []
+     },
+     {
+      "text": "Data Poisoning (ID: NISTAML.013)",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": " and ",
+      "citations": []
+     },
+     {
+      "text": "Prompt Injection (ID: NISTAML.018)",
+      "citations": [
+       2
+      ]
+     },
+     {
+      "text": ", which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that ",
+      "citations": []
+     },
+     {
+      "text": "user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+      "citations": [
+       3
+      ]
+     },
+     {
+      "text": " This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+      "citations": []
+     }
+    ],
+    "answer_ms": 6369,
+    "citations": [
+     {
+      "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+      "number": 1,
+      "source": "doc-4/p9",
+      "page_no": 9,
+      "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+      "provenance": "verified",
+      "document_id": 4
+     },
+     {
+      "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 11",
+      "number": 2,
+      "source": "doc-3/p11",
+      "page_no": 11,
+      "cited_text": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Targeted Poisoning (ID: NISTAML.024) * Misaligned Outputs (ID: NISTAML.027) \u2013 Privacy Compromises (ID: NISTAML.03) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Membership Inference (ID: NISTAML.033) * Prompt Extraction (ID: NISTAML.035) * Leaking information from user interactions (ID: NISTAML.036) * Training Data Attacks (ID: NISTAML.037) * Data Extraction (ID: NISTAML.038) * Compromising connected resources (ID: NISTAML.039) \u2013 Misuse Violations (ID: NISTAML.04) * Prompt Injection (ID: NISTAML.018) \u2013 Supply Chain Attacks (ID: NISTAML.05) * Model Poisoning (ID: NISTAML.051) xi",
+      "provenance": "verified",
+      "document_id": 3
+     },
+     {
+      "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024, page 9",
+      "number": 3,
+      "source": "doc-5/p9",
+      "page_no": 9,
+      "cited_text": "Some models may be complex to the point that they cannot easily be thoroughly inspected, potentially allowing for undetectable execution of arbitrary code. User queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+      "provenance": "verified",
+      "document_id": 5
+     }
+    ],
+    "citations_verified": 3
+   },
+   "model_turns": 1,
+   "tool_calls": 1,
+   "exec_ms": 7674,
+   "created_at": "2026-10-29T06:20:55.611395Z",
+   "finished_at": "2026-10-29T06:21:03.322706Z",
+   "compare_id": null,
+   "asked": null,
+   "replied": null,
+   "events": [
+    {
+     "seq": 1,
+     "type": "run_started",
+     "data": {
+      "mode": "baseline",
+      "faults": {},
+      "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+     },
+     "created_at": "2026-10-29T06:20:55.694961Z"
+    },
+    {
+     "seq": 2,
+     "type": "tool_call",
+     "data": {
+      "ms": 37,
+      "step": 1,
+      "tool": "search_documents",
+      "cache": "miss",
+      "input": {
+       "query": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+       "top_k": 8
+      },
+      "status": "ok",
+      "retries": [],
+      "summary": "8 passages",
+      "attempts": 1,
+      "evidence": [
+       {
+        "score": 0.0164,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "To taxonimize these attacks, this report differentiates between predictive and generative AI systems and the attacks relevant to each. It considers the components of an AI system i",
+        "page_no": 12,
+        "document_id": 3
+       },
+       {
+        "score": 0.0161,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+        "page_no": 1,
+        "document_id": 2
+       },
+       {
+        "score": 0.0159,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAM",
+        "page_no": 11,
+        "document_id": 3
+       },
+       {
+        "score": 0.0156,
+        "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+        "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+        "page_no": 2,
+        "document_id": 2
+       },
+       {
+        "score": 0.0154,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "FLAME: Taming backdoors in federated learning. In 31st USENIX Security Symposium (USENIX Security 22), pages 1415\u20131432, Boston, MA, August 2022. USENIX Asso- ciation. URL: https://",
+        "page_no": 101,
+        "document_id": 3
+       },
+       {
+        "score": 0.0152,
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+        "excerpt": "NIST AI 100-2e2025 March 2025 and Sewoong Oh. Unleashing the power of randomization in auditing differentially private ml. In Advances in Neural Information Processing Systems, 202",
+        "page_no": 104,
+        "document_id": 3
+       },
+       {
+        "score": 0.0149,
+        "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024",
+        "excerpt": "3 defense applications, CSAM/NCII investigations, and others, it will likely be helpful to take a defense-in-depth1 approach. These considerations may need to be weighed against to",
+        "page_no": 9,
+        "document_id": 4
+       },
+       {
+        "score": 0.0147,
+        "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024",
+        "excerpt": "NIST SP 800-218A Secure Software Development Practices for July 2024 Generative AI and Dual-Use Foundation Models 1 1. Introduction Section 4.1.a of Executive Order (EO) 14110, Saf",
+        "page_no": 9,
+        "document_id": 5
+       }
+      ]
+     },
+     "created_at": "2026-10-29T06:20:55.735374Z"
+    },
+    {
+     "seq": 3,
+     "type": "answer_delta",
+     "data": {
+      "text": "The",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:20:59.898427Z"
+    },
+    {
+     "seq": 4,
+     "type": "answer_delta",
+     "data": {
+      "text": " retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.019404Z"
+    },
+    {
+     "seq": 5,
+     "type": "answer_delta",
+     "data": {
+      "text": " excerpts from that document are its cover and front-matter pages. A compan",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.142308Z"
+    },
+    {
+     "seq": 6,
+     "type": "answer_delta",
+     "data": {
+      "text": "ion NIST document says the Profile highlights twelve different",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.265187Z"
+    },
+    {
+     "seq": 7,
+     "type": "answer_delta",
+     "data": {
+      "text": " categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.383565Z"
+    },
+    {
+     "seq": 8,
+     "type": "answer_delta",
+     "data": {
+      "text": " which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.506022Z"
+    },
+    {
+     "seq": 9,
+     "type": "answer_delta",
+     "data": {
+      "text": "-2 is only partly covered. It appears as an entry in a list of attack",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.628364Z"
+    },
+    {
+     "seq": 10,
+     "type": "answer_delta",
+     "data": {
+      "text": " types with the identifier NISTAML.015, but the passage gives no definition or",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.747618Z"
+    },
+    {
+     "seq": 11,
+     "type": "answer_delta",
+     "data": {
+      "text": " explanation. The list sits in a section that also includ",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.867534Z"
+    },
+    {
+     "seq": 12,
+     "type": "answer_delta",
+     "data": {
+      "text": "es Data Poisoning (ID: NISTAML.013) and",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:00.995491Z"
+    },
+    {
+     "seq": 13,
+     "type": "answer_delta",
+     "data": {
+      "text": " Prompt Injection (ID: NISTAML.018), which the",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.113117Z"
+    },
+    {
+     "seq": 14,
+     "type": "answer_delta",
+     "data": {
+      "text": " passage lists separately from indirect prompt injection. I can't describe how the ta",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.233558Z"
+    },
+    {
+     "seq": 15,
+     "type": "answer_delta",
+     "data": {
+      "text": "xonomy defines the attack from these passages.\n\nA related source, NIST S",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.355724Z"
+    },
+    {
+     "seq": 16,
+     "type": "answer_delta",
+     "data": {
+      "text": "P 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.477379Z"
+    },
+    {
+     "seq": 17,
+     "type": "answer_delta",
+     "data": {
+      "text": " sanitized properly \u2014 can be leveraged for injection-style attacks. This is about inj",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.600196Z"
+    },
+    {
+     "seq": 18,
+     "type": "answer_delta",
+     "data": {
+      "text": "ection attacks in general, not specifically the indirect form.\n\nTo answer either",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.721665Z"
+    },
+    {
+     "seq": 19,
+     "type": "answer_delta",
+     "data": {
+      "text": " part fully, the NIST AI 600-1 section on risks and the",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.841451Z"
+    },
+    {
+     "seq": 20,
+     "type": "answer_delta",
+     "data": {
+      "text": " NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+      "turn": 1
+     },
+     "created_at": "2026-10-29T06:21:01.963767Z"
+    },
+    {
+     "seq": 21,
+     "type": "model_call",
+     "data": {
+      "ms": 6300,
+      "turn": 1,
+      "model": "claude-haiku-5-5",
+      "purpose": "answer",
+      "cost_usd": 0.001189,
+      "stop_reason": "end_turn",
+      "input_tokens": 5761,
+      "output_tokens": 1225,
+      "cache_read_tokens": 0,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-29T06:21:01.998614Z"
+    },
+    {
+     "seq": 22,
+     "type": "answer",
+     "data": {
+      "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile highlights twelve different categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes Data Poisoning (ID: NISTAML.013) and Prompt Injection (ID: NISTAML.018), which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks. This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+      "segments": [
+       {
+        "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile ",
+        "citations": []
+       },
+       {
+        "text": "highlights twelve different categories of risk from generative AI in more detail",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "text": ", but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes ",
+        "citations": []
+       },
+       {
+        "text": "Data Poisoning (ID: NISTAML.013)",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": " and ",
+        "citations": []
+       },
+       {
+        "text": "Prompt Injection (ID: NISTAML.018)",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "text": ", which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that ",
+        "citations": []
+       },
+       {
+        "text": "user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+        "citations": [
+         3
+        ]
+       },
+       {
+        "text": " This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+        "citations": []
+       }
+      ],
+      "answer_ms": 6369,
+      "citations": [
+       {
+        "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+        "number": 1,
+        "source": "doc-4/p9",
+        "page_no": 9,
+        "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+        "provenance": "verified",
+        "document_id": 4
+       },
+       {
+        "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 11",
+        "number": 2,
+        "source": "doc-3/p11",
+        "page_no": 11,
+        "cited_text": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Targeted Poisoning (ID: NISTAML.024) * Misaligned Outputs (ID: NISTAML.027) \u2013 Privacy Compromises (ID: NISTAML.03) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Membership Inference (ID: NISTAML.033) * Prompt Extraction (ID: NISTAML.035) * Leaking information from user interactions (ID: NISTAML.036) * Training Data Attacks (ID: NISTAML.037) * Data Extraction (ID: NISTAML.038) * Compromising connected resources (ID: NISTAML.039) \u2013 Misuse Violations (ID: NISTAML.04) * Prompt Injection (ID: NISTAML.018) \u2013 Supply Chain Attacks (ID: NISTAML.05) * Model Poisoning (ID: NISTAML.051) xi",
+        "provenance": "verified",
+        "document_id": 3
+       },
+       {
+        "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024, page 9",
+        "number": 3,
+        "source": "doc-5/p9",
+        "page_no": 9,
+        "cited_text": "Some models may be complex to the point that they cannot easily be thoroughly inspected, potentially allowing for undetectable execution of arbitrary code. User queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+        "provenance": "verified",
+        "document_id": 5
+       }
+      ],
+      "citations_verified": 3
+     },
+     "created_at": "2026-10-29T06:21:02.010977Z"
+    },
+    {
+     "seq": 23,
+     "type": "support",
+     "data": {
+      "ms": 1295,
+      "checks": [
+       {
+        "claim": 1,
+        "reason": "Passage states the document highlights twelve different categories of risk from generative AI in more detail.",
+        "verdict": "supported",
+        "citations": [
+         1
+        ]
+       },
+       {
+        "claim": 2,
+        "reason": "The list in the passage includes 'Data Poisoning (ID: NISTAML.013)' verbatim.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 3,
+        "reason": "The list in the passage includes 'Prompt Injection (ID: NISTAML.018)' verbatim.",
+        "verdict": "supported",
+        "citations": [
+         2
+        ]
+       },
+       {
+        "claim": 4,
+        "reason": "The NIST SP 800-218A passage states both sentences of the claim nearly verbatim.",
+        "verdict": "supported",
+        "citations": [
+         3
+        ]
+       }
+      ],
+      "counts": {
+       "partly": 0,
+       "supported": 4,
+       "not_checked": 0,
+       "not_supported": 0
+      }
+     },
+     "created_at": "2026-10-29T06:21:03.311454Z"
+    },
+    {
+     "seq": 24,
+     "type": "run_finished",
+     "data": {
+      "ms": 7674,
+      "reason": null,
+      "status": "complete",
+      "cost_usd": 0.001552,
+      "tool_calls": 1,
+      "model_calls": 2,
+      "model_turns": 1,
+      "input_tokens": 8284,
+      "output_tokens": 1447,
+      "cache_read_tokens": 0,
+      "cache_creation_tokens": 0
+     },
+     "created_at": "2026-10-29T06:21:03.318313Z"
+    }
+   ]
+  }
+ ],
+ "clarified": false,
+ "asked_in_text": false,
+ "final": {
+  "id": "88b8b761-bc3f-41fa-9e72-c2929679926d",
+  "session_id": "c7dd90ea-0780-4492-90da-8c81e631f4f6",
+  "mode": "baseline",
+  "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+  "status": "complete",
+  "status_reason": null,
+  "answer": {
+   "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile highlights twelve different categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes Data Poisoning (ID: NISTAML.013) and Prompt Injection (ID: NISTAML.018), which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks. This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+   "support": [
+    {
+     "claim": 1,
+     "reason": "Passage states the document highlights twelve different categories of risk from generative AI in more detail.",
+     "verdict": "supported",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "claim": 2,
+     "reason": "The list in the passage includes 'Data Poisoning (ID: NISTAML.013)' verbatim.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 3,
+     "reason": "The list in the passage includes 'Prompt Injection (ID: NISTAML.018)' verbatim.",
+     "verdict": "supported",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "claim": 4,
+     "reason": "The NIST SP 800-218A passage states both sentences of the claim nearly verbatim.",
+     "verdict": "supported",
+     "citations": [
+      3
+     ]
+    }
+   ],
+   "segments": [
+    {
+     "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile ",
+     "citations": []
+    },
+    {
+     "text": "highlights twelve different categories of risk from generative AI in more detail",
+     "citations": [
+      1
+     ]
+    },
+    {
+     "text": ", but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes ",
+     "citations": []
+    },
+    {
+     "text": "Data Poisoning (ID: NISTAML.013)",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": " and ",
+     "citations": []
+    },
+    {
+     "text": "Prompt Injection (ID: NISTAML.018)",
+     "citations": [
+      2
+     ]
+    },
+    {
+     "text": ", which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that ",
+     "citations": []
+    },
+    {
+     "text": "user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+     "citations": [
+      3
+     ]
+    },
+    {
+     "text": " This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+     "citations": []
+    }
+   ],
+   "answer_ms": 6369,
+   "citations": [
+    {
+     "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+     "number": 1,
+     "source": "doc-4/p9",
+     "page_no": 9,
+     "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+     "provenance": "verified",
+     "document_id": 4
+    },
+    {
+     "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 11",
+     "number": 2,
+     "source": "doc-3/p11",
+     "page_no": 11,
+     "cited_text": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Targeted Poisoning (ID: NISTAML.024) * Misaligned Outputs (ID: NISTAML.027) \u2013 Privacy Compromises (ID: NISTAML.03) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Membership Inference (ID: NISTAML.033) * Prompt Extraction (ID: NISTAML.035) * Leaking information from user interactions (ID: NISTAML.036) * Training Data Attacks (ID: NISTAML.037) * Data Extraction (ID: NISTAML.038) * Compromising connected resources (ID: NISTAML.039) \u2013 Misuse Violations (ID: NISTAML.04) * Prompt Injection (ID: NISTAML.018) \u2013 Supply Chain Attacks (ID: NISTAML.05) * Model Poisoning (ID: NISTAML.051) xi",
+     "provenance": "verified",
+     "document_id": 3
+    },
+    {
+     "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024, page 9",
+     "number": 3,
+     "source": "doc-5/p9",
+     "page_no": 9,
+     "cited_text": "Some models may be complex to the point that they cannot easily be thoroughly inspected, potentially allowing for undetectable execution of arbitrary code. User queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+     "provenance": "verified",
+     "document_id": 5
+    }
+   ],
+   "citations_verified": 3
+  },
+  "model_turns": 1,
+  "tool_calls": 1,
+  "exec_ms": 7674,
+  "created_at": "2026-10-29T06:20:55.611395Z",
+  "finished_at": "2026-10-29T06:21:03.322706Z",
+  "compare_id": null,
+  "asked": null,
+  "replied": null,
+  "events": [
+   {
+    "seq": 1,
+    "type": "run_started",
+    "data": {
+     "mode": "baseline",
+     "faults": {},
+     "question": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?"
+    },
+    "created_at": "2026-10-29T06:20:55.694961Z"
+   },
+   {
+    "seq": 2,
+    "type": "tool_call",
+    "data": {
+     "ms": 37,
+     "step": 1,
+     "tool": "search_documents",
+     "cache": "miss",
+     "input": {
+      "query": "What two information security risks does the NIST Generative AI Profile describe, and how does NIST AI 100-2 describe indirect prompt injection?",
+      "top_k": 8
+     },
+     "status": "ok",
+     "retries": [],
+     "summary": "8 passages",
+     "attempts": 1,
+     "evidence": [
+      {
+       "score": 0.0164,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "To taxonimize these attacks, this report differentiates between predictive and generative AI systems and the attacks relevant to each. It considers the components of an AI system i",
+       "page_no": 12,
+       "document_id": 3
+      },
+      {
+       "score": 0.0161,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+       "page_no": 1,
+       "document_id": 2
+      },
+      {
+       "score": 0.0159,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAM",
+       "page_no": 11,
+       "document_id": 3
+      },
+      {
+       "score": 0.0156,
+       "title": "NIST AI 600-1: AI Risk Management Framework, Generative Artificial Intelligence Profile, July 2024",
+       "excerpt": "NIST Trustworthy and Responsible AI NIST AI 600-1 Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile This publication is available free o",
+       "page_no": 2,
+       "document_id": 2
+      },
+      {
+       "score": 0.0154,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "FLAME: Taming backdoors in federated learning. In 31st USENIX Security Symposium (USENIX Security 22), pages 1415\u20131432, Boston, MA, August 2022. USENIX Asso- ciation. URL: https://",
+       "page_no": 101,
+       "document_id": 3
+      },
+      {
+       "score": 0.0152,
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025",
+       "excerpt": "NIST AI 100-2e2025 March 2025 and Sewoong Oh. Unleashing the power of randomization in auditing differentially private ml. In Advances in Neural Information Processing Systems, 202",
+       "page_no": 104,
+       "document_id": 3
+      },
+      {
+       "score": 0.0149,
+       "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024",
+       "excerpt": "3 defense applications, CSAM/NCII investigations, and others, it will likely be helpful to take a defense-in-depth1 approach. These considerations may need to be weighed against to",
+       "page_no": 9,
+       "document_id": 4
+      },
+      {
+       "score": 0.0147,
+       "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024",
+       "excerpt": "NIST SP 800-218A Secure Software Development Practices for July 2024 Generative AI and Dual-Use Foundation Models 1 1. Introduction Section 4.1.a of Executive Order (EO) 14110, Saf",
+       "page_no": 9,
+       "document_id": 5
+      }
+     ]
+    },
+    "created_at": "2026-10-29T06:20:55.735374Z"
+   },
+   {
+    "seq": 3,
+    "type": "answer_delta",
+    "data": {
+     "text": "The",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:20:59.898427Z"
+   },
+   {
+    "seq": 4,
+    "type": "answer_delta",
+    "data": {
+     "text": " retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.019404Z"
+   },
+   {
+    "seq": 5,
+    "type": "answer_delta",
+    "data": {
+     "text": " excerpts from that document are its cover and front-matter pages. A compan",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.142308Z"
+   },
+   {
+    "seq": 6,
+    "type": "answer_delta",
+    "data": {
+     "text": "ion NIST document says the Profile highlights twelve different",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.265187Z"
+   },
+   {
+    "seq": 7,
+    "type": "answer_delta",
+    "data": {
+     "text": " categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.383565Z"
+   },
+   {
+    "seq": 8,
+    "type": "answer_delta",
+    "data": {
+     "text": " which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.506022Z"
+   },
+   {
+    "seq": 9,
+    "type": "answer_delta",
+    "data": {
+     "text": "-2 is only partly covered. It appears as an entry in a list of attack",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.628364Z"
+   },
+   {
+    "seq": 10,
+    "type": "answer_delta",
+    "data": {
+     "text": " types with the identifier NISTAML.015, but the passage gives no definition or",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.747618Z"
+   },
+   {
+    "seq": 11,
+    "type": "answer_delta",
+    "data": {
+     "text": " explanation. The list sits in a section that also includ",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.867534Z"
+   },
+   {
+    "seq": 12,
+    "type": "answer_delta",
+    "data": {
+     "text": "es Data Poisoning (ID: NISTAML.013) and",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:00.995491Z"
+   },
+   {
+    "seq": 13,
+    "type": "answer_delta",
+    "data": {
+     "text": " Prompt Injection (ID: NISTAML.018), which the",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.113117Z"
+   },
+   {
+    "seq": 14,
+    "type": "answer_delta",
+    "data": {
+     "text": " passage lists separately from indirect prompt injection. I can't describe how the ta",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.233558Z"
+   },
+   {
+    "seq": 15,
+    "type": "answer_delta",
+    "data": {
+     "text": "xonomy defines the attack from these passages.\n\nA related source, NIST S",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.355724Z"
+   },
+   {
+    "seq": 16,
+    "type": "answer_delta",
+    "data": {
+     "text": "P 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.477379Z"
+   },
+   {
+    "seq": 17,
+    "type": "answer_delta",
+    "data": {
+     "text": " sanitized properly \u2014 can be leveraged for injection-style attacks. This is about inj",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.600196Z"
+   },
+   {
+    "seq": 18,
+    "type": "answer_delta",
+    "data": {
+     "text": "ection attacks in general, not specifically the indirect form.\n\nTo answer either",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.721665Z"
+   },
+   {
+    "seq": 19,
+    "type": "answer_delta",
+    "data": {
+     "text": " part fully, the NIST AI 600-1 section on risks and the",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.841451Z"
+   },
+   {
+    "seq": 20,
+    "type": "answer_delta",
+    "data": {
+     "text": " NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+     "turn": 1
+    },
+    "created_at": "2026-10-29T06:21:01.963767Z"
+   },
+   {
+    "seq": 21,
+    "type": "model_call",
+    "data": {
+     "ms": 6300,
+     "turn": 1,
+     "model": "claude-haiku-5-5",
+     "purpose": "answer",
+     "cost_usd": 0.001189,
+     "stop_reason": "end_turn",
+     "input_tokens": 5761,
+     "output_tokens": 1225,
+     "cache_read_tokens": 0,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-29T06:21:01.998614Z"
+   },
+   {
+    "seq": 22,
+    "type": "answer",
+    "data": {
+     "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile highlights twelve different categories of risk from generative AI in more detail, but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes Data Poisoning (ID: NISTAML.013) and Prompt Injection (ID: NISTAML.018), which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks. This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+     "segments": [
+      {
+       "text": "The retrieved passages don't identify the two information security risks described in NIST AI 600-1. The only excerpts from that document are its cover and front-matter pages. A companion NIST document says the Profile ",
+       "citations": []
+      },
+      {
+       "text": "highlights twelve different categories of risk from generative AI in more detail",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "text": ", but the passages don't name those categories, so I can't say which two are information security risks.\n\nFor indirect prompt injection, NIST AI 100-2 is only partly covered. It appears as an entry in a list of attack types with the identifier NISTAML.015, but the passage gives no definition or explanation. The list sits in a section that also includes ",
+       "citations": []
+      },
+      {
+       "text": "Data Poisoning (ID: NISTAML.013)",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": " and ",
+       "citations": []
+      },
+      {
+       "text": "Prompt Injection (ID: NISTAML.018)",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "text": ", which the passage lists separately from indirect prompt injection. I can't describe how the taxonomy defines the attack from these passages.\n\nA related source, NIST SP 800-218A, notes that ",
+       "citations": []
+      },
+      {
+       "text": "user queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+       "citations": [
+        3
+       ]
+      },
+      {
+       "text": " This is about injection attacks in general, not specifically the indirect form.\n\nTo answer either part fully, the NIST AI 600-1 section on risks and the NIST AI 100-2 section defining indirect prompt injection would need to be retrieved.",
+       "citations": []
+      }
+     ],
+     "answer_ms": 6369,
+     "citations": [
+      {
+       "title": "NIST AI 100-4: Reducing Risks Posed by Synthetic Content, November 2024, page 9",
+       "number": 1,
+       "source": "doc-4/p9",
+       "page_no": 9,
+       "cited_text": "The latter also highlights twelve different categories of risk from generative AI in more detail.",
+       "provenance": "verified",
+       "document_id": 4
+      },
+      {
+       "title": "NIST AI 100-2 E2025: Adversarial Machine Learning, A Taxonomy and Terminology of Attacks and Mitigations, March 2025, page 11",
+       "number": 2,
+       "source": "doc-3/p11",
+       "page_no": 11,
+       "cited_text": "NIST AI 100-2e2025 March 2025 * Data Poisoning (ID: NISTAML.013) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Targeted Poisoning (ID: NISTAML.024) * Misaligned Outputs (ID: NISTAML.027) \u2013 Privacy Compromises (ID: NISTAML.03) * Indirect Prompt Injection (ID: NISTAML.015) * Prompt Injection (ID: NISTAML.018) * Backdoor Poisoning (ID: NISTAML.023) * Membership Inference (ID: NISTAML.033) * Prompt Extraction (ID: NISTAML.035) * Leaking information from user interactions (ID: NISTAML.036) * Training Data Attacks (ID: NISTAML.037) * Data Extraction (ID: NISTAML.038) * Compromising connected resources (ID: NISTAML.039) \u2013 Misuse Violations (ID: NISTAML.04) * Prompt Injection (ID: NISTAML.018) \u2013 Supply Chain Attacks (ID: NISTAML.05) * Model Poisoning (ID: NISTAML.051) xi",
+       "provenance": "verified",
+       "document_id": 3
+      },
+      {
+       "title": "NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models, July 2024, page 9",
+       "number": 3,
+       "source": "doc-5/p9",
+       "page_no": 9,
+       "cited_text": "Some models may be complex to the point that they cannot easily be thoroughly inspected, potentially allowing for undetectable execution of arbitrary code. User queries can be crafted to produce undesirable or objectionable output and \u2014 if not sanitized properly \u2014 can be leveraged for injection-style attacks.",
+       "provenance": "verified",
+       "document_id": 5
+      }
+     ],
+     "citations_verified": 3
+    },
+    "created_at": "2026-10-29T06:21:02.010977Z"
+   },
+   {
+    "seq": 23,
+    "type": "support",
+    "data": {
+     "ms": 1295,
+     "checks": [
+      {
+       "claim": 1,
+       "reason": "Passage states the document highlights twelve different categories of risk from generative AI in more detail.",
+       "verdict": "supported",
+       "citations": [
+        1
+       ]
+      },
+      {
+       "claim": 2,
+       "reason": "The list in the passage includes 'Data Poisoning (ID: NISTAML.013)' verbatim.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 3,
+       "reason": "The list in the passage includes 'Prompt Injection (ID: NISTAML.018)' verbatim.",
+       "verdict": "supported",
+       "citations": [
+        2
+       ]
+      },
+      {
+       "claim": 4,
+       "reason": "The NIST SP 800-218A passage states both sentences of the claim nearly verbatim.",
+       "verdict": "supported",
+       "citations": [
+        3
+       ]
+      }
+     ],
+     "counts": {
+      "partly": 0,
+      "supported": 4,
+      "not_checked": 0,
+      "not_supported": 0
+     }
+    },
+    "created_at": "2026-10-29T06:21:03.311454Z"
+   },
+   {
+    "seq": 24,
+    "type": "run_finished",
+    "data": {
+     "ms": 7674,
+     "reason": null,
+     "status": "complete",
+     "cost_usd": 0.001552,
+     "tool_calls": 1,
+     "model_calls": 2,
+     "model_turns": 1,
+     "input_tokens": 8284,
+     "output_tokens": 1447,
+     "cache_read_tokens": 0,
+     "cache_creation_tokens": 0
+    },
+    "created_at": "2026-10-29T06:21:03.318313Z"
+   }
+  ]
+ }
+}
