@@ -14,6 +14,7 @@
 | A failed tool call | Search is made to fail (an injected fault). It fails after one retry; the agent takes the document's outline, goes to the section on the topic and reads it. |
 | Your own document | A question answered from the private upload, then the upload deleted from the list. |
 | Saved conversations | Earlier conversations, with their steps, timing, tokens and cost. |
+| Rating and Insights | An answer rated "No" with a note on what was missing; Insights then shows the last 30 days of this account's own questions: outcomes, time, quotes found, ratings and cost. |
 
 The recording is scripted with Playwright, so it can be made again after a change. Below, each behaviour the brief asks to see has the command or UI action, what happens, and a saved trace from the committed evaluation run.
 
