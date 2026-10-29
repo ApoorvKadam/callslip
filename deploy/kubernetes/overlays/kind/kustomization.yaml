@@ -1,0 +1,18 @@
+# The ingress overlay on a local kind cluster (cluster.yaml; steps in docs/kubernetes.md):
+# images built and loaded on this machine, and one replica of each so it fits on a laptop.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: callslip
+resources:
+  - ../ingress
+images:
+  - name: registry.example.edu/callslip-backend
+    newName: callslip-backend
+    newTag: local
+  - name: registry.example.edu/callslip-frontend
+    newName: callslip-frontend
+    newTag: local
+replicas:
+  - {name: api, count: 1}
+  - {name: runner, count: 1}
+  - {name: frontend, count: 1}

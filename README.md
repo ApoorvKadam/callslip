@@ -19,9 +19,9 @@ Start with [SUMMARY.md](SUMMARY.md): what was built, the results, and what is un
 | What to submit: repository, reproducibility notes, architecture diagram, evaluation with a baseline, walkthrough, summary, deployment runbook | Done | [reproducibility](docs/reproducibility.md), [architecture](docs/architecture.md), [evaluation](docs/evaluation.md), [walkthrough](docs/demo.md), [summary](SUMMARY.md), [runbook](docs/runbook.md) |
 | Optional: authentication and personalisation | Done: local accounts, private uploads and their deletion, history per account, a limit on failed sign-ins | [accounts](#accounts-and-conversations) |
 | Optional: advanced retrieval | Done: hybrid vector and full-text search; a reranker was measured and not kept | [evaluation](docs/evaluation.md#failure-analysis) |
-| Optional: Kubernetes and OpenShift | Manifests written and checked in CI; not run on a cluster | [docs/kubernetes.md](docs/kubernetes.md) |
+| Optional: Kubernetes and OpenShift | Done on Kubernetes: the manifests ran on a local kind cluster, with the browser check, network policies, update, rollback and pod loss tested. OpenShift: schema-checked in CI only | [docs/kubernetes.md](docs/kubernetes.md#run-it-on-a-local-cluster) |
 | Added beyond the brief | Answers stream with live progress; a second model call checks every quote against its sentence; questions run in queued workers; each document's outline is a tool; latency measured in a real browser | [summary](SUMMARY.md) |
-| Not done | NYU single sign-on, sharing with groups, running on a real cluster, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
+| Not done | NYU single sign-on, sharing with groups, running on OpenShift or a hosted cluster, a larger evaluation | [summary](SUMMARY.md#unfinished-and-what-i-would-do-with-more-time) |
 
 ## Results at a glance
 

@@ -1,0 +1,13 @@
+# One-node kind cluster for the kind overlay. kind enforces network policies since v0.24.
+# The ingress controller listens on 443 inside the node, published as 127.0.0.1:8443.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: callslip
+nodes:
+  - role: control-plane
+    labels:
+      ingress-ready: "true"
+    extraPortMappings:
+      - containerPort: 443
+        hostPort: 8443
+        listenAddress: 127.0.0.1

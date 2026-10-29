@@ -52,6 +52,11 @@ spec:
             # lets only it in. Trust X-Forwarded-For only from the cluster's own network.
             - name: FORWARDED_ALLOW_IPS
               value: "10.0.0.0/8"
+          # When a rollout stops this pod, keep serving for 5 s while the ingress controller drops
+          # it from its endpoints. Without the pause, requests in that gap failed with 502.
+          lifecycle:
+            preStop:
+              exec: {command: ["sleep", "5"]}
           # Ready means the database answers; a missing Redis only degrades (200, "degraded").
           readinessProbe:
             httpGet: {path: /api/ready, port: http}
