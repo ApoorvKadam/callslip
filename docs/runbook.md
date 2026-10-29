@@ -4,7 +4,7 @@ Everything runs with Docker Compose: `frontend` (nginx + React), `api` (FastAPI)
 
 ## Requirements
 
-- Docker with Compose v2 (tested with Docker 29.9, Compose 5.6), about 3 GB of free memory. Each container has a memory limit (`mem_limit` in `docker-compose.yml`): api 1 GiB, worker 1 GiB, postgres 512 MiB, redis 128 MiB, frontend 64 MiB.
+- Docker with Compose v2 (tested with Docker 29.9, Compose 5.6), about 3 GB of free memory. Each container has a memory limit with no swap above it (`mem_limit` and `memswap_limit` in `docker-compose.yml`): api 1 GiB, worker 1 GiB, runner 1 GiB, postgres 512 MiB, redis 128 MiB, frontend 64 MiB.
 - An Anthropic API key for answers. Without it, documents and search work and asking a question returns 503.
 
 ## Configuration and secrets

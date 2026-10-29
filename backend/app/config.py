@@ -16,7 +16,9 @@ class Settings(BaseSettings):
     embed_model: str = "BAAI/bge-small-en-v1.5"
     embed_dim: int = 384
     embed_threads: int = 2
-    embed_batch_size: int = 32
+    # Passages embedded per model call. At 32 the ONNX runtime kept a buffer big enough to take
+    # the ingestion worker to 1.36 GB on the corpus; at 8 it peaked at 609 MB and was as fast.
+    embed_batch_size: int = 8
     fastembed_cache_path: str = "/opt/models"
 
     # Ingestion limits and worker behaviour.
