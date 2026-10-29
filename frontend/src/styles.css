@@ -1262,3 +1262,101 @@ a:hover {
   align-items: center;
   gap: 4px;
 }
+
+/* A cited page drawn from the PDF, with the quote marked: a modal sheet over the app. */
+.page-preview {
+  width: min(960px, calc(100vw - 16px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  background: var(--canvas);
+  color: var(--ink);
+  box-shadow: 0 16px 48px rgb(18 17 16 / 0.18);
+}
+.page-preview::backdrop {
+  background: rgb(18 17 16 / 0.35);
+}
+.preview-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+.preview-head h2 {
+  margin: 0 auto 0 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.preview-head .text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.preview-quote {
+  margin: 12px 20px 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 24px;
+}
+.preview-quote .label {
+  margin-right: 6px;
+}
+.preview-status {
+  margin: 6px 20px 10px;
+}
+.preview-body {
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+  padding: 0 20px 20px;
+}
+.preview-page {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+  border: 1px solid var(--hairline);
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+}
+.preview-page canvas {
+  display: block;
+}
+/* PDF.js text layer: invisible text over the drawing, positioned by PDF.js. */
+.preview-page .textLayer {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  line-height: 1;
+  text-align: initial;
+  transform-origin: 0 0;
+  --min-font-size: 1;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+.preview-page .textLayer :is(span, br) {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  transform-origin: 0% 0%;
+}
+.preview-page .textLayer > :not(.markedContent),
+.preview-page .textLayer .markedContent span:not(.markedContent) {
+  --font-height: 0;
+  font-size: calc(var(--text-scale-factor) * var(--font-height));
+  --scale-x: 1;
+  --rotate: 0deg;
+  transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+}
+.preview-page .textLayer .markedContent {
+  display: contents;
+}
+.preview-page .textLayer .hit {
+  background: rgb(87 6 140 / 0.24);
+  border-radius: 2px;
+}
+.source-foot .text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
