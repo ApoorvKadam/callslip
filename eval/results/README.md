@@ -5,8 +5,9 @@
 | `2026-10-28T165727Z` | `claude-haiku-5-5` | final (main at `09d1b08`) | the default model; 15 cases, both systems, 3 repeats |
 | `2026-10-28T171106Z` | `claude-sonnet-5-5` | final (main at `09d1b08`) | 15 cases, both systems, 3 repeats |
 | `2026-10-28T192415Z` | `claude-haiku-5-5` | thinking guided by the documented prompt, two more instructions (kept) | agent only |
-| `2026-10-29T061705Z` | `claude-haiku-5-5` | the current build: documents named by title, clarifying replies kept with the answer | 15 cases, both systems, 3 repeats |
-| `2026-10-29T063209Z` | `claude-haiku-5-5` | the current build, the three cases it missed once | agent only, 5 repeats (`--cases 4-ambiguous,9-supersession,13-security-and-injection --repeat 5`) |
+| `2026-10-29T065232Z` | `claude-haiku-5-5` | the current build: the user's question labelled in the first message | 15 cases, both systems, 3 repeats |
+| `2026-10-29T061705Z` | `claude-haiku-5-5` | documents named by title, clarifying replies kept with the answer | 15 cases, both systems, 3 repeats |
+| `2026-10-29T063209Z` | `claude-haiku-5-5` | the same build, the three cases it missed once | agent only, 5 repeats (`--cases 4-ambiguous,9-supersession,13-security-and-injection --repeat 5`) |
 | `2026-10-28T221200Z` | `claude-haiku-5-5` | each document's outline as a tool (kept) | agent only |
 | `2026-10-28T220519Z` | `claude-haiku-5-5` | each document's outline, cases 8b and 13 only (kept) | agent only, 20 repeats (`--cases 8b-tool-keeps-failing,13-security-and-injection --repeat 20`) |
 | `2026-10-28T211637Z` | `claude-haiku-5-5` | read on to the section when search fails, first wording (not kept) | agent only |

@@ -53,7 +53,7 @@ Each folder holds `results.json` (every measurement), `report.md` (the generated
 
 Time to answer is execution time until the checked answer is ready; for case 4 it excludes the time waiting for the user's reply. Case 8a includes the injected 8 s timeout.
 
-**The current build.** With the rule to name documents by their title, the full run gave the agent 42 of 45 and the single pass 21 of 45 ([`061705Z`](../eval/results/2026-10-29T061705Z/)). The agent missed cases 4, 9 and 13 once each. Repeated five times each, those three passed 15 of 15 ([`063209Z`](../eval/results/2026-10-29T063209Z/)), so the misses are run-to-run variation, as in the earlier runs of 43 and 44 of 45.
+**The current build.** Two changes followed these runs. With the rule to name documents by their title, the agent passed 42 of 45 ([`061705Z`](../eval/results/2026-10-29T061705Z/)); its three misses, in cases 4, 9 and 13, passed 15 of 15 when repeated ([`063209Z`](../eval/results/2026-10-29T063209Z/)). Then the user's question was labelled as such in the agent's first message, after a request to ignore the rules was misread as part of the document list. On that build the agent passed all 45 runs and the single pass 20, with every one of 207 citations found on its page ([`065232Z`](../eval/results/2026-10-29T065232Z/)).
 
 ## Latency
 

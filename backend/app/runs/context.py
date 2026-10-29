@@ -185,9 +185,10 @@ def content_dicts(blocks: list) -> list[dict]:
 
 
 def question_text(question: str, history: list[tuple[str, str]]) -> str:
-    """The user's question, preceded by earlier questions and answers of this session (plain
-    text, no citations: citation-bearing text may not be sent back inside a user message)."""
+    """The user's question, labelled as such so it never reads as part of the document list that
+    comes before it, preceded by earlier questions and answers of this session (plain text, no
+    citations: citation-bearing text may not be sent back inside a user message)."""
     if not history:
-        return question
+        return f"The user's question:\n{question}"
     earlier = "\n\n".join(f"Q: {q}\nA: {a}" for q, a in history)
-    return f"Earlier in this conversation:\n{earlier}\n\nCurrent question: {question}"
+    return f"Earlier in this conversation:\n{earlier}\n\nThe user's current question:\n{question}"
